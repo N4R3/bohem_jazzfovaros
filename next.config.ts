@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
+import { getBuildLocale } from "./src/lib/buildLocale";
 
 const nextConfig: NextConfig = {
+  env: {
+    NEXT_PUBLIC_BUILD_LOCALE: getBuildLocale(),
+  },
   output: "export",
   trailingSlash: true,
   images: {

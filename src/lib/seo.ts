@@ -1,14 +1,18 @@
-const locale = process.env.NEXT_PUBLIC_LOCALE ?? "hu";
+import { getBuildLocale } from "./buildLocale";
+
+function locale(): ReturnType<typeof getBuildLocale> {
+  return getBuildLocale();
+}
 
 export const BASE_URL: string =
-  locale === "en"
-    ? (process.env.NEXT_PUBLIC_SITE_URL_EN ?? "https://jazzcapital.hu")
-    : (process.env.NEXT_PUBLIC_SITE_URL_HU ?? "https://jazzfovaros.hu");
+  locale() === "en"
+    ? (process.env.NEXT_PUBLIC_SITE_URL_EN ?? "https://jazzcapital.hu").replace(/\/$/, "")
+    : (process.env.NEXT_PUBLIC_SITE_URL_HU ?? "https://jazzfovaros.hu").replace(/\/$/, "");
 
 export const ALT_URL: string =
-  locale === "en"
-    ? (process.env.NEXT_PUBLIC_SITE_URL_HU ?? "https://jazzfovaros.hu")
-    : (process.env.NEXT_PUBLIC_SITE_URL_EN ?? "https://jazzcapital.hu");
+  locale() === "en"
+    ? (process.env.NEXT_PUBLIC_SITE_URL_HU ?? "https://jazzfovaros.hu").replace(/\/$/, "")
+    : (process.env.NEXT_PUBLIC_SITE_URL_EN ?? "https://jazzcapital.hu").replace(/\/$/, "");
 
 /**
  * HU/EN gomb cél URL-je (build időben égetve).
@@ -24,7 +28,8 @@ export function getLanguageSwitchUrl(): string {
     const noSlash = raw.replace(/\/$/, "");
     return noSlash.startsWith("http") ? noSlash : `https://${noSlash}`;
   }
-  if (locale === "hu") {
+  const loc = locale();
+  if (loc === "hu") {
     const en = process.env.NEXT_PUBLIC_SITE_URL_EN?.trim();
     if (en) return en.replace(/\/$/, "");
   } else {

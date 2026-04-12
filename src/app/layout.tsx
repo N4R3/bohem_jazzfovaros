@@ -12,9 +12,9 @@ import { ThemeProvider } from "@/components/theme/ThemeContext";
 import ThemedHeader from "@/components/layout/ThemedHeader";
 import ThemeBackground from "@/components/theme/ThemeBackground";
 import MainContent from "@/components/layout/MainContent";
+import { getBuildLocale } from "@/lib/buildLocale";
 
-const locale = process.env.NEXT_PUBLIC_LOCALE ?? "hu";
-const isEn = locale === "en";
+const isEn = getBuildLocale() === "en";
 
 const inter = Inter({
   subsets: ["latin"],

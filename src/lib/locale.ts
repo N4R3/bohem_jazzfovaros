@@ -1,11 +1,10 @@
 import type { Locale, SiteContent } from "./types";
+import { getBuildLocale } from "./buildLocale";
 import { hu } from "@/content/hu";
 import { en } from "@/content/en";
 
 export function getLocale(): Locale {
-  const env = process.env.NEXT_PUBLIC_LOCALE;
-  if (env === "en") return "en";
-  return "hu";
+  return getBuildLocale();
 }
 
 export function getContent(): SiteContent {

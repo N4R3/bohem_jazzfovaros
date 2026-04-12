@@ -1,7 +1,6 @@
 # Next.js static export (next.config: output = "export") → publish: out
-# Két külön Netlify site, ugyanabból a repóból:
-#   Magyar: https://bohemjazz.netlify.app  → NEXT_PUBLIC_LOCALE=hu (opcionális, alapértelmezés is hu)
-#   Angol:  https://buhemjazzen.netlify.app → NEXT_PUBLIC_LOCALE=en KÖTELEZŐ (Site settings → Environment variables)
+# Két külön Netlify site, ugyanabból a repóból (buildkor a Netlify URL alapján választ nyelvet: buildLocale.ts).
+# Opcionális: NEXT_PUBLIC_LOCALE=en|hu — egyedi domainnál, ha az URL nem egyezik a SITE_URL_* hosttal.
 
 [build]
   command = "npm run build"

@@ -50,7 +50,7 @@ export default function CookieBanner() {
           We use cookies to analyse traffic and improve your experience.{" "}
           <a
             href={
-              process.env.NEXT_PUBLIC_LOCALE === "en"
+              process.env.NEXT_PUBLIC_BUILD_LOCALE === "en"
                 ? "https://jazzcapital.hu/privacy"
                 : "https://jazzfovaros.hu/adatvedelem"
             }
