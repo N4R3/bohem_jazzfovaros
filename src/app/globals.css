@@ -1,0 +1,355 @@
+@import "tailwindcss";
+
+@theme {
+  --color-gold-50:  #fdf8ed;
+  --color-gold-100: #faefc9;
+  --color-gold-200: #f5db8c;
+  --color-gold-300: #e8c76a;
+  --color-gold-400: #ddb84f;
+  --color-gold-500: #d4a843;
+  --color-gold-600: #b8922e;
+  --color-gold-700: #8f6e1f;
+
+  --color-navy-700: #1e3a5f;
+  --color-navy-800: #1a2a40;
+  --color-navy-900: #0f1b2d;
+  --color-navy-950: #080f1a;
+
+  --color-cream-50:  #fffdf7;
+  --color-cream-100: #fff9ed;
+  --color-cream-200: #fef3d0;
+
+  --color-coral-400: #e8907a;
+  --color-coral-500: #e07a5f;
+
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+/* Mobil hamburger menü — linkek belépése */
+@keyframes mobile-nav-link-in {
+  from {
+    opacity: 0;
+    transform: translate3d(-18px, -10px, 0) scale(0.96);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.mobile-nav-link-in {
+  animation: mobile-nav-link-in 0.72s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-nav-link-in {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   THEME 2 — Teal Water  (Design2 mappa)
+   Sötét türkiz víz háttér, arany gombok, illusztrált várossal
+   ============================================================ */
+[data-theme="2"] {
+  --color-gold-50:  #0d3842;
+  --color-gold-100: #1a4a55;
+  --color-gold-200: #2a6070;
+  --color-gold-300: #ddc060;
+  --color-gold-400: #f0cc6a;
+  --color-gold-500: #e8b84a;
+  --color-gold-600: #c09020;
+  --color-gold-700: #8f6a18;
+
+  --color-navy-700: #78aab8;
+  --color-navy-800: #90c0cc;
+  --color-navy-900: #c0dce4;
+  --color-navy-950: #041e24;
+
+  --color-cream-50:  #0a4858;
+  --color-cream-100: #0d5565;
+  --color-cream-200: #1a6878;
+
+  --color-coral-400: #4aafb8;
+  --color-coral-500: #38a0aa;
+
+  --theme-hero-glow: rgba(14,180,200,0.18);
+  --theme-hero-dark: rgba(4,30,36,0.80);
+}
+[data-theme="2"] .bg-\[var\(--color-navy-900\)\] {
+  background-color: #062028 !important;
+}
+[data-theme="2"] .bg-white {
+  background-color: #0e3a48 !important;
+}
+[data-theme="2"] footer {
+  --color-cream-100: #a0c8d4;
+  --color-cream-200: #78a8b8;
+}
+
+/* ============================================================
+   THEME 3 — Folk Illustration  (Design3 mappa)
+   Zöldeskék teal háttér, krém kártyák, narancs akcentek
+   Színek: #E8425A, #E8823A, #F9B233, #FDF6E3
+   ============================================================ */
+[data-theme="3"] {
+  --color-gold-50:  #fff8f0;
+  --color-gold-100: #ffe8d0;
+  --color-gold-200: #ffd0a0;
+  --color-gold-300: #f9b233;
+  --color-gold-400: #f9b233;
+  --color-gold-500: #e8823a;
+  --color-gold-600: #c05820;
+  --color-gold-700: #903518;
+
+  --color-navy-700: #c0e0d8;
+  --color-navy-800: #d0ece4;
+  --color-navy-900: #fdf6e3;
+  --color-navy-950: #0a2a25;
+
+  --color-cream-50:  #2a8a7e;
+  --color-cream-100: #34978a;
+  --color-cream-200: #1e7a70;
+
+  --color-coral-400: #e8907a;
+  --color-coral-500: #e8425a;
+
+  --theme-hero-glow: rgba(232,130,58,0.20);
+  --theme-hero-dark: rgba(10,42,37,0.80);
+}
+[data-theme="3"] .bg-\[var\(--color-navy-900\)\] {
+  background-color: #0e3530 !important;
+}
+[data-theme="3"] .bg-white {
+  background-color: #fdf6e3 !important;
+}
+[data-theme="3"] .bg-white,
+[data-theme="3"] .rounded-xl.border {
+  --color-navy-900: #1a3d38;
+  --color-cream-200: #e8d8b8;
+}
+[data-theme="3"] footer {
+  --color-cream-100: #a0d0c8;
+  --color-cream-200: #78b0a8;
+}
+
+/* ============================================================
+   THEME 3 — Hero animations
+   will-change: transform on sailing/bobbing elements for GPU compositing
+   ============================================================ */
+
+/* Sailing & bobbing elements: GPU layer */
+[data-theme="3"] [style*="d3-sail"],
+[data-theme="3"] [style*="d3-duck"],
+[data-theme="3"] [style*="d3-bird"],
+[data-theme="3"] [style*="d3-life-float"] {
+  will-change: transform;
+}
+
+/* Mobile: disable background sailing/bird animations, keep duck bob only */
+@media (max-width: 640px) {
+  [data-theme="3"] [style*="d3-sail-left"],
+  [data-theme="3"] [style*="d3-sail-right"],
+  [data-theme="3"] [style*="d3-bird"],
+  [data-theme="3"] [style*="d3-bird-right"],
+  [data-theme="3"] [style*="d3-life-float"],
+  [data-theme="3"] [style*="d3-lighthouse-blink"] {
+    animation: none !important;
+    display: none !important;
+  }
+}
+
+/* Respect system preference */
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="3"] [style*="animation"] {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@keyframes d3-duck-bob {
+  0%, 100% { transform: translateY(0px) rotate(-5deg) scaleX(-1); }
+  30%       { transform: translateY(-16px) rotate(2deg) scaleX(-1); }
+  60%       { transform: translateY(-8px) rotate(-3deg) scaleX(-1); }
+}
+
+@keyframes d3-sail-left {
+  0%   { transform: translateX(105vw); }
+  100% { transform: translateX(-220px); }
+}
+
+@keyframes d3-sail-left-slow {
+  0%   { transform: translateX(108vw) scaleX(-1); }
+  100% { transform: translateX(-220px) scaleX(-1); }
+}
+
+@keyframes d3-sail-right {
+  0%   { transform: translateX(-220px) scaleX(-1); }
+  100% { transform: translateX(105vw) scaleX(-1); }
+}
+
+@keyframes d3-life-float {
+  0%, 100% { transform: translateY(0) rotate(-8deg); }
+  50%       { transform: translateY(-12px) rotate(8deg); }
+}
+
+@keyframes d3-wave-pulse {
+  0%, 100% { transform: scaleX(1) translateX(0); }
+  50%       { transform: scaleX(1.04) translateX(-2%); }
+}
+
+@keyframes d3-lighthouse-blink {
+  0%, 100% { opacity: 0.2; }
+  45%, 55%  { opacity: 0.85; }
+}
+
+@keyframes d3-bird {
+  0%   { transform: translateX(102vw) translateY(0); }
+  100% { transform: translateX(-10vw) translateY(-30px); }
+}
+
+@keyframes d3-bird-right {
+  0%   { transform: translateX(-10vw) translateY(0) scaleX(-1); }
+  100% { transform: translateX(102vw) translateY(-25px) scaleX(-1); }
+}
+
+/* ============================================================
+   THEME 3 — Layout & Section overrides
+   ============================================================ */
+
+/* Body: teal fallback (bg image applied via ThemeBackground.tsx) */
+[data-theme="3"] body {
+  background-color: #1a7a6e;
+}
+
+/* z-index layers for theme 3 — do NOT override position (sticky must work) */
+[data-theme="3"] main {
+  position: relative;
+  z-index: 1;
+}
+
+/* All sections and page wrappers transparent — body bg image shows through */
+[data-theme="3"] section,
+[data-theme="3"] .d3-page-wrapper,
+[data-theme="3"] div.min-h-screen {
+  background: transparent !important;
+}
+
+/* Footer: keep dark overlay for readability */
+[data-theme="3"] footer {
+  position: relative;
+  z-index: 1;
+  background: rgba(10, 42, 37, 0.88) !important;
+}
+
+/* InfoStrip gold bar */
+[data-theme="3"] .bg-\[var\(--color-gold-600\)\] {
+  background-color: #c85820 !important;
+}
+
+/* ============================================================
+   THEME 3 — Program page card day colors
+   Grid selector: .d3-program-grid
+   Card header: .d3-day-header
+   Card body: .d3-day-card
+   ============================================================ */
+
+/* Card outer */
+[data-theme="3"] .d3-day-card {
+  background: #fdf6e3 !important;
+  border: 2px solid #d8c8a0 !important;
+  border-radius: 1rem !important;
+}
+
+/* Card body dividers */
+[data-theme="3"] .d3-day-card .divide-y > * {
+  border-color: #e8d8b8 !important;
+}
+
+/* Slot time text */
+[data-theme="3"] .d3-day-card .font-mono {
+  color: #c05820 !important;
+}
+
+/* Slot artist text */
+[data-theme="3"] .d3-day-card .text-\[var\(--color-navy-900\)\] {
+  color: #1a3d38 !important;
+}
+
+/* Day headers — 4 days, colors from cards.png */
+[data-theme="3"] .d3-program-grid > :nth-child(1) .d3-day-header {
+  background: #c85030 !important; /* Csütörtök: warm orange-red */
+  color: #fff8f0 !important;
+}
+[data-theme="3"] .d3-program-grid > :nth-child(2) .d3-day-header {
+  background: #1a7868 !important; /* Péntek: deep teal */
+  color: #fdf6e3 !important;
+}
+[data-theme="3"] .d3-program-grid > :nth-child(3) .d3-day-header {
+  background: #e8b020 !important; /* Szombat: golden yellow */
+  color: #1a3020 !important;
+}
+[data-theme="3"] .d3-program-grid > :nth-child(4) .d3-day-header {
+  background: #b89048 !important; /* Vasárnap: warm sand */
+  color: #fdf6e3 !important;
+}
+
+/* Date subtitle in card header */
+[data-theme="3"] .d3-program-grid > :nth-child(1) .d3-day-header .d3-day-date { color: #fde0d0 !important; }
+[data-theme="3"] .d3-program-grid > :nth-child(2) .d3-day-header .d3-day-date { color: #a0d8d0 !important; }
+[data-theme="3"] .d3-program-grid > :nth-child(3) .d3-day-header .d3-day-date { color: #3a5020 !important; }
+[data-theme="3"] .d3-program-grid > :nth-child(4) .d3-day-header .d3-day-date { color: #fde8c0 !important; }
+
+/* Stage badge colors */
+[data-theme="3"] .d3-day-card .bg-\[var\(--color-gold-100\)\] {
+  background: rgba(232,130,58,0.18) !important;
+  color: #903518 !important;
+  border-color: rgba(232,130,58,0.35) !important;
+}
+
+/* Section heading badge style — used on program + lineup pages */
+[data-theme="3"] .d3-section-badge {
+  display: inline-block;
+  background: #fdf6e3;
+  color: #1a3d38;
+  border: 2px solid #d8b878;
+  border-radius: 0.75rem;
+  padding: 0.5rem 1.5rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-cream-50);
+  color: var(--color-navy-900);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  min-width: 320px;
+}
+
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold-500);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
