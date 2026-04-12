@@ -1,6 +1,6 @@
 import type { SiteContent } from "@/lib/types";
 import { BASE } from "./base";
-import { ALT_URL } from "@/lib/seo";
+import { getLanguageSwitchUrl } from "@/lib/seo";
 
 export const en: SiteContent = {
   meta: {
@@ -27,7 +27,7 @@ export const en: SiteContent = {
 
   otherLocale: {
     label: "HU",
-    domain: ALT_URL,
+    domain: getLanguageSwitchUrl(),
   },
 
   home: {

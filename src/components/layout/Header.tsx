@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getContent } from "@/lib/locale";
 import Container from "@/components/ui/Container";
 import MobileMenu from "@/components/layout/MobileMenu";
+import LocaleSwitchAnchor from "@/components/layout/LocaleSwitchAnchor";
 
 export default function Header() {
   const c = getContent();
@@ -44,12 +45,11 @@ export default function Header() {
                 </Link>
               )
             )}
-            <a
-              href={c.otherLocale.domain}
+            <LocaleSwitchAnchor
+              fallbackHref={c.otherLocale.domain}
+              label={c.otherLocale.label}
               className="ml-2 rounded border border-[var(--color-gold-500)] px-3 py-1 text-xs font-semibold text-[var(--color-gold-600)] hover:bg-[var(--color-gold-500)] hover:text-[var(--color-navy-900)] transition-colors"
-            >
-              {c.otherLocale.label}
-            </a>
+            />
           </nav>
 
           <MobileMenu

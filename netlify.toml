@@ -1,6 +1,7 @@
 # Next.js static export (next.config: output = "export") → publish: out
-# Netlify: New site from Git → build command & publish előre beállítva ebből a fájlból
-# Env változók: Site settings → Environment variables (NEXT_PUBLIC_*)
+# Két külön Netlify site, ugyanabból a repóból:
+#   Magyar: https://bohemjazz.netlify.app  → NEXT_PUBLIC_LOCALE=hu (opcionális, alapértelmezés is hu)
+#   Angol:  https://buhemjazzen.netlify.app → NEXT_PUBLIC_LOCALE=en KÖTELEZŐ (Site settings → Environment variables)
 
 [build]
   command = "npm run build"
@@ -8,3 +9,5 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  NEXT_PUBLIC_SITE_URL_HU = "https://bohemjazz.netlify.app"
+  NEXT_PUBLIC_SITE_URL_EN = "https://buhemjazzen.netlify.app"

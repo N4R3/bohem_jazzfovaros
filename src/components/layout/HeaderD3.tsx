@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from "react";
 import type { NavItem } from "@/lib/types";
 import MobileMenu from "@/components/layout/MobileMenu";
 import HeaderBrandMarks from "@/components/layout/HeaderBrandMarks";
+import LocaleSwitchAnchor from "@/components/layout/LocaleSwitchAnchor";
 
 interface Props {
   siteTitle: string;
@@ -116,13 +117,12 @@ export default function HeaderD3({ siteTitle, festivalDates, nav, otherLocale }:
               )
             )}
 
-            <a
-              href={otherLocale.domain}
+            <LocaleSwitchAnchor
+              fallbackHref={otherLocale.domain}
+              label={otherLocale.label}
               className="ml-2 shrink-0 whitespace-nowrap rounded-full border-2 px-3 py-1 text-xs font-bold transition-colors hover:bg-[#f9b233]/20"
               style={{ borderColor: "rgba(249,178,51,0.55)", color: "#f9b233" }}
-            >
-              {otherLocale.label}
-            </a>
+            />
           </nav>
 
           <MobileMenu

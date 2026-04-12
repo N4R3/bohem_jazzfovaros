@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { NavItem } from "@/lib/types";
 import HeaderBrandMarks from "@/components/layout/HeaderBrandMarks";
+import LocaleSwitchAnchor from "@/components/layout/LocaleSwitchAnchor";
 
 interface Props {
   siteTitle: string;
@@ -40,12 +41,11 @@ export default function HeaderD2({ siteTitle, nav, otherLocale }: Props) {
               </Link>
             )
           )}
-          <a
-            href={otherLocale.domain}
+          <LocaleSwitchAnchor
+            fallbackHref={otherLocale.domain}
+            label={otherLocale.label}
             className="ml-1 rounded-full border border-[#f0cc6a]/40 px-3 py-1 text-xs font-semibold text-[#f0cc6a] hover:bg-[#f0cc6a]/10 transition-colors"
-          >
-            {otherLocale.label}
-          </a>
+          />
         </nav>
       </div>
     </header>

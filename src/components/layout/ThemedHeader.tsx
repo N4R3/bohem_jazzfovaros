@@ -8,6 +8,7 @@ import MobileMenu from "@/components/layout/MobileMenu";
 import HeaderD2 from "@/components/layout/HeaderD2";
 import HeaderD3 from "@/components/layout/HeaderD3";
 import HeaderBrandMarks from "@/components/layout/HeaderBrandMarks";
+import LocaleSwitchAnchor from "@/components/layout/LocaleSwitchAnchor";
 
 interface Props {
   siteTitle: string;
@@ -45,12 +46,11 @@ function HeaderD1({ siteTitle, festivalDates, nav, otherLocale }: Props) {
                 </Link>
               )
             )}
-            <a
-              href={otherLocale.domain}
+            <LocaleSwitchAnchor
+              fallbackHref={otherLocale.domain}
+              label={otherLocale.label}
               className="ml-2 rounded border border-[var(--color-gold-500)] px-3 py-1 text-xs font-semibold text-[var(--color-gold-600)] hover:bg-[var(--color-gold-500)] hover:text-[var(--color-navy-900)] transition-colors"
-            >
-              {otherLocale.label}
-            </a>
+            />
           </nav>
           <MobileMenu nav={nav} otherLocaleLabel={otherLocale.label} otherLocaleDomain={otherLocale.domain} />
         </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import type { NavItem } from "@/lib/types";
+import LocaleSwitchAnchor from "@/components/layout/LocaleSwitchAnchor";
 
 interface MobileMenuProps {
   nav: NavItem[];
@@ -137,14 +138,13 @@ export default function MobileMenu({
                   animationDelay: open ? `${90 + nav.length * 62 + 40}ms` : undefined,
                 }}
               >
-                <a
-                  href={otherLocaleDomain}
-                  onClick={() => setOpen(false)}
+                <LocaleSwitchAnchor
+                  fallbackHref={otherLocaleDomain}
+                  label={otherLocaleLabel}
                   className="block min-w-0 max-w-full break-words rounded-xl px-4 py-3.5 text-sm font-bold transition-colors hover:bg-white/10"
                   style={{ color: "#f9d47a" }}
-                >
-                  {otherLocaleLabel}
-                </a>
+                  onClick={() => setOpen(false)}
+                />
               </div>
             </nav>
           </div>
