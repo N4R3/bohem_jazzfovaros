@@ -1,10 +1,9 @@
-# Next.js static export (next.config: output = "export") → publish: out
+# Netlify Next.js plugin által kezelt deploy (publish könyvtárat nem adunk meg).
 # Két külön Netlify site, ugyanabból a repóból (buildkor a Netlify URL alapján választ nyelvet: buildLocale.ts).
 # Opcionális: NEXT_PUBLIC_LOCALE=en|hu — egyedi domainnál, ha az URL nem egyezik a SITE_URL_* hosttal.
 
 [build]
   command = "npm run build"
-  publish = "out"
 
 [build.environment]
   NODE_VERSION = "20"
