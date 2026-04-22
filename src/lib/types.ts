@@ -4,7 +4,7 @@ export interface Artist {
   name: string;
   genre: string;
   bio: string;
-  image: string;
+  image?: string;
   day: "thursday" | "friday" | "saturday" | "sunday";
   stage: "main" | "club";
   time: string;

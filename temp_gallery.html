@@ -1,0 +1,583 @@
+
+<!DOCTYPE html>
+<html lang="hu" dir="ltr">
+<head>
+ <title>Kezdőlap - JAZZFŐVÁROS</title>
+    <meta charset="UTF-8">
+    <meta name="robots" content="index, follow, all" />
+    <meta name="description" content="JAZZFŐVÁROS fesztivál sportprogramjai egy helyen." />
+    <meta name="keywords" content="foci, kosárlabda, röplabda, kerékpár, bicikli, bringa, váltófutás, futás, tájfutás, sárkányhajó"/>
+    <meta name="revisit-after" content="1 days" />
+    <meta property="og:site_name" content="Kezdőlap" />
+    <meta property="og:title" content="Kezdőlap" />
+    <meta property="og:url" content="https://jazzfovaros.hu:443/galeria" />
+    <meta property="og:description" content="JAZZFŐVÁROS fesztivál sportprogramjai egy helyen." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="viewport" content="user-scalable=yes, width=device-width, initial-scale=1.0" />
+    <meta name="facebook-domain-verification" content="8ut5kd01a978gezx41e40g4xjg8wet" />
+    <base href="https://jazzfovaros.hu/">
+    <link rel="shortcut icon" href="/images/favicon_jazz.ico" />
+    <link rel="stylesheet" href="/css/lightbox.css">
+    <link rel="stylesheet" href="/css/lightslider2.css">
+    <link rel="stylesheet" href="/css/main.css?v=33" type="text/css" />
+    <link rel="stylesheet" href="/css/responsive.css?v=17" type="text/css" />
+    <link rel="stylesheet" href="/css/jquery.fancybox.css">  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,700' rel='stylesheet' type='text/css'><script src="js/lightslider.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,700,500' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Cantarell" rel="stylesheet">
+ 	 	<link href='https:///fonts.googleapis.com/css?family=Oswald&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <script src="/js/timer.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/jquery.mousewheel-3.0.6.pack.js"></script>
+    <script src="/js/jquery.countdown.js"></script>
+    <script src="/js/jquery.fancybox.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+    <style>
+
+    body #szechenyi {
+	display: block;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	width: 350px;
+	height: 242px;
+	background-image: url(/images/szechenyi_2020.png);
+	background-repeat: no-repeat;
+	transition: all .4s ease;
+    }
+
+
+</style>
+
+    <script>
+     $(document)
+         .ready(function() {
+             $('#main-slider')
+                 .lightSlider({
+                     adaptiveHeight: true,
+                     item: 1,
+                     auto: 1,
+                     pause: 5000,
+                     slideMargin: 0,
+                     controls: 1,
+                     loop: true
+                 });
+                 
+             var pslider = $('#performer-slider')
+                 .lightSlider({
+                     adaptiveHeight: true,
+                     item: 4,
+                     auto: 1,
+                     pause: 5000,
+                     slideMargin: 0,
+                     controls: 0,
+                     loop: true,
+                     
+                     responsive : [
+                     {
+                         breakpoint:1000,
+                         settings: {
+                         item:3,
+                         slideMove:1,
+                         slideMargin:0,
+                           }
+                     },         {
+                         breakpoint:760,
+                         settings: {
+                         item:2,
+                         slideMove:1,
+                         slideMargin:0,
+                           }
+                     },         {
+                         breakpoint:560,
+                         settings: {
+                         item:1,
+                         slideMove:1,
+                         slideMargin:0,
+                           }
+                     }
+                     
+                     
+                     ]
+
+                     
+                     
+                 });
+                 
+                $('#goToPrevSlide').on('click', function () {
+                    pslider.goToPrevSlide();
+                });
+                $('#goToNextSlide').on('click', function () {
+                    pslider.goToNextSlide();
+                });       
+         });
+         
+       $(document).ready(function() {
+           $(".performer-popup").fancybox({          
+           type: 'ajax'                     
+           });
+       });         
+     </script>
+     <!-- Facebook Pixel Code -->
+     <script>
+     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+     n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+     n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+     t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+     document,'script','https://connect.facebook.net/en_US/fbevents.js');
+     
+     fbq('init', '1011250538943528');
+     fbq('track', "PageView");</script>
+     <noscript><img height="1" width="1" style="display:none"
+     src="https://www.facebook.com/tr?id=1011250538943528&ev=PageView&noscript=1"
+     /></noscript>
+     <!-- End Facebook Pixel Code -->
+          
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-53K27Q3');</script>
+<!-- End Google Tag Manager -->
+
+
+
+     
+</head>
+<body>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-53K27Q3"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78158185-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<div id="mainbg"></div>
+<div id="lajos">
+ <img src="/images/lajos.png" alt="JAZZFŐVÁROS" title="JAZZFŐVÁROS" />
+</div>
+<header>
+   
+    <div class="container">
+     
+
+     
+        <h1 class="jazz-title">JAZZFŐVÁROS Kecskemét,<br />2022. augusztus 4-7.</h1>
+        <div class="abslogo">
+                            <a href="/"> <img src="/images/logo19_hu.svg?v=3" width="132" alt="Kezdőlap" title="Kezdőlap"></a>
+                     </div>
+        
+        <div class="abslogo-mobile">
+          <a href="/"> <img src="/images/logo19_hu.svg?v=4" width="90" alt="Kezdőlap" title="Kezdőlap" /></a>        </div>
+        
+
+        <div class="timer">
+            <div id="jstimer" class="clock">
+            </div>       
+        </div>
+        
+
+        
+        <div class="program-info">Bohém JAZZFŐVÁROS Kecskemét, 2026. augusztus 6-9.</div>
+        <div class="lang">            
+            <div class="lang-select">
+                <form method="get" action="/">
+                    <select name="lang" onchange="this.form.submit()">
+                        <option value="hu" selected>HUN</option>
+                        <option value="en" >EN</option>
+                    </select>
+                </form>
+            </div>          
+            <div class="socials">
+                <ul>
+                    <li><a href="https://www.youtube.com/watch?v=4gGiiNwHe6E" target="_blank"><img src="/images/youtube.png?v=2" alt="Youtube" title="Youtube" /></a></li>
+                    <li><a href="https://www.instagram.com/jazzfovaros/" target="_blank"><img src="/images/instagram.png?v=2" alt="Instagram" title="Instagram" /></a></li>
+                    <li><a href="http://www.facebook.com/jazzfovaros" target="_blank"><img src="/images/facebook.png?v=2" alt="Facebook" title="Facebook"   /></a></li>
+                </ul>                
+            </div>            
+        </div>
+        <div class="clearfix"></div>
+        
+        <div id="mainmenu">
+            <div class="mobile-menu"><a href="#" onclick="menu_show()"><img src="/images/mobile.png" id="mobile-icon" alt="" /></a></div>
+            <ul id="menu-top">
+                
+                    <li><a href="/fellepok" >FELLÉPŐK</a></li><li><a href="https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/" >JEGY 2026</a></li><li><a href="/programok" >PROGRAMOK</a></li><li><a href="/szallas" >SZÁLLÁS</a></li><li><a href="/kozlekedes" >TÉRKÉP, KÖZLEKEDÉS</a></li><li><a href="/aszf" >ÁSZF</a></li><li><a href="/kapcsolat" >KAPCSOLAT</a></li><li><a href="/futas" >futás</a></li><li><a href="/jazztabor" >jazztábor</a></li>             </ul>
+        </div>
+        <div class="clearfix"></div>
+        
+            </div>
+</header>
+<section>
+
+
+
+
+  <div class="main-content">
+
+   
+   
+             
+           <div class="article-box">                        
+                <div class="article-image">
+                    <a href="//program"></a>
+                </div> 
+                <div class="article-content">
+                        
+                    <div class="title"><a href="//program">PROGRAMOK IDŐRENDBEN</a></div>
+                    <div class="date">Dátum: 24-08-01 02:15</div>
+                    <div class="text">
+                        <p>A 2025-&ouml;s BOH&Eacute;M JAZZFŐV&Aacute;ROS fesztiv&aacute;l &ouml;sszes programj&aacute;nak v&eacute;gleges időrendi beoszt&aacute;sa j&uacute;niusban lesz el&eacute;rhető. Addig t&aacute;j&eacute;koz&oacute;dj a Fell&eacute;pők men&uuml;pontban &eacute;s a <a href="https://www.facebook.com/jazzfovaros/" target="_blank" rel="noopener">Facebook-oldalunkon</a>!</p>
+<!--p>A programok végén csupa nagybetűvel a helyszínt tüntettük fel.<br /><em>Dőlt betűvel</em> a swingtáncos programokat jelöltük, <span style="color: #008000;">zölddel</span> a kísérőprogramokat.</p-->                       
+                    </div>
+                    <a href="//program" class="article-next">Tovább</a>
+                </div>
+        </div>        <div class="article-box">                        
+                <div class="article-image">
+                    <a href="//reszvetel"></a>
+                </div> 
+                <div class="article-content">
+                        
+                    <div class="title"><a href="//reszvetel">Részvételi szabályzat</a></div>
+                    <div class="date">Dátum: 24-05-02 14:41</div>
+                    <div class="text">
+                        <p><strong>JAZZFŐV&Aacute;ROS fesztiv&aacute;l (szervező: JAZZFŐV&Aacute;ROS Kft.):</strong><br />A fesztiv&aacute;lon r&eacute;sztvevők (k&ouml;z&ouml;ns&eacute;g, fell&eacute;pők, dolgoz&oacute;k, vend&eacute;gek) a fesztiv&aacute;l ter&uuml;let&eacute;re val&oacute; bel&eacute;p&eacute;s&uuml;kkel elfogadj&aacute;k a rendezv&eacute;ny h&aacute;zirendj&eacute;t. A h&aacute;zirend a&nbsp;<a href="/downloads/documents/4/hazirend-jf.pdf" target="_blank" rel="noopener">https://jazzfovaros.hu/downloads/documents/4/hazirend-jf.pdf</a> linkről let&ouml;lthető.</p>
+<hr />
+<p></p>                       
+                    </div>
+                    <a href="//reszvetel" class="article-next">Tovább</a>
+                </div>
+        </div>        <div class="article-box">                        
+                <div class="article-image">
+                    <a href="//adatvedelem"></a>
+                </div> 
+                <div class="article-content">
+                        
+                    <div class="title"><a href="//adatvedelem">Adatvédelmi tájékoztató</a></div>
+                    <div class="date">Dátum: 24-04-24 14:00</div>
+                    <div class="text">
+                        <p>Adatkezel&eacute;si t&aacute;j&eacute;koztat&oacute; a http://jazzfovaros.hu weboldal l&aacute;togat&oacute;i &eacute;s regisztr&aacute;lt felhaszn&aacute;l&oacute;i r&eacute;sz&eacute;re.</p>
+<p style="text-align: center;"><strong>Bevezet&eacute;s</strong></p>
+<p>A Kecskem&eacute;ti Jazz Alap&iacute;tv&aacute;ny mint a jazzfovaros.hu domain tulajdonosa, valamint a JAZZFŐV&Aacute;ROS jazzt&aacute;bor szervezője, a JAZZFŐV&Aacute;ROS fesztiv&aacute;l t&aacute;rsszervezője, vagyis az adatkezelő (a tov&aacute;bbiakban: Alap&iacute;tv&aacute;ny) a weboldal műk&ouml;dtet&eacute;se sor&aacute;n, az oldalon, illetve az oldalhoz kapcsolt űrlapokon regisztr&aacute;lt szem&eacute;lyek adatait kezeli abb&oacute;l a c&eacute;lb&oacute;l, hogy r&eacute;sz&uuml;kre megfelelő szolg&aacute;ltat&aacute;st ny&uacute;jthasson.</p>
+<p>Az Alap&iacute;tv&aacute;ny teljes m&eacute;rt&eacute;kben meg k&iacute;v&aacute;n felelni a szem&eacute;lyes adatok kezel&eacute;s&eacute;re vonatkoz&oacute; jogszab&aacute;lyi elő&iacute;r&aacute;soknak, k&uuml;l&ouml;n&ouml;sen az Eur&oacute;pai Parlament &eacute;s a Tan&aacute;cs (EU) 2016/679 rendelet&eacute;ben foglaltaknak.</p>
+<p>Ez az adatkezel&eacute;si t&aacute;j&eacute;koztat&oacute; a term&eacute;szetes szem&eacute;lyek szem&eacute;lyes adatai v&eacute;delm&eacute;ről &eacute;s az adatok szabad &aacute;raml&aacute;s&aacute;r&oacute;l az Eur&oacute;pai Parlament &eacute;s a Tan&aacute;cs (EU) 2016/679 rendelete alapj&aacute;n k&eacute;sz&uuml;lt, figyelemmel a 2011. &eacute;vi CXII. t&ouml;rv&eacute;ny tartalm&aacute;ra, amely az inform&aacute;ci&oacute;s &ouml;nrendelkez&eacute;si jogr&oacute;l &eacute;s az inform&aacute;ci&oacute;szabads&aacute;gr&oacute;l sz&oacute;l.</p>
+<p><strong>Szolg&aacute;ltat&oacute;, adatkezelő megnevez&eacute;se</strong><br />N&eacute;v / c&eacute;gn&eacute;v:&nbsp;Kecskem&eacute;ti Jazz Alap&iacute;tv&aacute;ny<br />Sz&eacute;khely:&nbsp;6000 Kecskem&eacute;t, Csabagy&ouml;ngye u. 71.<br />Ad&oacute;sz&aacute;m:&nbsp;19046309-2-09<br />Weboldal megnevez&eacute;se, c&iacute;me:&nbsp;<a href="http://www.jazzfovaros.hu">www.jazzfovaros.hu<br /></a>Az adatkezel&eacute;si t&aacute;j&eacute;koztat&oacute; el&eacute;rhetős&eacute;ge:&nbsp;<a href="http://www.jazzfovaros.hu/adatvedelem">www.jazzfovaros.hu/adatvedelem</a></p>
+<p><strong>Az adatkezelő el&eacute;rhetős&eacute;gei</strong></p>
+<p>N&eacute;v / c&eacute;gn&eacute;v: Kecskem&eacute;ti Jazz Alap&iacute;tv&aacute;ny<br />Sz&eacute;khely:&nbsp;6000 Kecskem&eacute;t, Csabagy&ouml;ngye u. 71.<br />K&eacute;pviselő: dr. Ittz&eacute;s Tam&aacute;s kurat&oacute;riumi eln&ouml;k<br />E-mail:&nbsp;<a href="mailto:bohemragtime@gmail.com,">bohemragtime@gmail.com,</a>&nbsp;<a href="mailto:jazzfovaros@gmail.com">jazzfovaros@gmail.com<br /></a>Telefon:&nbsp;+36-20-336-4620</p>
+<hr />
+<p style="text-align: center;"><strong>Fogalommeghat&aacute;roz&aacute;sok</strong></p>
+<p style="text-align: left;"><strong>GDPR</strong> (General Data Protection Regulation): az Eur&oacute;pai Uni&oacute; &uacute;j Adatv&eacute;delmi Rendelete</p>
+<p><strong>Adatkezel&eacute;s:</strong> a szem&eacute;lyes adatokon vagy adat&aacute;llom&aacute;nyokon automatiz&aacute;lt vagy nem automatiz&aacute;lt m&oacute;don v&eacute;gzett b&aacute;rmely művelet vagy műveletek &ouml;sszess&eacute;ge, &iacute;gy a gyűjt&eacute;s, r&ouml;gz&iacute;t&eacute;s, rendszerez&eacute;s, tagol&aacute;s, t&aacute;rol&aacute;s, &aacute;talak&iacute;t&aacute;s vagy megv&aacute;ltoztat&aacute;s, lek&eacute;rdez&eacute;s, betekint&eacute;s, felhaszn&aacute;l&aacute;s, k&ouml;zl&eacute;s, tov&aacute;bb&iacute;t&aacute;s, terjeszt&eacute;s vagy egy&eacute;b m&oacute;don t&ouml;rt&eacute;nő hozz&aacute;f&eacute;rhetőv&eacute; t&eacute;tel &uacute;tj&aacute;n, &ouml;sszehangol&aacute;s vagy &ouml;sszekapcsol&aacute;s, korl&aacute;toz&aacute;s, t&ouml;rl&eacute;s, illetve megsemmis&iacute;t&eacute;s.</p>
+<p><strong>Adatfeldolgoz&oacute;:</strong> az a term&eacute;szetes vagy jogi szem&eacute;ly, k&ouml;zhatalmi szerv, &uuml;gyn&ouml;ks&eacute;g vagy b&aacute;rmely egy&eacute;b szerv, amely az adatkezelő nev&eacute;ben szem&eacute;lyes adatokat kezel;</p>
+<p><strong>Szem&eacute;lyes adat:</strong> azonos&iacute;tott vagy azonos&iacute;that&oacute; term&eacute;szetes szem&eacute;lyre (&eacute;rintett) vonatkoz&oacute; b&aacute;rmely inform&aacute;ci&oacute;; azonos&iacute;that&oacute; az a term&eacute;szetes szem&eacute;ly, aki k&ouml;zvetlen vagy k&ouml;zvetett m&oacute;don, k&uuml;l&ouml;n&ouml;sen valamely azonos&iacute;t&oacute;, p&eacute;ld&aacute;ul n&eacute;v, sz&aacute;m, helymeghat&aacute;roz&oacute; adat, online azonos&iacute;t&oacute; vagy a term&eacute;szetes szem&eacute;ly testi, fiziol&oacute;giai, genetikai, szellemi, gazdas&aacute;gi, kultur&aacute;lis vagy szoci&aacute;lis azonoss&aacute;g&aacute;ra vonatkoz&oacute; egy vagy t&ouml;bb t&eacute;nyező alapj&aacute;n azonos&iacute;that&oacute;;</p>
+<p><strong>Adatkezelő:</strong> az a term&eacute;szetes vagy jogi szem&eacute;ly, k&ouml;zhatalmi szerv, &uuml;gyn&ouml;ks&eacute;g vagy b&aacute;rmely egy&eacute;b szerv, amely a szem&eacute;lyes adatok kezel&eacute;s&eacute;nek c&eacute;ljait &eacute;s eszk&ouml;zeit &ouml;n&aacute;ll&oacute;an vagy m&aacute;sokkal egy&uuml;tt meghat&aacute;rozza; ha az adatkezel&eacute;s c&eacute;ljait &eacute;s eszk&ouml;zeit az uni&oacute;s vagy a tag&aacute;llami jog hat&aacute;rozza meg, az adatkezelőt vagy az adatkezelő kijel&ouml;l&eacute;s&eacute;re vonatkoz&oacute; k&uuml;l&ouml;n&ouml;s szempontokat az uni&oacute;s vagy a tag&aacute;llami jog is meghat&aacute;rozhatja;</p>
+<p><strong>Az &eacute;rintett hozz&aacute;j&aacute;rul&aacute;sa:</strong> az &eacute;rintett akarat&aacute;nak &ouml;nk&eacute;ntes, konkr&eacute;t &eacute;s megfelelő t&aacute;j&eacute;koztat&aacute;son alapul&oacute; &eacute;s egy&eacute;rtelmű kinyilv&aacute;n&iacute;t&aacute;sa, amellyel az &eacute;rintett nyilatkozat vagy a megerős&iacute;t&eacute;st f&eacute;lre&eacute;rthetetlen&uuml;l kifejező cselekedet &uacute;tj&aacute;n jelzi, hogy beleegyez&eacute;s&eacute;t adja az őt &eacute;rintő szem&eacute;lyes adatok kezel&eacute;s&eacute;hez;</p>
+<p><strong>Adatv&eacute;delmi incidens:</strong> a biztons&aacute;g olyan s&eacute;r&uuml;l&eacute;se, amely a tov&aacute;bb&iacute;tott, t&aacute;rolt vagy m&aacute;s m&oacute;don kezelt szem&eacute;lyes adatok v&eacute;letlen vagy jogellenes megsemmis&iacute;t&eacute;s&eacute;t, elveszt&eacute;s&eacute;t, megv&aacute;ltoztat&aacute;s&aacute;t, jogosulatlan k&ouml;zl&eacute;s&eacute;t vagy az azokhoz val&oacute; jogosulatlan hozz&aacute;f&eacute;r&eacute;st eredm&eacute;nyezi.</p>
+<p><strong>C&iacute;mzett:</strong> az a term&eacute;szetes vagy jogi szem&eacute;ly, k&ouml;zhatalmi szerv, &uuml;gyn&ouml;ks&eacute;g vagy b&aacute;rmely egy&eacute;b szerv, akivel vagy amellyel a szem&eacute;lyes adatot k&ouml;zlik, f&uuml;ggetlen&uuml;l att&oacute;l, hogy harmadik f&eacute;l-e. Azon k&ouml;zhatalmi szervek, amelyek egy egyedi vizsg&aacute;lat keret&eacute;ben az uni&oacute;s vagy a tag&aacute;llami joggal &ouml;sszhangban f&eacute;rhetnek hozz&aacute; szem&eacute;lyes adatokhoz, nem minős&uuml;lnek c&iacute;mzettnek; az eml&iacute;tett adatok e k&ouml;zhatalmi szervek &aacute;ltali kezel&eacute;se meg kell, hogy feleljen az adatkezel&eacute;s c&eacute;ljainak megfelelően az alkalmazand&oacute; adatv&eacute;delmi szab&aacute;lyoknak;</p>
+<p><strong>Harmadik f&eacute;l:</strong> az a term&eacute;szetes vagy jogi szem&eacute;ly, k&ouml;zhatalmi szerv, &uuml;gyn&ouml;ks&eacute;g vagy b&aacute;rmely egy&eacute;b szerv, amely nem azonos az &eacute;rintettel, az adatkezelővel, az adatfeldolgoz&oacute;val vagy azokkal a szem&eacute;lyekkel, akik az adatkezelő vagy adatfeldolgoz&oacute; k&ouml;zvetlen ir&aacute;ny&iacute;t&aacute;sa alatt a szem&eacute;lyes adatok kezel&eacute;s&eacute;re felhatalmaz&aacute;st kaptak.</p>                       
+                    </div>
+                    <a href="//adatvedelem" class="article-next">Tovább</a>
+                </div>
+        </div>        <div class="article-box">                        
+                <div class="article-image">
+                    <a href="//bringa"></a>
+                </div> 
+                <div class="article-content">
+                        
+                    <div class="title"><a href="//bringa">Kerékpáros váltó</a></div>
+                    <div class="date">Dátum: 22-07-18 09:58</div>
+                    <div class="text">
+                        <p style="text-align: center;"><span style="color: #ff0000;"><strong>JAZZFŐV&Aacute;ROS&nbsp;ker&eacute;kp&aacute;ros v&aacute;lt&oacute;<br /></strong></span><strong>2023. augusztus 6., vas&aacute;rnap&nbsp;10.00<br /></strong><strong>Kecskem&eacute;t, Benk&oacute; Zolt&aacute;n Szabadidők&ouml;zpont<br /></strong><strong>T&oacute; Hotel (JAZZFŐV&Aacute;ROS II. kapu)<br /></strong><strong><a href="https://docs.google.com/forms/d/e/1FAIpQLSfXMY_8H3QagknA-fqJ86PGvLyFrxOoUgBOm5tvLPHAvM0LDg/viewform" target="_blank" rel="noopener">ONLINE NEVEZ&Eacute;S ITT aug. 3-&aacute;n &eacute;jf&eacute;lig!</a><br /></strong>&Iacute;gy nem kell a helysz&iacute;nen pap&iacute;rt kit&ouml;ltened &eacute;s biztosan kapsz JAZZFŐV&Aacute;ROS p&oacute;l&oacute;t a saj&aacute;t m&eacute;retedre.<br />Ha lek&eacute;sted az online nevez&eacute;st, a verseny előtt a helysz&iacute;nen is nevezhetsz.<strong><br />A JAZZFŐV&Aacute;ROS ker&eacute;kp&aacute;ros v&aacute;lt&oacute; r&eacute;sztvevői INGYENES BEL&Eacute;PŐ-t kapnak a vas&aacute;rnapi programra!<br /></strong>r&eacute;szletek lejjebb...</p>
+<p style="text-align: center;"><strong>Eredm&eacute;nyhirdet&eacute;s:</strong><br /><strong>2023. aug. 6., vas&aacute;rnap&nbsp;12.00, a Cargoport sz&iacute;npad előtt</strong></p>
+<hr />                       
+                    </div>
+                    <a href="//bringa" class="article-next">Tovább</a>
+                </div>
+        </div>        <div class="article-box">                        
+                <div class="article-image">
+                    <a href="//roplabda"></a>
+                </div> 
+                <div class="article-content">
+                        
+                    <div class="title"><a href="//roplabda">Strandröplabda</a></div>
+                    <div class="date">Dátum: 22-07-18 09:30</div>
+                    <div class="text">
+                        <p><strong>Strandr&ouml;plabda torna elsősorban c&eacute;ges&nbsp;csapatok r&eacute;sz&eacute;re: <a href="https://docs.google.com/forms/d/e/1FAIpQLSdlRxl6f81-NAw5sjpLnM00UjEOi32ScxRNPXQuaCzIH2Y4hg/viewform" target="_blank" rel="noopener">T&Ouml;LTSD KI A JELENTKEZ&Eacute;SI LAPOT ITT!</a></strong></p>
+<p><strong>C&eacute;lja:</strong> Szabadidős sportrendezv&eacute;ny, amelynek c&eacute;lja az eg&eacute;szs&eacute;ges &eacute;letm&oacute;d n&eacute;pszerűs&iacute;t&eacute;se, a r&ouml;plabda&nbsp;szeretet&eacute;nek megoszt&aacute;sa, a rendezv&eacute;ny t&aacute;mogat&oacute;i k&ouml;r&eacute;nek csapat&eacute;p&iacute;tő&nbsp;jellegű sportol&aacute;s biztos&iacute;t&aacute;sa. Sportszerű j&aacute;t&eacute;k (FAIR PLAY) &eacute;rv&eacute;nyre juttat&aacute;sa.</p>
+<p><strong>Időpont:</strong> 2023. augusztus 5., szombat 9.00-12.30</p>
+<p><strong>Helysz&iacute;n:</strong> Benk&oacute; Zolt&aacute;n Szabadidők&ouml;zpont, Kecskem&eacute;t, Csabay G&eacute;za krt.&nbsp;7., JAZZFŐV&Aacute;ROS fesztiv&aacute;l ter&uuml;lete</p>
+<p><strong>Jelentkez&eacute;s:</strong> <a href="https://docs.google.com/forms/d/e/1FAIpQLSdlRxl6f81-NAw5sjpLnM00UjEOi32ScxRNPXQuaCzIH2Y4hg/viewform" target="_blank" rel="noopener"><strong>ONLINE</strong></a> 2023. j&uacute;lius 31., h&eacute;tfő 16 &oacute;r&aacute;ig.&nbsp;Minden r&eacute;sztvevő saj&aacute;t felelőss&eacute;g&eacute;re vesz r&eacute;szt a torn&aacute;n.</p>
+<p><strong>Felt&eacute;tele:</strong>&nbsp;c&eacute;ges csapatba csak olyan j&aacute;t&eacute;kosok nevezhetőek, akik a rendezv&eacute;nyt t&aacute;mogat&oacute; gazdas&aacute;gi t&aacute;rsas&aacute;gokkal munkav&eacute;gz&eacute;sre ir&aacute;nyul&oacute; jogviszonyban &aacute;llnak. K&eacute;r&uuml;nk mindenkit, hogy a SPORTSZERŰS&Eacute;G keret&eacute;ben minden j&aacute;t&eacute;kos a fenti felt&eacute;teleknek megfelelő legyen! Bar&aacute;ti t&aacute;rsas&aacute;ggal t&ouml;rt&eacute;nő nevez&eacute;s eset&eacute;n ez nem felt&eacute;tel.</p>
+<p>A torna elsődleges c&eacute;lja az &ouml;nfeledt sz&oacute;rakoz&aacute;s: a &bdquo;v&eacute;rre menő&rdquo; k&uuml;zdelem helyett sportszerű j&aacute;t&eacute;k (FAIR PLAY) messzemenő &eacute;rv&eacute;nyre juttat&aacute;sa. A jelentkező csapatok sz&aacute;ma optim&aacute;lis esetben 6, maximum 8 lehet. A jelentkező csapatok sz&aacute;m&aacute;nak f&uuml;ggv&eacute;ny&eacute;ben szervezős&eacute;g fenntartja a jogot az időbeoszt&aacute;&eacute;s megv&aacute;ltoztat&aacute;s&aacute;ra (pl. kor&aacute;bbi kezd&eacute;s).</p>
+<p><strong><a href="https://docs.google.com/forms/d/e/1FAIpQLSdlRxl6f81-NAw5sjpLnM00UjEOi32ScxRNPXQuaCzIH2Y4hg/viewform" target="_blank" rel="noopener">T&Ouml;LTSD KI A JELENTKEZ&Eacute;SI LAPOT ITT!</a></strong></p>
+<p><strong>Lebonyol&iacute;t&aacute;s rendje:</strong><br />9.00-11.00 k&ouml;rm&eacute;rkőz&eacute;s (r&eacute;szletek az oldal alj&aacute;n)</p>
+<!--p><strong>Lebonyolítás tervezett rendje (6 csapat esetén):</strong><br />9.00-11.00 csoportmérkőzések<br />11.00-12.30  a csoportok első két helyezettje részvételével</p-->
+<p><strong>D&iacute;jaz&aacute;s:</strong><br />1. hely: kupa, &eacute;rem, oklev&eacute;l<br />2-3. hely: &eacute;rem, oklev&eacute;l<br />Minden csapat: oklev&eacute;l</p>
+<p><strong>Egy&eacute;b:</strong><br />Az &eacute;rt&eacute;kt&aacute;rgyak&eacute;rt felelőss&eacute;get nem v&aacute;llal a rendező! &Ouml;lt&ouml;z&eacute;si, zuhanyoz&aacute;si lehetős&eacute;g a helysz&iacute;nen biztos&iacute;tott. A szervezőkkel szemben minden jogc&iacute;men kiz&aacute;rt a k&aacute;rt&eacute;r&iacute;t&eacute;si ig&eacute;ny &eacute;rv&eacute;nyes&iacute;t&eacute;se!</p>
+<p><strong>Rendező:</strong> JAZZFŐV&Aacute;ROS Kft. (el&eacute;rhetős&eacute;g: jazzfovaros@gmail.com; +36-20/960-7169)<br /><strong>Lebonyol&iacute;t&oacute;:</strong>&nbsp;Kecskem&eacute;ti Sportiskola&nbsp;R&ouml;plabda Szakoszt&aacute;lya: roplabda@juniorsportkft.hu</p>
+<hr />                       
+                    </div>
+                    <a href="//roplabda" class="article-next">Tovább</a>
+                </div>
+        </div>        <div class="article-box">                        
+                <div class="article-image">
+                    <a href="//kosar"></a>
+                </div> 
+                <div class="article-content">
+                        
+                    <div class="title"><a href="//kosar">Kosárlabda</a></div>
+                    <div class="date">Dátum: 22-07-13 00:33</div>
+                    <div class="text">
+                        <p><span style="color: #ff0000;"><strong>A KOS&Aacute;RLABDA KUPA 2023-BAN ELMARAD!</strong></span></p>
+<p><strong>3x3 kos&aacute;rlabda (street ball) torna elsősorban c&eacute;ges&nbsp;csapatok r&eacute;sz&eacute;re: <a href="https://docs.google.com/forms/d/e/1FAIpQLSeJWfuURg0QtEH9c07xUBt4u7R80077ykpJ5hTv-apPKdMPeQ/viewform" target="_blank" rel="noopener">T&Ouml;LTSD KI A JELENTKEZ&Eacute;SI LAPOT ITT!</a></strong></p>
+<p><strong>C&eacute;lja:</strong> Szabadidős sport rendezv&eacute;ny, amelynek c&eacute;lja az eg&eacute;szs&eacute;ges &eacute;letm&oacute;d n&eacute;pszerűs&iacute;t&eacute;se, a&nbsp;kos&aacute;rlabda sport szeretet&eacute;nek megoszt&aacute;sa, a rendezv&eacute;ny t&aacute;mogat&oacute;i k&ouml;r&eacute;nek csapat&eacute;p&iacute;tő&nbsp;jellegű sportol&aacute;s biztos&iacute;t&aacute;sa. Sportszerű j&aacute;t&eacute;k (FAIR PLAY) &eacute;rv&eacute;nyre juttat&aacute;sa.</p>
+<p><strong>Időpont:</strong> 2023. augusztus 5., szombat 10.00-13.30</p>
+<p><strong>Helysz&iacute;n:</strong> Benk&oacute; Zolt&aacute;n Szabadidők&ouml;zpont, Kecskem&eacute;t, Csabay G&eacute;za krt.&nbsp;7., JAZZFŐV&Aacute;ROS fesztiv&aacute;l ter&uuml;lete</p>
+<p><strong>Jelentkez&eacute;s:</strong> <a href="https://docs.google.com/forms/d/e/1FAIpQLSeJWfuURg0QtEH9c07xUBt4u7R80077ykpJ5hTv-apPKdMPeQ/viewform" target="_blank" rel="noopener"><strong>ONLINE</strong></a> 2023. j&uacute;lius 28-ig.&nbsp;Minden r&eacute;sztvevő saj&aacute;t felelőss&eacute;g&eacute;re vesz r&eacute;szt a torn&aacute;n.</p>
+<p><strong>Felt&eacute;tele:</strong> c&eacute;ges csapatba csak olyan j&aacute;t&eacute;kosok nevezhetőek, akik a rendezv&eacute;nyt t&aacute;mogat&oacute; gazdas&aacute;gi t&aacute;rsas&aacute;gokkal munkav&eacute;gz&eacute;sre ir&aacute;nyul&oacute; jogviszonyban &aacute;llnak. K&eacute;r&uuml;nk mindenkit, hogy a SPORTSZERŰS&Eacute;G keret&eacute;ben minden j&aacute;t&eacute;kos a fenti felt&eacute;teleknek megfelelő legyen! Bar&aacute;ti t&aacute;rsas&aacute;ggal t&ouml;rt&eacute;nő nevez&eacute;s eset&eacute;n ez nem felt&eacute;tel.</p>
+<p>A torna elsődleges c&eacute;lja az &ouml;nfeledt sz&oacute;rakoz&aacute;s: a &bdquo;v&eacute;rre menő&rdquo; k&uuml;zdelem helyett sportszerű j&aacute;t&eacute;k (FAIR PLAY) messzemenő &eacute;rv&eacute;nyre juttat&aacute;sa.&nbsp;A jelentkező csapatok sz&aacute;ma optim&aacute;lis esetben 6, maximum 8 lehet. A jelentkező csapatok sz&aacute;m&aacute;nak f&uuml;ggv&eacute;ny&eacute;ben szervezős&eacute;g fenntartja a jogot az időbeoszt&aacute;&eacute;s megv&aacute;ltoztat&aacute;s&aacute;ra (pl. kor&aacute;bbi kezd&eacute;s).</p>
+<p><strong><a href="https://docs.google.com/forms/d/e/1FAIpQLSeJWfuURg0QtEH9c07xUBt4u7R80077ykpJ5hTv-apPKdMPeQ/viewform" target="_blank" rel="noopener">T&Ouml;LTSD KI A JELENTKEZ&Eacute;SI LAPOT ITT!</a></strong></p>
+<p><strong>Lebonyol&iacute;t&aacute;s tervezett rendje (6 csapat eset&eacute;n):</strong><br />10.00-12.00 csoportm&eacute;rkőz&eacute;sek<br />12.00-13.30 &nbsp;a csoportok első k&eacute;t helyezettje r&eacute;szv&eacute;tel&eacute;vel</p>
+<p><strong>D&iacute;jaz&aacute;s:</strong><br />1. hely: kupa, &eacute;rem, oklev&eacute;l<br />2-3. hely: &eacute;rem, oklev&eacute;l<br />Minden csapat: oklev&eacute;l</p>
+<p><strong>Egy&eacute;b:</strong><br />Az &eacute;rt&eacute;kt&aacute;rgyak&eacute;rt felelőss&eacute;get nem v&aacute;llal a rendező! &Ouml;lt&ouml;z&eacute;si, zuhanyoz&aacute;si lehetős&eacute;ga helysz&iacute;nen biztos&iacute;tott. A szervezőkkel szemben minden jogc&iacute;men kiz&aacute;rt a k&aacute;rt&eacute;r&iacute;t&eacute;si ig&eacute;ny &eacute;rv&eacute;nyes&iacute;t&eacute;se!</p>
+<p><strong>Rendező:</strong> JAZZFŐV&Aacute;ROS Kft. (el&eacute;rhetős&eacute;g: jazzfovaros@gmail.com; +36-20/960-7169)<br /><strong>Lebonyol&iacute;t&oacute;:</strong>&nbsp;DECATHLON kecskem&eacute;ti &aacute;ruh&aacute;z&aacute;nak munkat&aacute;rsai</p>
+<hr />                       
+                    </div>
+                    <a href="//kosar" class="article-next">Tovább</a>
+                </div>
+        </div>        <div class="article-box">                        
+                <div class="article-image">
+                    <a href="//jazztabor_tanarok"></a>
+                </div> 
+                <div class="article-content">
+                        
+                    <div class="title"><a href="//jazztabor_tanarok">A JAZZTÁBOR TANÁRAI</a></div>
+                    <div class="date">Dátum: 22-07-05 10:48</div>
+                    <div class="text">
+                        <p>Bolba &Eacute;va (&eacute;nek) *&nbsp;Cseh Bal&aacute;zs (dob) * Dennert &Aacute;rp&aacute;d (faf&uacute;v&oacute;sok) *&nbsp;Farkas P&eacute;ter (bőgő) * Gy&aacute;rf&aacute;s Istv&aacute;n (git&aacute;r)&nbsp;* Ittz&eacute;s Tam&aacute;s (t&aacute;borvezető, hegedű) * Korb Attila (r&eacute;zf&uacute;v&oacute;sok, zongora, szaxofon, zenekari gyakorlat) * Luk&aacute;cs Eszter (&eacute;nek) * Nagy Iv&aacute;n (zongora) * Rieger Attila (git&aacute;r)&nbsp;* Szal&oacute;ky B&eacute;la (r&eacute;zf&uacute;v&oacute;sok, zenekari gyakorlat)</p>
+<hr />
+<p>&nbsp;</p>                       
+                    </div>
+                    <a href="//jazztabor_tanarok" class="article-next">Tovább</a>
+                </div>
+        </div>        <div class="article-box">                        
+                <div class="article-image">
+                    <a href="//sport"></a>
+                </div> 
+                <div class="article-content">
+                        
+                    <div class="title"><a href="//sport">Sport</a></div>
+                    <div class="date">Dátum: 22-06-26 13:50</div>
+                    <div class="text">
+                        <p><span style="color: #ff0000;"><strong>A BOH&Eacute;M JAZZFŐV&Aacute;ROS fesztiv&aacute;l sportprogramjai egy helyen ABC szerint (időrendi bont&aacute;st ld. a Programok oldalon). A MOZOGJ &Eacute;S FESZTIV&Aacute;LOZZ! szlogen alatt szereplő, pirossal szedett sportversenyen indul&oacute;k ingyenes bel&eacute;pőt kapnak a fesztiv&aacute;lra. R&eacute;szleteket ld. az oldal alj&aacute;n &eacute;s a sport&aacute;gi linkeken:</strong></span></p>
+<hr /><!--p><strong>DECATHLON Sportpark</strong> (ping-pong, tollas, kültéri ügyességi játékok, sporteszközök stb.) – 2023. aug. 5-6., szombat-vasárnap</p>
+<p><span style="color: #ff0000;"><strong>FOCI (MOZOGJ ÉS FESZTIVÁLOZZ!)</strong></span> JAZZFŐVÁROS focikupa cégeknek, baráti társaságoknak – 2023. aug. 5., szombat 10.00-16.00 – <strong><a href="/foci" target="_blank" rel="noopener">SZABÁLYOK, ONLINE JELENTKEZÉSI LAP ITT!</a></strong></p>
+<p><strong>FOCI</strong> (célbarúgó verseny) – 2023. aug. 6., vasárnap 11.30 – jelentkezni a helyszínen lehet</p-->
+<p><span style="color: #ff0000;"><strong>FUT&Aacute;S (MOZOGJ &Eacute;S FESZTIV&Aacute;LOZZ!)</strong></span>&nbsp;JAZZFŐV&Aacute;ROS fut&aacute;s &ndash; 2024. aug. 3., szombat 10.00 &ndash; <a href="/futas" target="_blank" rel="noopener"><strong>SZAB&Aacute;LYOK, ONLINE JELENTKEZ&Eacute;SI LAP ITT!</strong></a> (jelentkezni a helysz&iacute;nen is lehet 9.45-ig)</p>
+<!--p><strong>FUTÁS</strong> (zenés váltófutás 4 fős csapatoknak) – 2023. aug. 5., szombat 11.30 – <strong><a href="/futas" target="_blank" rel="noopener">SZABÁLYOK, ONLINE JELENTKEZÉSI LAP ITT!</a></strong> (jelentkezni a helyszínen is lehet 11.15-ig)</p--><!--p><span style="color: #ff0000;"><strong>KERÉKPÁR (MOZOGJ ÉS FESZTIVÁLOZZ!)</strong></span> 1 órás váltóverseny családoknak, cégeknek, baráti társaságoknak – 2023. aug. 6., vasárnap 10.00 – <strong><a href="/bringa" target="_blank" rel="noopener">SZABÁLYOK, ONLINE JELENTKEZÉSI LAP ITT!</a> </strong>(jelentkezni a helyszínen is lehet 9.45-ig)</p--><!--p><strong>KOSÁRLABDA</strong> (3x3 streetball kosárkupa cégeknek, baráti társaságoknak) – 2023. aug. 5., szombat 10.00-12.00 – <strong><a href="/kosarlabda" target="_blank" rel="noopener">SZABÁLYOK, ONLINE JELENTKEZÉSI LAP ITT!</a></strong></p--><!--p><strong>KOSÁRLABDA </strong>(kosárdobó verseny) – 2023. aug. 6., vasárnap 12.30 – jelentkezni a helyszínen lehet</p-->
+<p><strong>LABIRINTUSP&Aacute;LYA</strong>&nbsp;(t&aacute;jfut&aacute;s alapjai, elsősorban gyerekeknek) &ndash; 2024. aug. 2-4., p&eacute;ntek-vas&aacute;rnap (a fesztiv&aacute;l alatt folyamatosan)</p>
+<p><strong>S&Aacute;RK&Aacute;NYHAJ&Oacute;Z&Aacute;S</strong> &ndash; 2024. aug. 3., szombat (s&aacute;rk&aacute;nyhaj&oacute;z&aacute;s: 15.00-19.00, zen&eacute;s-f&aacute;kly&aacute;s s&aacute;rk&aacute;nyhaj&oacute;z&aacute;s: 21.30) &ndash; jelentkezni a helysz&iacute;nen lehet</p>
+<p><strong>STRAND</strong> &ndash; fesztiv&aacute;lkarszalaggal a Domb Beach strand a BOH&Eacute;M JAZZFŐV&Aacute;ROS fesztiv&aacute;l alatt ingyenesen l&aacute;togathat&oacute;!</p>
+<p><span style="color: #000000;"><strong>STRANDR&Ouml;PLABDA</strong></span>&nbsp;&ndash; a fesztiv&aacute;llal szomsz&eacute;des strandon k&eacute;t strandr&ouml;plabda p&aacute;lya &aacute;ll rendelkez&eacute;sre a j&aacute;t&eacute;khoz (j&uacute;l. 31-ig t&ouml;rt&eacute;nő előzetes jelz&eacute;s eset&eacute;n labd&aacute;t tudunk biztos&iacute;tani!)<!--strong><a href="/roplabda" target="_blank" rel="noopener">SZABÁLYOK, ONLINE JELENTKEZÉSI LAP ITT!</a></strong--></p>
+<!--p><strong>TÁJFUTÁS "Fusd le az IQ-dat!"</strong> – 2023. aug. 4-6., péntek-vasárnap (játékos tájfutás a fesztivál alatt folyamatosan)</p-->                       
+                    </div>
+                    <a href="//sport" class="article-next">Tovább</a>
+                </div>
+        </div>        <div class="article-box">                        
+                <div class="article-image">
+                    <a href="//logall-tajekozodasi-futas"></a>
+                </div> 
+                <div class="article-content">
+                        
+                    <div class="title"><a href="//logall-tajekozodasi-futas">LOGALL tájékozódási futás</a></div>
+                    <div class="date">Dátum: 21-07-20 00:14</div>
+                    <div class="text">
+                        <p style="text-align: center;"><strong>2021. augusztus 8., vas&aacute;rnap 10.00</strong><br /><strong>Kecskem&eacute;t, Benk&oacute; Zolt&aacute;n Szabadidők&ouml;zpont</strong><br /><strong>T&oacute; Hotel (JAZZFŐV&Aacute;ROS II. kapu)</strong></p>
+<p style="text-align: center;"><strong>A versenyen csak a fesztiv&aacute;lt t&aacute;mogat&oacute; c&eacute;gek 4 fős csapatai vehetnek r&eacute;szt.<br /></strong><strong>Egy c&eacute;g t&ouml;bb csapatot is ind&iacute;that.<br />Jelentkez&eacute;si hat&aacute;ridő: 2021. j&uacute;lius 30. p&eacute;ntek<br /><span style="color: #ff0000;">AZ ONLINE JELENTKEZ&Eacute;SHEZ&nbsp;<a href="https://docs.google.com/forms/d/e/1FAIpQLSeZzpyf8v774bLuh_cLXppDwDbj7Xze-P5MQ6ZnPzlnkDOSeQ/viewform" target="_blank">IDE KATTINTS!</a></span></strong></p>
+<p style="text-align: center;"><span style="color: #000000;">Bővebb inform&aacute;ci&oacute; a t&aacute;jfut&aacute;sr&oacute;l az oldal alj&aacute;n.</span></p>
+<p>Elősz&ouml;r is ismerkedj&uuml;nk azzal, hogy mi is az a t&aacute;j&eacute;koz&oacute;d&aacute;si fut&aacute;s, vagy egyszerűs&iacute;tve t&aacute;jfut&aacute;s. A t&aacute;jfut&aacute;s nem a sz&eacute;p t&aacute;jakr&oacute;l kapta a nev&eacute;t, ahol a versenyzők futnak. A t&aacute;jfut&aacute;sban a t&aacute;j&eacute;koz&oacute;d&aacute;s a l&eacute;nyeg t&eacute;rk&eacute;ppel &eacute;s t&aacute;jol&oacute;val, az &uacute;tvonal szabad megv&aacute;laszt&aacute;sa az ellenőrző pontok k&ouml;z&ouml;tt, &eacute;s a v&aacute;lasztott &uacute;tvonal hib&aacute;tlan teljes&iacute;t&eacute;se. &Eacute;s term&eacute;szetesen a fut&aacute;s: erdőben, mezőn, boz&oacute;tosban, tiszt&aacute;son. Ehhez sporthoz erőnl&eacute;t kell, mert hegyi terepen, utakr&oacute;l let&eacute;rve futni embert pr&oacute;b&aacute;l&oacute;. Az a sport, amihez szellemi koncentr&aacute;ci&oacute; kell, mert a t&eacute;rk&eacute;p alapj&aacute;n kell gyorsan t&aacute;j&eacute;koz&oacute;dva megtal&aacute;lni a pontokat, amelyek kiadj&aacute;k a p&aacute;ly&aacute;t. A j&oacute; t&aacute;jfut&oacute;nak mind fizikailag, mind ment&aacute;lisan magas teljes&iacute;tm&eacute;nyt kell ny&uacute;jtania. A t&aacute;jfut&aacute;s ugyanakkor egy j&aacute;t&eacute;k, kaland, amihez nem kellenek bonyolult eszk&ouml;z&ouml;k, csak egy t&eacute;rk&eacute;p &eacute;s egy t&aacute;jol&oacute;, amelyek seg&iacute;ts&eacute;g&eacute;vel a kikapcsol&oacute;d&aacute;s k&uuml;l&ouml;nleges form&aacute;j&aacute;t adja a XXI. sz&aacute;zad ember&eacute;nek: sport k&ouml;zben visszavezeti a term&eacute;szetbe, az eg&eacute;szs&eacute;ges k&ouml;rnyezetbe, mik&ouml;zben fejleszti a probl&eacute;mamegold&oacute; &eacute;s d&ouml;nt&eacute;si k&eacute;pess&eacute;g&eacute;t.</p>
+<p>A LOGALL t&aacute;j&eacute;koz&oacute;d&aacute;si fut&oacute;versenyre egy szervezet t&ouml;bb csapatot is &ouml;ssze&aacute;ll&iacute;that. A n&eacute;gy főből &aacute;ll&oacute; csapatok v&aacute;lt&oacute;versenyen fognak r&eacute;szt venni. Az indul&aacute;s t&ouml;megrajtos lesz, ez azt jelenti, hogy az egyes csapatb&oacute;l az első indul&oacute;k egyidejűleg indulnak el, viszont mindenki m&aacute;s-m&aacute;s p&aacute;ly&aacute;t fut be. A k&ouml;vetkező csapattag akkor mehet ki, amikor az előző t&aacute;rsa be&eacute;rt a c&eacute;lba, &eacute;s k&eacute;z&eacute;rint&eacute;ssel lehetős&eacute;get kap az indul&aacute;sra. Ez addig megy, am&iacute;g a negyedik versenyző is be&eacute;r a c&eacute;lba. A versenyt az a csapat nyeri meg aki a legr&ouml;videbb idő alatt hib&aacute;tlanul teljes&iacute;ti mind a n&eacute;gy p&aacute;ly&aacute;t.</p>
+<p>A sz&uuml;ks&eacute;ges sporteszk&ouml;z&ouml;ket biztos&iacute;tjuk (t&eacute;rk&eacute;p, t&aacute;jol&oacute;, időm&eacute;rő) csak egy k&eacute;nyelmes fut&aacute;sra alkalmas ruh&aacute;zattal, illetve cipővel kell k&eacute;sz&uuml;lni. A versenyt megelőzően r&eacute;szletes t&aacute;j&eacute;koztat&aacute;st fogunk tartani a t&eacute;rk&eacute;p haszn&aacute;latr&oacute;l &eacute;s a t&aacute;j&eacute;koz&oacute;d&aacute;s alapjair&oacute;l. &nbsp;</p>                       
+                    </div>
+                    <a href="//logall-tajekozodasi-futas" class="article-next">Tovább</a>
+                </div>
+        </div>        <div class="article-box">                        
+                <div class="article-image">
+                    <a href="//szep-kartya"></a>
+                </div> 
+                <div class="article-content">
+                        
+                    <div class="title"><a href="//szep-kartya">SZÉP-kártya</a></div>
+                    <div class="date">Dátum: 21-05-21 18:02</div>
+                    <div class="text">
+                        <p><span style="color: #ff0000;"><strong>SZ&Eacute;P-k&aacute;rty&aacute;t elfogadunk!</strong></span></p>
+<p>Sz&eacute;chenyi Pihenő K&aacute;rty&aacute;val kifizetheted a fesztiv&aacute;lbel&eacute;pődet (a Boh&eacute;m Web&aacute;ruh&aacute;zban &eacute;s szem&eacute;lyesen) &eacute;s a sz&aacute;ll&aacute;sodat (k&ouml;zvetlen&uuml;l a sz&aacute;llod&aacute;kban). R&aacute;ad&aacute;sul egy 2021-ben hozott&nbsp;&eacute;s 2022-ben&nbsp;meghosszabb&iacute;tott korm&aacute;nyrendeletnek k&ouml;sz&ouml;nhetően 2022. szeptember&nbsp;30-ig b&aacute;rmelyik (sz&aacute;ll&aacute;shely, vend&eacute;gl&aacute;t&aacute;s, rekre&aacute;ci&oacute;) zsebből fizethetsz! A tervek szerint a helysz&iacute;nen &eacute;telt-italt is fizethetsz SZ&Eacute;P-k&aacute;rty&aacute;val n&eacute;melyik gasztro-szolg&aacute;ltat&oacute;n&aacute;l. R&eacute;szletek al&aacute;bb:</p>                       
+                    </div>
+                    <a href="//szep-kartya" class="article-next">Tovább</a>
+                </div>
+        </div>
+   <ul class="pager"><li class="active"> 1 </li><li><a href="?p=2" title="2/4" alt="2/4">2</a></li><li><a href="?p=3" title="3/4" alt="3/4">3</a></li><li><a href="?p=4" title="4/4" alt="4/4">4</a></li><li class="next"><a href="?p=2">&gt;</a></li><li class="end"><a href="?p=4">&gt;&gt;</a></li></ul>
+
+<div class="rovat">
+
+<div class="col-xs-12 col-sm-6 col-md-3 text-center tevekenysegek ">
+                    <div class="bg-white tevekenysegek-inner">
+                        <h2>Menüstruktúra</h2>
+<!--                        <img src="" alt="Menüstruktúra" title="Menüstruktúra">
+-->
+                        <p></p>
+                        <a href=" /" class="tevekenysegek-more">BŐVEBBEN</a>
+                    </div>
+</div>                
+</div>                    
+  </div>
+    
+
+
+
+    <div class="container">
+        <div id="tamogatok">
+              <div class="title">
+              Támogatók              </div>
+              
+              
+                <div class="supporter-box">
+                  <div class="sup-title red">
+                   
+                     Főtámogatók                   
+                  </div>
+                  <a href="http://www.kecskemet.hu" target="_blank" class="partner-logo" title="KMJV"><img src="/gallery/menu/1302-6642.png" alt="" title="KMJV"></a><a href="www.nka.hu" target="_blank" class="partner-logo" title="NKA"><img src="/gallery/menu/1296-2624.png" alt="" title="NKA"></a><a href="ste" target="_blank" class="partner-logo" title="STE"><img src="/gallery/menu/1407-3126.png" alt="" title="STE"></a><a href="http://logall.hu/" target="_blank" class="partner-logo" title="Logall"><img src="/gallery/menu/1375-5338.png" alt="" title="Logall"></a><a href="http://www.alcufer.hu/hu/" target="_blank" class="partner-logo" title="Alcufer"><img src="/gallery/menu/1390-4377.png" alt="" title="Alcufer"></a><a href="http://www.cargoport.hu" target="_blank" class="partner-logo" title="Cargoport"><img src="/gallery/menu/1377-2536.png" alt="" title="Cargoport"></a><a href="https://nje.hu/" target="_blank" class="partner-logo" title="Neumann Egyetem"><img src="/gallery/menu/1403-6758.png" alt="" title="Neumann Egyetem"></a><a href="https://www.netherlandsandyou.nl/web/hungary/about-us" target="_blank" class="partner-logo" title="Holland Nagykövetség"><img src="/gallery/menu/1333-6769.png" alt="" title="Holland Nagykövetség"></a>               </div>
+                
+                <div class="supporter-box">
+                  <div class="sup-title green">
+                   
+                     Szponzorok                   
+                  </div>
+                  <a href="https://www.felegyhazipekseg.hu" target="_blank" class="partner-logo" title="Félegyházi Pékség"><img src="/gallery/menu/1364-4060.png" alt="" title="Félegyházi Pékség"></a><a href="http://kedozrt.hu" target="_blank" class="partner-logo" title="KEDO"><img src="/gallery/menu/1413-9085.png" alt="" title="KEDO"></a>               </div>
+                
+                <div class="supporter-box">
+                  <div class="sup-title blue">Partnerek</div>
+                  <a href="https://mediaklikk.hu/bartok/" target="_blank" class="partner-logo" title="Bartók Rádió"><img src="/gallery/menu/1416-5177.png" alt="" title="Bartók Rádió"></a><a href="https://hiros.hu" target="_blank" class="partner-logo" title="hiros.hu"><img src="/gallery/menu/1315-7264.png" alt="" title="hiros.hu"></a><a href="https://www.axon-cable.com/en/axon-kabelgyarto-hungary" target="_blank" class="partner-logo" title="Axon"><img src="/gallery/menu/1394-8120.png" alt="" title="Axon"></a><a href="http://furedi.eu/" target="_blank" class="partner-logo" title="Füredi"><img src="/gallery/menu/1359-1595.png" alt="" title="Füredi"></a><a href="https://dtkh.hu" target="_blank" class="partner-logo" title="DTKH"><img src="/gallery/menu/1339-3453.png" alt="" title="DTKH"></a><a href="https://gepesz.hu" target="_blank" class="partner-logo" title="Gépész"><img src="/gallery/menu/1300-9865.png" alt="" title="Gépész"></a><a href="tiszafoldvari-italkereskedohaz" target="_blank" class="partner-logo" title="Tiszaföldvári Italkereskedőház"><img src="/gallery/menu/1391-4915.png" alt="" title="Tiszaföldvári Italkereskedőház"></a><a href="kefag" target="_blank" class="partner-logo" title="KEFAG"><img src="/gallery/menu/1311-5581.png" alt="" title="KEFAG"></a><a href="http://www.microsystem.hu" target="_blank" class="partner-logo" title="Microsystem"><img src="/gallery/menu/1405-8346.png" alt="" title="Microsystem"></a><a href="https://botondkft.hu/" target="_blank" class="partner-logo" title="Botond Kft."><img src="/gallery/menu/1353-3892.png" alt="" title="Botond Kft."></a><a href="https://www.beewatec.de/hu/" target="_blank" class="partner-logo" title="BeeWaTec"><img src="/gallery/menu/1360-5339.png" alt="" title="BeeWaTec"></a><a href="https://termostar.hu/kezdolap" target="_blank" class="partner-logo" title="termostar"><img src="/gallery/menu/1335-9925.png" alt="" title="termostar"></a><a href="https://www.simonotthonok.hu/" target="_blank" class="partner-logo" title="Simon Otthonok"><img src="/gallery/menu/1387-7975.png" alt="" title="Simon Otthonok"></a><a href="https://www.szabadidokozpont-kecskemet.hu/" target="_blank" class="partner-logo" title="Benkó Zoltán Szabadidőközpont"><img src="/gallery/menu/1381-2680.png" alt="" title="Benkó Zoltán Szabadidőközpont"></a><a href="https://hirosveteran.hu" target="_blank" class="partner-logo" title="Hírös Veterán"><img src="/gallery/menu/1409-6341.png" alt="" title="Hírös Veterán"></a><a href="https://www.juszti.hu" target="_blank" class="partner-logo" title="Iustitia"><img src="/gallery/menu/1410-6252.png" alt="" title="Iustitia"></a><a href="https://www.facebook.com/kecskemetitarsasjatek/" target="_blank" class="partner-logo" title="Társasjáték"><img src="/gallery/menu/1414-7680.png" alt="" title="Társasjáték"></a>               </div> 
+                
+        </div>
+    </div>
+    
+    
+</section>
+<footer>
+    <div class="container">
+     
+    <div class="abslogo">
+     
+                            <a href="/"> <img src="/images/logo19_hu.png?v=2" alt="Kezdőlap" title="Kezdőlap"></a>
+                          
+    </div>
+
+
+        <div class="footerbox">
+            <div class="footertitle">
+                
+            Navigáció                
+            </div>
+            <ul>
+                   <li><a href="/fellepok" >FELLÉPŐK</a></li><li><a href="https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/" >JEGY 2026</a></li><li><a href="/programok" >PROGRAMOK</a></li><li><a href="/szallas" >SZÁLLÁS</a></li><li><a href="/kozlekedes" >TÉRKÉP, KÖZLEKEDÉS</a></li><li><a href="/aszf" >ÁSZF</a></li><li><a href="/kapcsolat" >KAPCSOLAT</a></li><li><a href="/futas" >futás</a></li><li><a href="/jazztabor" >jazztábor</a></li>                    </ul>            
+        </div>
+        <div class="footerbox">
+            <div class="footertitle">
+            Közösség</div>
+            <p class="social">
+            
+            Csatlakozzon hozzánk közösségi oldalainkon!            </p>
+            <div class="social-icons">
+                <ul>
+                    <li><a href="https://www.youtube.com/watch?v=4gGiiNwHe6E" target="_blank"><img src="/images/f-yt.png" alt="Youtube" title="Youtube" /></a></li>
+                    <li><a href="https://www.instagram.com/jazzfovaros/" target="_blank"><img src="/images/f-insta.png" alt="Instagram" title="Instagram" /></a></li>
+                    <li><a href="http://www.facebook.com/jazzfovaros" target="_blank"><img src="/images/f-fb.png" alt="Facebook" title="Facebook"   /></a></li>
+                </ul>
+                
+                            <div class="clearfix"></div>
+               <p><img src="/images/barion.jpg" alt="Barion" title="Barion" /></p>
+                           </div>                 
+        </div>
+        
+        <div class="footerbox">
+            <div class="footertitle">
+            Fizetési lehetőségek</div>
+            <p>
+            <img src="/images/barion-kicsi.jpg"  alt="" title="" />
+
+            </p>
+                
+        </div>
+        
+        
+        
+    </div>    
+    <div class="bottombar">
+      <div class="container">
+            <div class="left">
+                    
+                    
+                       &copy; Copyright 2018 JAZZFŐVÁROS KFT. MINDEN JOG FENNTARTVA      
+                    
+                    
+            </div>            
+            <div class="right">
+                    <div class="menu">
+                        <ul>
+                            <li><a href="/adatvedelem">Adatvédelem</a></li>
+                                <li><a href="/jogi-nyilatkozat">Jogi nyilatkozat</a></li>
+                                <li><a href="/impresszum">Impresszum</a></li>                        </ul>                        
+                    </div>
+                    <div class="copy">                    
+                        Készítette: <a href="http://mayoka.hu">Mayoka</a>                    
+                    </div>
+            </div>            
+      </div>
+      <div class="clearfix"></div>
+    </div>    
+</footer>
+<script type="text/javascript">       
+  $('.timer').countdown('2026/08/06', function(event) {   
+   $('#jstimer').html(event.strftime('<div class="month">%D</div><div class="week">%H</div><div class="day">%M</div>'));
+ });   
+ </script>
+    <!-- Google remarketingcímke-kód -->
+   <!--------------------------------------------------
+   A remarketingcímkék nem társíthatók személyazonosításra alkalmas adatokkal, és nem helyezhetők el érzékeny kategóriához kapcsolódó oldalakon. A címke beállításával kapcsolatban további információt és útmutatást a következő címen olvashat: http://google.com/ads/remarketingsetup
+   --------------------------------------------------->
+   <script type="text/javascript">
+   /* <![CDATA[ */
+   var google_conversion_id = 881354213;
+   var google_custom_params = window.google_tag_params;
+   var google_remarketing_only = true;
+   /* ]]> */
+   </script>
+   <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+   </script>
+   <noscript>
+   <div style="display:inline;">
+   <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/881354213/?value=0&amp;guid=ON&amp;script=0"/>
+   </div>
+   </noscript>
+
+        <div id="szechenyi" class=""></div>
+</body>
+</html>
+

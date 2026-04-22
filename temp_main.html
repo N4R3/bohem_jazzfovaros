@@ -1,0 +1,463 @@
+
+<!DOCTYPE html>
+<html lang="hu" dir="ltr">
+<head>
+ <title>Kezdőlap - JAZZFŐVÁROS</title>
+    <meta charset="UTF-8">
+    <meta name="robots" content="index, follow, all" />
+    <meta name="description" content="JAZZFŐVÁROS fesztivál sportprogramjai egy helyen." />
+    <meta name="keywords" content="foci, kosárlabda, röplabda, kerékpár, bicikli, bringa, váltófutás, futás, tájfutás, sárkányhajó"/>
+    <meta name="revisit-after" content="1 days" />
+    <meta property="og:site_name" content="Kezdőlap" />
+    <meta property="og:title" content="Kezdőlap" />
+    <meta property="og:url" content="https://jazzfovaros.hu:443/" />
+    <meta property="og:description" content="JAZZFŐVÁROS fesztivál sportprogramjai egy helyen." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="viewport" content="user-scalable=yes, width=device-width, initial-scale=1.0" />
+    <meta name="facebook-domain-verification" content="8ut5kd01a978gezx41e40g4xjg8wet" />
+    <base href="https://jazzfovaros.hu/">
+    <link rel="shortcut icon" href="/images/favicon_jazz.ico" />
+    <link rel="stylesheet" href="/css/lightbox.css">
+    <link rel="stylesheet" href="/css/lightslider2.css">
+    <link rel="stylesheet" href="/css/main.css?v=33" type="text/css" />
+    <link rel="stylesheet" href="/css/responsive.css?v=17" type="text/css" />
+    <link rel="stylesheet" href="/css/jquery.fancybox.css">  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,700' rel='stylesheet' type='text/css'><script src="js/lightslider.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,700,500' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Cantarell" rel="stylesheet">
+ 	 	<link href='https:///fonts.googleapis.com/css?family=Oswald&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <script src="/js/timer.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/jquery.mousewheel-3.0.6.pack.js"></script>
+    <script src="/js/jquery.countdown.js"></script>
+    <script src="/js/jquery.fancybox.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+    <style>
+
+    body #szechenyi {
+	display: block;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	width: 350px;
+	height: 242px;
+	background-image: url(/images/szechenyi_2020.png);
+	background-repeat: no-repeat;
+	transition: all .4s ease;
+    }
+
+
+</style>
+
+    <script>
+     $(document)
+         .ready(function() {
+             $('#main-slider')
+                 .lightSlider({
+                     adaptiveHeight: true,
+                     item: 1,
+                     auto: 1,
+                     pause: 5000,
+                     slideMargin: 0,
+                     controls: 1,
+                     loop: true
+                 });
+                 
+             var pslider = $('#performer-slider')
+                 .lightSlider({
+                     adaptiveHeight: true,
+                     item: 4,
+                     auto: 1,
+                     pause: 5000,
+                     slideMargin: 0,
+                     controls: 0,
+                     loop: true,
+                     
+                     responsive : [
+                     {
+                         breakpoint:1000,
+                         settings: {
+                         item:3,
+                         slideMove:1,
+                         slideMargin:0,
+                           }
+                     },         {
+                         breakpoint:760,
+                         settings: {
+                         item:2,
+                         slideMove:1,
+                         slideMargin:0,
+                           }
+                     },         {
+                         breakpoint:560,
+                         settings: {
+                         item:1,
+                         slideMove:1,
+                         slideMargin:0,
+                           }
+                     }
+                     
+                     
+                     ]
+
+                     
+                     
+                 });
+                 
+                $('#goToPrevSlide').on('click', function () {
+                    pslider.goToPrevSlide();
+                });
+                $('#goToNextSlide').on('click', function () {
+                    pslider.goToNextSlide();
+                });       
+         });
+         
+       $(document).ready(function() {
+           $(".performer-popup").fancybox({          
+           type: 'ajax'                     
+           });
+       });         
+     </script>
+     <!-- Facebook Pixel Code -->
+     <script>
+     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+     n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+     n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+     t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+     document,'script','https://connect.facebook.net/en_US/fbevents.js');
+     
+     fbq('init', '1011250538943528');
+     fbq('track', "PageView");</script>
+     <noscript><img height="1" width="1" style="display:none"
+     src="https://www.facebook.com/tr?id=1011250538943528&ev=PageView&noscript=1"
+     /></noscript>
+     <!-- End Facebook Pixel Code -->
+          
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-53K27Q3');</script>
+<!-- End Google Tag Manager -->
+
+
+
+     
+</head>
+<body>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-53K27Q3"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+
+   <script>swal.fire('A 2026-os fesztivál bérletei már kaphatók!', '', '');</script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78158185-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<div id="mainbg"></div>
+<div id="lajos">
+ <img src="/images/lajos.png" alt="JAZZFŐVÁROS" title="JAZZFŐVÁROS" />
+</div>
+<header>
+   
+    <div class="container">
+     
+
+     
+        <h1 class="jazz-title">JAZZFŐVÁROS Kecskemét,<br />2022. augusztus 4-7.</h1>
+        <div class="abslogo">
+                            <a href="/"> <img src="/images/logo19_hu.svg?v=3" width="132" alt="Kezdőlap" title="Kezdőlap"></a>
+                     </div>
+        
+        <div class="abslogo-mobile">
+          <a href="/"> <img src="/images/logo19_hu.svg?v=4" width="90" alt="Kezdőlap" title="Kezdőlap" /></a>        </div>
+        
+
+        <div class="timer">
+            <div id="jstimer" class="clock">
+            </div>       
+        </div>
+        
+
+        
+        <div class="program-info">Bohém JAZZFŐVÁROS Kecskemét, 2026. augusztus 6-9.</div>
+        <div class="lang">            
+            <div class="lang-select">
+                <form method="get" action="/">
+                    <select name="lang" onchange="this.form.submit()">
+                        <option value="hu" selected>HUN</option>
+                        <option value="en" >EN</option>
+                    </select>
+                </form>
+            </div>          
+            <div class="socials">
+                <ul>
+                    <li><a href="https://www.youtube.com/watch?v=4gGiiNwHe6E" target="_blank"><img src="/images/youtube.png?v=2" alt="Youtube" title="Youtube" /></a></li>
+                    <li><a href="https://www.instagram.com/jazzfovaros/" target="_blank"><img src="/images/instagram.png?v=2" alt="Instagram" title="Instagram" /></a></li>
+                    <li><a href="http://www.facebook.com/jazzfovaros" target="_blank"><img src="/images/facebook.png?v=2" alt="Facebook" title="Facebook"   /></a></li>
+                </ul>                
+            </div>            
+        </div>
+        <div class="clearfix"></div>
+        
+        <div id="mainmenu">
+            <div class="mobile-menu"><a href="#" onclick="menu_show()"><img src="/images/mobile.png" id="mobile-icon" alt="" /></a></div>
+            <ul id="menu-top">
+                
+                    <li><a href="/fellepok" >FELLÉPŐK</a></li><li><a href="https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/" >JEGY 2026</a></li><li><a href="/programok" >PROGRAMOK</a></li><li><a href="/szallas" >SZÁLLÁS</a></li><li><a href="/kozlekedes" >TÉRKÉP, KÖZLEKEDÉS</a></li><li><a href="/aszf" >ÁSZF</a></li><li><a href="/kapcsolat" >KAPCSOLAT</a></li><li><a href="/futas" >futás</a></li><li><a href="/jazztabor" >jazztábor</a></li>             </ul>
+        </div>
+        <div class="clearfix"></div>
+        
+                        <div id="slider">
+                    <ul id="main-slider">
+                        <!--<li class="video">-->
+                        <!--    <div class="container">-->
+                        <!--    <iframe src="https://www.youtube.com/embed/WxdI6DKmNqc" frameborder="0" allowfullscreen></iframe>-->
+                        <!--    </div>-->
+                        <!--</li>  -->
+         <li class="video">
+						<div class="container">
+						<iframe src="//www.youtube.com/embed/4gGiiNwHe6E" allowfullscreen></iframe>
+						</div>
+					</li>  
+       </ul>    
+        </div>
+        
+    </div>
+</header>
+<section>
+
+
+
+
+
+
+
+     <div class="mobile-title">
+     <h1 class="jazz-title2">Bohém JAZZFŐVÁROS Kecskemét, 2026. augusztus 6-9.</h1>    </div>
+    
+        
+    <!--
+        <div class="container-table">
+        <a href="/performers"><img src="images/fellepok24_hu.png?v=13" alt="" title="" /></a>
+    </div>
+    
+        -->
+    
+    <div class="container">
+     
+          
+        <div id="cikkek">            
+                        <div class="article-box">
+                <div class="title"><a href="jegyvasarlas">Jegyvásárlás</a></div>
+                <div class="sep"></div>
+                <div class="image">
+                    <a href="jegyvasarlas"><img src="https://jazzfovaros.hu/gallery/articles/8/8-4687.jpg" /></a>
+                </div>
+                <div class="intro">
+                        <p><a href="https://jazzfovaros.netpositive.hu/" target="_blank" rel="noopener"><strong></strong></a><a href="https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/" target="_blank" rel="noopener"><strong>JEGYV&Aacute;S&Aacute;RL&Aacute;S BANKK&Aacute;RTY&Aacute;VAL AZONNAL &ndash; KATTINTS IDE! (bel&eacute;pők 3.900-59.900 Ft k&ouml;z&ouml;tt):</strong></a><br />Super Early Bird b&eacute;rlet (első 200 v&aacute;s&aacute;rl&oacute;nak aj&aacute;nd&eacute;k fesztiv&aacute;lsz&eacute;kkel) 19.900 Ft<br />Early Bird b&eacute;rlet 19.900 Ft<br />Lazy Bird b&eacute;rlet 24.900 Ft<br />B&eacute;rlet kecskem&eacute;tieknek (ir&aacute;ny&iacute;t&oacute;sz&aacute;m 6000-6050 k&ouml;z&ouml;tt) 16.900 Ft<br />Di&aacute;kb&eacute;rlet (7-18 &eacute;ves kor k&ouml;z&ouml;tt) 7.900 Ft</p>
+<p><a href="https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/" target="_blank" rel="noopener">4 NAPOS B&Eacute;RLET: 29.900 Ft (m&aacute;rc. 31-ig Early Bird: 19.900 Ft, j&uacute;n. 30-ig Lazy Bird: 24.900 Ft)&nbsp;</a><br /><a href="https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/" target="_blank" rel="noopener">4 NAPOS VIP-B&Eacute;RLET (&eacute;tel-ital fogyaszt&aacute;ssal a VIP-s&aacute;torban): 59.900 Ft</a><br /><a href="https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/" target="_blank" rel="noopener">4 NAPOS B&Eacute;RLET KECSKEM&Eacute;TIEKNEK (6000 &eacute;s 6050 k&ouml;z&ouml;tti ir&aacute;ny&iacute;t&oacute;sz&aacute;m&uacute; lakosoknak): 16.900 Ft</a><br /><a href="https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/" target="_blank" rel="noopener">4 NAPOS B&Eacute;RLET &Aacute;LTAL&Aacute;NOS ISKOL&Aacute;SOKNAK 7.900 Ft</a><br /><a href="https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/" target="_blank" rel="noopener">NAPIJEGY (cs&uuml;t&ouml;rt&ouml;k): 5.900 Ft</a><br /><a href="https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/" target="_blank" rel="noopener">NAPIJEGY (p&eacute;ntek): 9.900 Ft</a><br /><a href="https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/" target="_blank" rel="noopener">NAPIJEGY (szombat): 11.900 Ft<br />NAPIJEGY (vas&aacute;rnap): 3.900 Ft</a><!--br /><a href="https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/" target="_blank" rel="noopener">GARANT&Aacute;LT &Uuml;LŐHELY (eg&eacute;sz fesztiv&aacute;lon a nagys&aacute;torban): 4.000 Ft</a--></p>
+<p><span style="color: #ff0000;"><strong>ESTI NAPIJEGY 4.900 Ft (p&eacute;ntek-szombat 21.00 ut&aacute;n)</strong></span></p>
+<p><span style="color: #ff0000;"><strong>JEGYV&Aacute;S&Aacute;RL&Aacute;S OTP-s SZ&Eacute;P-K&Aacute;RTY&Aacute;VAL: a fesztiv&aacute;l alatt a II. kapun&aacute;l a fesztiv&aacute;lirod&aacute;ban!</strong></span></p>
+<hr />
+<p>A bel&eacute;pő minden esetben egy karszalag, amit a helysz&iacute;nen kapsz meg az előv&aacute;s&aacute;rl&aacute;skor kapott sz&aacute;ml&aacute;d ellen&eacute;ben.</p>
+<p>A BEL&Eacute;P&Eacute;S 6 &Eacute;VES KORIG FELNŐTT K&Iacute;S&Eacute;RETTEL INGYENES, GYEREKEKNEK TEH&Aacute;T NE VEGY&Eacute;L BEL&Eacute;PŐT! (6 &eacute;vesnek az sz&aacute;m&iacute;t, aki a fesztiv&aacute;l idej&eacute;n m&eacute;g nem t&ouml;lt&ouml;tte be a 7. &eacute;v&eacute;t, vagyis 2019. aug. 9. ut&aacute;n&nbsp;sz&uuml;letett.)</p>
+<p>A helysz&iacute;nen is tudsz jegyet venni (I. &eacute;s II. kapu, valamint fesztiv&aacute;liroda, volt T&oacute; Hotel, t&eacute;rk&eacute;p a K&ouml;zleked&eacute;s men&uuml;pontban).</p>
+<p>FIGYELEM! A fesztiv&aacute;l ter&uuml;let&eacute;re &eacute;telt, italt behozni tilos, a bej&aacute;ratn&aacute;l a biztons&aacute;giak ellenőrizhetik a t&aacute;sk&aacute;dat!</p>
+<hr />
+<p></p>
+<!--p><span style="color: #000000;"><strong><a href="/szep-kartya" target="_blank" rel="noopener">JEGYVÁSÁRLÁS OTP-s SZÉP-KÁRTYÁVAL: RÉSZLETES INFORMÁCIÓ ITT! (elővételben csak 2024. júl. 15-ig!)</a></strong></span></p-->
+                </div>
+                
+          
+                <a href="jegyvasarlas" class="next">Tovább</a>            </div>            <div class="article-box">
+                <div class="title"><a href="kozlekedes">Térkép, közlekedés</a></div>
+                <div class="sep"></div>
+                <div class="image">
+                    <a href="kozlekedes"><img src="https://jazzfovaros.hu/gallery/articles/9/9-6572.jpg" /></a>
+                </div>
+                <div class="intro">
+                        <p><strong>Fesztiv&aacute;lhelysz&iacute;n t&eacute;rk&eacute;pe (figyelem, az I. kapu csak 9-20 k&ouml;z&ouml;tt van nyitva, a II. kapu nyitvatart&aacute;sa folyamatos!!!):</strong></p>
+<p><strong><img src="/gallery/article-upload/7/901a43ed59ac4878d276b1b8a5b20640.jpg" /></strong></p>
+<hr />
+<p>Hogyan jutsz el Kecskem&eacute;tre &eacute;s a fesztiv&aacute;lra a legegyszerűbben? Al&aacute;bb minden inform&aacute;ci&oacute; egy helyen!</p>
+<!--p><strong><a href="https://jazzfovaros.livetickethub.hu/events/42976?showItems=1" target="_blank" rel="noopener">SHUTTLE BUSZ KARSZALAG 4 napra (a belvárosi szállodák és a fesztiválhelyszín között): 3.900 Ft (a belépők alatti utolsó jegy)</a></strong></p>
+<hr /-->
+<p>Kecskem&eacute;t az orsz&aacute;g k&ouml;zep&eacute;n van, nagyon egyszerűen el tudsz jutni a fesztiv&aacute;l helysz&iacute;n&eacute;re. Aut&oacute;val, vonattal, busszal, sőt telekocsival is. (A biciklit, gyalogos lehetős&eacute;geket &eacute;s a katonai rep&uuml;l&eacute;st most nem r&eacute;szletezz&uuml;k.) A JAZZFŐV&Aacute;ROS helysz&iacute;ne a Benk&oacute; Zolt&aacute;n Szabadidők&ouml;zpont (Domb Beach) szabadstrandja melletti nagy f&uuml;ves ter&uuml;let, c&iacute;m szerint a&nbsp;Csabay G&eacute;za k&ouml;r&uacute;ton (ld. a t&eacute;rk&eacute;pet al&aacute;bb), a k&oacute;rh&aacute;z &eacute;s a Kecskem&eacute;ti F&uuml;rdő k&ouml;z&ouml;tt. A fesztiv&aacute;lter&uuml;letre k&eacute;t kapun tudsz bej&ouml;nni, a strandbej&aacute;rat felőli I. kapu CSAK este 20 &oacute;r&aacute;ig van nyitva, a II. kapu folyamatosan!!! (R&eacute;szletes fesztiv&aacute;lhelysz&iacute;n-t&eacute;rk&eacute;p az oldal tetej&eacute;n!)</p>
+<p><strong>AUT&Oacute;VAL:</strong> Az M5-&ouml;s aut&oacute;p&aacute;ly&aacute;r&oacute;l a Kecskem&eacute;t-Centrum/Lajosmizse, vagy a Kecskem&eacute;t-Nyugat kij&aacute;ratn&aacute;l is lej&ouml;hetsz, k&ouml;vetheted a t&aacute;bl&aacute;kat, a fenti t&eacute;rk&eacute;pet, vagy a GPS-edet. Parkolni a fesztiv&aacute;l ter&uuml;lete mellett tudsz a h&aacute;ts&oacute; kapun&aacute;l, itt lesz egy k&uuml;l&ouml;n parkol&oacute; a fesztiv&aacute;lter&uuml;leten bel&uuml;l. A fenti t&eacute;rk&eacute;pen a JAZZFŐV&Aacute;ROS felirat alatt, a Tat&aacute;r sor folytat&aacute;sa a f&uuml;ves ter&uuml;letn&eacute;l. GPS koordin&aacute;t&aacute;k: 46.903819, 19.666032</p>
+<p><strong>VONAT:</strong> <a title="M&Aacute;V-menetrend" href="https://jegy.mav.hu" target="_blank" rel="noopener">itt n&eacute;zd meg a menetrendet,</a> majd &eacute;rkez&eacute;s ut&aacute;n sz&aacute;llj fel a szomsz&eacute;dos aut&oacute;busz&aacute;llom&aacute;son a minden eg&eacute;sz &oacute;r&aacute;ban indul&oacute; 21-es, vagy a minden &oacute;ra harminc perckor indul&oacute; 22-es buszra (<a title="kecskem&eacute;ti buszmenetrend" href="http://menetrend.kecskemet.hu" target="_blank" rel="noopener">itt a menetrend</a>), amivel 10-11 perces buszutat k&ouml;vetően (az SZTK-n&aacute;l sz&aacute;llj le!) kb. 5 percet kell gyalogolnod. Ha v&aacute;rosk&ouml;zponti sz&aacute;llod&aacute;ban laksz, akkor a főt&eacute;r az &aacute;llom&aacute;st&oacute;l 8-10 perc s&eacute;ta (persze mehetsz busszal, taxival is).</p>
+<p><strong>AUT&Oacute;BUSZ:</strong> ugyanaz a helyzet, mint a vonatn&aacute;l (egym&aacute;s mellett van a vonat- &eacute;s a busz&aacute;llom&aacute;s), <a title="t&aacute;vols&aacute;gi buszmenetrend" href="http://menetrendek.hu/" target="_blank" rel="noopener">itt a t&aacute;vols&aacute;gi aut&oacute;buszmenetrend.</a></p>
+<!--p><strong>FESZTIVÁLJÁRAT:</strong> A belvárosi szállodák és a fesztiválterület között shuttle-járatot üzemeltetünk. A fesztiválbelépő nem jogosít a busz használatára, külön kell rá karszalagot váltanod (15 éven aluliak számára is). A karszalag online megvásárolható a <a href="/jegyek" target="_blank" rel="noopener">JEGY menüpontban,</a>, vagy a helyszínen a fesztiválirodában.</p>
+<p><strong>Menetrend:</strong><br />minden óra 30 perckor: Aranyhomok-JAZZFŐVÁROS<br />minden egész órakor: JAZZFŐVÁROS-Három Gúnár-Aranyhomok</p>
+<p>Első járat az Aranyhomoktól: aug. 5-én 17.30., aug. 6-án 15.30, 7-én és 8-án 10.00, majd 10.30<br />Utolsó járat a JAZZFŐVÁROSból: aug. 5-én 23.00, aug. 6-7-én éjjel 02.00, aug. 8-án 16.10</p>
+<p>Az első és utolsó járatok között a busz csak igény esetén jár! A végső pontos menetrend az érintett szállodákban és a helyszíni fesztiválirodában elérhető lesz!</p-->
+                </div>
+                
+          
+                <a href="kozlekedes" class="next">Tovább</a>            </div>            <div class="article-box">
+                <div class="title"><a href="szallas">Szállás</a></div>
+                <div class="sep"></div>
+                <div class="image">
+                    <a href="szallas"><img src="https://jazzfovaros.hu/gallery/articles/10/10-1884.jpg" /></a>
+                </div>
+                <div class="intro">
+                        <p><span style="color: #ff0000;"><strong>FESZTIV&Aacute;LSZ&Aacute;LLODA: <span style="color: #000000;">FOUR POINTS BY SHERATON. Foglal&aacute;s kedvezm&eacute;nyes &aacute;ron egy&eacute;nileg, r&eacute;szletek lejjebb a sz&aacute;lloda fot&oacute;i alatt. Sz&aacute;ll&aacute;s 19.950 Ft/fő/&eacute;j-től!<br /></span></strong><span style="color: #000000;">Minden sz&aacute;llodai szoba a sz&aacute;llod&aacute;kban k&ouml;zvetlen&uuml;l foglalhat&oacute;! Gyalogosan a Sheraton 15 percre, az Aqua 5 percre, a belv&aacute;rosi sz&aacute;llod&aacute;k kb. 35-40 percre vannak a helysz&iacute;ntől. SZ&Aacute;LL&Aacute;S FIZET&Eacute;SE SZ&Eacute;P-K&Aacute;RTY&Aacute;VAL K&Ouml;ZVETLEN&Uuml;L A HOTELEKBEN LEHETS&Eacute;GES.</span></span></p>
+<p><span style="color: #ff0000;"><strong>KEMPING:</strong>&nbsp;</span>A fesztiv&aacute;lhelysz&iacute;n k&ouml;zvetlen szomsz&eacute;ds&aacute;g&aacute;ban a T&oacute; Kempingben s&aacute;traz&aacute;sra &eacute;s lak&oacute;aut&oacute;val t&ouml;rt&eacute;nő helyfoglal&aacute;sra egyar&aacute;nt van lehetős&eacute;g. <!-- >(Sátorban 1 fő részére: 4.900 Ft/éj, 2 fő részére: 4.150 Ft/fő/éj. Lakóautóban 1 fő részére: 8.200 Ft/fő/éj, 2 fő részére: 6.800 Ft/fő/éj. <em>A megadott árak nem tartalmazzák az idegenforgalmi adót: 18 éves kortól 400 Ft/fő/éj.</em>)<--> Recepci&oacute; 9.00-13.00 &oacute;ra k&ouml;z&ouml;tt, akkor tudsz fizetni! Ha k&eacute;sőbb &eacute;rkezel, nyugodtan verd fel a s&aacute;trad, vagy foglalj el egy &aacute;ramki&aacute;ll&aacute;sos helyet lak&oacute;aut&oacute;val.&nbsp;<strong><a href="https://tokemping.hu" target="_blank" rel="noopener">FOGLAL&Aacute;S K&Ouml;ZVETLEN&Uuml;L A KEMPING HONLAPJ&Aacute;N!</a></strong></p>
+<p></p>
+<hr />
+<p><strong><span style="color: #000000;">Four Points by Sheraton (a fesztiv&aacute;lt&oacute;l 15 perc s&eacute;t&aacute;ra)</span>&nbsp;<span style="color: #ff0000;">19.950 Ft/fő/&eacute;jtől</span></strong><br /><strong><span style="color: #ff0000;"><span style="color: #000000;">Hotel Aqua (a fesztiv&aacute;lt&oacute;l 5 perc s&eacute;t&aacute;ra)</span>&nbsp;20.500 Ft/fő/&eacute;jtől</span></strong></p>
+<p><em><span style="color: #ff0000;"><span style="color: #000000;">A megadott &aacute;rak a lista&aacute;rakn&aacute;l kedvezőbbek, csak a JAZZFŐV&Aacute;ROS fesztiv&aacute;lra &eacute;rkező vend&eacute;gek r&eacute;sz&eacute;re &eacute;s a sz&aacute;llod&aacute;k r&eacute;szletes le&iacute;r&aacute;s&aacute;n&aacute;l megadott foglal&aacute;si csatorn&aacute;n kereszt&uuml;l el&eacute;rhetőek. Az &aacute;rak minden esetben reggelivel &eacute;rtendők, de nem tartalmazz&aacute;k az idegenforgalmi ad&oacute;t (18 &eacute;ves kort&oacute;l 400 Ft/fő/&eacute;j).<br /></span></span></em><strong><span style="color: #ff0000;">R&eacute;szletes le&iacute;r&aacute;s minden el&eacute;rhető sz&aacute;llod&aacute;hoz, foglal&aacute;si m&oacute;dok al&aacute;bb.&nbsp;</span></strong></p>
+                </div>
+                
+          
+                <a href="szallas" class="next">Tovább</a>            </div>        </div>        
+    </div>
+
+
+
+    <div class="container">
+        <div id="tamogatok">
+              <div class="title">
+              Támogatók              </div>
+              
+              
+                <div class="supporter-box">
+                  <div class="sup-title red">
+                   
+                     Főtámogatók                   
+                  </div>
+                  <a href="http://www.kecskemet.hu" target="_blank" class="partner-logo" title="KMJV"><img src="/gallery/menu/1302-6642.png" alt="" title="KMJV"></a><a href="www.nka.hu" target="_blank" class="partner-logo" title="NKA"><img src="/gallery/menu/1296-2624.png" alt="" title="NKA"></a><a href="ste" target="_blank" class="partner-logo" title="STE"><img src="/gallery/menu/1407-3126.png" alt="" title="STE"></a><a href="http://logall.hu/" target="_blank" class="partner-logo" title="Logall"><img src="/gallery/menu/1375-5338.png" alt="" title="Logall"></a><a href="http://www.alcufer.hu/hu/" target="_blank" class="partner-logo" title="Alcufer"><img src="/gallery/menu/1390-4377.png" alt="" title="Alcufer"></a><a href="http://www.cargoport.hu" target="_blank" class="partner-logo" title="Cargoport"><img src="/gallery/menu/1377-2536.png" alt="" title="Cargoport"></a><a href="https://nje.hu/" target="_blank" class="partner-logo" title="Neumann Egyetem"><img src="/gallery/menu/1403-6758.png" alt="" title="Neumann Egyetem"></a><a href="https://www.netherlandsandyou.nl/web/hungary/about-us" target="_blank" class="partner-logo" title="Holland Nagykövetség"><img src="/gallery/menu/1333-6769.png" alt="" title="Holland Nagykövetség"></a>               </div>
+                
+                <div class="supporter-box">
+                  <div class="sup-title green">
+                   
+                     Szponzorok                   
+                  </div>
+                  <a href="https://www.felegyhazipekseg.hu" target="_blank" class="partner-logo" title="Félegyházi Pékség"><img src="/gallery/menu/1364-4060.png" alt="" title="Félegyházi Pékség"></a><a href="http://kedozrt.hu" target="_blank" class="partner-logo" title="KEDO"><img src="/gallery/menu/1413-9085.png" alt="" title="KEDO"></a>               </div>
+                
+                <div class="supporter-box">
+                  <div class="sup-title blue">Partnerek</div>
+                  <a href="https://mediaklikk.hu/bartok/" target="_blank" class="partner-logo" title="Bartók Rádió"><img src="/gallery/menu/1416-5177.png" alt="" title="Bartók Rádió"></a><a href="https://hiros.hu" target="_blank" class="partner-logo" title="hiros.hu"><img src="/gallery/menu/1315-7264.png" alt="" title="hiros.hu"></a><a href="https://www.axon-cable.com/en/axon-kabelgyarto-hungary" target="_blank" class="partner-logo" title="Axon"><img src="/gallery/menu/1394-8120.png" alt="" title="Axon"></a><a href="http://furedi.eu/" target="_blank" class="partner-logo" title="Füredi"><img src="/gallery/menu/1359-1595.png" alt="" title="Füredi"></a><a href="https://dtkh.hu" target="_blank" class="partner-logo" title="DTKH"><img src="/gallery/menu/1339-3453.png" alt="" title="DTKH"></a><a href="https://gepesz.hu" target="_blank" class="partner-logo" title="Gépész"><img src="/gallery/menu/1300-9865.png" alt="" title="Gépész"></a><a href="tiszafoldvari-italkereskedohaz" target="_blank" class="partner-logo" title="Tiszaföldvári Italkereskedőház"><img src="/gallery/menu/1391-4915.png" alt="" title="Tiszaföldvári Italkereskedőház"></a><a href="kefag" target="_blank" class="partner-logo" title="KEFAG"><img src="/gallery/menu/1311-5581.png" alt="" title="KEFAG"></a><a href="http://www.microsystem.hu" target="_blank" class="partner-logo" title="Microsystem"><img src="/gallery/menu/1405-8346.png" alt="" title="Microsystem"></a><a href="https://botondkft.hu/" target="_blank" class="partner-logo" title="Botond Kft."><img src="/gallery/menu/1353-3892.png" alt="" title="Botond Kft."></a><a href="https://www.beewatec.de/hu/" target="_blank" class="partner-logo" title="BeeWaTec"><img src="/gallery/menu/1360-5339.png" alt="" title="BeeWaTec"></a><a href="https://termostar.hu/kezdolap" target="_blank" class="partner-logo" title="termostar"><img src="/gallery/menu/1335-9925.png" alt="" title="termostar"></a><a href="https://www.simonotthonok.hu/" target="_blank" class="partner-logo" title="Simon Otthonok"><img src="/gallery/menu/1387-7975.png" alt="" title="Simon Otthonok"></a><a href="https://www.szabadidokozpont-kecskemet.hu/" target="_blank" class="partner-logo" title="Benkó Zoltán Szabadidőközpont"><img src="/gallery/menu/1381-2680.png" alt="" title="Benkó Zoltán Szabadidőközpont"></a><a href="https://hirosveteran.hu" target="_blank" class="partner-logo" title="Hírös Veterán"><img src="/gallery/menu/1409-6341.png" alt="" title="Hírös Veterán"></a><a href="https://www.juszti.hu" target="_blank" class="partner-logo" title="Iustitia"><img src="/gallery/menu/1410-6252.png" alt="" title="Iustitia"></a><a href="https://www.facebook.com/kecskemetitarsasjatek/" target="_blank" class="partner-logo" title="Társasjáték"><img src="/gallery/menu/1414-7680.png" alt="" title="Társasjáték"></a>               </div> 
+                
+        </div>
+    </div>
+    
+    
+</section>
+<footer>
+    <div class="container">
+     
+    <div class="abslogo">
+     
+                            <a href="/"> <img src="/images/logo19_hu.png?v=2" alt="Kezdőlap" title="Kezdőlap"></a>
+                          
+    </div>
+
+
+        <div class="footerbox">
+            <div class="footertitle">
+                
+            Navigáció                
+            </div>
+            <ul>
+                   <li><a href="/fellepok" >FELLÉPŐK</a></li><li><a href="https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/" >JEGY 2026</a></li><li><a href="/programok" >PROGRAMOK</a></li><li><a href="/szallas" >SZÁLLÁS</a></li><li><a href="/kozlekedes" >TÉRKÉP, KÖZLEKEDÉS</a></li><li><a href="/aszf" >ÁSZF</a></li><li><a href="/kapcsolat" >KAPCSOLAT</a></li><li><a href="/futas" >futás</a></li><li><a href="/jazztabor" >jazztábor</a></li>                    </ul>            
+        </div>
+        <div class="footerbox">
+            <div class="footertitle">
+            Közösség</div>
+            <p class="social">
+            
+            Csatlakozzon hozzánk közösségi oldalainkon!            </p>
+            <div class="social-icons">
+                <ul>
+                    <li><a href="https://www.youtube.com/watch?v=4gGiiNwHe6E" target="_blank"><img src="/images/f-yt.png" alt="Youtube" title="Youtube" /></a></li>
+                    <li><a href="https://www.instagram.com/jazzfovaros/" target="_blank"><img src="/images/f-insta.png" alt="Instagram" title="Instagram" /></a></li>
+                    <li><a href="http://www.facebook.com/jazzfovaros" target="_blank"><img src="/images/f-fb.png" alt="Facebook" title="Facebook"   /></a></li>
+                </ul>
+                
+                            <div class="clearfix"></div>
+               <p><img src="/images/barion.jpg" alt="Barion" title="Barion" /></p>
+                           </div>                 
+        </div>
+        
+        <div class="footerbox">
+            <div class="footertitle">
+            Fizetési lehetőségek</div>
+            <p>
+            <img src="/images/barion-kicsi.jpg"  alt="" title="" />
+
+            </p>
+                
+        </div>
+        
+        
+        
+    </div>    
+    <div class="bottombar">
+      <div class="container">
+            <div class="left">
+                    
+                    
+                       &copy; Copyright 2018 JAZZFŐVÁROS KFT. MINDEN JOG FENNTARTVA      
+                    
+                    
+            </div>            
+            <div class="right">
+                    <div class="menu">
+                        <ul>
+                            <li><a href="/adatvedelem">Adatvédelem</a></li>
+                                <li><a href="/jogi-nyilatkozat">Jogi nyilatkozat</a></li>
+                                <li><a href="/impresszum">Impresszum</a></li>                        </ul>                        
+                    </div>
+                    <div class="copy">                    
+                        Készítette: <a href="http://mayoka.hu">Mayoka</a>                    
+                    </div>
+            </div>            
+      </div>
+      <div class="clearfix"></div>
+    </div>    
+</footer>
+<script type="text/javascript">       
+  $('.timer').countdown('2026/08/06', function(event) {   
+   $('#jstimer').html(event.strftime('<div class="month">%D</div><div class="week">%H</div><div class="day">%M</div>'));
+ });   
+ </script>
+    <!-- Google remarketingcímke-kód -->
+   <!--------------------------------------------------
+   A remarketingcímkék nem társíthatók személyazonosításra alkalmas adatokkal, és nem helyezhetők el érzékeny kategóriához kapcsolódó oldalakon. A címke beállításával kapcsolatban további információt és útmutatást a következő címen olvashat: http://google.com/ads/remarketingsetup
+   --------------------------------------------------->
+   <script type="text/javascript">
+   /* <![CDATA[ */
+   var google_conversion_id = 881354213;
+   var google_custom_params = window.google_tag_params;
+   var google_remarketing_only = true;
+   /* ]]> */
+   </script>
+   <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+   </script>
+   <noscript>
+   <div style="display:inline;">
+   <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/881354213/?value=0&amp;guid=ON&amp;script=0"/>
+   </div>
+   </noscript>
+
+        <div id="szechenyi" class=""></div>
+</body>
+</html>
+

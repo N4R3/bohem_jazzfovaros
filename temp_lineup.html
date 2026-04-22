@@ -1,0 +1,665 @@
+
+<!DOCTYPE html>
+<html lang="hu" dir="ltr">
+<head>
+ <title>Fellépők - JAZZFŐVÁROS</title>
+    <meta charset="UTF-8">
+    <meta name="robots" content="index, follow, all" />
+    <meta name="description" content="Európa legjobb szabadtéri klasszikus jazz fesztiválja: IX. JAZZFŐVÁROS, 2025.08.07-10., Kecskemét, Domb Beach strand. 4 nap, 4 színpad, 10 ország, 120 zenész, 40 óra zene!" />
+    <meta name="keywords" content="swingtánckurzusok,strand,futóverseny,40órajazz,4nap,5színpad,10ország,120zenész,ÁrpiShow,BenkóDixielandBand,BohémRagtimeJazzBand,BudapestJazzOrchestra,DeltaBastards,EddieMetz,FalusiMariann,HotJazzBand,KecskemétJazzOrchestra,KorbAttila,SzalókyBéla,Szürkeverebekjazzbandája,TomWhite,TóthVera,BohémTrió,DánielBalázs,fesztivál,jazzpiknik,paloznakijazzpiknik,családiprogram,zeneifesztivál,nyáriszünet,Gerejazzfeszt,Kecskemétprogram,LouisArmstrongJazzfesztivál,fesztiválprogram,ÉrdiJazzFesztivál,dzsessz,dzsesszfesztivál,swing,szving,swingtánc,szvingtánc,tánc,ragtime"/>
+    <meta name="revisit-after" content="1 days" />
+    <meta property="og:site_name" content="Fellépők" />
+    <meta property="og:title" content="Fellépők" />
+    <meta property="og:url" content="https://jazzfovaros.hu:443/fellepok" />
+    <meta property="og:description" content="Európa legjobb szabadtéri klasszikus jazz fesztiválja: IX. JAZZFŐVÁROS, 2025.08.07-10., Kecskemét, Domb Beach strand. 4 nap, 4 színpad, 10 ország, 120 zenész, 40 óra zene!" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="viewport" content="user-scalable=yes, width=device-width, initial-scale=1.0" />
+    <meta name="facebook-domain-verification" content="8ut5kd01a978gezx41e40g4xjg8wet" />
+    <base href="https://jazzfovaros.hu/">
+    <link rel="shortcut icon" href="/images/favicon_jazz.ico" />
+    <link rel="stylesheet" href="/css/lightbox.css">
+    <link rel="stylesheet" href="/css/lightslider2.css">
+    <link rel="stylesheet" href="/css/main.css?v=33" type="text/css" />
+    <link rel="stylesheet" href="/css/responsive.css?v=17" type="text/css" />
+    <link rel="stylesheet" href="/css/jquery.fancybox.css">  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,700' rel='stylesheet' type='text/css'><script src="js/lightslider.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,700,500' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Cantarell" rel="stylesheet">
+ 	 	<link href='https:///fonts.googleapis.com/css?family=Oswald&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <script src="/js/timer.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/jquery.mousewheel-3.0.6.pack.js"></script>
+    <script src="/js/jquery.countdown.js"></script>
+    <script src="/js/jquery.fancybox.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+    <style>
+
+    body #szechenyi {
+	display: block;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	width: 350px;
+	height: 242px;
+	background-image: url(/images/szechenyi_2020.png);
+	background-repeat: no-repeat;
+	transition: all .4s ease;
+    }
+
+
+</style>
+
+    <script>
+     $(document)
+         .ready(function() {
+             $('#main-slider')
+                 .lightSlider({
+                     adaptiveHeight: true,
+                     item: 1,
+                     auto: 1,
+                     pause: 5000,
+                     slideMargin: 0,
+                     controls: 1,
+                     loop: true
+                 });
+                 
+             var pslider = $('#performer-slider')
+                 .lightSlider({
+                     adaptiveHeight: true,
+                     item: 4,
+                     auto: 1,
+                     pause: 5000,
+                     slideMargin: 0,
+                     controls: 0,
+                     loop: true,
+                     
+                     responsive : [
+                     {
+                         breakpoint:1000,
+                         settings: {
+                         item:3,
+                         slideMove:1,
+                         slideMargin:0,
+                           }
+                     },         {
+                         breakpoint:760,
+                         settings: {
+                         item:2,
+                         slideMove:1,
+                         slideMargin:0,
+                           }
+                     },         {
+                         breakpoint:560,
+                         settings: {
+                         item:1,
+                         slideMove:1,
+                         slideMargin:0,
+                           }
+                     }
+                     
+                     
+                     ]
+
+                     
+                     
+                 });
+                 
+                $('#goToPrevSlide').on('click', function () {
+                    pslider.goToPrevSlide();
+                });
+                $('#goToNextSlide').on('click', function () {
+                    pslider.goToNextSlide();
+                });       
+         });
+         
+       $(document).ready(function() {
+           $(".performer-popup").fancybox({          
+           type: 'ajax'                     
+           });
+       });         
+     </script>
+     <!-- Facebook Pixel Code -->
+     <script>
+     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+     n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+     n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+     t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+     document,'script','https://connect.facebook.net/en_US/fbevents.js');
+     
+     fbq('init', '1011250538943528');
+     fbq('track', "PageView");</script>
+     <noscript><img height="1" width="1" style="display:none"
+     src="https://www.facebook.com/tr?id=1011250538943528&ev=PageView&noscript=1"
+     /></noscript>
+     <!-- End Facebook Pixel Code -->
+          
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-53K27Q3');</script>
+<!-- End Google Tag Manager -->
+
+
+
+     
+</head>
+<body>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-53K27Q3"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78158185-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<div id="mainbg"></div>
+<div id="lajos">
+ <img src="/images/lajos.png" alt="JAZZFŐVÁROS" title="JAZZFŐVÁROS" />
+</div>
+<header>
+   
+    <div class="container">
+     
+
+     
+        <h1 class="jazz-title">JAZZFŐVÁROS Kecskemét,<br />2022. augusztus 4-7.</h1>
+        <div class="abslogo">
+                            <a href="/"> <img src="/images/logo19_hu.svg?v=3" width="132" alt="Kezdőlap" title="Kezdőlap"></a>
+                     </div>
+        
+        <div class="abslogo-mobile">
+          <a href="/"> <img src="/images/logo19_hu.svg?v=4" width="90" alt="Fellépők" title="Fellépők" /></a>        </div>
+        
+
+        <div class="timer">
+            <div id="jstimer" class="clock">
+            </div>       
+        </div>
+        
+
+        
+        <div class="program-info">Bohém JAZZFŐVÁROS Kecskemét, 2026. augusztus 6-9.</div>
+        <div class="lang">            
+            <div class="lang-select">
+                <form method="get" action="/">
+                    <select name="lang" onchange="this.form.submit()">
+                        <option value="hu" selected>HUN</option>
+                        <option value="en" >EN</option>
+                    </select>
+                </form>
+            </div>          
+            <div class="socials">
+                <ul>
+                    <li><a href="https://www.youtube.com/watch?v=4gGiiNwHe6E" target="_blank"><img src="/images/youtube.png?v=2" alt="Youtube" title="Youtube" /></a></li>
+                    <li><a href="https://www.instagram.com/jazzfovaros/" target="_blank"><img src="/images/instagram.png?v=2" alt="Instagram" title="Instagram" /></a></li>
+                    <li><a href="http://www.facebook.com/jazzfovaros" target="_blank"><img src="/images/facebook.png?v=2" alt="Facebook" title="Facebook"   /></a></li>
+                </ul>                
+            </div>            
+        </div>
+        <div class="clearfix"></div>
+        
+        <div id="mainmenu">
+            <div class="mobile-menu"><a href="#" onclick="menu_show()"><img src="/images/mobile.png" id="mobile-icon" alt="" /></a></div>
+            <ul id="menu-top">
+                
+                    <li class="active"><a href="/fellepok">FELLÉPŐK</a></li><li><a href="https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/" >JEGY 2026</a></li><li><a href="/programok" >PROGRAMOK</a></li><li><a href="/szallas" >SZÁLLÁS</a></li><li><a href="/kozlekedes" >TÉRKÉP, KÖZLEKEDÉS</a></li><li><a href="/aszf" >ÁSZF</a></li><li><a href="/kapcsolat" >KAPCSOLAT</a></li><li><a href="/futas" >futás</a></li><li><a href="/jazztabor" >jazztábor</a></li>             </ul>
+        </div>
+        <div class="clearfix"></div>
+        
+            </div>
+</header>
+<section>
+
+
+
+
+  <div class="main-content">
+
+   
+   
+           <div class="float-right socials"> 
+   <!-- AddThis Button BEGIN -->
+  <div class="addthis_toolbox addthis_default_style ">
+  <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+  <a class="addthis_button_tweet"></a>
+  <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5152d0590df2e895"></script>
+  <!-- AddThis Button END -->
+</div>
+
+<div>
+
+<h2 class="title bordered">Fellépők</h2>
+</div>
+
+<div class="content-holder esemenyek">
+   <!-- <div id="esemeny-kereso">
+        <form method="get">
+            <select name="performer">
+                <option value="" selected>Előadó</option>
+                <option value="148">Ari &amp; Simon (E/UK)</option><option value="127">Árpi Show (H)</option><option value="102">Attilio Troiano Trio (I)</option><option value="124">Benkó Dixieland Band (H)</option><option value="99">Benoȋt de Flamesnil (F) tb</option><option value="92">Bényei Tamás &amp; a Gramophonia Hot Jazz Orchestra (H)</option><option value="19">Bényei Tamás &amp; his Gramphonia Hot Jazz Orchestra (H)</option><option value="190">Bérczesi Jazz Band (H)</option><option value="41">Berdisz Tamás (H)</option><option value="42">Bóbis László (H)</option><option value="2">Bohém Ragtime Jazz Band (H)</option><option value="49">Bohém Trio (H)</option><option value="131">Bolba Éva (H) voc</option><option value="33">Bolba Éva és a JAZZterlánc (H)</option><option value="108">Bolba Éva és a JAZZterlánc (H)</option><option value="18">Bolyki Brothers (H)</option><option value="83">BrassDance (H)</option><option value="78">Bratislava Hot Serenaders (SK)</option><option value="115">Budapest Jazz Orchestra (H)</option><option value="135">Bundzik István (H) p</option><option value="158">Cafuné (H)</option><option value="30">Canarro (H)</option><option value="132">Candy Men Duo (H)</option><option value="147">Carling Family (S)</option><option value="65">Chris Conz (CH)</option><option value="193">Clotile Yana (USA) voc</option><option value="28">Coquette Jazz Band (INT)</option><option value="43">Cseh Balázs (H) dr</option><option value="34">Dániel Balázs (H) p</option><option value="14">Dave Blenkhorn (AUS)</option><option value="89">Dave Blenkhorn (AUS)</option><option value="11">David Lukacs (NL)</option><option value="67">Debrecen Dixieland Jazz Band (H)</option><option value="123">Delta Bastards (URU/CDN)</option><option value="45">Dennert Árpád (H) cl, ts</option><option value="162">Dom &amp; Nora (A)</option><option value="75">Echoes of New Orleans (INT)</option><option value="129">Eddie Metz Jr. (USA) dr</option><option value="164">Ellie (USA)</option><option value="166">Emanuele Urso &quot;King of Swing&quot; (I)</option><option value="13">Evan Arntzen (CDN/USA)</option><option value="94">Falusi Mariann (H)</option><option value="192">Farkas Norbert (H) sb</option><option value="171">Farkas Péter (H)</option><option value="16">Felix Hunot (F)</option><option value="84">Festival All Stars (INT)</option><option value="170">Fodor László</option><option value="119">Francesca Leone &amp; Guido di Leone (I)</option><option value="136">Francesca Leone Quartet (I)</option><option value="25">Frank Muschalle Trio (D)</option><option value="60">Frank Roberscheuten (NL) cl, ts</option><option value="139">Freddie műsorvezető/MC</option><option value="140">Freddie Trio (H)</option><option value="26">Funny Fellows (SK)</option><option value="101">George Trebar (UK) sb</option><option value="91">George Washingmachine (AUS) vl</option><option value="189">Goat Jazz Band (H)</option><option value="103">Goff Dubber (UK) cl, ss</option><option value="63">Gone Hepsville (CZ)</option><option value="149">Good Evening Mr. Blues (H)</option><option value="61">Grunting Pigs (H)</option><option value="74">Guillaume Nouaux (F) dr</option><option value="146">Gunhild Carling (S)</option><option value="32">Gyárfás István (H) g</option><option value="152">Gyárfás-Premecz Organ Trio (H)</option><option value="110">Halas Jazz Band (H)</option><option value="36">Happy Dixieland Band Hévíz (H)</option><option value="1">Harlemania (CZ)</option><option value="10">Harry Kanters (NL)</option><option value="179">Harry Kanters (NL) p</option><option value="3">Hot Jazz Band (H)</option><option value="77">How About Rita? (NL)</option><option value="85">Hungarian All Stars</option><option value="195">Hungarian Jazz Embassy (H)</option><option value="31">Hungarian Swing Company (H)</option><option value="194">Hunter Burgamy (USA) bj, g</option><option value="137">Ittzés Márton (H) dr</option><option value="181">Jake Walker (B)</option><option value="176">Janča &amp; Victor (CZ/BG)</option><option value="143">Jazz Camp All Stars (H)</option><option value="168">Jazzleman (H)</option><option value="175">Jenna &amp; Peter (USA)</option><option value="163">Jenna &amp; Tobi (USA/A)</option><option value="96">Jerome Etcheberry (F) tp, voc</option><option value="44">Juhász Attila (H)</option><option value="128">Jumping Matt &amp; his Combo (H)</option><option value="159">Jungle Jazz Band (D)</option><option value="46">Kecskemét Jazz Orchestra (H)</option><option value="111">Kecskeméti Városi Fúvószenekar (H)</option><option value="56">Ken Aoki (J) bj</option><option value="40">Korb Attila (H) tb, tp, bs, p, voc</option><option value="47">Kőrösi Szürkeverebek Jazzbandája (H)</option><option value="133">Leslie Fodor Swing Unit (H)</option><option value="172">Louis Armstrong Celebration Band (NL)</option><option value="82">Luca Filastro (I) p</option><option value="167">Lukács Eszter (H)</option><option value="12">Malo Mazurié (F)</option><option value="23">Malo's Hot Five (INT)</option><option value="27">Marco Marchi &amp; the Mojo Workers (CH)</option><option value="35">Mardi Gras Jazz Band (H)</option><option value="17">Martin Breinschmid (A) dr</option><option value="154">Mátrai Quartet (H)</option><option value="105">Mátrai Zoltán (H) reeds</option><option value="145">Micheller Myrtill &amp; Swinguistique (H)</option><option value="7">Mimi Blais (CDN) p</option><option value="37">Miskolc Dixieland Band (H)</option><option value="125">Miskolc Dixieland Band (H)</option><option value="100">Miss Mikey May and the Organ Grinders (ISR/CZ)</option><option value="81">Mojo Workings (H)</option><option value="38">Molnár Dixieland Band (H)</option><option value="79">Morten Gunnar Larsen (N) p</option><option value="188">Mr Smood (H)</option><option value="165">Mr. Kong &amp; His Swinging Monkeys (CZ)</option><option value="72">Mudrák Mariann (H) voc</option><option value="55">N'Awlins Brass Band (NL)</option><option value="106">Nagy Iván (H) p</option><option value="161">Nagy Noémi Quartet (H)</option><option value="191">Nanna Carling (S)</option><option value="130">Nobuo Watanabe (J) p</option><option value="174">Nora &amp; Jure (H/SLO)</option><option value="173">Norbert Susemihl’s Joyful Gumbo (INT)</option><option value="76">Norwegian Jazz Kings (N)</option><option value="98">Olivier Franc (F) ss</option><option value="107">Pair of Jazz (H)</option><option value="97">Pannon Big Band (H)</option><option value="9">Paolo Alderighi (I)</option><option value="29">PapaJazz (H)</option><option value="80">PapaJazz (H)</option><option value="182">Papp</option><option value="138">Papp Brothers (H)</option><option value="51">Penge Benge Jazz Band (H)</option><option value="141">Pocsai Kriszta (H) voc</option><option value="187">Pribojszki Mátyás (H)</option><option value="117">Prohibition Orchestra (A)</option><option value="118">Prohibition Stompers (A)</option><option value="90">Raphael Dever (F) sb</option><option value="70">Ratty Jazz Band (H)</option><option value="95">Ricky &amp; the Drunken Sailors (H)</option><option value="169">Rieger Attila (H)</option><option value="50">Rollini Project (INT)</option><option value="58">Rossano Sportiello (I/USA) p</option><option value="177">Ryan Donohue (USA)</option><option value="157">Sant Andreu Jazz Band (E)</option><option value="93">Sárik Péter Trió (H)</option><option value="48">Sárkány Sándor (H)</option><option value="144">Sárkány Sándor (H) sb</option><option value="15">Sebastien Girardot (AUS/F)</option><option value="151">Shirt Tail Stompers (INT)</option><option value="134">Side by Side (H)</option><option value="186">Sir Oliver Mally &amp; Peter Schneider Duo (A/D)</option><option value="71">Slezák Csaba &amp; Bálint (H)</option><option value="185">Sonia &amp; Hector</option><option value="184">Sonia &amp; Hector (E)</option><option value="153">SoulBlaster (H)</option><option value="122">Stefan Rey (D) sb</option><option value="8">Stephanie Trick (USA)</option><option value="126">Swing &amp; Fire Big Band (H)</option><option value="160">Swing Kong Dance Orchestra (CZ)</option><option value="24">Swingfonix (CZ)</option><option value="109">Swinging Quartet (H)</option><option value="112">SwingPotatoes (H)</option><option value="86">Swingtáncórák kezdőknek / Swing dance lessons for beginners</option><option value="183">Szabó Dániel p (H)</option><option value="150">Szalóky Balázs &amp; Gyárfás István duó (H)</option><option value="39">Szalóky Béla (H) tp, tb</option><option value="142">Szalóky Béla (H) tp, tb</option><option value="178">Szalóky Classic Jazz (H)</option><option value="57">Szekeres Adrien (H) voc</option><option value="104">Szekszárd Junior Stars (H)</option><option value="113">Szőke Nikoletta Quartet feat. Attila Korb (H)</option><option value="52">teszt elek</option><option value="53">teszt elek</option><option value="87">The Blues Messengers (A)</option><option value="88">The Busquitos (NL)</option><option value="54">The Chicago Stompers (I)</option><option value="62">The Fireballs (CZ)</option><option value="180">The Fried Seven (NL)</option><option value="66">The Resonant Rogues (USA)</option><option value="68">The Vitality 3 (UK)</option><option value="156">Thimo Niesterok (D) tp</option><option value="120">Three 'O' Trommelen Plus Three (NL/D/USA)</option><option value="22">Three Blind Mice (F)</option><option value="59">Three Wise Men (INT)</option><option value="155">Tijn Trommelen Quartet (NL)</option><option value="64">Tom White &amp; the Mad Circus (H)</option><option value="114">Tóth Vera (H)</option><option value="121">Uwe Rössler (D) p</option><option value="116">Valami Swing (H)</option><option value="73">Vintage Dolls (H)</option><option value="69">Wizards of Blues (A)</option>
+            </select>
+            <select name="date">
+                <option value="" selected>Dátum</option>
+                
+            </select>
+            <select name="area">
+                <option value="" selected>Helyszín</option>
+                
+            </select>
+            <input type="submit" value="Keresés" />
+        </form>
+    </div>-->
+    
+    <p>
+           </p>
+      
+    
+       <a href="/bg/performer-popup/190" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/7087.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/7087.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Bérczesi Jazz Band (H)</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/190"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/2" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/1500.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/1500.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Bohém Ragtime Jazz Band (H)</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/2"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/131" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/4202.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/4202.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Bolba Éva (H) voc</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/131"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/193" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/9530.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/9530.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Clotile Yana (USA) voc</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/193"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/43" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/9793.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/9793.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Cseh Balázs (H) dr</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/43"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/34" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/5344.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/5344.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Dániel Balázs (H) p</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/34"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/45" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/6119.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/6119.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Dennert Árpád (H) cl, ts</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/45"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/166" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/3514.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/3514.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Emanuele Urso &quot;King of Swing&quot; (I)</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/166"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/192" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/2959.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/2959.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Farkas Norbert (H) sb</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/192"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/171" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/7811.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/7811.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Farkas Péter (H)</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/171"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/84" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/8532.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/8532.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Festival All Stars (INT)</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/84"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/32" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/9936.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/9936.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Gyárfás István (H) g</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/32"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/195" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/1568.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/1568.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Hungarian Jazz Embassy (H)</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/195"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/194" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/5961.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/5961.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Hunter Burgamy (USA) bj, g</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/194"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/143" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/8080.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/8080.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Jazz Camp All Stars (H)</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/143"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/56" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/7074.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/7074.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Ken Aoki (J) bj</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/56"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/40" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/4007.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/4007.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Korb Attila (H) tb, tp, bs, p, voc</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/40"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/167" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/6878.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/6878.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Lukács Eszter (H)</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/167"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/106" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/5231.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/5231.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Nagy Iván (H) p</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/106"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/191" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/3845.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/3845.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Nanna Carling (S)</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/191"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/187" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/8519.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/8519.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Pribojszki Mátyás (H)</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/187"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/186" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/5444.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/5444.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Sir Oliver Mally &amp; Peter Schneider Duo (A/D)</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/186"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/86" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/6362.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/6362.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Swingtáncórák kezdőknek / Swing dance lessons for beginners</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/86"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/142" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/1789.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/1789.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Szalóky Béla (H) tp, tb</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/142"></a>-->
+            </div>
+        </div>
+    </a>
+
+   <a href="/bg/performer-popup/64" class="performer-popup">
+        <div class="performers-box" style="background-image:url('/gallery/bands/4208.jpg');">
+            <!--<a href="#"><img src="/gallery/bands/4208.jpg" alt="" title="" /></a>-->
+            <div class="bottombar">
+                <div class="performer">Tom White &amp; the Mad Circus (H)</div>
+                <!--<a class="performer-popup" href="/bg/performer-popup/64"></a>-->
+            </div>
+        </div>
+    </a>
+
+
+    
+    <p></p>
+</div>
+                    
+  </div>
+    
+
+
+
+    <div class="container">
+        <div id="tamogatok">
+              <div class="title">
+              Támogatók              </div>
+              
+              
+                <div class="supporter-box">
+                  <div class="sup-title red">
+                   
+                     Főtámogatók                   
+                  </div>
+                  <a href="http://www.kecskemet.hu" target="_blank" class="partner-logo" title="KMJV"><img src="/gallery/menu/1302-6642.png" alt="" title="KMJV"></a><a href="www.nka.hu" target="_blank" class="partner-logo" title="NKA"><img src="/gallery/menu/1296-2624.png" alt="" title="NKA"></a><a href="ste" target="_blank" class="partner-logo" title="STE"><img src="/gallery/menu/1407-3126.png" alt="" title="STE"></a><a href="http://logall.hu/" target="_blank" class="partner-logo" title="Logall"><img src="/gallery/menu/1375-5338.png" alt="" title="Logall"></a><a href="http://www.alcufer.hu/hu/" target="_blank" class="partner-logo" title="Alcufer"><img src="/gallery/menu/1390-4377.png" alt="" title="Alcufer"></a><a href="http://www.cargoport.hu" target="_blank" class="partner-logo" title="Cargoport"><img src="/gallery/menu/1377-2536.png" alt="" title="Cargoport"></a><a href="https://nje.hu/" target="_blank" class="partner-logo" title="Neumann Egyetem"><img src="/gallery/menu/1403-6758.png" alt="" title="Neumann Egyetem"></a><a href="https://www.netherlandsandyou.nl/web/hungary/about-us" target="_blank" class="partner-logo" title="Holland Nagykövetség"><img src="/gallery/menu/1333-6769.png" alt="" title="Holland Nagykövetség"></a>               </div>
+                
+                <div class="supporter-box">
+                  <div class="sup-title green">
+                   
+                     Szponzorok                   
+                  </div>
+                  <a href="https://www.felegyhazipekseg.hu" target="_blank" class="partner-logo" title="Félegyházi Pékség"><img src="/gallery/menu/1364-4060.png" alt="" title="Félegyházi Pékség"></a><a href="http://kedozrt.hu" target="_blank" class="partner-logo" title="KEDO"><img src="/gallery/menu/1413-9085.png" alt="" title="KEDO"></a>               </div>
+                
+                <div class="supporter-box">
+                  <div class="sup-title blue">Partnerek</div>
+                  <a href="https://mediaklikk.hu/bartok/" target="_blank" class="partner-logo" title="Bartók Rádió"><img src="/gallery/menu/1416-5177.png" alt="" title="Bartók Rádió"></a><a href="https://hiros.hu" target="_blank" class="partner-logo" title="hiros.hu"><img src="/gallery/menu/1315-7264.png" alt="" title="hiros.hu"></a><a href="https://www.axon-cable.com/en/axon-kabelgyarto-hungary" target="_blank" class="partner-logo" title="Axon"><img src="/gallery/menu/1394-8120.png" alt="" title="Axon"></a><a href="http://furedi.eu/" target="_blank" class="partner-logo" title="Füredi"><img src="/gallery/menu/1359-1595.png" alt="" title="Füredi"></a><a href="https://dtkh.hu" target="_blank" class="partner-logo" title="DTKH"><img src="/gallery/menu/1339-3453.png" alt="" title="DTKH"></a><a href="https://gepesz.hu" target="_blank" class="partner-logo" title="Gépész"><img src="/gallery/menu/1300-9865.png" alt="" title="Gépész"></a><a href="tiszafoldvari-italkereskedohaz" target="_blank" class="partner-logo" title="Tiszaföldvári Italkereskedőház"><img src="/gallery/menu/1391-4915.png" alt="" title="Tiszaföldvári Italkereskedőház"></a><a href="kefag" target="_blank" class="partner-logo" title="KEFAG"><img src="/gallery/menu/1311-5581.png" alt="" title="KEFAG"></a><a href="http://www.microsystem.hu" target="_blank" class="partner-logo" title="Microsystem"><img src="/gallery/menu/1405-8346.png" alt="" title="Microsystem"></a><a href="https://botondkft.hu/" target="_blank" class="partner-logo" title="Botond Kft."><img src="/gallery/menu/1353-3892.png" alt="" title="Botond Kft."></a><a href="https://www.beewatec.de/hu/" target="_blank" class="partner-logo" title="BeeWaTec"><img src="/gallery/menu/1360-5339.png" alt="" title="BeeWaTec"></a><a href="https://termostar.hu/kezdolap" target="_blank" class="partner-logo" title="termostar"><img src="/gallery/menu/1335-9925.png" alt="" title="termostar"></a><a href="https://www.simonotthonok.hu/" target="_blank" class="partner-logo" title="Simon Otthonok"><img src="/gallery/menu/1387-7975.png" alt="" title="Simon Otthonok"></a><a href="https://www.szabadidokozpont-kecskemet.hu/" target="_blank" class="partner-logo" title="Benkó Zoltán Szabadidőközpont"><img src="/gallery/menu/1381-2680.png" alt="" title="Benkó Zoltán Szabadidőközpont"></a><a href="https://hirosveteran.hu" target="_blank" class="partner-logo" title="Hírös Veterán"><img src="/gallery/menu/1409-6341.png" alt="" title="Hírös Veterán"></a><a href="https://www.juszti.hu" target="_blank" class="partner-logo" title="Iustitia"><img src="/gallery/menu/1410-6252.png" alt="" title="Iustitia"></a><a href="https://www.facebook.com/kecskemetitarsasjatek/" target="_blank" class="partner-logo" title="Társasjáték"><img src="/gallery/menu/1414-7680.png" alt="" title="Társasjáték"></a>               </div> 
+                
+        </div>
+    </div>
+    
+    
+</section>
+<footer>
+    <div class="container">
+     
+    <div class="abslogo">
+     
+                            <a href="/"> <img src="/images/logo19_hu.png?v=2" alt="Kezdőlap" title="Kezdőlap"></a>
+                          
+    </div>
+
+
+        <div class="footerbox">
+            <div class="footertitle">
+                
+            Navigáció                
+            </div>
+            <ul>
+                   <li class="active"><a href="/fellepok">FELLÉPŐK</a></li><li><a href="https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/" >JEGY 2026</a></li><li><a href="/programok" >PROGRAMOK</a></li><li><a href="/szallas" >SZÁLLÁS</a></li><li><a href="/kozlekedes" >TÉRKÉP, KÖZLEKEDÉS</a></li><li><a href="/aszf" >ÁSZF</a></li><li><a href="/kapcsolat" >KAPCSOLAT</a></li><li><a href="/futas" >futás</a></li><li><a href="/jazztabor" >jazztábor</a></li>                    </ul>            
+        </div>
+        <div class="footerbox">
+            <div class="footertitle">
+            Közösség</div>
+            <p class="social">
+            
+            Csatlakozzon hozzánk közösségi oldalainkon!            </p>
+            <div class="social-icons">
+                <ul>
+                    <li><a href="https://www.youtube.com/watch?v=4gGiiNwHe6E" target="_blank"><img src="/images/f-yt.png" alt="Youtube" title="Youtube" /></a></li>
+                    <li><a href="https://www.instagram.com/jazzfovaros/" target="_blank"><img src="/images/f-insta.png" alt="Instagram" title="Instagram" /></a></li>
+                    <li><a href="http://www.facebook.com/jazzfovaros" target="_blank"><img src="/images/f-fb.png" alt="Facebook" title="Facebook"   /></a></li>
+                </ul>
+                
+                            <div class="clearfix"></div>
+               <p><img src="/images/barion.jpg" alt="Barion" title="Barion" /></p>
+                           </div>                 
+        </div>
+        
+        <div class="footerbox">
+            <div class="footertitle">
+            Fizetési lehetőségek</div>
+            <p>
+            <img src="/images/barion-kicsi.jpg"  alt="" title="" />
+
+            </p>
+                
+        </div>
+        
+        
+        
+    </div>    
+    <div class="bottombar">
+      <div class="container">
+            <div class="left">
+                    
+                    
+                       &copy; Copyright 2018 JAZZFŐVÁROS KFT. MINDEN JOG FENNTARTVA      
+                    
+                    
+            </div>            
+            <div class="right">
+                    <div class="menu">
+                        <ul>
+                            <li><a href="/adatvedelem">Adatvédelem</a></li>
+                                <li><a href="/jogi-nyilatkozat">Jogi nyilatkozat</a></li>
+                                <li><a href="/impresszum">Impresszum</a></li>                        </ul>                        
+                    </div>
+                    <div class="copy">                    
+                        Készítette: <a href="http://mayoka.hu">Mayoka</a>                    
+                    </div>
+            </div>            
+      </div>
+      <div class="clearfix"></div>
+    </div>    
+</footer>
+<script type="text/javascript">       
+  $('.timer').countdown('2026/08/06', function(event) {   
+   $('#jstimer').html(event.strftime('<div class="month">%D</div><div class="week">%H</div><div class="day">%M</div>'));
+ });   
+ </script>
+    <!-- Google remarketingcímke-kód -->
+   <!--------------------------------------------------
+   A remarketingcímkék nem társíthatók személyazonosításra alkalmas adatokkal, és nem helyezhetők el érzékeny kategóriához kapcsolódó oldalakon. A címke beállításával kapcsolatban további információt és útmutatást a következő címen olvashat: http://google.com/ads/remarketingsetup
+   --------------------------------------------------->
+   <script type="text/javascript">
+   /* <![CDATA[ */
+   var google_conversion_id = 881354213;
+   var google_custom_params = window.google_tag_params;
+   var google_remarketing_only = true;
+   /* ]]> */
+   </script>
+   <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+   </script>
+   <noscript>
+   <div style="display:inline;">
+   <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/881354213/?value=0&amp;guid=ON&amp;script=0"/>
+   </div>
+   </noscript>
+
+        <div id="szechenyi" class=""></div>
+</body>
+</html>
+

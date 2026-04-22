@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>10. Bohém Jazzfőváros 2026 – Főoldal Wireframe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,700;0,800;0,900;1,700&family=Oswald:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #FF6200;
+      --orange-dark: #E05500;
+      --navy: #0D2137;
+      --navy-light: #1A3A5C;
+      --sky-blue: #5BB8E8;
+      --ocean-blue: #1B6CA8;
+      --cream: #FFFDF5;
+      --white: #FFFFFF;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ===== NAVBAR ===== */
+    nav {
+      background: #0A1628;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-badge {
+      width: 48px;
+      height: 48px;
+      background: var(--navy-light);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--orange);
+    }
+
+    .nav-logo-badge .num { font-size: 9px; color: var(--orange); font-weight: 900; line-height: 1; }
+    .nav-logo-badge .bohm { font-size: 7px; color: #FFD700; font-style: italic; line-height: 1; }
+    .nav-logo-badge .jazz { font-size: 14px; color: var(--orange); font-weight: 900; line-height: 1; font-family: 'Oswald', sans-serif; }
+    .nav-logo-badge .fovaros { font-size: 6px; color: var(--white); font-weight: 700; line-height: 1; }
+    .nav-logo-badge .year { font-size: 7px; color: #FFD700; line-height: 1; }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      list-style: none;
+    }
+
+    .nav-menu a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-menu a:hover { color: var(--orange); }
+
+    .nav-en {
+      border: 1.5px solid rgba(255,255,255,0.5);
+      padding: 3px 10px;
+      border-radius: 4px;
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-en:hover { border-color: var(--orange); color: var(--orange); }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      min-height: 480px;
+      background: linear-gradient(180deg, #87CEEB 0%, #5BB8E8 30%, #2B8FCC 55%, #1B6CA8 75%, #0D4A7A 100%);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero-waves {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      background: url('waves_pattern.png') center bottom / cover no-repeat;
+      opacity: 0.7;
+    }
+
+    .hero-bubbles {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url('bubbles_pattern.png') center / 60% repeat;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    .hero-sun {
+      position: absolute;
+      top: 20px;
+      right: 280px;
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle, #FFE066 40%, #FFB800 70%, transparent 100%);
+      border-radius: 50%;
+      box-shadow: 0 0 40px 20px rgba(255,200,0,0.4);
+    }
+
+    .hero-cloud {
+      position: absolute;
+      background: rgba(255,255,255,0.9);
+      border-radius: 50px;
+    }
+
+    .hero-cloud::before, .hero-cloud::after {
+      content: '';
+      position: absolute;
+      background: rgba(255,255,255,0.9);
+      border-radius: 50%;
+    }
+
+    .cloud1 {
+      top: 40px; left: 80px;
+      width: 120px; height: 40px;
+    }
+    .cloud1::before { width: 60px; height: 60px; top: -30px; left: 15px; }
+    .cloud1::after  { width: 45px; height: 45px; top: -20px; left: 55px; }
+
+    .cloud2 {
+      top: 60px; left: 300px;
+      width: 90px; height: 30px;
+    }
+    .cloud2::before { width: 45px; height: 45px; top: -22px; left: 10px; }
+    .cloud2::after  { width: 35px; height: 35px; top: -15px; left: 42px; }
+
+    .hero-duck {
+      position: absolute;
+      right: 0;
+      bottom: 60px;
+      width: 340px;
+      height: auto;
+      filter: drop-shadow(-8px 8px 20px rgba(0,0,0,0.3));
+    }
+
+    .hero-lifering {
+      position: absolute;
+      left: 38%;
+      bottom: 80px;
+      width: 100px;
+      height: auto;
+      transform: rotate(-15deg);
+    }
+
+    .hero-beachball {
+      position: absolute;
+      left: 50%;
+      bottom: 100px;
+      width: 60px;
+      height: auto;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      padding: 60px 40px;
+      max-width: 55%;
+    }
+
+    .hero-logo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(13,33,55,0.85);
+      border: 2px solid var(--orange);
+      border-radius: 12px;
+      padding: 10px 16px;
+      margin-bottom: 20px;
+    }
+
+    .hero-logo-badge .badge-icon {
+      width: 50px; height: 50px;
+      background: var(--navy-light);
+      border-radius: 8px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+
+    .hero-logo-badge .badge-text { color: var(--white); }
+    .hero-logo-badge .badge-text .small { font-size: 10px; color: var(--orange); font-weight: 700; }
+    .hero-logo-badge .badge-text .big { font-size: 13px; font-weight: 900; color: var(--white); }
+
+    .hero-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 72px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 0.95;
+      text-shadow: 2px 4px 12px rgba(0,0,0,0.4);
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      opacity: 0.9;
+    }
+
+    .hero-date {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 28px;
+    }
+
+    .btn-orange {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--orange);
+      color: var(--white);
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      padding: 14px 32px;
+      border-radius: 50px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 4px 16px rgba(255,98,0,0.4);
+    }
+
+    .btn-orange:hover { background: var(--orange-dark); transform: translateY(-2px); }
+    .btn-orange:active { transform: translateY(0); }
+
+    /* ===== INFO BAR ===== */
+    .info-bar {
+      background: var(--orange);
+      padding: 14px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .info-bar-text {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .info-bar-text .sep { opacity: 0.6; }
+
+    .btn-orange-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--white);
+      font-family: 'Oswald', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 8px 22px;
+      border-radius: 50px;
+      border: 2px solid var(--white);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-orange-outline:hover { background: rgba(255,255,255,0.15); }
+
+    /* ===== VIDEO SECTION ===== */
+    .video-section {
+      background: linear-gradient(180deg, #0D2137 0%, #1A3A5C 50%, #0D2137 100%);
+      padding: 50px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .video-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url('bubbles_pattern.png') center / 80% repeat;
+      opacity: 0.06;
+      pointer-events: none;
+    }
+
+    .video-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+      border: 3px solid var(--orange);
+    }
+
+    .video-thumb {
+      width: 100%;
+      display: block;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+    }
+
+    .video-play-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.25);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .video-play-overlay:hover { background: rgba(0,0,0,0.15); }
+
+    .play-btn {
+      width: 80px; height: 80px;
+      background: #FF0000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      transition: transform 0.2s;
+    }
+
+    .play-btn:hover { transform: scale(1.1); }
+
+    .play-btn::after {
+      content: '';
+      width: 0; height: 0;
+      border-style: solid;
+      border-width: 16px 0 16px 28px;
+      border-color: transparent transparent transparent white;
+      margin-left: 6px;
+    }
+
+    /* ===== TICKET BOXES ===== */
+    .ticket-boxes {
+      background: var(--navy);
+      padding: 30px 40px;
+    }
+
+    .ticket-boxes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .ticket-box {
+      background: var(--orange);
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      text-decoration: none;
+    }
+
+    .ticket-box:hover { background: var(--orange-dark); transform: translateY(-2px); }
+
+    .ticket-box-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .ticket-box-icon {
+      font-size: 24px;
+      opacity: 0.9;
+    }
+
+    .ticket-box-text .title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: 0.5px;
+    }
+
+    .ticket-box-text .sub {
+      font-size: 11px;
+      color: rgba(255,255,255,0.8);
+      font-weight: 600;
+    }
+
+    .ticket-box-arrow {
+      font-size: 20px;
+      color: var(--white);
+      font-weight: 700;
+    }
+
+    /* ===== STATS ===== */
+    .stats-bar {
+      background: var(--orange);
+      padding: 30px 40px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 20px;
+      border-right: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .stat-item:last-child { border-right: none; }
+
+    .stat-icon {
+      font-size: 28px;
+      margin-bottom: 6px;
+      opacity: 0.9;
+    }
+
+    .stat-number {
+      font-family: 'Oswald', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* ===== ARTISTS ===== */
+    .artists-section {
+      background: linear-gradient(180deg, #0D2137 0%, #1A3A5C 50%, #0D2137 100%);
+      padding: 60px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .artists-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url('guitar_silhouette.png') right center / 300px no-repeat;
+      opacity: 0.05;
+      pointer-events: none;
+    }
+
+    .section-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--orange);
+      text-align: center;
+      margin-bottom: 40px;
+      letter-spacing: 2px;
+    }
+
+    .artists-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      max-width: 1100px;
+      margin: 0 auto 16px;
+    }
+
+    .artist-card {
+      background: var(--cream);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+
+    .artist-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+
+    .artist-card-tag {
+      background: var(--orange);
+      color: var(--white);
+      font-size: 9px;
+      font-weight: 800;
+      padding: 4px 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: inline-block;
+      margin: 10px 10px 0;
+      border-radius: 4px;
+    }
+
+    .artist-card-photo {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+      margin-top: 8px;
+    }
+
+    .artist-card-photo-placeholder {
+      width: 100%;
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, #C8E6F5 0%, #90C8E8 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 8px;
+      font-size: 40px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .artist-card-body {
+      padding: 10px 12px 14px;
+    }
+
+    .artist-card-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--orange);
+      text-transform: uppercase;
+      line-height: 1.2;
+      margin-bottom: 3px;
+    }
+
+    .artist-card-genre {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--orange);
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    /* ===== CTA ===== */
+    .cta-section {
+      background: linear-gradient(135deg, #0D2137 0%, #1A3A5C 50%, #0D2137 100%);
+      padding: 80px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url('guitar_silhouette.png') left center / 250px no-repeat,
+                  url('bubbles_pattern.png') center / 60% repeat;
+      opacity: 0.06;
+      pointer-events: none;
+    }
+
+    .cta-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 56px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+      position: relative;
+    }
+
+    .cta-subtitle {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 32px;
+      font-weight: 600;
+      position: relative;
+    }
+
+    /* ===== SPONSORS ===== */
+    .sponsors-section {
+      background: var(--navy);
+      padding: 60px 40px;
+      text-align: center;
+    }
+
+    .sponsors-block {
+      margin-bottom: 40px;
+    }
+
+    .sponsors-block-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--orange);
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+    }
+
+    .sponsors-list {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      font-weight: 600;
+      line-height: 1.8;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .sponsors-divider {
+      width: 80px;
+      height: 2px;
+      background: var(--orange);
+      margin: 30px auto;
+      opacity: 0.4;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #0A1628;
+      padding: 50px 40px 20px;
+      border-top: 2px solid rgba(255,98,0,0.3);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+      gap: 40px;
+      max-width: 1100px;
+      margin: 0 auto 40px;
+    }
+
+    .footer-logo-col .logo-badge {
+      width: 60px; height: 60px;
+      background: var(--orange);
+      border-radius: 10px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .footer-logo-col .logo-badge .jazz-text {
+      font-family: 'Oswald', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .footer-logo-col .brand-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .footer-logo-col .brand-info {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.6;
+    }
+
+    .footer-col-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--orange);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--orange); }
+
+    .footer-contact-item {
+      font-size: 12px;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .social-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      color: var(--white);
+    }
+
+    .social-icon:hover { border-color: var(--orange); color: var(--orange); }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 20px;
+      text-align: center;
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .artists-grid { grid-template-columns: repeat(3, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .hero-title { font-size: 48px; }
+      .hero-duck { width: 220px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-badge">
+        <span class="num">10.</span>
+        <span class="bohm">bohém</span>
+        <span class="jazz">JAZZ</span>
+        <span class="fovaros">FŐVÁROS</span>
+        <span class="year">2026.</span>
+      </div>
+    </a>
+    <ul class="nav-menu">
+      <li><a href="#">Főoldal</a></li>
+      <li><a href="#">Fellépők</a></li>
+      <li><a href="#">Programok</a></li>
+      <li><a href="#">Jegyek &amp; Infó</a></li>
+      <li><a href="#">Szállás</a></li>
+      <li><a href="#">Térkép</a></li>
+      <li><a href="#">Galéria</a></li>
+      <li><a href="#">Jazztábor</a></li>
+      <li><a href="#">Futás</a></li>
+      <li><a href="#">Kapcsolat</a></li>
+    </ul>
+    <div class="nav-en">/ IN ENGLISH</div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-bubbles"></div>
+    <div class="hero-sun"></div>
+    <div class="hero-cloud cloud1"></div>
+    <div class="hero-cloud cloud2"></div>
+    <div class="hero-waves"></div>
+
+    <img src="rubber_duck.png" alt="Gumikacsa" class="hero-duck" />
+    <img src="life_ring.png" alt="Mentőöv" class="hero-lifering" />
+    <img src="beach_ball.png" alt="Strandlabda" class="hero-beachball" />
+
+    <div class="hero-content">
+      <div class="hero-logo-badge">
+        <div class="badge-icon">
+          <span style="font-family:'Oswald',sans-serif;font-size:10px;color:#FF6200;font-weight:900;">10.</span>
+          <span style="font-family:'Oswald',sans-serif;font-size:18px;color:#FF6200;font-weight:900;">JAZZ</span>
+          <span style="font-size:7px;color:#FFD700;font-weight:700;">FŐVÁROS</span>
+        </div>
+        <div class="badge-text">
+          <div class="small">bohém</div>
+          <div class="big">2026.</div>
+        </div>
+      </div>
+
+      <h1 class="hero-title">BOHÉM<br>JAZZFŐVÁROS</h1>
+      <p class="hero-subtitle">Kecskemét, Domb Beach</p>
+      <p class="hero-date">2026. augusztus 6–9.</p>
+      <a href="#" class="btn-orange">JEGYVÁSÁRLÁS →</a>
+    </div>
+  </section>
+
+  <!-- ===== INFO BAR ===== -->
+  <div class="info-bar">
+    <div class="info-bar-text">
+      <span>📅 2026. augusztus 6–9.</span>
+      <span class="sep">•</span>
+      <span>📍 DOMB BEACH (BENKŐ ZOLTÁN SZABADIDŐKÖZPONT), KECSKEMÉT</span>
+    </div>
+    <a href="#" class="btn-orange-outline">JEGYVÁSÁRLÁS →</a>
+  </div>
+
+  <!-- ===== VIDEO SECTION ===== -->
+  <section class="video-section">
+    <div class="video-wrapper">
+      <img src="video_thumbnail_frame.png" alt="Fesztivál videó" class="video-thumb" />
+      <div class="video-play-overlay">
+        <div class="play-btn"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TICKET BOXES ===== -->
+  <section class="ticket-boxes">
+    <div class="ticket-boxes-grid">
+      <a href="#" class="ticket-box">
+        <div class="ticket-box-left">
+          <div class="ticket-box-icon">🎫</div>
+          <div class="ticket-box-text">
+            <div class="title">JEGYVÁSÁRLÁS</div>
+            <div class="sub">Bérlet és napijegyek online</div>
+          </div>
+        </div>
+        <div class="ticket-box-arrow">→</div>
+      </a>
+      <a href="#" class="ticket-box">
+        <div class="ticket-box-left">
+          <div class="ticket-box-icon">🗺️</div>
+          <div class="ticket-box-text">
+            <div class="title">JEGYVÁSÁRLÁS</div>
+            <div class="sub">Helyszínen és jegypontókban</div>
+          </div>
+        </div>
+        <div class="ticket-box-arrow">→</div>
+      </a>
+      <a href="#" class="ticket-box">
+        <div class="ticket-box-left">
+          <div class="ticket-box-icon">📱</div>
+          <div class="ticket-box-text">
+            <div class="title">JEGYVÁSÁRLÁS</div>
+            <div class="sub">Bérlet és napijegyek online</div>
+          </div>
+        </div>
+        <div class="ticket-box-arrow">→</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== STATS BAR ===== -->
+  <section class="stats-bar">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-icon">📅</div>
+        <div class="stat-number">4</div>
+        <div class="stat-label">NAP</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">🌍</div>
+        <div class="stat-number">10+</div>
+        <div class="stat-label">ORSZÁG</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">🎤</div>
+        <div class="stat-number">120+</div>
+        <div class="stat-label">ZENÉSZ</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">🎵</div>
+        <div class="stat-number">40+</div>
+        <div class="stat-label">ÓRA ZENE</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ARTISTS ===== -->
+  <section class="artists-section">
+    <h2 class="section-title">FELLÉPŐK</h2>
+
+    <div class="artists-grid">
+      <!-- Row 1 -->
+      <div class="artist-card">
+        <span class="artist-card-tag">Magyar Jazz</span>
+        <img src="artist_card_template.png" alt="Dresch Mihály Quartet" class="artist-card-photo" />
+        <div class="artist-card-body">
+          <div class="artist-card-name">Dresch Mihály Quartet</div>
+          <div class="artist-card-genre">Magyar Jazz</div>
+        </div>
+      </div>
+      <div class="artist-card">
+        <span class="artist-card-tag">Magyar Jazz</span>
+        <div class="artist-card-photo-placeholder">🎷</div>
+        <div class="artist-card-body">
+          <div class="artist-card-name">Dresch Mihály Quartet</div>
+          <div class="artist-card-genre">Magyar Jazz</div>
+        </div>
+      </div>
+      <div class="artist-card">
+        <span class="artist-card-tag">Magyar Jazz</span>
+        <div class="artist-card-photo-placeholder">🎺</div>
+        <div class="artist-card-body">
+          <div class="artist-card-name">Dresch Mihály Quartet</div>
+          <div class="artist-card-genre">Magyar Jazz</div>
+        </div>
+      </div>
+      <div class="artist-card">
+        <span class="artist-card-tag">Magyar Jazz</span>
+        <div class="artist-card-photo-placeholder">🎸</div>
+        <div class="artist-card-body">
+          <div class="artist-card-name">Dresch Mihály Quartet</div>
+          <div class="artist-card-genre">Magyar Jazz</div>
+        </div>
+      </div>
+      <div class="artist-card">
+        <span class="artist-card-tag">Magyar Jazz</span>
+        <div class="artist-card-photo-placeholder">🥁</div>
+        <div class="artist-card-body">
+          <div class="artist-card-name">Dresch Mihály Quartet</div>
+          <div class="artist-card-genre">Magyar Jazz</div>
+        </div>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="artist-card">
+        <span class="artist-card-tag">World Jazz</span>
+        <div class="artist-card-photo-placeholder">🎻</div>
+        <div class="artist-card-body">
+          <div class="artist-card-name">Dresch Mihály Quartet</div>
+          <div class="artist-card-genre">Magyar Jazz</div>
+        </div>
+      </div>
+      <div class="artist-card">
+        <span class="artist-card-tag">Contemporary</span>
+        <div class="artist-card-photo-placeholder">🎹</div>
+        <div class="artist-card-body">
+          <div class="artist-card-name">Dresch Mihály Quartet</div>
+          <div class="artist-card-genre">Magyar Jazz</div>
+        </div>
+      </div>
+      <div class="artist-card">
+        <span class="artist-card-tag">Fusion Jazz</span>
+        <div class="artist-card-photo-placeholder">🎷</div>
+        <div class="artist-card-body">
+          <div class="artist-card-name">Dresch Mihály Quartet</div>
+          <div class="artist-card-genre">Magyar Jazz</div>
+        </div>
+      </div>
+      <div class="artist-card">
+        <span class="artist-card-tag">Free Jazz</span>
+        <div class="artist-card-photo-placeholder">🎺</div>
+        <div class="artist-card-body">
+          <div class="artist-card-name">Dresch Mihály Quartet</div>
+          <div class="artist-card-genre">Magyar Jazz</div>
+        </div>
+      </div>
+      <div class="artist-card">
+        <span class="artist-card-tag">Soul Jazz</span>
+        <div class="artist-card-photo-placeholder">🎸</div>
+        <div class="artist-card-body">
+          <div class="artist-card-name">Dresch Mihály Quartet</div>
+          <div class="artist-card-genre">Magyar Jazz</div>
+        </div>
+      </div>
+
+      <!-- Row 3 -->
+      <div class="artist-card">
+        <span class="artist-card-tag">Gypsy Jazz</span>
+        <div class="artist-card-photo-placeholder">🎻</div>
+        <div class="artist-card-body">
+          <div class="artist-card-name">Dresch Mihály Quartet</div>
+          <div class="artist-card-genre">Magyar Jazz</div>
+        </div>
+      </div>
+      <div class="artist-card">
+        <span class="artist-card-tag">Nordic Jazz</span>
+        <div class="artist-card-photo-placeholder">🥁</div>
+        <div class="artist-card-body">
+          <div class="artist-card-name">Dresch Mihály Quartet</div>
+          <div class="artist-card-genre">Magyar Jazz</div>
+        </div>
+      </div>
+      <div class="artist-card">
+        <span class="artist-card-tag">Avant-garde</span>
+        <div class="artist-card-photo-placeholder">🎹</div>
+        <div class="artist-card-body">
+          <div class="artist-card-name">Dresch Mihály Quartet</div>
+          <div class="artist-card-genre">Magyar Jazz</div>
+        </div>
+      </div>
+      <div class="artist-card">
+        <span class="artist-card-tag">Funk Jazz</span>
+        <div class="artist-card-photo-placeholder">🎷</div>
+        <div class="artist-card-body">
+          <div class="artist-card-name">Dresch Mihály Quartet</div>
+          <div class="artist-card-genre">Magyar Jazz</div>
+        </div>
+      </div>
+      <div class="artist-card">
+        <span class="artist-card-tag">Electronic</span>
+        <div class="artist-card-photo-placeholder">🎺</div>
+        <div class="artist-card-body">
+          <div class="artist-card-name">Dresch Mihály Quartet</div>
+          <div class="artist-card-genre">Magyar Jazz</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta-section">
+    <h2 class="cta-title">VEDD MEG A JEGYED MOST!</h2>
+    <p class="cta-subtitle">2026. AUGUSZTUS 6–9. • DOMB BEACH (BENKŐ ZOLTÁN SZABADIDŐKÖZPONT), KECSKEMÉT</p>
+    <a href="#" class="btn-orange" style="font-size:20px;padding:16px 40px;">JEGYVÁSÁRLÁS →</a>
+  </section>
+
+  <!-- ===== SPONSORS ===== -->
+  <section class="sponsors-section">
+    <div class="sponsors-block">
+      <h3 class="sponsors-block-title">TÁMOGATÓINK</h3>
+      <p class="sponsors-list">
+        Kecskemét Megyei Jogú Város / Nemzeti Kulturális Alap / STE Logali / Alcofer / Cargoport / NJE / NL Netherlands
+      </p>
+    </div>
+    <div class="sponsors-divider"></div>
+    <div class="sponsors-block">
+      <h3 class="sponsors-block-title">SZPONZOROK</h3>
+      <p class="sponsors-list">Tesco / Kedo</p>
+    </div>
+    <div class="sponsors-divider"></div>
+    <div class="sponsors-block">
+      <h3 class="sponsors-block-title">PARTNEREK</h3>
+      <p class="sponsors-list">
+        Bartók Rádió / Hirus.hu / Axon / Füredi / DTKH / Gépesz / Tiszafüred / Zafiras / LS / Borona / Beematec / Termostar / Simon Otthon / Zölség Sziget / Veteran / Kecskeméti Lovasklub / Palotás
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-logo-col">
+        <div class="logo-badge">
+          <span class="jazz-text">JAZZ</span>
+        </div>
+        <div class="brand-name">BOHÉM<br>JAZZFŐVÁROS</div>
+        <div class="brand-info">
+          2026. AUGUSZTUS 6–9.<br>
+          KECSKEMÉT
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Navigáció</div>
+        <ul class="footer-links">
+          <li><a href="#">Főoldal</a></li>
+          <li><a href="#">Fellépők</a></li>
+          <li><a href="#">Programok</a></li>
+          <li><a href="#">Jegyek &amp; Infó</a></li>
+          <li><a href="#">Szállás</a></li>
+          <li><a href="#">Térkép</a></li>
+          <li><a href="#">Galéria</a></li>
+          <li><a href="#">Jazztábor</a></li>
+          <li><a href="#">Futás</a></li>
+          <li><a href="#">Kapcsolat</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Jegyek &amp; Infó</div>
+        <ul class="footer-links">
+          <li><a href="#">Térkép</a></li>
+          <li><a href="#">Galéria</a></li>
+          <li><a href="#">Jazztábor</a></li>
+          <li><a href="#">Futás</a></li>
+          <li><a href="#">Kapcsolat</a></li>
+          <li><a href="#">Átállás</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Kontakt</div>
+        <div class="footer-contact-item">
+          Domb Beach (Benkő Zoltán Szabadidőközpont),<br>Kecskemét
+        </div>
+        <div class="footer-contact-item">
+          jazzfovaros@gmail.com
+        </div>
+        <div class="footer-social">
+          <a href="#" class="social-icon">f</a>
+          <a href="#" class="social-icon">📷</a>
+          <a href="#" class="social-icon">▶</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © 2026 Jazzfőváros Kft. · Minden jog fenntartva. · Adatvédelem · Jogi nyilatkozat · Impresszum · Süti · Napfoka
+    </div>
+  </footer>
+
+</body>
+</html>

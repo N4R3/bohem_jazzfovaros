@@ -5,7 +5,6 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_BUILD_LOCALE: getBuildLocale(),
   },
-  output: "export",
   trailingSlash: true,
   images: {
     unoptimized: true,

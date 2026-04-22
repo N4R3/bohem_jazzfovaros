@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import type { GalleryImage } from "@/lib/types";
 import { useInView } from "@/hooks/useInView";
 
@@ -56,13 +57,20 @@ export default function GalleryClient({ images }: Props) {
             }}
             aria-label={img.alt || `Photo ${i + 1}`}
           >
-            <div className="aspect-square bg-gradient-to-br from-[var(--color-navy-800)] to-[var(--color-navy-900)] flex items-center justify-center">
-              <span className="font-mono text-xs text-[var(--color-gold-500)]/20">
-                {String(i + 1).padStart(2, "0")}
-              </span>
+            <div className="relative aspect-square overflow-hidden">
+              <Image
+                src={img.src}
+                alt={img.alt || `Fotó ${i + 1}`}
+                fill
+                sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
+              />
             </div>
-            <div className="absolute inset-0 flex items-end bg-[var(--color-navy-900)]/0 transition-colors group-hover:bg-[var(--color-navy-900)]/40">
-              <span className="translate-y-full p-3 text-xs text-white transition-transform group-hover:translate-y-0">
+            <div className="absolute inset-0 flex items-end bg-black/0 transition-colors group-hover:bg-black/50">
+              <span
+                className="translate-y-full p-3 text-xs font-semibold transition-transform group-hover:translate-y-0"
+                style={{ color: "#fdf6e3" }}
+              >
                 {img.alt}
               </span>
             </div>
@@ -85,11 +93,14 @@ export default function GalleryClient({ images }: Props) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-[var(--color-navy-900)] shadow-2xl">
-              <div className="flex h-full w-full items-center justify-center">
-                <span className="font-mono text-2xl text-[var(--color-gold-500)]/30">
-                  {String(open + 1).padStart(2, "0")}
-                </span>
-              </div>
+              <Image
+                src={images[open].src}
+                alt={images[open].alt || `Fotó ${open + 1}`}
+                fill
+                sizes="(max-width: 1280px) 100vw, 1280px"
+                className="object-contain"
+                priority
+              />
               {images[open].alt && (
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 px-6 py-4">
                   <p className="text-sm text-white/80">{images[open].alt}</p>

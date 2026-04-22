@@ -1,36 +1,26 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import { getContent } from "@/lib/locale";
-import { BASE_URL, ALT_URL, canonicalUrl } from "@/lib/seo";
-import Footer from "@/components/layout/Footer";
+import { getContent, getLocale } from "@/lib/locale";
+import { BASE_URL, canonicalUrl } from "@/lib/seo";
 import Scripts from "@/components/analytics/Scripts";
 import CookieBanner from "@/components/analytics/CookieBanner";
-import ThemeInit from "@/components/theme/ThemeInit";
-import ThemeSwitcher from "@/components/theme/ThemeSwitcher";
-import { ThemeProvider } from "@/components/theme/ThemeContext";
-import ThemedHeader from "@/components/layout/ThemedHeader";
-import ThemeBackground from "@/components/theme/ThemeBackground";
-import MainContent from "@/components/layout/MainContent";
-import { getBuildLocale } from "@/lib/buildLocale";
+import Navbar from "@/components/home/Navbar";
+import Footer from "@/components/home/Footer";
+import BackgroundWrapper from "@/components/layout/BackgroundWrapper";
 
-const isEn = getBuildLocale() === "en";
+export const dynamic = "force-dynamic";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-});
+/* Fontok (Poppins body, Bebas Neue display, Pacifico script) a
+   globals.css-ben @import-olódnak a Google Fonts CDN-ről — pontosan
+   úgy, ahogy a jazzdesign1/Bohem Jazzfovaros 2026.html csinálja. */
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap",
-});
-
-export function generateMetadata(): Metadata {
-  const c = getContent();
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const isEn = locale === "en";
+  const c = await getContent();
   const ogImage = `${BASE_URL}/images/og-image.jpg`;
+  const localizedPath = isEn ? "/en/" : "/";
+  const alternatePath = isEn ? "/" : "/en/";
 
   return {
     metadataBase: new URL(BASE_URL),
@@ -40,15 +30,15 @@ export function generateMetadata(): Metadata {
     },
     description: c.meta.siteDescription,
     alternates: {
-      canonical: canonicalUrl("/"),
+      canonical: canonicalUrl(localizedPath),
       languages: {
-        [isEn ? "hu" : "en"]: ALT_URL,
+        [isEn ? "hu" : "en"]: canonicalUrl(alternatePath),
       },
     },
     openGraph: {
       title: c.meta.siteTitle,
       description: c.meta.siteDescription,
-      url: canonicalUrl("/"),
+      url: canonicalUrl(localizedPath),
       siteName: c.meta.siteTitle,
       locale: isEn ? "en_GB" : "hu_HU",
       type: "website",
@@ -70,43 +60,51 @@ export function generateMetadata(): Metadata {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#0f1b2d",
+  /* Világos ég-kék #bfe6f5 — a jazzdesign1 header háttere */
+  themeColor: "#bfe6f5",
   width: "device-width",
   initialScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const c = getContent();
+  const locale = await getLocale();
+  const isEn = locale === "en";
+  const c = await getContent();
+
   return (
     <html lang={isEn ? "en" : "hu"} suppressHydrationWarning>
-      <head>
-        <ThemeInit />
-      </head>
-      <body className={`${inter.variable} ${playfair.variable}`}>
+      <body className="font-sans antialiased text-ink-800">
         <Scripts />
-        <ThemeProvider>
-          <ThemeBackground />
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-[var(--color-gold-500)] focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-[var(--color-navy-900)]"
-          >
-            {isEn ? "Skip to content" : "Ugrás a tartalomhoz"}
-          </a>
-          <ThemedHeader
-            siteTitle={c.meta.siteTitle}
-            festivalDates={c.meta.festivalDates}
-            nav={c.nav}
-            otherLocale={c.otherLocale}
-          />
-          <MainContent>{children}</MainContent>
+
+        {/* Akadálymentes skip-to-content link — billentyűzet navigációhoz */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-orange-500 focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-white"
+        >
+          {isEn ? "Skip to content" : "Ugrás a tartalomhoz"}
+        </a>
+
+        {/* Globális fixed fehér navigáció (jazzdesign1) */}
+        <Navbar content={c} />
+
+        <BackgroundWrapper>
+          {/* Oldal-tartalom — a page.tsx-ek itt renderelődnek.
+              A Navbar `fixed` (76px magas), ezért a main a
+              jazzdesign1 `.page-bg { margin-top: var(--navbar-height) }`
+              megoldásához hasonlóan pt-[76px] kap. */}
+          <main id="main-content" className="pt-[76px]">
+            {children}
+          </main>
+
+          {/* Globális footer (minden oldalon) */}
           <Footer />
-          <CookieBanner />
-          <ThemeSwitcher />
-        </ThemeProvider>
+        </BackgroundWrapper>
+
+        <CookieBanner />
       </body>
     </html>
   );

@@ -44,7 +44,7 @@ export default function MobileMenu({
         aria-label={open ? "Menü bezárása" : "Menü megnyitása"}
         aria-expanded={open}
         className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors hover:bg-white/10 md:hidden"
-        style={{ color: "var(--color-navy-900)" }}
+        style={{ color: "#f6d98b" }}
       >
         {open ? (
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
@@ -59,7 +59,7 @@ export default function MobileMenu({
 
       {/* Háttér — lassú elhalványulás */}
       <div
-        className="fixed inset-0 top-16 z-40 md:hidden"
+        className="fixed inset-0 top-11 z-40 md:hidden"
         style={{
           opacity: open ? 1 : 0,
           pointerEvents: open ? "auto" : "none",
@@ -73,7 +73,7 @@ export default function MobileMenu({
 
       {/* Panel — grid 0fr → 1fr: lassú, „összecsukódó” magasság */}
       <div
-        className="fixed left-0 right-0 top-16 z-50 md:hidden"
+        className="fixed left-0 right-0 top-11 z-50 md:hidden"
         style={{
           display: "grid",
           gridTemplateRows: open ? "minmax(0, 1fr)" : "0fr",

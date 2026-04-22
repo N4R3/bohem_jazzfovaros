@@ -1,32 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800;900&family=Pacifico&display=swap');
 @import "tailwindcss";
 
+/* ============================================================
+   TAILWIND v4 @theme — design tokenek a reference.html alapján.
+   Minden token automatikusan utility class-ként használható
+   (pl. --color-orange-500 → `bg-orange-500`, `text-orange-500`).
+   ============================================================ */
 @theme {
-  --color-gold-50:  #fdf8ed;
-  --color-gold-100: #faefc9;
-  --color-gold-200: #f5db8c;
-  --color-gold-300: #e8c76a;
-  --color-gold-400: #ddb84f;
-  --color-gold-500: #d4a843;
-  --color-gold-600: #b8922e;
-  --color-gold-700: #8f6e1f;
+  /* -------- Erős narancs (#FF6200 a fő akcent, jazzdesign1) -------- */
+  --color-orange-400: #ff8a3d;
+  --color-orange-500: #ff6200;  /* --orange */
+  --color-orange-600: #e55800;  /* --orange-dark */
+  --color-orange-700: #c94f00;  /* --orange-deep */
 
-  --color-navy-700: #1e3a5f;
-  --color-navy-800: #1a2a40;
-  --color-navy-900: #0f1b2d;
-  --color-navy-950: #080f1a;
+  /* -------- Ég / óceán palette a hero hátteréhez (jazzdesign1) -------- */
+  --color-sky-50:    #e8f4fa;
+  --color-sky-100:   #bfe6f5;  /* --sky-top */
+  --color-sky-200:   #7fc7e4;  /* --sky-mid */
+  --color-ocean-300: #3fa4cc;  /* --ocean */
+  --color-ocean-400: #2a7fa8;  /* --ocean-deep */
+  --color-ocean-500: #1f6c8f;
 
-  --color-cream-50:  #fffdf7;
-  --color-cream-100: #fff9ed;
-  --color-cream-200: #fef3d0;
+  /* -------- Sötét ink (szöveg, footer) -------- */
+  --color-ink-700: #2a3a4a;
+  --color-ink-800: #1a2733;   /* --ink */
+  --color-ink-900: #0e1a24;
+  --color-ink-950: #05101a;
 
-  --color-coral-400: #e8907a;
-  --color-coral-500: #e07a5f;
+  /* -------- Krém felületek (fellépő-kártyák) -------- */
+  --color-cream-50:  #fff6d6;
+  --color-cream-100: #fff3cc;  /* --cream */
+  --color-cream-200: #ffe9a8;  /* --cream-2 */
+  --color-cream-300: #ffecb3;
 
-  --font-display: "Playfair Display", Georgia, serif;
-  --font-sans: "Inter", system-ui, sans-serif;
+  /* -------- Sárga (hero-badge Pacifico, duck-accent) -------- */
+  --color-sun-300: #ffd84d;
+  --color-sun-400: #ffc93c;   /* --yellow */
+
+  /* -------- Teal — kiemelő másodlagos (jazzdesign1 --teal) -------- */
+  --color-teal-400: #3eb4bc;
+  --color-teal-500: #1ba0a8;
+  --color-teal-600: #158188;
+  --color-teal-700: #0e4844;
+  --color-teal-800: #0a3a36;
+  --color-teal-900: #072a27;
+  --color-teal-950: #03181a;
+
+  /* -------- Régi / alias tokenek (backward compat aloldalakhoz) -------- */
+  --color-accent-50:  #fff0e6;
+  --color-accent-100: #ffd6b8;
+  --color-accent-200: #ffbc8a;
+  --color-accent-300: #ff9f5c;
+  --color-accent-400: #ff8a3d;
+  --color-accent-500: #ff6200;
+  --color-accent-600: #e55800;
+  --color-accent-700: #c94f00;
+
+  --color-gold-50:  #fff0e6;
+  --color-gold-100: #ffd6b8;
+  --color-gold-200: #ffbc8a;
+  --color-gold-300: #ff9f5c;
+  --color-gold-400: #ff8a3d;
+  --color-gold-500: #ff6200;
+  --color-gold-600: #e55800;
+  --color-gold-700: #c94f00;
+
+  --color-navy-700: #1f7e73;
+  --color-navy-800: #0e4844;
+  --color-navy-900: #0a3a36;
+  --color-navy-950: #03181a;
+
+  /* -------- Fontok: Bebas Neue (display) + Poppins (body) + Pacifico (script) -------- */
+  --font-display: "Bebas Neue", "Impact", system-ui, sans-serif;
+  --font-sans:    "Poppins", system-ui, sans-serif;
+  --font-script:  "Pacifico", cursive;
+
+  /* -------- Egyedi animációk (jazzdesign1) -------- */
+  --animate-bob:        bob 5.5s ease-in-out infinite;
+  --animate-bubble:     bubble 7s ease-in-out infinite;
+  --animate-ring:       ring 6s ease-in-out infinite;
+  --animate-ball:       ball 4.5s ease-in-out infinite;
+  --animate-duck-bob:   duckBob 4.5s ease-in-out infinite;
+  --animate-float-a:    floatA 6s ease-in-out infinite;
+  --animate-float-b:    floatB 5s ease-in-out infinite;
+  --animate-pulse-ring: pulseRing 2.2s ease-out infinite;
+  --animate-rise:       rise linear infinite;
 }
 
-/* Mobil hamburger menü — linkek belépése */
+/* ============================================================
+   Mobil hamburger menü animáció
+   ============================================================ */
 @keyframes mobile-nav-link-in {
   from {
     opacity: 0;
@@ -39,282 +102,449 @@
     filter: blur(0);
   }
 }
-
 .mobile-nav-link-in {
   animation: mobile-nav-link-in 0.72s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
-
 @media (prefers-reduced-motion: reduce) {
-  .mobile-nav-link-in {
-    animation: none;
-  }
+  .mobile-nav-link-in { animation: none; }
 }
 
 /* ============================================================
-   THEME 2 — Teal Water  (Design2 mappa)
-   Sötét türkiz víz háttér, arany gombok, illusztrált várossal
+   Hero + dekor animációk (jazzdesign1 1:1 másolata)
    ============================================================ */
-[data-theme="2"] {
-  --color-gold-50:  #0d3842;
-  --color-gold-100: #1a4a55;
-  --color-gold-200: #2a6070;
-  --color-gold-300: #ddc060;
-  --color-gold-400: #f0cc6a;
-  --color-gold-500: #e8b84a;
-  --color-gold-600: #c09020;
-  --color-gold-700: #8f6a18;
-
-  --color-navy-700: #78aab8;
-  --color-navy-800: #90c0cc;
-  --color-navy-900: #c0dce4;
-  --color-navy-950: #041e24;
-
-  --color-cream-50:  #0a4858;
-  --color-cream-100: #0d5565;
-  --color-cream-200: #1a6878;
-
-  --color-coral-400: #4aafb8;
-  --color-coral-500: #38a0aa;
-
-  --theme-hero-glow: rgba(14,180,200,0.18);
-  --theme-hero-dark: rgba(4,30,36,0.80);
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50%      { transform: translateY(-8px) rotate(-2deg); }
 }
-[data-theme="2"] .bg-\[var\(--color-navy-900\)\] {
-  background-color: #062028 !important;
+@keyframes bubble {
+  0%, 100% { transform: translateY(0);     opacity: 0.35; }
+  50%      { transform: translateY(-16px); opacity: 0.7;  }
 }
-[data-theme="2"] .bg-white {
-  background-color: #0e3a48 !important;
+@keyframes ring {
+  0%, 100% { transform: rotate(-10deg) translateY(0); }
+  50%      { transform: rotate(-14deg) translateY(-6px); }
 }
-[data-theme="2"] footer {
-  --color-cream-100: #a0c8d4;
-  --color-cream-200: #78a8b8;
+@keyframes ball {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50%      { transform: translateY(-6px) rotate(14deg); }
 }
 
-/* ============================================================
-   THEME 3 — Folk Illustration  (Design3 mappa)
-   Zöldeskék teal háttér, krém kártyák, narancs akcentek
-   Színek: #E8425A, #E8823A, #F9B233, #FDF6E3
-   ============================================================ */
-[data-theme="3"] {
-  --color-gold-50:  #fff8f0;
-  --color-gold-100: #ffe8d0;
-  --color-gold-200: #ffd0a0;
-  --color-gold-300: #f9b233;
-  --color-gold-400: #f9b233;
-  --color-gold-500: #e8823a;
-  --color-gold-600: #c05820;
-  --color-gold-700: #903518;
-
-  --color-navy-700: #c0e0d8;
-  --color-navy-800: #d0ece4;
-  --color-navy-900: #fdf6e3;
-  --color-navy-950: #0a2a25;
-
-  --color-cream-50:  #2a8a7e;
-  --color-cream-100: #34978a;
-  --color-cream-200: #1e7a70;
-
-  --color-coral-400: #e8907a;
-  --color-coral-500: #e8425a;
-
-  --theme-hero-glow: rgba(232,130,58,0.20);
-  --theme-hero-dark: rgba(10,42,37,0.80);
+/* jazzdesign1 specifikus mozgások */
+@keyframes duckBob {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50%      { transform: translateY(-18px) rotate(1.5deg); }
 }
-[data-theme="3"] .bg-\[var\(--color-navy-900\)\] {
-  background-color: #0e3530 !important;
-}
-[data-theme="3"] .bg-white {
-  background-color: #fdf6e3 !important;
-}
-[data-theme="3"] .bg-white,
-[data-theme="3"] .rounded-xl.border {
-  --color-navy-900: #1a3d38;
-  --color-cream-200: #e8d8b8;
-}
-[data-theme="3"] footer {
-  --color-cream-100: #a0d0c8;
-  --color-cream-200: #78b0a8;
-}
-
-/* ============================================================
-   THEME 3 — Hero animations
-   will-change: transform on sailing/bobbing elements for GPU compositing
-   ============================================================ */
-
-/* Sailing & bobbing elements: GPU layer */
-[data-theme="3"] [style*="d3-sail"],
-[data-theme="3"] [style*="d3-duck"],
-[data-theme="3"] [style*="d3-bird"],
-[data-theme="3"] [style*="d3-life-float"] {
-  will-change: transform;
-}
-
-/* Mobile: disable background sailing/bird animations, keep duck bob only */
-@media (max-width: 640px) {
-  [data-theme="3"] [style*="d3-sail-left"],
-  [data-theme="3"] [style*="d3-sail-right"],
-  [data-theme="3"] [style*="d3-bird"],
-  [data-theme="3"] [style*="d3-bird-right"],
-  [data-theme="3"] [style*="d3-life-float"],
-  [data-theme="3"] [style*="d3-lighthouse-blink"] {
-    animation: none !important;
-    display: none !important;
-  }
-}
-
-/* Respect system preference */
-@media (prefers-reduced-motion: reduce) {
-  [data-theme="3"] [style*="animation"] {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-
-@keyframes d3-duck-bob {
-  0%, 100% { transform: translateY(0px) rotate(-5deg) scaleX(-1); }
-  30%       { transform: translateY(-16px) rotate(2deg) scaleX(-1); }
-  60%       { transform: translateY(-8px) rotate(-3deg) scaleX(-1); }
-}
-
-@keyframes d3-sail-left {
-  0%   { transform: translateX(105vw); }
-  100% { transform: translateX(-220px); }
-}
-
-@keyframes d3-sail-left-slow {
-  0%   { transform: translateX(108vw) scaleX(-1); }
-  100% { transform: translateX(-220px) scaleX(-1); }
-}
-
-@keyframes d3-sail-right {
-  0%   { transform: translateX(-220px) scaleX(-1); }
-  100% { transform: translateX(105vw) scaleX(-1); }
-}
-
-@keyframes d3-life-float {
+@keyframes floatA {
   0%, 100% { transform: translateY(0) rotate(-8deg); }
-  50%       { transform: translateY(-12px) rotate(8deg); }
+  50%      { transform: translateY(-14px) rotate(4deg); }
+}
+@keyframes floatB {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50%      { transform: translateY(-20px) rotate(180deg); }
+}
+@keyframes pulseRing {
+  0%   { box-shadow: 0 0 0 0 rgba(255,98,0,0.55), 0 20px 40px rgba(0,0,0,0.35); }
+  80%  { box-shadow: 0 0 0 32px rgba(255,98,0,0), 0 20px 40px rgba(0,0,0,0.35); }
+  100% { box-shadow: 0 0 0 0 rgba(255,98,0,0), 0 20px 40px rgba(0,0,0,0.35); }
+}
+@keyframes rise {
+  from { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+  10%  { opacity: 1; }
+  to   { transform: translateY(-110vh) translateX(30px) scale(1.2); opacity: 0; }
 }
 
-@keyframes d3-wave-pulse {
+/* --- Régi keyframe nevek backward compat --- */
+@keyframes duck-bob {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  30%      { transform: translateY(-14px) rotate(3deg); }
+  60%      { transform: translateY(-6px) rotate(-2deg); }
+}
+
+@keyframes wave-pulse {
   0%, 100% { transform: scaleX(1) translateX(0); }
-  50%       { transform: scaleX(1.04) translateX(-2%); }
+  50%      { transform: scaleX(1.04) translateX(-2%); }
 }
 
-@keyframes d3-lighthouse-blink {
-  0%, 100% { opacity: 0.2; }
-  45%, 55%  { opacity: 0.85; }
+@keyframes ring-float {
+  0%, 100% { transform: translateY(0) rotate(-10deg); }
+  50%      { transform: translateY(-10px) rotate(8deg); }
 }
 
-@keyframes d3-bird {
-  0%   { transform: translateX(102vw) translateY(0); }
-  100% { transform: translateX(-10vw) translateY(-30px); }
+@keyframes ball-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-8px) rotate(12deg); }
 }
 
-@keyframes d3-bird-right {
-  0%   { transform: translateX(-10vw) translateY(0) scaleX(-1); }
-  100% { transform: translateX(102vw) translateY(-25px) scaleX(-1); }
+@keyframes cloud-drift {
+  0%   { transform: translateX(-20px); }
+  100% { transform: translateX(20px); }
 }
 
-/* ============================================================
-   THEME 3 — Layout & Section overrides
-   ============================================================ */
-
-/* Body: teal fallback (bg image applied via ThemeBackground.tsx) */
-[data-theme="3"] body {
-  background-color: #1a7a6e;
+@keyframes card-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* z-index layers for theme 3 — do NOT override position (sticky must work) */
-[data-theme="3"] main {
-  position: relative;
-  z-index: 1;
+@keyframes bubble-rise {
+  0%, 100% { transform: translateY(0); opacity: var(--bubble-op, 0.35); }
+  50%      { transform: translateY(-20px); opacity: 0.55; }
 }
 
-/* All sections and page wrappers transparent — body bg image shows through */
-[data-theme="3"] section,
-[data-theme="3"] .d3-page-wrapper,
-[data-theme="3"] div.min-h-screen {
-  background: transparent !important;
-}
-
-/* Footer: keep dark overlay for readability */
-[data-theme="3"] footer {
-  position: relative;
-  z-index: 1;
-  background: rgba(10, 42, 37, 0.88) !important;
-}
-
-/* InfoStrip gold bar */
-[data-theme="3"] .bg-\[var\(--color-gold-600\)\] {
-  background-color: #c85820 !important;
+@media (prefers-reduced-motion: reduce) {
+  [style*="duck-bob"],
+  [style*="wave-pulse"],
+  [style*="ring-float"],
+  [style*="ball-float"],
+  [style*="cloud-drift"] {
+    animation: none !important;
+  }
 }
 
 /* ============================================================
-   THEME 3 — Program page card day colors
-   Grid selector: .d3-program-grid
-   Card header: .d3-day-header
-   Card body: .d3-day-card
+   Alap body — jazzdesign1 világos #f5fbfd háttér + Poppins
+   ============================================================ */
+html {
+  scroll-behavior: smooth;
+  /* A sticky navbar magasság (76px a jazzdesign1-ben) alatti scroll-padding */
+  scroll-padding-top: 88px;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: #1a2733;           /* --ink — a jazzdesign1 alap szövegszíne */
+  background: #f5fbfd;       /* jazzdesign1 body háttér */
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  min-width: 320px;
+  position: relative;
+}
+
+h1, h2, h3,
+.font-display { letter-spacing: 0.02em; text-wrap: balance; }
+p { text-wrap: pretty; }
+
+/* ============================================================
+   .page-bg / .hero-fold — 3 nézet (mobil / standard / wide) + sun overlay.
+   A háttér képek a jazzdesign1 újabb verzióiból jönnek:
+     - header_mobile.png         (1344×3168, portrait — telefonra)
+     - header_simple.png         (4096×2644, ~3:2   — tablet + standard desktop)
+     - header_simple_wide.png    (4096×1732, ~2.4:1 — ultra-wide desktop)
+     - sun.png                   (4096×3668, ~1.1:1 — jobb felső sarokba
+                                   bal alsó felé halványodó mask-kel)
+
+   A váltás aspect-ratio alapján történik:
+     - < 960px szélesség           → mobile layout
+     - >= 960px és AR < 2:1         → simple header (cover, center bottom)
+     - >= 960px és AR >= 2:1        → wide header (cover, right bottom)
    ============================================================ */
 
-/* Card outer */
-[data-theme="3"] .d3-day-card {
-  background: #fdf6e3 !important;
+/* Page wrapper — TRANSZPARENS, hogy a szülő .below-fold-bg
+   bg_home háttere átüssenek a .content-photo-bg területén.
+   (A hero-fold saját opaque header bg-jét nem érinti, mert az
+   a .hero-fold-ra / a Hero section-re van közvetlenül rákötve.) */
+.page-bg {
+  position: relative;
+  z-index: 0;
+}
+
+/* ---------- MOBILE (max-width: 959px) ----------
+   A hero szekció magassága FIXEN = navbar alatti képernyő-magasság (100svh - 76px).
+   `height` (nem `min-height`) + `overflow: hidden` garantálja, hogy a szekció
+   NEM nő túl a viewporton akkor sem, ha a tartalom nagyobb — így a háttérkép
+   ALJA mindig PONTOSAN a képernyő alján van, és nem lehet lefelé görgetni a
+   header képen. A tartalom tolerálható felülmúlás esetén clip-elődik (a Hero
+   content itt már kellően kompakt ahhoz, hogy kis telefonokon is beleférjen).
+
+   Az info-bar a hero UTÁN jön a DOM-ban → első viewportban nem látszik, csak
+   görgetésre. A grid-display (Tailwind-ből) megmarad; az `align-content: center`
+   vertikálisan középre igazítja a tartalmat. */
+@media (max-width: 959px) {
+  .hero-fold {
+    display: block;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-fold > section[aria-label="Hero"] {
+    height: calc(100svh - var(--navbar-height, 76px));
+    background-color: #bfe6f5;
+    background-image: url('/images/design1/header_mobile.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center bottom;
+    align-content: center;
+    overflow: hidden;
+  }
+}
+
+/* ---------- TABLET + DESKTOP (min-width: 960px) ----------
+   A hero-fold egy flex oszlop, ami kitölti az első képernyőt.
+   A hero tartalom középen, az info-bar `margin-top: auto` → a képernyő alján.
+   A háttér képet egy `::before` pseudo-element adja az info-bar FÖLÖTT;
+   a sun.png overlay-t egy `::after` teszi a jobb felső sarokba. */
+@media (min-width: 960px) {
+  .hero-fold {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100svh - var(--navbar-height, 76px));
+    background-color: #bfe6f5;
+    overflow: hidden;   /* ::after sun overlay clipelése a szél mentén */
+  }
+
+  /* Hero szekció tölti a fennmaradó teret + középre igazítva */
+  .hero-fold > section[aria-label="Hero"] {
+    flex: 1 1 auto;
+    align-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Info-bar lezárja az első képernyőt, a képernyő aljához tapadva.
+     Az info-bar saját narancs bg-je teljesen opaque, így a háttérkép alatta
+     nem látszik — nem kell a ::before-t bottom inset-tel limitálni. */
+  .hero-fold > section[aria-label="Dátum és helyszín"] {
+    flex: 0 0 auto;
+    margin-top: auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Háttér kép — TELJES hero-fold területet kitölti (info-bar orange alá is
+     benyúl, de az info-bar opaque, így eltakarja). Cover → nincs üres sáv. */
+  .hero-fold::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('/images/design1/header_simple.png');
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: cover;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Sun overlay — jobb felső sarok.
+     Kisebb méret + 4-stop radiális mask: a mag (0–26%) teljes erővel látszik
+     (telített sárga), majd 26–42% között meredeken 20%-ra esik, 42–55% között
+     nagyon halvány 5%-ra, és 55–70% között lágyan elolvad a háttérben. A
+     legkülső él így szinte észrevétlenül összeolvad az égbolt-kék háttérrel,
+     nincs éles perem. A `saturate/brightness` filter a sárgát tovább mélyíti. */
+  .hero-fold::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: clamp(240px, 32vw, 540px);
+    height: clamp(220px, 30vw, 500px);
+    background-image: url('/images/design1/sun.png');
+    background-repeat: no-repeat;
+    background-position: top right;
+    background-size: contain;
+    -webkit-mask-image: radial-gradient(circle at 100% 0%, #000 0%, #000 26%, rgba(0,0,0,0.20) 42%, rgba(0,0,0,0.05) 55%, transparent 70%);
+            mask-image: radial-gradient(circle at 100% 0%, #000 0%, #000 26%, rgba(0,0,0,0.20) 42%, rgba(0,0,0,0.05) 55%, transparent 70%);
+    filter: saturate(1.55) brightness(1.08);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 1;
+  }
+}
+
+/* ---------- ULTRA-WIDE (min-aspect-ratio 2/1) ----------
+   21:9 monitor, vagy nagyon széles laptop → wide header használata.
+   A kép AR-e 2.365, így cover-rel torzítás nélkül illeszkedik. */
+@media (min-width: 960px) and (min-aspect-ratio: 2/1) {
+  .hero-fold::before {
+    background-image: url('/images/design1/header_simple_wide.png');
+    background-position: right bottom;
+  }
+}
+
+/* Ha a viewport kisebb lenne mint a bg kép AR-je, akkor se maradjon
+   üres csík — a `background-size: cover` gondoskodik erről. */
+
+/* ============================================================
+   HERO illusztrációk "víz alá" effekt — csak md+ (≥768px), mert
+   mobilon a props sáv a kép FELSŐ (ég) részén ül.
+   Az elem ALJA fokozatosan elhalványul, így a háttér víz/strand
+   része átüt, mintha az elem félig a vízbe merülne.
+   ------------------------------------------------------------
+   `.hero-dip` → kis merülés (~25% az aljáról) — a kacsának
+   `.hero-half-dip` → nagy merülés (~50%) — ball + mentőöv félig
+     a víz alatt, mint a referencia képen
+   ============================================================ */
+/* Kacsa — a fara/alja a vízbe merül. Minden viewport-on érvényesül, hogy
+   a referencia képhez hasonlóan a kacsa is „a vízben" üljön (nem a homokon). */
+.hero-dip {
+  -webkit-mask-image: linear-gradient(to bottom,
+    #000 0%,
+    #000 62%,
+    rgba(0,0,0,0.55) 77%,
+    rgba(0,0,0,0.22) 89%,
+    transparent 100%);
+          mask-image: linear-gradient(to bottom,
+    #000 0%,
+    #000 62%,
+    rgba(0,0,0,0.55) 77%,
+    rgba(0,0,0,0.22) 89%,
+    transparent 100%);
+}
+
+/* Labda + mentőöv — a közepüknél kezdenek a víz alá merülni.
+   Minden viewport-on érvényesül, hogy a kellékek a vízvonalon
+   félig a víz alatt lebegjenek, a referencia kép szerint. */
+.hero-half-dip {
+  -webkit-mask-image: linear-gradient(to bottom,
+    #000 0%,
+    #000 46%,
+    rgba(0,0,0,0.6) 60%,
+    rgba(0,0,0,0.18) 74%,
+    transparent 92%);
+          mask-image: linear-gradient(to bottom,
+    #000 0%,
+    #000 46%,
+    rgba(0,0,0,0.6) 60%,
+    rgba(0,0,0,0.18) 74%,
+    transparent 92%);
+}
+
+/* ============================================================
+   .below-fold-bg — a layout.tsx-ben a <main> ÉS a <Footer> közös
+   szulője. Ez hordozza a fotós bg_home.png hátteret, így a kép:
+   - a navbar ALATT kezdődik (a hero-fold saját opaque bg-je
+     eltakarja a felső 100svh-t)
+   - a FOOTER mögött folytatódik, egyszen a body legaljáig
+   - `background-size: cover` + `background-attachment: scroll` →
+     nincsenek üres sávok, minden viewport-méret kitoltött
+   - `background-position: center bottom` → a kép ALJA pontosan
+     az oldal ALJÁN (footer mögött) tapad; felül a cover skálázás
+     miatt elkülönböző arányú képernyők általában töbrészről vágnak
+     egy-egy sávot, de a hero saját képét ez nem érinti.
+   ============================================================ */
+.below-fold-bg {
+  position: relative;
+  background-color: #bfe6f5;
+  background-image: url('/images/design1/bg_home.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center bottom;
+  background-attachment: scroll;
+}
+
+/* Aloldalak háttérképe — sub_bg.png felülre igazítva */
+.below-fold-bg.subpage-bg {
+  background-image: url('/images/design1/sub_bg.png');
+  background-position: center top;
+}
+
+/* .content-photo-bg — most TRANSZPARENS, mert a bg_home a szülő
+   .below-fold-bg-re került. A position/z-index stack context-et
+   megtartjuk, mert a page.tsx-ben `relative z-[1]` is beállítva,
+   és a gyermek szekciók erre alapoznak. */
+.content-photo-bg {
+  position: relative;
+  z-index: 0;
+}
+
+/* jazzdesign1 szaggatott perforált szalag (info-bar/stats-bar felső + alsó élen) */
+.perf-line {
+  background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.08) 0 12px, transparent 12px 24px);
+}
+
+/* prefers-reduced-motion: letilt minden dekoratív animációt */
+@media (prefers-reduced-motion: reduce) {
+  .animate-bob,
+  .animate-bubble,
+  .animate-ring,
+  .animate-ball,
+  .animate-duck-bob,
+  .animate-float-a,
+  .animate-float-b,
+  .animate-pulse-ring,
+  .animate-rise {
+    animation: none !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-500);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* ============================================================
+   Legacy aloldal-kompatibilitási térkép
+   (program / aszf / szallas még a régi design-3 sötét palettában fut;
+   a .bg-white globális cream-re mapelését MEGSZÜNTETTÜK, hogy az új
+   fehér navbar és fehér info-bar CTA helyesen jelenjen meg.)
+   ============================================================ */
+.bg-\[var\(--color-navy-900\)\] {
+  background-color: var(--color-teal-900) !important;
+}
+.bg-\[var\(--color-navy-950\)\] {
+  background-color: var(--color-teal-950) !important;
+}
+
+/* InfoStrip gold bar — élénk narancs (aloldali InfoStrip.tsx-hez) */
+.bg-\[var\(--color-gold-600\)\] {
+  background-color: var(--color-accent-500) !important;
+}
+
+/* ============================================================
+   Program oldal napi kártyák
+   ============================================================ */
+.d3-day-card {
+  background: var(--color-cream-50) !important;
   border: 2px solid #d8c8a0 !important;
   border-radius: 1rem !important;
 }
-
-/* Card body dividers */
-[data-theme="3"] .d3-day-card .divide-y > * {
+.d3-day-card .divide-y > * {
   border-color: #e8d8b8 !important;
 }
-
-/* Slot time text */
-[data-theme="3"] .d3-day-card .font-mono {
-  color: #c05820 !important;
+.d3-day-card .font-mono {
+  color: var(--color-accent-600) !important;
 }
-
-/* Slot artist text */
-[data-theme="3"] .d3-day-card .text-\[var\(--color-navy-900\)\] {
-  color: #1a3d38 !important;
+.d3-day-card .text-\[var\(--color-navy-900\)\] {
+  color: var(--color-teal-800) !important;
 }
-
-/* Day headers — 4 days, colors from cards.png */
-[data-theme="3"] .d3-program-grid > :nth-child(1) .d3-day-header {
-  background: #c85030 !important; /* Csütörtök: warm orange-red */
+.d3-program-grid > :nth-child(1) .d3-day-header {
+  background: #c85030 !important;
   color: #fff8f0 !important;
 }
-[data-theme="3"] .d3-program-grid > :nth-child(2) .d3-day-header {
-  background: #1a7868 !important; /* Péntek: deep teal */
-  color: #fdf6e3 !important;
+.d3-program-grid > :nth-child(2) .d3-day-header {
+  background: #1a7868 !important;
+  color: var(--color-cream-50) !important;
 }
-[data-theme="3"] .d3-program-grid > :nth-child(3) .d3-day-header {
-  background: #e8b020 !important; /* Szombat: golden yellow */
+.d3-program-grid > :nth-child(3) .d3-day-header {
+  background: #e8b020 !important;
   color: #1a3020 !important;
 }
-[data-theme="3"] .d3-program-grid > :nth-child(4) .d3-day-header {
-  background: #b89048 !important; /* Vasárnap: warm sand */
-  color: #fdf6e3 !important;
+.d3-program-grid > :nth-child(4) .d3-day-header {
+  background: #b89048 !important;
+  color: var(--color-cream-50) !important;
+}
+.d3-program-grid > :nth-child(1) .d3-day-header .d3-day-date { color: #fde0d0 !important; }
+.d3-program-grid > :nth-child(2) .d3-day-header .d3-day-date { color: #a0d8d0 !important; }
+.d3-program-grid > :nth-child(3) .d3-day-header .d3-day-date { color: #3a5020 !important; }
+.d3-program-grid > :nth-child(4) .d3-day-header .d3-day-date { color: #fde8c0 !important; }
+
+.d3-day-card .bg-\[var\(--color-gold-100\)\] {
+  background: rgba(239,122,31,0.18) !important;
+  color: var(--color-accent-700) !important;
+  border-color: rgba(239,122,31,0.35) !important;
 }
 
-/* Date subtitle in card header */
-[data-theme="3"] .d3-program-grid > :nth-child(1) .d3-day-header .d3-day-date { color: #fde0d0 !important; }
-[data-theme="3"] .d3-program-grid > :nth-child(2) .d3-day-header .d3-day-date { color: #a0d8d0 !important; }
-[data-theme="3"] .d3-program-grid > :nth-child(3) .d3-day-header .d3-day-date { color: #3a5020 !important; }
-[data-theme="3"] .d3-program-grid > :nth-child(4) .d3-day-header .d3-day-date { color: #fde8c0 !important; }
-
-/* Stage badge colors */
-[data-theme="3"] .d3-day-card .bg-\[var\(--color-gold-100\)\] {
-  background: rgba(232,130,58,0.18) !important;
-  color: #903518 !important;
-  border-color: rgba(232,130,58,0.35) !important;
-}
-
-/* Section heading badge style — used on program + lineup pages */
-[data-theme="3"] .d3-section-badge {
+.d3-section-badge {
   display: inline-block;
-  background: #fdf6e3;
-  color: #1a3d38;
+  background: var(--color-cream-50);
+  color: var(--color-teal-800);
   border: 2px solid #d8b878;
   border-radius: 0.75rem;
   padding: 0.5rem 1.5rem;
@@ -324,32 +554,4 @@
   text-transform: uppercase;
   margin-bottom: 1.5rem;
   box-shadow: 0 2px 12px rgba(0,0,0,0.12);
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: var(--font-sans);
-  background-color: var(--color-cream-50);
-  color: var(--color-navy-900);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
-  min-width: 320px;
-}
-
-h1, h2, h3 {
-  text-wrap: balance;
-}
-
-p {
-  text-wrap: pretty;
-}
-
-:focus-visible {
-  outline: 2px solid var(--color-gold-500);
-  outline-offset: 3px;
-  border-radius: 3px;
 }

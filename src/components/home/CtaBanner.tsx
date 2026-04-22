@@ -5,34 +5,50 @@ interface CtaBannerProps {
   buttonUrl: string;
 }
 
+/**
+ * "Vedd meg a jegyed most!" — teljes szélességű narancs szalag
+ * nagy fehér címmel, alcímmel és sötét-narancs pill gombbal.
+ */
 export default function CtaBanner({ title, subtitle, buttonLabel, buttonUrl }: CtaBannerProps) {
   return (
-    <section aria-label="Ticket call to action" className="relative overflow-hidden bg-[var(--color-navy-950)] py-24">
-      <div
-        className="absolute inset-0"
-        style={{ background: "radial-gradient(ellipse at 50% 120%, rgba(212,168,67,0.12) 0%, transparent 65%)" }}
-        aria-hidden="true"
-      />
-      <div
-        className="absolute left-0 right-0 top-0 h-px"
-        style={{ background: "linear-gradient(90deg, transparent, var(--color-gold-500), transparent)" }}
-        aria-hidden="true"
-      />
-      <div className="relative mx-auto max-w-2xl px-4 text-center sm:px-6 lg:px-8">
-        <h2 className="font-display text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+    <section
+      aria-label="Ticket call to action"
+      className="relative py-14 md:py-16"
+      style={{ background: "var(--color-accent-500)" }}
+    >
+      <div className="mx-auto w-full max-w-[1400px] px-4 text-center sm:px-6 lg:px-10">
+        <h2
+          className="font-display font-black uppercase leading-tight"
+          style={{
+            fontSize: "clamp(1.75rem, 4.5vw, 3rem)",
+            color: "#fdf6e3",
+            letterSpacing: "0.02em",
+            textShadow: "0 2px 10px rgba(0,0,0,0.25)",
+          }}
+        >
           {title}
         </h2>
-        <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-[var(--color-cream-200)]/55 sm:text-base md:text-lg">
+
+        <p
+          className="mx-auto mt-3 max-w-xl text-sm font-semibold uppercase tracking-wider sm:text-base"
+          style={{ color: "rgba(253,246,227,0.92)" }}
+        >
           {subtitle}
         </p>
+
         <a
           href={buttonUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-8 inline-flex w-full items-center justify-center gap-3 rounded-full bg-[var(--color-gold-500)] px-8 py-4 text-sm font-bold text-[var(--color-navy-950)] shadow-xl shadow-[var(--color-gold-500)]/20 hover:bg-[var(--color-gold-400)] transition-colors sm:w-auto sm:px-10 sm:text-base"
+          className="mt-7 inline-flex items-center justify-center gap-2 rounded-full px-8 py-3 text-sm font-extrabold uppercase tracking-wider transition-transform hover:scale-[1.03]"
+          style={{
+            background: "var(--color-accent-700)",
+            color: "#fdf6e3",
+            boxShadow: "0 6px 18px rgba(0,0,0,0.25)",
+          }}
         >
-          {buttonLabel}
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+          {buttonLabel.replace(/\s*→\s*$/, "")}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8">
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>
         </a>

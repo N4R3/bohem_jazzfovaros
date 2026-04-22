@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { getContent } from "@/lib/locale";
 import { canonicalUrl } from "@/lib/seo";
-import Container from "@/components/ui/Container";
-import SectionHeading from "@/components/ui/SectionHeading";
+import BeachPageShell from "@/components/layout/BeachPageShell";
 import GalleryClient from "@/components/gallery/GalleryClient";
 
-export function generateMetadata(): Metadata {
-  const c = getContent();
+export async function generateMetadata(): Promise<Metadata> {
+  const c = await getContent();
   return {
     title: c.gallery.title,
     description: c.gallery.subtitle,
@@ -19,16 +18,17 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function GalleryPage() {
-  const c = getContent();
+export default async function GalleryPage() {
+  const c = await getContent();
   const { gallery } = c;
 
   return (
-    <div className="min-h-screen bg-[var(--color-cream-50)] py-16">
-      <Container>
-        <SectionHeading title={gallery.title} subtitle={gallery.subtitle} />
-        <GalleryClient images={gallery.images} />
-      </Container>
-    </div>
+    <BeachPageShell
+      eyebrow="Pillanatok a fesztiválról"
+      title={gallery.title}
+      subtitle={gallery.subtitle}
+    >
+      <GalleryClient images={gallery.images} />
+    </BeachPageShell>
   );
 }

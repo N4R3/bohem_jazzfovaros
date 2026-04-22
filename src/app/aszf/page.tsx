@@ -3,8 +3,8 @@ import { getContent } from "@/lib/locale";
 import { canonicalUrl } from "@/lib/seo";
 import Container from "@/components/ui/Container";
 
-export function generateMetadata(): Metadata {
-  const c = getContent();
+export async function generateMetadata(): Promise<Metadata> {
+  const c = await getContent();
   return {
     title: c.terms.title,
     description: c.meta.siteTitle,
@@ -17,8 +17,8 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function TermsPage() {
-  const c = getContent();
+export default async function TermsPage() {
+  const c = await getContent();
   const { terms } = c;
 
   return (

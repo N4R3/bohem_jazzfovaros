@@ -16,27 +16,37 @@ export const ALT_URL: string =
 
 /**
  * HU/EN gomb cél URL-je (build időben égetve).
- * 1) NEXT_PUBLIC_LANGUAGE_SWITCH_URL
- * 2) HU build: NEXT_PUBLIC_SITE_URL_EN | EN build: NEXT_PUBLIC_SITE_URL_HU (üres string nem számít)
- * 3) ALT_URL (alapértelmezés: jazzfovaros.hu / jazzcapital.hu)
  *
- * Demón újraépítés nélkül: LocaleSwitchAnchor + window.__PEER_LOCALE_URL__ (Netlify snippet).
+ * EGY DOMAIN alatt szolgáljuk a két nyelvet:
+ *   HU  →  /         (root)
+ *   EN  →  /en/      (alkönyvtár)
+ *
+ * Ezért alapból relatív, azonos-domain útvonalat adunk vissza, hogy az EN
+ * gomb NE külső `jazzcapital.hu` URL-re vigyen, hanem az oldal angol
+ * fordítására ugyanazon domain-en belül.
+ *
+ * Felülbírálhatóság (pl. ha valaki mégis külön domain-eket használna):
+ *   1) NEXT_PUBLIC_LANGUAGE_SWITCH_URL — explicit cél URL
+ *   2) HU build: NEXT_PUBLIC_SITE_URL_EN  |  EN build: NEXT_PUBLIC_SITE_URL_HU
+ *
+ * Demón újraépítés nélkül: LocaleSwitchAnchor + window.__PEER_LOCALE_URL__.
  */
 export function getLanguageSwitchUrl(): string {
   const raw = process.env.NEXT_PUBLIC_LANGUAGE_SWITCH_URL?.trim();
   if (raw) {
     const noSlash = raw.replace(/\/$/, "");
-    return noSlash.startsWith("http") ? noSlash : `https://${noSlash}`;
+    return noSlash.startsWith("http") ? noSlash : noSlash.startsWith("/") ? noSlash || "/" : `https://${noSlash}`;
   }
   const loc = locale();
   if (loc === "hu") {
     const en = process.env.NEXT_PUBLIC_SITE_URL_EN?.trim();
     if (en) return en.replace(/\/$/, "");
+    return "/en/";
   } else {
     const hu = process.env.NEXT_PUBLIC_SITE_URL_HU?.trim();
     if (hu) return hu.replace(/\/$/, "");
+    return "/";
   }
-  return ALT_URL;
 }
 
 export function canonicalUrl(path: string = "/"): string {

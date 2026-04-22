@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bohém Jazzfőváros 2026 — Kecskemét, Dopin Beach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navbar-height: 76px;
+    --header-bg-image: url('assets/header_simple.png');
+    --header-bg-image-wide: url('assets/header_simple_wide.png');
+    --header-bg-image-mobile: url('assets/header_mobile.png');
+    --orange: #FF6200;
+    --orange-dark: #E55800;
+    --orange-deep: #C94F00;
+    --sky-top: #BFE6F5;
+    --sky-mid: #7FC7E4;
+    --ocean: #3FA4CC;
+    --ocean-deep: #2A7FA8;
+    --cream: #FFF3CC;
+    --cream-2: #FFE9A8;
+    --ink: #1A2733;
+    --yellow: #FFC93C;
+    --teal: #1BA0A8;
+  }
+  *,*::before,*::after { box-sizing: border-box; }
+  html, body { margin:0; padding:0; }
+  html { scroll-padding-top: calc(var(--navbar-height) + 12px); }
+  body {
+    font-family: 'Poppins', system-ui, sans-serif;
+    color: var(--ink);
+    background: #f5fbfd;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+  body[data-header-style="design"] {
+    --header-bg-image: url('assets/header_design.png');
+    --header-bg-image-wide: url('assets/header_design_wide.png');
+  }
+
+  /* Hero + navbar offset: mobilon page-bg, asztalon hero-fold háttér */
+  .page-bg {
+    position: relative;
+    z-index: 0;
+    margin-top: var(--navbar-height);
+    background-color: #BFE6F5;
+    background-image: var(--header-bg-image);
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: 100% auto;
+  }
+  @media (min-width: 960px) {
+    .page-bg {
+      background-image: none;
+    }
+    .hero-fold {
+      position: relative;
+      background-color: #BFE6F5;
+    }
+    .hero-fold::before {
+      content: '';
+      position: absolute;
+      inset: 0 0 80px 0;
+      background-image: var(--header-bg-image);
+      background-repeat: no-repeat;
+      background-position: center bottom;
+      background-size: cover;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero {
+      position: relative;
+      z-index: 1;
+    }
+    .hero-fold .info-bar {
+      position: relative;
+      z-index: 1;
+    }
+  }
+  @media (min-width: 1770px) and (min-height: 1220px) {
+    .hero-fold::before {
+      background-image: var(--header-bg-image-wide);
+      background-position: 100% 0;
+      background-size: cover;
+    }
+  }
+  @media (min-width: 960px) and (max-height: 1219px) {
+    .hero-fold::before {
+      background-image: var(--header-bg-image);
+      background-position: center bottom;
+    }
+  }
+  @media (min-width: 2700px) and (min-height: 1220px) {
+    .hero-fold::before {
+      background-position: 100% 100%;
+    }
+  }
+  @media (max-width: 959px) {
+    .page-bg {
+      background-image: var(--header-bg-image-mobile);
+    }
+  }
+
+  /* Fotó háttér: az info-sáv (📅 / 📍) vonalától; keskenyen teteje, szélesen alul igazítva */
+  .content-photo-bg {
+    position: relative;
+    z-index: 0;
+    background-color: #BFE6F5;
+    background-image: url('assets/bg_home.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center top;
+  }
+  @media (min-width: 960px) {
+    .content-photo-bg {
+      background-position: center bottom;
+    }
+  }
+
+  img { display:block; max-width:100%; }
+  a { color:inherit; text-decoration:none; }
+  button { font-family:inherit; cursor:pointer; border:none; background:none; color:inherit; }
+
+  /* ============ NAVBAR ============ */
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: #fff;
+    border-bottom: 1px solid rgba(24, 103, 138, 0.12);
+    transition: box-shadow .3s;
+  }
+  .navbar.scrolled { box-shadow: 0 4px 24px rgba(24,103,138,0.15); }
+  .nav-inner {
+    max-width: 1320px; margin: 0 auto;
+    padding: 10px 32px;
+    display:flex; align-items:center; gap: 28px;
+  }
+  .nav-logo { height: 56px; width:auto; }
+  .nav-links {
+    display:flex; gap: 22px; align-items:center; list-style:none; margin:0; padding:0;
+    font-weight: 700; font-size: 13px; letter-spacing: 0.03em;
+    text-transform: uppercase; color: var(--ink);
+    flex: 1;
+  }
+  .nav-links li a {
+    position:relative; padding: 6px 2px;
+    transition: color .2s;
+  }
+  .nav-links li a::after {
+    content:''; position:absolute; left:0; right:0; bottom:-2px; height:3px;
+    background: var(--orange); border-radius:2px;
+    transform: scaleX(0); transform-origin: left; transition: transform .25s;
+  }
+  .nav-links li a:hover { color: var(--orange); }
+  .nav-links li a:hover::after { transform: scaleX(1); }
+  .nav-lang {
+    border: 2px solid var(--ink);
+    padding: 6px 14px; border-radius: 999px;
+    font-weight: 800; font-size: 12px;
+    letter-spacing: 0.08em;
+    transition: all .2s;
+  }
+  .nav-lang:hover { background: var(--ink); color:#fff; }
+  .nav-burger { display:none; flex-direction:column; gap:5px; padding:8px; }
+  .nav-burger span { width:26px; height:3px; background:var(--ink); border-radius:2px; transition:.2s; }
+
+  /* Hero + narancs sáv: mobilon első képernyő csak hero; asztalon flex → sáv a nézet alján */
+  .hero-fold {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+  }
+  /* ============ HERO ============ */
+  .hero {
+    position: relative;
+    max-width: 1320px; margin: 0 auto;
+    padding: 40px 32px 80px;
+    min-height: 620px;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 24px;
+    align-items: center;
+    z-index: 2;
+  }
+  /* Telefon: csak a header tölti az első képernyőt; narancs sáv egy görgetésnyire */
+  @media (max-width: 959px) {
+    .hero-fold {
+      display: block;
+    }
+    .hero {
+      min-height: calc(100svh - var(--navbar-height));
+      padding-bottom: 48px;
+      box-sizing: border-box;
+    }
+  }
+  /* Asztal: nav + hero + narancs sáv egy magasságban, sáv a képernyő aljához igazítva */
+  @media (min-width: 961px) and (min-height: 700px) {
+    .hero-fold {
+      min-height: calc(100svh - var(--navbar-height));
+    }
+    .hero {
+      flex: 1 1 auto;
+      min-height: 0;
+      padding-top: 32px;
+      padding-bottom: 36px;
+      align-content: center;
+    }
+    .hero-fold .info-bar {
+      flex: 0 0 auto;
+      margin-top: auto;
+    }
+    .hero-right {
+      height: min(560px, calc(100svh - var(--navbar-height) - 220px));
+    }
+  }
+  .hero-left { position: relative; z-index: 3; }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:10px;
+    background: var(--ink); color: var(--yellow);
+    padding: 10px 18px; border-radius: 4px;
+    font-family:'Pacifico', cursive; font-size: 22px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    transform: rotate(-3deg);
+    margin-bottom: 18px;
+  }
+  .hero-badge::before {
+    content:'10.'; font-family:'Bebas Neue'; font-size: 32px;
+    color: var(--orange); line-height: 1;
+  }
+  .hero-title {
+    font-family:'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 9vw, 132px);
+    line-height: 0.88;
+    color: #fff;
+    letter-spacing: 0.01em;
+    margin: 0 0 8px;
+    text-shadow: 0 4px 0 rgba(0,0,0,0.08), 0 10px 30px rgba(24,103,138,0.25);
+  }
+  .hero-title .ink { color: var(--ink); }
+  .hero-sub {
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--ink);
+    margin: 18px 0 28px;
+    letter-spacing: 0.02em;
+  }
+  .hero-sub strong { color: var(--orange); }
+  .btn {
+    display:inline-flex; align-items:center; gap: 12px;
+    padding: 18px 32px; border-radius: 999px;
+    font-weight: 800; font-size: 16px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    transition: transform .2s, box-shadow .2s, background .2s;
+  }
+  .btn-primary {
+    background: var(--orange); color: #fff;
+    box-shadow: 0 10px 0 var(--orange-deep), 0 16px 30px rgba(255,98,0,0.35);
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 13px 0 var(--orange-deep), 0 22px 34px rgba(255,98,0,0.45);
+  }
+  .btn-primary:active {
+    transform: translateY(4px);
+    box-shadow: 0 3px 0 var(--orange-deep), 0 6px 12px rgba(255,98,0,0.35);
+  }
+  .btn-primary .arrow { width:28px; height:28px; border-radius:50%; background:#fff; color: var(--orange); display:grid; place-items:center; font-size: 14px; }
+
+  /* Duck and props */
+  .hero-right {
+    position: relative;
+    height: 560px;
+  }
+  .duck {
+    position: absolute;
+    right: -20px; top: 40px;
+    width: 520px; max-width: 100%;
+    height: auto;
+    filter: drop-shadow(0 30px 40px rgba(24,103,138,0.35));
+    animation: duckBob 4.5s ease-in-out infinite;
+    z-index: 3;
+  }
+  @keyframes duckBob {
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50% { transform: translateY(-18px) rotate(1.5deg); }
+  }
+  /* Lifebuoy */
+  .lifebuoy {
+    position:absolute; left: 10%; bottom: 20px;
+    width: 150px; height: 150px;
+    z-index: 2;
+    animation: floatA 6s ease-in-out infinite;
+  }
+  @keyframes floatA {
+    0%,100% { transform: translateY(0) rotate(-8deg); }
+    50% { transform: translateY(-14px) rotate(4deg); }
+  }
+  /* Beach ball */
+  .beachball {
+    position:absolute; left: 2%; top: 10%;
+    width: 90px; height: 90px;
+    z-index: 2;
+    animation: floatB 5s ease-in-out infinite;
+  }
+  @keyframes floatB {
+    0%,100% { transform: translateY(0) rotate(0); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+  }
+  /* Small shell */
+  .shell {
+    position:absolute; right: 4%; bottom: 40px;
+    width: 70px; height: 60px;
+    z-index: 2;
+    animation: floatA 7s ease-in-out infinite reverse;
+  }
+
+  /* Water ripples behind duck */
+  .ripples {
+    position:absolute; right: 40px; bottom: 20px;
+    width: 400px; height: 60px;
+    z-index: 1;
+    opacity: 0.6;
+  }
+
+  /* Floating bubbles across the whole page */
+  .bubbles { position: absolute; inset: 0; pointer-events:none; overflow:hidden; z-index: 1; }
+  .bubble {
+    position:absolute; bottom: -80px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.2) 70%);
+    border: 1px solid rgba(255,255,255,0.7);
+    animation: rise linear infinite;
+  }
+  @keyframes rise {
+    from { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+    10% { opacity: 1; }
+    to { transform: translateY(-110vh) translateX(30px) scale(1.2); opacity: 0; }
+  }
+
+  /* ============ ORANGE INFO BAR ============ */
+  .info-bar {
+    background: var(--orange);
+    position: relative; z-index: 2;
+    padding: 22px 32px;
+    display: flex;
+    align-items:center; justify-content:center; gap: 40px;
+    color: #fff; font-weight: 700;
+    letter-spacing: 0.05em;
+    box-shadow: 0 10px 24px rgba(255,98,0,0.25);
+  }
+  .info-bar::before, .info-bar::after {
+    content:''; position:absolute; left:0; right:0; height: 6px;
+    background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.08) 0 12px, transparent 12px 24px);
+  }
+  .info-bar::before { top: 0; }
+  .info-bar::after { bottom: 0; }
+  .info-bar .pill { display:inline-flex; align-items:center; gap: 12px; font-size: 16px; text-transform: uppercase; }
+  .info-bar .ico { width: 22px; height: 22px; display:grid; place-items:center; background: rgba(255,255,255,0.2); border-radius:50%; font-size:12px; }
+  .info-bar .cta {
+    margin-left: auto;
+    background:#fff; color: var(--orange);
+    padding: 10px 20px; border-radius: 999px;
+    font-weight: 800; font-size: 13px; letter-spacing: 0.08em;
+    display:inline-flex; align-items:center; gap:8px;
+    transition: transform .2s;
+  }
+  .info-bar .cta:hover { transform: translateX(4px); }
+
+  /* ============ VIDEO SECTION ============ */
+  .section { position: relative; z-index: 2; padding: 80px 32px; }
+  .container { max-width: 1160px; margin: 0 auto; }
+  .video-wrap {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+    aspect-ratio: 16/9;
+    cursor: pointer;
+    background: linear-gradient(135deg, #8B2E2E, #C74A4A, #E07B4A);
+  }
+  .video-wrap .thumb {
+    position:absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.45)),
+      radial-gradient(ellipse at 35% 40%, rgba(255,180,120,0.6), transparent 50%),
+      linear-gradient(135deg, #4a2020 0%, #8a3030 35%, #c95b3a 70%, #e89550 100%);
+    transition: transform .5s;
+  }
+  .video-wrap:hover .thumb { transform: scale(1.03); }
+  /* Stylized concert silhouette */
+  .thumb svg { position:absolute; inset:0; width:100%; height:100%; }
+  .play-btn {
+    position:absolute; inset:0; margin:auto;
+    width: 110px; height: 110px;
+    background: var(--orange);
+    border-radius: 50%;
+    display:grid; place-items:center;
+    box-shadow: 0 0 0 0 rgba(255,98,0,0.5), 0 20px 40px rgba(0,0,0,0.35);
+    transition: transform .25s;
+    animation: pulseRing 2.2s ease-out infinite;
+  }
+  @keyframes pulseRing {
+    0% { box-shadow: 0 0 0 0 rgba(255,98,0,0.55), 0 20px 40px rgba(0,0,0,0.35); }
+    80% { box-shadow: 0 0 0 32px rgba(255,98,0,0), 0 20px 40px rgba(0,0,0,0.35); }
+    100% { box-shadow: 0 0 0 0 rgba(255,98,0,0), 0 20px 40px rgba(0,0,0,0.35); }
+  }
+  .play-btn:hover { transform: scale(1.08); }
+  .play-tri {
+    width: 0; height: 0; margin-left: 6px;
+    border-left: 28px solid #fff;
+    border-top: 18px solid transparent;
+    border-bottom: 18px solid transparent;
+  }
+  .video-caption {
+    position:absolute; left: 24px; bottom: 20px;
+    color: #fff;
+    font-family:'Bebas Neue'; font-size: 32px;
+    letter-spacing: 0.05em;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+
+  /* ============ TICKET BOXES ============ */
+  .tickets {
+    padding: 40px 32px 30px;
+    position: relative; z-index: 2;
+  }
+  .tickets .grid {
+    max-width: 1160px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .ticket-box {
+    background: var(--orange);
+    color: #fff;
+    padding: 22px 24px;
+    border-radius: 14px;
+    display:flex; align-items:center; gap: 16px;
+    box-shadow: 0 8px 0 var(--orange-deep), 0 14px 30px rgba(255,98,0,0.35);
+    transition: transform .25s, box-shadow .25s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .ticket-box::before {
+    content:''; position:absolute; left: 0; top:0; bottom:0; width: 60px;
+    background: rgba(255,255,255,0.08);
+    border-right: 2px dashed rgba(255,255,255,0.3);
+  }
+  .ticket-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 13px 0 var(--orange-deep), 0 22px 40px rgba(255,98,0,0.5);
+  }
+  .ticket-box .ti-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: rgba(255,255,255,0.2);
+    display:grid; place-items:center;
+    font-size: 22px; flex-shrink: 0;
+    z-index: 1;
+  }
+  .ticket-box .ti-text { z-index:1; }
+  .ticket-box .ti-title {
+    font-family:'Bebas Neue'; font-size: 24px; letter-spacing: 0.05em; line-height: 1;
+    margin-bottom: 4px;
+  }
+  .ticket-box .ti-sub { font-size: 12px; opacity: .92; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 600; }
+  .ticket-box .ti-arrow {
+    margin-left: auto; width: 30px; height: 30px; border-radius: 50%;
+    background: #fff; color: var(--orange);
+    display:grid; place-items:center; font-weight: 900;
+    z-index: 1;
+    transition: transform .2s;
+  }
+  .ticket-box:hover .ti-arrow { transform: translateX(4px); }
+
+  /* ============ STATS BAR ============ */
+  .stats-bar {
+    background: var(--orange);
+    margin-top: 30px;
+    position: relative; z-index: 2;
+    padding: 36px 32px;
+    color:#fff;
+    box-shadow: 0 10px 30px rgba(255,98,0,0.25);
+  }
+  .stats-bar::before, .stats-bar::after {
+    content:''; position:absolute; left:0; right:0; height: 6px;
+    background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.08) 0 12px, transparent 12px 24px);
+  }
+  .stats-bar::before { top: 0; }
+  .stats-bar::after { bottom: 0; }
+  .stats-grid {
+    max-width: 1160px; margin: 0 auto;
+    display:grid; grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    text-align: center;
+  }
+  .stat {
+    display:flex; flex-direction:column; align-items:center; gap: 6px;
+    position: relative;
+  }
+  .stat:not(:last-child)::after {
+    content:''; position:absolute; right:-10px; top: 10%; bottom: 10%; width: 2px;
+    background: rgba(255,255,255,0.3);
+  }
+  .stat .num {
+    font-family:'Bebas Neue'; font-size: 64px; line-height: 1;
+    color: #fff;
+  }
+  .stat .lbl {
+    font-weight: 800; letter-spacing: 0.1em;
+    text-transform: uppercase; font-size: 13px;
+    opacity: .95;
+  }
+  .stat .ico {
+    width: 40px; height: 40px; display:grid; place-items:center;
+    background: rgba(255,255,255,0.18); border-radius:50%;
+    margin-bottom: 4px;
+  }
+
+  /* ============ FELLEPOK (ARTISTS) ============ */
+  .artists-section { padding: 80px 32px 40px; position: relative; z-index: 2; }
+  .section-title {
+    font-family:'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 7vw, 92px);
+    color: #fff;
+    text-align: center;
+    letter-spacing: 0.06em;
+    margin: 0 0 12px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    position: relative;
+  }
+  .section-title::after {
+    content:''; display:block;
+    width: 80px; height: 5px; margin: 10px auto 0;
+    background: var(--orange); border-radius: 999px;
+  }
+  .section-lede {
+    text-align:center; color: rgba(255,255,255,0.9);
+    max-width: 600px; margin: 0 auto 40px;
+    font-size: 15px; font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+  .artist-filter {
+    display:flex; justify-content:center; gap: 8px;
+    margin-bottom: 36px; flex-wrap:wrap;
+  }
+  .filter-chip {
+    padding: 8px 18px; border-radius: 999px;
+    background: rgba(255,255,255,0.15);
+    color: #fff; font-weight: 700; font-size: 13px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    transition: all .2s;
+  }
+  .filter-chip:hover { background: rgba(255,255,255,0.28); }
+  .filter-chip.active {
+    background: var(--orange); color:#fff; border-color: var(--orange);
+    box-shadow: 0 6px 16px rgba(255,98,0,0.4);
+  }
+  .artists-grid {
+    max-width: 1160px; margin: 0 auto;
+    display:grid; grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+  }
+  .artist-card {
+    background: linear-gradient(180deg, #FFF6D6 0%, #FFECB3 100%);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.15);
+    transition: transform .3s, box-shadow .3s;
+    cursor: pointer;
+    display:flex; flex-direction: column;
+  }
+  .artist-card:hover {
+    transform: translateY(-8px) rotate(-0.5deg);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+  }
+  .artist-card:nth-child(even):hover { transform: translateY(-8px) rotate(0.8deg); }
+  .artist-photo {
+    aspect-ratio: 1/1;
+    background: linear-gradient(180deg, #6BA4BF 0%, #3A6B85 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .artist-photo svg { width:100%; height:100%; display:block; }
+  .artist-card .meta {
+    padding: 12px 14px 14px;
+    border-top: 2px solid rgba(0,0,0,0.06);
+  }
+  .artist-card .name {
+    font-family:'Bebas Neue'; font-size: 20px; letter-spacing: 0.04em; line-height: 1.08;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .artist-card .genre {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--orange);
+  }
+  .artist-card .day {
+    display:inline-block; margin-top: 6px;
+    font-size: 10px; padding: 2px 8px;
+    border-radius: 999px; background: var(--ink); color: var(--yellow);
+    font-weight: 700; letter-spacing: 0.08em;
+  }
+
+  /* ============ BIG CTA ============ */
+  .big-cta {
+    padding: 80px 32px 60px;
+    text-align:center;
+    position: relative; z-index: 2;
+  }
+  .big-cta h2 {
+    font-family:'Bebas Neue'; font-size: clamp(48px, 7vw, 96px);
+    color: #fff; letter-spacing: 0.04em;
+    margin: 0 0 12px; line-height: 1;
+    text-shadow: 0 6px 30px rgba(0,0,0,0.2);
+  }
+  .big-cta h2 em { font-style: normal; color: var(--orange); }
+  .big-cta p {
+    color: rgba(255,255,255,0.9);
+    font-weight: 600; letter-spacing: 0.04em;
+    margin: 0 0 32px;
+  }
+  .big-cta .btn-primary { font-size: 18px; padding: 22px 42px; }
+
+  /* ============ SUPPORTERS / SPONSORS / PARTNERS ============ */
+  .supporters {
+    padding: 60px 32px 40px;
+    position: relative; z-index: 2;
+    text-align: center;
+  }
+  .supporters h3 {
+    font-family:'Bebas Neue'; font-size: 48px;
+    letter-spacing: 0.08em; color: #fff;
+    margin: 0 0 8px;
+  }
+  .supporters h3::after {
+    content:''; display:block;
+    width: 50px; height: 4px; margin: 8px auto 20px;
+    background: var(--orange); border-radius: 999px;
+  }
+  .logo-row {
+    display:flex; flex-wrap:wrap; justify-content:center; gap: 14px 28px;
+    max-width: 900px; margin: 0 auto 40px;
+  }
+  .logo-chip {
+    padding: 10px 20px;
+    background: rgba(255,255,255,0.92);
+    border-radius: 10px;
+    font-family:'Bebas Neue'; font-size: 20px;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform .2s;
+  }
+  .logo-chip:hover { transform: translateY(-3px) scale(1.03); }
+  .logo-chip.small { font-size: 14px; padding: 8px 14px; }
+
+  /* ============ FOOTER ============ */
+  .footer {
+    background: linear-gradient(180deg, rgba(12, 60, 85, 0.85), rgba(8, 42, 60, 0.95));
+    color: #fff;
+    padding: 60px 32px 24px;
+    position: relative; z-index: 2;
+    margin-top: 40px;
+  }
+  .footer-inner {
+    max-width: 1160px; margin: 0 auto;
+    display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr;
+    gap: 40px;
+  }
+  .footer-logo { height: 110px; margin-bottom: 14px; }
+  .footer h4 {
+    font-family:'Bebas Neue'; font-size: 22px;
+    letter-spacing: 0.1em; color: var(--orange);
+    margin: 0 0 14px;
+  }
+  .footer ul { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap: 6px; font-size: 13px; }
+  .footer ul a:hover { color: var(--yellow); }
+  .footer .address { font-size: 13px; line-height: 1.6; opacity: 0.88; }
+  .footer .socials { display:flex; gap: 10px; margin-top: 14px; }
+  .socials a {
+    width: 38px; height: 38px; border-radius:50%;
+    background: rgba(255,255,255,0.1);
+    display:grid; place-items:center;
+    transition: background .2s, transform .2s;
+  }
+  .socials a:hover { background: var(--orange); transform: translateY(-3px); }
+  .footer-bottom {
+    max-width: 1160px; margin: 40px auto 0;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    display:flex; justify-content:space-between;
+    font-size: 12px; opacity: .7;
+    flex-wrap: wrap; gap: 8px;
+  }
+
+  /* Wave divider */
+  .wave-divider {
+    display:block; width:100%; height: 60px;
+  }
+
+  /* =============== RESPONSIVE =============== */
+  @media (max-width: 960px) {
+    .nav-links { display:none; }
+    .nav-burger { display:flex; }
+    .hero { grid-template-columns: 1fr; padding: 24px 20px 60px; }
+    .hero-right { height: 380px; order: -1; }
+    .duck { width: 320px; right: 0; top: 0; left: auto; margin: 0 auto; position: relative; }
+    .hero-right { display:flex; justify-content:center; align-items:flex-start; }
+    .lifebuoy { left: 5%; bottom: 10px; width: 90px; height: 90px; }
+    .beachball { left: 0; top: 0; width: 60px; height: 60px; }
+    .shell { display: none; }
+    .info-bar { flex-wrap: wrap; justify-content: flex-start; gap: 16px; }
+    .info-bar .cta { margin-left: 0; }
+    .tickets .grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+    .stat:nth-child(2)::after, .stat:not(:last-child)::after { display:none; }
+    .artists-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+    .section { padding: 50px 20px; }
+  }
+  @media (max-width: 520px) {
+    .artists-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .hero-badge { font-size: 16px; padding: 8px 14px; }
+    .hero-title { font-size: 56px; }
+    .logo-chip { font-size: 16px; padding: 8px 14px; }
+  }
+
+  /* Modal */
+  .modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(5, 30, 45, 0.75);
+    backdrop-filter: blur(8px);
+    display:none; align-items:center; justify-content:center;
+    z-index: 500;
+    padding: 20px;
+  }
+  .modal-backdrop.open { display:flex; animation: fadeIn .25s; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .modal {
+    background: #fff; border-radius: 20px;
+    max-width: 520px; width: 100%;
+    padding: 36px; text-align: center;
+    position: relative;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    animation: pop .3s;
+  }
+  @keyframes pop { from { transform: scale(.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .modal .close {
+    position:absolute; right: 14px; top: 14px;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: #f1f3f5; font-size: 18px; font-weight: 900;
+  }
+  .modal h3 { font-family:'Bebas Neue'; font-size: 40px; letter-spacing: 0.06em; margin: 8px 0 6px; color: var(--ink); }
+  .modal p { color: #556; margin: 0 0 20px; }
+  .ticket-option {
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 14px 18px; border: 2px solid #eef1f4;
+    border-radius: 12px; margin-bottom: 10px;
+    transition: border .2s, background .2s;
+    cursor: pointer;
+    text-align: left;
+  }
+  .ticket-option:hover { border-color: var(--orange); background: #FFF6EC; }
+  .ticket-option .to-name { font-weight: 800; font-size: 15px; }
+  .ticket-option .to-desc { font-size: 12px; color: #778; }
+  .ticket-option .to-price { font-family:'Bebas Neue'; font-size: 28px; color: var(--orange); letter-spacing: 0.04em; }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(200%);
+    background: var(--ink); color: var(--yellow);
+    padding: 14px 24px; border-radius: 999px;
+    font-weight: 700; letter-spacing: 0.04em;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    z-index: 600;
+    transition: transform .35s cubic-bezier(.2,.9,.3,1.4);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body data-header-style="simple">
+
+<!-- =========== NAVBAR =========== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#" aria-label="Főoldal"><img class="nav-logo" src="assets/logo19_hu.svg" alt="Bohém Jazzfőváros Kecskemét" /></a>
+    <ul class="nav-links">
+      <li><a href="#">Főoldal</a></li>
+      <li><a href="#video">Programok</a></li>
+      <li><a href="#fellepok">Jazztális Est</a></li>
+      <li><a href="#fellepok">Fellépők</a></li>
+      <li><a href="#">Helyszín</a></li>
+      <li><a href="#">Tények</a></li>
+      <li><a href="#">Galéria</a></li>
+      <li><a href="#supporters">Jazztális</a></li>
+      <li><a href="#" style="color: var(--orange);">Jegyvásárlás</a></li>
+    </ul>
+    <a class="nav-lang" href="#">EN</a>
+    <button class="nav-burger" aria-label="Menü"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="page-bg">
+<div class="bubbles" id="bubbles"></div>
+
+<div class="hero-fold">
+
+<!-- =========== HERO =========== -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge">JUBILEUMI FESZTIVÁL</div>
+    <h1 class="hero-title">BOHÉM<br/>JAZZ<span class="ink">FŐ</span>VÁROS</h1>
+    <p class="hero-sub">2026. <strong>AUGUSZTUS 6–9.</strong> &nbsp;·&nbsp; KECSKEMÉT, DOPIN BEACH</p>
+    <button class="btn btn-primary" onclick="openTicketModal()">
+      Jegyvásárlás
+      <span class="arrow">➜</span>
+    </button>
+  </div>
+
+  <div class="hero-right">
+    <!-- Beach ball -->
+    <img class="beachball" src="assets/ball.png" alt="Strandlabda" />
+
+    <!-- Ripples -->
+    <svg class="ripples" viewBox="0 0 400 60" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 30 Q50 10 100 30 T200 30 T300 30 T400 30" stroke="#fff" stroke-width="3" fill="none" opacity="0.7"/>
+      <path d="M0 45 Q60 28 120 45 T240 45 T360 45 T480 45" stroke="#fff" stroke-width="2" fill="none" opacity="0.5"/>
+    </svg>
+
+    <!-- The duck -->
+    <img class="duck" src="assets/lajos_duck.png" alt="Gumikacsa kalapban" />
+
+    <!-- Lifebuoy -->
+    <img class="lifebuoy" src="assets/mentoov.png" alt="Mentőöv" />
+
+    <!-- Shell -->
+    <svg class="shell" viewBox="0 0 70 60" aria-hidden="true">
+      <path d="M35 5 Q5 25 10 55 L60 55 Q65 25 35 5 Z" fill="#FFDEB3" stroke="#E8A86A" stroke-width="2"/>
+      <path d="M35 5 L35 55" stroke="#E8A86A" stroke-width="1.5" fill="none"/>
+      <path d="M35 5 Q20 30 20 55" stroke="#E8A86A" stroke-width="1.5" fill="none"/>
+      <path d="M35 5 Q50 30 50 55" stroke="#E8A86A" stroke-width="1.5" fill="none"/>
+    </svg>
+  </div>
+</section>
+
+<!-- =========== ORANGE INFO BAR =========== -->
+<div class="info-bar">
+  <span class="pill"><span class="ico">📅</span> 2026. AUGUSZTUS 6–9.</span>
+  <span class="pill"><span class="ico">📍</span> DOPIN BEACH &amp; JAZZ SZABADTÉRI SZÍNPAD · KECSKEMÉT</span>
+  <a href="#" class="cta" onclick="openTicketModal(); return false;">JEGYVÁSÁRLÁS →</a>
+</div>
+
+</div>
+
+<div class="content-photo-bg">
+
+<!-- =========== VIDEO =========== -->
+<section class="section" id="video">
+  <div class="container">
+    <div class="video-wrap" onclick="playVideo(this)">
+      <div class="thumb">
+        <svg viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <!-- stage lights -->
+          <defs>
+            <radialGradient id="spot1" cx="30%" cy="30%"><stop offset="0%" stop-color="rgba(255,220,140,0.8)"/><stop offset="100%" stop-color="rgba(255,220,140,0)"/></radialGradient>
+            <radialGradient id="spot2" cx="70%" cy="20%"><stop offset="0%" stop-color="rgba(255,170,100,0.6)"/><stop offset="100%" stop-color="rgba(255,170,100,0)"/></radialGradient>
+          </defs>
+          <rect width="800" height="450" fill="url(#spot1)"/>
+          <rect width="800" height="450" fill="url(#spot2)"/>
+          <!-- crowd silhouettes -->
+          <g fill="rgba(0,0,0,0.55)">
+            <rect x="0" y="380" width="800" height="70"/>
+            <circle cx="60" cy="380" r="22"/><circle cx="110" cy="378" r="20"/><circle cx="160" cy="382" r="24"/><circle cx="220" cy="376" r="20"/><circle cx="280" cy="380" r="22"/><circle cx="340" cy="378" r="20"/><circle cx="400" cy="380" r="24"/><circle cx="460" cy="376" r="20"/><circle cx="520" cy="380" r="22"/><circle cx="580" cy="378" r="20"/><circle cx="640" cy="380" r="24"/><circle cx="700" cy="376" r="20"/><circle cx="760" cy="380" r="22"/>
+          </g>
+          <!-- singer silhouette center -->
+          <g fill="rgba(20,8,8,0.85)">
+            <ellipse cx="340" cy="180" rx="34" ry="40"/>
+            <rect x="310" y="210" width="60" height="130" rx="18"/>
+            <rect x="280" y="220" width="40" height="14" rx="4" transform="rotate(-15 300 230)"/>
+          </g>
+          <!-- trumpet player silhouette -->
+          <g fill="rgba(20,8,8,0.85)">
+            <ellipse cx="520" cy="200" rx="28" ry="34"/>
+            <rect x="490" y="225" width="60" height="120" rx="16"/>
+            <path d="M548 230 L610 210 L620 205 L625 218 L615 225 L550 245 Z" fill="#E6C474"/>
+            <circle cx="625" cy="212" r="14" fill="#FFC93C"/>
+          </g>
+        </svg>
+      </div>
+      <div class="play-btn" aria-label="Videó lejátszása"><div class="play-tri"></div></div>
+      <div class="video-caption">AFTERMOVIE · BOHÉM 2025</div>
+    </div>
+  </div>
+</section>
+
+<!-- =========== TICKET BOXES =========== -->
+<section class="tickets">
+  <div class="grid">
+    <div class="ticket-box" onclick="openTicketModal()">
+      <div class="ti-icon">🎟️</div>
+      <div class="ti-text">
+        <div class="ti-title">NAPIJEGY</div>
+        <div class="ti-sub">Válaszd ki a napod</div>
+      </div>
+      <div class="ti-arrow">→</div>
+    </div>
+    <div class="ticket-box" onclick="openTicketModal()">
+      <div class="ti-icon">🎫</div>
+      <div class="ti-text">
+        <div class="ti-title">BÉRLET</div>
+        <div class="ti-sub">4 nap · korlátlan belépés</div>
+      </div>
+      <div class="ti-arrow">→</div>
+    </div>
+    <div class="ticket-box" onclick="openTicketModal()">
+      <div class="ti-icon">⭐</div>
+      <div class="ti-text">
+        <div class="ti-title">VIP JEGY</div>
+        <div class="ti-sub">Kiemelt élmény · catering</div>
+      </div>
+      <div class="ti-arrow">→</div>
+    </div>
+  </div>
+</section>
+
+<!-- =========== STATS =========== -->
+<div class="stats-bar">
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="ico">📅</div>
+      <div class="num" data-count="4">0</div>
+      <div class="lbl">NAP</div>
+    </div>
+    <div class="stat">
+      <div class="ico">🌍</div>
+      <div class="num" data-count="10">0<span>+</span></div>
+      <div class="lbl">ORSZÁG</div>
+    </div>
+    <div class="stat">
+      <div class="ico">🎷</div>
+      <div class="num" data-count="120">0<span>+</span></div>
+      <div class="lbl">ZENÉSZ</div>
+    </div>
+    <div class="stat">
+      <div class="ico">🎶</div>
+      <div class="num" data-count="40">0<span>+</span></div>
+      <div class="lbl">ÓRA ZENE</div>
+    </div>
+  </div>
+</div>
+
+<!-- =========== FELLÉPŐK =========== -->
+<section class="artists-section" id="fellepok">
+  <h2 class="section-title">FELLÉPŐK</h2>
+  <p class="section-lede">Több mint 120 zenész, 10+ országból — négy napon keresztül a kecskeméti strandon.</p>
+
+  <div class="artist-filter" id="filters">
+    <button class="filter-chip active" data-filter="all">MIND</button>
+    <button class="filter-chip" data-filter="cs">CSÜT</button>
+    <button class="filter-chip" data-filter="pe">PÉN</button>
+    <button class="filter-chip" data-filter="sz">SZO</button>
+    <button class="filter-chip" data-filter="va">VAS</button>
+  </div>
+
+  <div class="artists-grid" id="artistsGrid">
+    <!-- Populated by JS -->
+  </div>
+</section>
+
+<!-- =========== BIG CTA =========== -->
+<section class="big-cta">
+  <h2>VEDD MEG A <em>JEGYED</em> MOST!</h2>
+  <p>2026. AUGUSZTUS 6–9. · DOPIN BEACH &amp; JAZZ SZABADTÉRI SZÍNPAD · KECSKEMÉT</p>
+  <button class="btn btn-primary" onclick="openTicketModal()">
+    Jegyvásárlás
+    <span class="arrow">➜</span>
+  </button>
+</section>
+
+<!-- =========== SUPPORTERS =========== -->
+<section class="supporters" id="supporters">
+  <h3>TÁMOGATÓINK</h3>
+  <div class="logo-row">
+    <div class="logo-chip">KECSKEMÉT MJV ÖNK.</div>
+    <div class="logo-chip">NKA</div>
+    <div class="logo-chip">MAGYAR MŰVÉSZETI AKADÉMIA</div>
+    <div class="logo-chip">NEMZETI KULTURÁLIS ALAP</div>
+    <div class="logo-chip">EMMI</div>
+    <div class="logo-chip">LIBRI</div>
+    <div class="logo-chip">BFT</div>
+    <div class="logo-chip">MOL NYRT.</div>
+  </div>
+
+  <h3>SZPONZOROK</h3>
+  <div class="logo-row">
+    <div class="logo-chip">YONEX</div>
+    <div class="logo-chip">DREHER</div>
+    <div class="logo-chip">BORSODI</div>
+    <div class="logo-chip">PEPSI</div>
+    <div class="logo-chip">OTP BANK</div>
+    <div class="logo-chip">VODAFONE</div>
+  </div>
+
+  <h3>PARTNEREK</h3>
+  <div class="logo-row">
+    <div class="logo-chip small">BARTÓK RÁDIÓ</div>
+    <div class="logo-chip small">MTVA</div>
+    <div class="logo-chip small">JAZZ.HU</div>
+    <div class="logo-chip small">FIDELIO</div>
+    <div class="logo-chip small">STÚDIÓ DÉPESZ</div>
+    <div class="logo-chip small">TUGURI PROD.</div>
+    <div class="logo-chip small">ZAFIROS</div>
+    <div class="logo-chip small">LS AGENCY</div>
+    <div class="logo-chip small">BACHAPICS</div>
+    <div class="logo-chip small">HUNGAROTON</div>
+    <div class="logo-chip small">MAP</div>
+    <div class="logo-chip small">BMC</div>
+    <div class="logo-chip small">ZÖLDEBB SZÍNEK</div>
+    <div class="logo-chip small">MÚZEUM</div>
+    <div class="logo-chip small">KECSKEMÉTI LOVARDA</div>
+    <div class="logo-chip small">PALOTÁS</div>
+  </div>
+</section>
+
+<!-- =========== FOOTER =========== -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <img class="footer-logo" src="assets/logo19_hu.svg" alt="Logo" />
+      <p class="address">Bohém Jazzfőváros Nonprofit Kft.<br/>6000 Kecskemét, Kéttemplom köz 2.<br/><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="09616c656566496b66616c64636873736f667f687b667a27617c">[email&#160;protected]</a></p>
+      <div class="socials">
+        <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M13 22v-8h3l1-4h-4V7.5c0-1.2.3-2 2-2h2V2h-3c-3 0-5 1.8-5 5v3H6v4h3v8h4z"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#fff"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M22 12s0-3.3-.4-4.9c-.2-.9-.9-1.6-1.8-1.8C18.3 5 12 5 12 5s-6.3 0-7.8.3c-.9.2-1.6.9-1.8 1.8C2 8.7 2 12 2 12s0 3.3.4 4.9c.2.9.9 1.6 1.8 1.8 1.5.3 7.8.3 7.8.3s6.3 0 7.8-.3c.9-.2 1.6-.9 1.8-1.8.4-1.6.4-4.9.4-4.9zM10 15V9l5 3-5 3z"/></svg></a>
+        <a href="#" aria-label="Spotify"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><circle cx="12" cy="12" r="10"/><path d="M7 10c3-.8 7-.6 10 1" stroke="#1A2733" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M7.5 13c2.5-.6 5.5-.4 8 1" stroke="#1A2733" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M8 16c2-.4 4-.3 6 .7" stroke="#1A2733" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg></a>
+      </div>
+    </div>
+    <div>
+      <h4>NAVIGÁCIÓ</h4>
+      <ul>
+        <li><a href="#">Főoldal</a></li>
+        <li><a href="#">Programok</a></li>
+        <li><a href="#fellepok">Fellépők</a></li>
+        <li><a href="#">Helyszín</a></li>
+        <li><a href="#">Jegyvásárlás</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>INFO</h4>
+      <ul>
+        <li><a href="#">GYIK</a></li>
+        <li><a href="#">Házirend</a></li>
+        <li><a href="#">Akadálymentesítés</a></li>
+        <li><a href="#">Önkéntesnek</a></li>
+        <li><a href="#">Sajtó</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>KAPCSOLAT</h4>
+      <ul>
+        <li>+36 76 000 000</li>
+        <li><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d5bdb0b9b9ba95b7babdb0b8bfb4afafb3baa3b4a7baa6fbbda0">[email&#160;protected]</a></li>
+        <li>Kecskemét, Dopin Beach</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Bohém Jazzfőváros · Minden jog fenntartva.</span>
+    <span><a href="#">Adatvédelem</a> · <a href="#">ÁSZF</a> · <a href="#">Süti beállítások</a></span>
+  </div>
+</footer>
+
+</div>
+
+</div>
+
+<!-- =========== MODAL =========== -->
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <button class="close" onclick="closeTicketModal()">✕</button>
+    <h3>JEGYVÁSÁRLÁS</h3>
+    <p>Válaszd ki a jegytípust — a fizetés biztonságos felületen történik.</p>
+    <div class="ticket-option" onclick="buyToast('Napijegy')">
+      <div><div class="to-name">NAPIJEGY</div><div class="to-desc">1 nap · színpadok + beach</div></div>
+      <div class="to-price">8 900 Ft</div>
+    </div>
+    <div class="ticket-option" onclick="buyToast('4 napos bérlet')">
+      <div><div class="to-name">4 NAPOS BÉRLET</div><div class="to-desc">Teljes fesztivál · minden program</div></div>
+      <div class="to-price">24 900 Ft</div>
+    </div>
+    <div class="ticket-option" onclick="buyToast('VIP jegy')">
+      <div><div class="to-name">VIP JEGY</div><div class="to-desc">Kiemelt hely · catering · meet&amp;greet</div></div>
+      <div class="to-price">54 900 Ft</div>
+    </div>
+    <div class="ticket-option" onclick="buyToast('Diákjegy')">
+      <div><div class="to-name">DIÁKJEGY</div><div class="to-desc">Érv. diákigazolvánnyal</div></div>
+      <div class="to-price">4 900 Ft</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Jegy a kosárba kerül...</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // ===== Artist data =====
+  const ARTISTS = [
+    { name: "Dresch Mihály Quartett", genre: "Modern Jazz", day: "CSÜT", key:"cs", color:"#6BA4BF" },
+    { name: "Harcsa Veronika", genre: "Vocal Jazz", day: "CSÜT", key:"cs", color:"#C7A27B" },
+    { name: "Binder Quartet", genre: "Fusion", day: "CSÜT", key:"cs", color:"#7A9E7E" },
+    { name: "Snétberger Ferenc", genre: "Acoustic Jazz", day: "CSÜT", key:"cs", color:"#B06A6A" },
+    { name: "Balázs Elemér Group", genre: "Contemporary", day: "PÉN", key:"pe", color:"#8E7AAD" },
+    { name: "Lajkó Félix Trio", genre: "World Jazz", day: "PÉN", key:"pe", color:"#6B8FBF" },
+    { name: "Kathy Horváth Lajos", genre: "Gypsy Jazz", day: "PÉN", key:"pe", color:"#C29144" },
+    { name: "Micheller Myrtill", genre: "Vocal Jazz", day: "PÉN", key:"pe", color:"#9E6B6B" },
+    { name: "Tony Lakatos Quintet", genre: "Hard Bop", day: "SZO", key:"sz", color:"#4E8E9E" },
+    { name: "Djabe", genre: "Ethno Jazz", day: "SZO", key:"sz", color:"#A98B4C" },
+    { name: "Fekete-Kovács Kornél", genre: "Modern Jazz", day: "SZO", key:"sz", color:"#6E8256" },
+    { name: "Gadó Gábor Quartet", genre: "Avant-garde", day: "SZO", key:"sz", color:"#8B5A7A" },
+    { name: "Berki Tamás Quartet", genre: "Smooth Jazz", day: "VAS", key:"va", color:"#5F8DA0" },
+    { name: "Pege Aladár Tribute", genre: "Classic Jazz", day: "VAS", key:"va", color:"#8A6F50" },
+    { name: "Syrius Legacy Band", genre: "Prog Jazz", day: "VAS", key:"va", color:"#7A6AA8" },
+  ];
+
+  function artistSVG(color){
+    return `<svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="g${color.replace('#','')}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${color}"/><stop offset="100%" stop-color="#2A4A5A"/>
+        </linearGradient>
+        <radialGradient id="sp${color.replace('#','')}" cx="35%" cy="30%">
+          <stop offset="0%" stop-color="rgba(255,230,160,0.6)"/><stop offset="100%" stop-color="rgba(255,230,160,0)"/>
+        </radialGradient>
+      </defs>
+      <rect width="200" height="200" fill="url(#g${color.replace('#','')})"/>
+      <rect width="200" height="200" fill="url(#sp${color.replace('#','')})"/>
+      <!-- silhouette head + shoulders -->
+      <g fill="rgba(0,0,0,0.45)">
+        <ellipse cx="100" cy="90" rx="32" ry="38"/>
+        <path d="M50 200 L50 170 Q50 130 100 130 Q150 130 150 170 L150 200 Z"/>
+        <!-- hat -->
+        <path d="M65 70 L135 70 L125 50 L75 50 Z" fill="rgba(0,0,0,0.7)"/>
+        <rect x="58" y="68" width="84" height="8" rx="3" fill="rgba(0,0,0,0.7)"/>
+      </g>
+      <!-- subtle saxophone hint -->
+      <g fill="rgba(255,200,60,0.35)">
+        <ellipse cx="155" cy="165" rx="16" ry="20"/>
+        <rect x="140" y="120" width="6" height="50" rx="3" transform="rotate(12 143 145)"/>
+      </g>
+    </svg>`;
+  }
+
+  function renderArtists(filter){
+    const grid = document.getElementById('artistsGrid');
+    const items = ARTISTS.filter(a => filter==='all' || a.key===filter);
+    grid.innerHTML = items.map(a => `
+      <div class="artist-card" data-day="${a.key}">
+        <div class="artist-photo">${artistSVG(a.color)}</div>
+        <div class="meta">
+          <div class="name">${a.name.toUpperCase()}</div>
+          <div class="genre">${a.genre}</div>
+          <div class="day">${a.day}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+  renderArtists('all');
+
+  document.getElementById('filters').addEventListener('click', e => {
+    const b = e.target.closest('.filter-chip');
+    if (!b) return;
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    b.classList.add('active');
+    renderArtists(b.dataset.filter);
+  });
+
+  // ===== Bubbles =====
+  (function makeBubbles(){
+    const wrap = document.getElementById('bubbles');
+    const N = 16;
+    for (let i=0; i<N; i++){
+      const b = document.createElement('div');
+      b.className = 'bubble';
+      const size = 8 + Math.random()*28;
+      b.style.width = b.style.height = size+'px';
+      b.style.left = (Math.random()*100)+'%';
+      b.style.animationDuration = (10 + Math.random()*16)+'s';
+      b.style.animationDelay = (Math.random()*-20)+'s';
+      b.style.opacity = 0.5 + Math.random()*0.4;
+      wrap.appendChild(b);
+    }
+  })();
+
+  // ===== Modal =====
+  function openTicketModal(){ document.getElementById('modal').classList.add('open'); }
+  function closeTicketModal(){ document.getElementById('modal').classList.remove('open'); }
+  document.getElementById('modal').addEventListener('click', e => {
+    if (e.target.id === 'modal') closeTicketModal();
+  });
+
+  function buyToast(type){
+    closeTicketModal();
+    const t = document.getElementById('toast');
+    t.textContent = `✓ ${type} a kosárba került`;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2400);
+  }
+
+  // ===== Navbar scroll shadow =====
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+  });
+  // Header design váltás: setHeaderStyle('simple') | setHeaderStyle('design')
+  function setHeaderStyle(style){
+    document.body.setAttribute('data-header-style', style === 'design' ? 'design' : 'simple');
+  }
+
+  // ===== Video play =====
+  function playVideo(el){
+    el.querySelector('.play-btn').style.transform = 'scale(0.9)';
+    const t = document.getElementById('toast');
+    t.textContent = '▶ Aftermovie hamarosan…';
+    t.classList.add('show');
+    setTimeout(() => { t.classList.remove('show'); el.querySelector('.play-btn').style.transform = ''; }, 2000);
+  }
+
+  // ===== Animated stats counter =====
+  const statEls = document.querySelectorAll('.stat .num');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (en.isIntersecting && !en.target.dataset.done){
+        en.target.dataset.done = '1';
+        const target = +en.target.dataset.count;
+        const plus = en.target.querySelector('span');
+        const dur = 1200, t0 = performance.now();
+        const tick = (t) => {
+          const p = Math.min(1, (t - t0)/dur);
+          const v = Math.round(target * (1 - Math.pow(1-p, 3)));
+          en.target.firstChild.textContent = v;
+          if (plus && p===1) en.target.appendChild(plus);
+          if (p<1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      }
+    });
+  }, { threshold: 0.4 });
+  statEls.forEach(e => obs.observe(e));
+
+  // ESC closes modal
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTicketModal(); });
+</script>
+</body>
+</html>

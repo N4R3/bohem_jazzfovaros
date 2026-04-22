@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { getContent } from "@/lib/locale";
 import { canonicalUrl } from "@/lib/seo";
-import Container from "@/components/ui/Container";
-import SectionHeading from "@/components/ui/SectionHeading";
+import BeachPageShell from "@/components/layout/BeachPageShell";
 
-export function generateMetadata(): Metadata {
-  const c = getContent();
+export async function generateMetadata(): Promise<Metadata> {
+  const c = await getContent();
   return {
     title: c.program.title,
     description: c.program.subtitle,
@@ -18,70 +17,120 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function ProgramPage() {
-  const c = getContent();
+const dayAccents = [
+  { bg: "#e84a5f", text: "#fdf6e3", label: "#fde0d0" },
+  { bg: "#ef7a1f", text: "#fdf6e3", label: "#fde2c8" },
+  { bg: "#f2c94c", text: "#0e4844", label: "#4a3a20" },
+  { bg: "#1f7e73", text: "#fdf6e3", label: "#a0d8d0" },
+];
+
+export default async function ProgramPage() {
+  const c = await getContent();
   const { program } = c;
 
-  const stageColors: Record<string, string> = {
-    main: "bg-[var(--color-gold-100)] text-[var(--color-gold-700)] border-[var(--color-gold-200)]",
-    club: "bg-[var(--color-navy-900)]/5 text-[var(--color-navy-800)] border-[var(--color-navy-900)]/10",
-  };
-
   return (
-    <div className="d3-page-wrapper min-h-screen bg-[var(--color-cream-50)] py-20">
-      <Container>
-        <SectionHeading title={program.title} subtitle={program.subtitle} />
-
-        <div className="d3-program-grid grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-          {program.days.map((day) => (
-            <div
+    <BeachPageShell
+      eyebrow={`${c.meta.festivalDates} · ${c.meta.city}`}
+      title={program.title}
+      subtitle={program.subtitle}
+    >
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        {program.days.map((day, idx) => {
+          const accent = dayAccents[idx % dayAccents.length];
+          return (
+            <article
               key={day.date}
-              className="d3-day-card overflow-hidden rounded-xl border border-[var(--color-cream-200)] bg-white shadow-sm"
+              className="flex flex-col overflow-hidden rounded-2xl shadow-xl transition-transform hover:-translate-y-1"
+              style={{
+                background: "var(--color-cream-50)",
+                boxShadow: "0 12px 30px rgba(0,0,0,0.3)",
+                animation: "card-fade-in 0.6s ease-out backwards",
+                animationDelay: `${idx * 80}ms`,
+              }}
             >
-              {/* Card header — color set by CSS nth-child for theme 3 */}
-              <div className="d3-day-header bg-[var(--color-navy-900)] px-5 py-4">
-                <h3 className="font-display text-lg font-bold text-white">
+              {/* nap fejléce — színkódolva */}
+              <div
+                className="px-5 py-4"
+                style={{ background: accent.bg, color: accent.text }}
+              >
+                <h3 className="font-display text-xl font-black uppercase leading-tight">
                   {day.label}
                 </h3>
-                <p className="d3-day-date mt-0.5 text-xs font-medium text-[var(--color-gold-400)]">
+                <p
+                  className="mt-0.5 text-[11px] font-bold uppercase tracking-widest"
+                  style={{ color: accent.label }}
+                >
                   {new Date(day.date).toLocaleDateString("hu-HU", {
+                    year: "numeric",
                     month: "long",
                     day: "numeric",
                   })}
                 </p>
               </div>
 
-              <div className="flex flex-col divide-y divide-[var(--color-cream-200)]">
+              <ul className="flex flex-col divide-y" style={{ borderColor: "rgba(10,58,54,0.1)" }}>
                 {day.slots.map((slot, i) => (
-                  <div
+                  <li
                     key={i}
                     className="flex items-start gap-3 px-4 py-3.5"
+                    style={{ borderTopColor: "rgba(10,58,54,0.1)" }}
                   >
-                    <span className="mt-0.5 w-10 shrink-0 font-mono text-sm font-bold text-[var(--color-gold-600)]">
+                    <span
+                      className="mt-0.5 w-12 shrink-0 font-mono text-sm font-black"
+                      style={{ color: "var(--color-accent-600)" }}
+                    >
                       {slot.time}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <div className="text-sm font-semibold leading-snug text-[var(--color-navy-900)]">
+                      <div
+                        className="text-sm font-bold leading-snug"
+                        style={{ color: "var(--color-teal-900)" }}
+                      >
                         {slot.artist}
                       </div>
-                      <div className="mt-1 flex items-center gap-2">
+                      <div className="mt-1 flex flex-wrap items-center gap-2">
                         <span
-                          className={`inline-block rounded-full border px-2 py-0.5 text-[10px] font-semibold ${stageColors[slot.stage]}`}
+                          className="rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider"
+                          style={{
+                            background:
+                              slot.stage === "main"
+                                ? "rgba(239,122,31,0.18)"
+                                : "rgba(31,126,115,0.18)",
+                            color:
+                              slot.stage === "main"
+                                ? "var(--color-accent-700)"
+                                : "var(--color-teal-800)",
+                          }}
                         >
-                          {slot.stage === "main" ? program.stageMain : program.stageClub}
+                          {slot.stage === "main"
+                            ? program.stageMain
+                            : program.stageClub}
                         </span>
-                        <span className="text-xs text-[var(--color-navy-700)]/35">
-                          {slot.duration}&apos;
-                        </span>
+                        {slot.duration > 0 && (
+                          <span
+                            className="text-[10px] font-semibold"
+                            style={{ color: "rgba(10,58,54,0.45)" }}
+                          >
+                            {slot.duration}&apos;
+                          </span>
+                        )}
                       </div>
+                      {slot.note && (
+                        <p
+                          className="mt-1 text-[11px] italic"
+                          style={{ color: "rgba(10,58,54,0.55)" }}
+                        >
+                          {slot.note}
+                        </p>
+                      )}
                     </div>
-                  </div>
+                  </li>
                 ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </Container>
-    </div>
+              </ul>
+            </article>
+          );
+        })}
+      </div>
+    </BeachPageShell>
   );
 }
