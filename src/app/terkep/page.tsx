@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { getContent } from "@/lib/locale";
 import { canonicalUrl } from "@/lib/seo";
 import { BASE } from "@/content/base";
@@ -114,6 +115,56 @@ export default async function MapPage() {
         >
           GPS: {map.gps}
         </span>
+      </div>
+
+      {/* Interaktív fesztiváltérkép kép */}
+      <div
+        className="mx-auto mb-10 max-w-3xl overflow-hidden rounded-3xl border-4 shadow-2xl"
+        style={{
+          borderColor: "rgba(246,217,139,0.85)",
+          boxShadow: "0 18px 50px rgba(0,0,0,0.4)",
+          background: "rgba(10,58,54,0.65)",
+        }}
+      >
+        <div className="relative">
+          <Image
+            src={map.mapImage}
+            alt="JAZZFŐVÁROS fesztiváltérkép"
+            width={1400}
+            height={900}
+            className="h-auto w-full"
+            sizes="100vw"
+          />
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-4 sm:p-5">
+            <p className="text-xs font-bold uppercase tracking-wider text-white/90">
+              Interaktív térkép tippek
+            </p>
+            <p className="mt-1 text-xs text-white/80 sm:text-sm">
+              Nagyíts rá a képre mobilon két ujjal, vagy nyisd meg teljes méretben az alábbi gombbal.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-2 border-t border-white/20 px-4 py-4 sm:px-5">
+          <a
+            href={map.mapImage}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-extrabold uppercase tracking-wider"
+            style={{ background: "var(--color-accent-500)", color: "#fff" }}
+          >
+            Térkép megnyitása nagyban
+          </a>
+          <a
+            href={`https://www.google.com/maps/dir/?api=1&destination=${gps}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-extrabold uppercase tracking-wider"
+            style={{ borderColor: "rgba(255,255,255,0.5)", color: "#fff" }}
+          >
+            Útvonal a helyszínhez
+          </a>
+        </div>
       </div>
 
       <h2

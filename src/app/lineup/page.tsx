@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { getContent } from "@/lib/locale";
 import { canonicalUrl } from "@/lib/seo";
 import { BASE } from "@/content/base";
 import BeachPageShell from "@/components/layout/BeachPageShell";
-import type { Artist } from "@/lib/types";
+import LineupGrid, { type LineupArtist } from "@/components/lineup/LineupGrid";
 
 export async function generateMetadata(): Promise<Metadata> {
   const c = await getContent();
@@ -31,198 +30,184 @@ export default async function LineupPage() {
     sunday: lineup.filterSunday,
   };
 
+  const baseArtistByName = new Map(BASE.artists.map((artist) => [artist.name, artist]));
+
+  const performerDetailsHu: Record<
+    string,
+    {
+      details: string;
+      lineup?: string[];
+      website?: string;
+      youtube?: string;
+    }
+  > = {
+    "Bérczesi Jazz Band":
+      {
+        details:
+          "Bérczesi Róbert (Hiperkarma) különleges vendégprojektje. Klasszikus jazzt és bohém lendületet ötvöző formáció.",
+        lineup: [
+          "Bérczesi Róbert (Hiperkarma) (voc, g)",
+          "Szalóky Béla (tp)",
+          "Papp Mátyás (tb)",
+          "Berkó Domonkos (cl, sax)",
+          "Juhász Attila (p)",
+          "Csikós Miklós (sb)",
+          "Kovacsevics Gábor (dr, wb)",
+        ],
+      },
+    "Bohém Ragtime Jazz Band": {
+      details:
+        "Az eMeRTon-díjas kecskeméti csapat 1985-ben alakult, repertoárjuk a ragtime-tól a New Orleans-i jazzen és dixielanden át a swingig terjed. A Nemzetközi Bohém Ragtime & Jazz Fesztivál és a JAZZFŐVÁROS házigazdái.",
+      lineup: [
+        "Bolba Éva (voc)",
+        "Lebanov József (tp)",
+        "Bera Zsolt (tb)",
+        "Berkó Domonkos (cl, sax)",
+        "Ittzés Tamás (p, vl, voc, ld)",
+        "Hegedüs Csaba (g, bj)",
+        "Korb Attila (bs)",
+        "Gulyás-Szabó Krisztián (dr)",
+      ],
+    },
+    "Bolba Éva": {
+      details:
+        "Nemzetközileg is aktív jazzénekes, Európa mellett az USA-ban és Ázsiában is fellépett. A JAZZterlánc megálmodója, a JAZZFŐVÁROS jazztáborának tanára.",
+      lineup: ["Bolba Éva (voc)"],
+    },
+    "Clotile Yana": {
+      details: "Amerikai jazzénekesnő, a fesztivál nemzetközi vendégelőadója.",
+      lineup: ["Clotile Yana (voc)"],
+    },
+    "Cseh Balázs": {
+      details:
+        "A régi stílusú jazzdobolás specialistája, tapasztalt stúdiózenész és több formáció tagja. Fellépett több európai fesztiválon, Kenyában és Indiában is.",
+      lineup: ["Cseh Balázs (dr)"],
+    },
+    "Dániel Balázs": {
+      details:
+        "Mr. Firehand, a boogie-woogie magyar nagykövete és az egyik legvirtuózabb hazai zongorista. Európa-szerte koncertezik, az USA-ban is turnézott.",
+      lineup: ["Dániel Balázs (p)"],
+    },
+    "Dennert Árpád": {
+      details:
+        "Az Árpi Show, a Benkó Dixieland és számos más hazai jazz-zenekar meghatározó hangszerese.",
+      lineup: ["Dennert Árpád (cl, sax)"],
+    },
+    'Emanuele Urso "King of Swing"': {
+      details: "Az olasz swingélet kiemelt alakja, a fesztivál nemzetközi vendégművésze.",
+      lineup: ["Emanuele Urso (dr, cl)"],
+      website: "https://emanueleurso.it",
+      youtube: "https://www.youtube.com/watch?v=q1Gh8TQ9e3I",
+    },
+    "Farkas Norbert": {
+      details: "Hazai nagybőgős előadó, klasszikus jazz formációk visszatérő közreműködője.",
+      lineup: ["Farkas Norbert (sb)"],
+    },
+    "Festival All Stars": {
+      details:
+        "Nemzetközi all-stars projekt magyar és külföldi vendégművészekkel, külön pénteki és szombati felállással.",
+    },
+    "Gyárfás István": {
+      details:
+        "A mainstream jazz egyik legismertebb hazai gitárosa, több évtizedes pályafutással és nemzetközi együttműködésekkel.",
+      lineup: ["Gyárfás István (g)"],
+    },
+    "Hungarian Jazz Embassy": {
+      details: "Hazai jazz-elit formáció, kifejezetten a fesztiválra összeállított felállással.",
+      lineup: [
+        "Szalóky Balázs (tp)",
+        "Zana Zoltán (ts)",
+        "Szalóky Béla (tb)",
+        "Tálas Áron (p)",
+        "Lutz János (sb)",
+        "Richter Ambrus (dr)",
+      ],
+    },
+    "Hunter Burgamy": {
+      details: "Amerikai gitáros/bendzsós és énekes, tradicionális jazz és swing vonalon.",
+      lineup: ["Hunter Burgamy (g, bj, voc)"],
+      website: "https://www.hunterburgamy.com/",
+    },
+    "Jazz Camp All Stars": {
+      details:
+        "A JAZZFŐVÁROS jazztábor tanárai és zenésztársaik spontán örömzenélésre összeálló nyitónapi csapata.",
+      lineup: [
+        "Bolba Éva (voc)",
+        "Lukács Eszter (voc)",
+        "Szalóky Béla (tp, tb)",
+        "Korb Attila (tp, tb, p)",
+        "Nagy Iván (p)",
+        "Gyárfás István (g)",
+        "Rieger Attila (g)",
+        "Farkas Péter (sb)",
+        "Cseh Balázs (dr)",
+      ],
+    },
+    "Ken Aoki": {
+      details: "Világszínvonalú bendzsóművész, a fesztivál egyik közönségkedvenc nemzetközi fellépője.",
+      lineup: ["Ken Aoki (bj)"],
+      website: "https://www.facebook.com/vegavox",
+      youtube: "https://www.youtube.com/watch?v=eXFc-JfW2r8",
+    },
+    "Korb Attila": {
+      details:
+        "Sokoldalú hangszeres (harsona, trombita, szaxofon, zongora, ének), korábban a Bohém Ragtime Jazz Band tagja, folyamatosan turnézó szabadúszó jazzmuzsikus.",
+      lineup: ["Korb Attila (tb, tp, bass-sax, p, voc)"],
+    },
+    "Nagy Iván": {
+      details:
+        "A stride-zongorázás elkötelezett képviselője, számos hazai swing- és jazzformáció közreműködője.",
+      lineup: ["Nagy Iván (p)"],
+    },
+    "Sir Oliver Mally & Peter Schneider Duo": {
+      details: "Osztrák-német blues duó, akusztikus gitárra és énekre épülő műsorral.",
+      lineup: ["Sir Oliver Mally (g, voc)", "Peter Schneider (g)"],
+    },
+    "Swingtáncórák kezdőknek": {
+      details:
+        "Kezdő swingtáncórák több időpontban a fesztivál alatt, magyar és nemzetközi közönségnek.",
+    },
+    "Szalóky Béla": {
+      details:
+        "Multiinstrumentalista, a magyar oldtimer-jazz meghatározó alakja, rendszeres nemzetközi fesztiválvendég.",
+      lineup: ["Szalóky Béla (tp, tb)"],
+    },
+    "Tom White & the Mad Circus": {
+      details: "A rockabilly magyar királyai, erős színpadi energiával és vintage hangzással.",
+      lineup: [
+        "Tom White (voc, harp)",
+        "Schiffler Patrik (Ricky) (voc, g)",
+        "Buzsik Tamás (dr)",
+        "Kéri Kolos (sb)",
+      ],
+    },
+  };
+
+  const artists: LineupArtist[] = lineup.artists.map((artist) => {
+    const baseArtist = baseArtistByName.get(artist.name);
+    const details = performerDetailsHu[artist.name];
+    return {
+      ...artist,
+      image: baseArtist?.image ?? artist.image,
+      details: details?.details || artist.bio,
+      lineup: details?.lineup,
+      website: details?.website,
+      youtube: details?.youtube,
+    };
+  });
+
   return (
     <BeachPageShell
       eyebrow={`${c.meta.festivalDates} · ${c.meta.city}`}
       title={lineup.title}
       subtitle={lineup.subtitle}
     >
-      <div className="grid gap-5 sm:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-4">
-        {lineup.artists.map((artist, i) => (
-          <ArtistCard
-            key={artist.name}
-            artist={artist}
-            index={i}
-            dayLabel={dayLabels[artist.day] ?? ""}
-            stageLabel={
-              artist.stage === "main" ? lineup.stageMain : lineup.stageClub
-            }
-            ticketUrl={BASE.ticketUrl}
-            ticketLabel="Jegyvásárlás"
-          />
-        ))}
-      </div>
+      <LineupGrid
+        artists={artists}
+        stageLabels={{ main: lineup.stageMain, club: lineup.stageClub }}
+        ticketUrl={BASE.ticketUrl}
+        ticketLabel="Jegyvásárlás"
+      />
     </BeachPageShell>
-  );
-}
-
-function ArtistCard({
-  artist,
-  index,
-  dayLabel,
-  stageLabel,
-  ticketUrl,
-  ticketLabel,
-}: {
-  artist: Artist;
-  index: number;
-  dayLabel: string;
-  stageLabel: string;
-  ticketUrl: string;
-  ticketLabel: string;
-}) {
-  return (
-    <article
-      className="group flex flex-col overflow-hidden rounded-2xl transition-all hover:-translate-y-1 hover:shadow-2xl"
-      style={{
-        background: "var(--color-cream-50)",
-        boxShadow: "0 10px 28px rgba(0,0,0,0.28)",
-        animation: "card-fade-in 0.6s ease-out backwards",
-        animationDelay: `${Math.min(index * 60, 600)}ms`,
-      }}
-    >
-      <div
-        className="relative aspect-[4/3] overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(135deg, #87c9e6 0%, #5fb6e0 40%, #3e89a3 100%)",
-        }}
-      >
-        {artist.image ? (
-          <Image
-            src={artist.image}
-            alt={artist.name}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-          />
-        ) : (
-          <ArtistPlaceholder />
-        )}
-
-        <span
-          className="absolute left-3 top-3 rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider shadow-lg"
-          style={{
-            background: "var(--color-accent-500)",
-            color: "#fdf6e3",
-          }}
-        >
-          {artist.genre}
-        </span>
-
-        <span
-          className="absolute right-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider shadow-lg"
-          style={{
-            background: "rgba(10,42,37,0.88)",
-            color: "#f6d98b",
-          }}
-        >
-          {dayLabel} · {artist.time}
-        </span>
-      </div>
-
-      <div className="flex flex-1 flex-col p-5">
-        <h3
-          className="font-display text-xl font-black leading-tight"
-          style={{ color: "var(--color-teal-900)" }}
-        >
-          {artist.name}
-        </h3>
-        <p
-          className="mt-0.5 text-xs font-semibold uppercase tracking-wider"
-          style={{ color: "var(--color-accent-600)" }}
-        >
-          {artist.origin}
-        </p>
-
-        {artist.bio && (
-          <p
-            className="mt-3 line-clamp-3 text-sm leading-relaxed"
-            style={{ color: "rgba(10,58,54,0.72)" }}
-          >
-            {artist.bio}
-          </p>
-        )}
-
-        <div
-          className="mt-4 flex items-center justify-between gap-3 border-t pt-3"
-          style={{ borderColor: "rgba(10,58,54,0.12)" }}
-        >
-          <span
-            className="text-[10px] font-extrabold uppercase tracking-wider"
-            style={{ color: "var(--color-teal-800)" }}
-          >
-            {stageLabel}
-          </span>
-          <a
-            href={ticketUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-wider transition-all hover:scale-[1.05]"
-            style={{
-              background: "var(--color-accent-500)",
-              color: "#fdf6e3",
-              boxShadow: "0 4px 12px rgba(212,98,26,0.35)",
-            }}
-          >
-            {ticketLabel}
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8">
-              <path d="M5 12h14M13 5l7 7-7 7" />
-            </svg>
-          </a>
-        </div>
-      </div>
-    </article>
-  );
-}
-
-/** Illusztrált placeholder — mikrofon + jegy + kotta + hullámok */
-function ArtistPlaceholder() {
-  return (
-    <div className="absolute inset-0 flex items-center justify-center">
-      <svg viewBox="0 0 200 150" className="h-full w-full" aria-hidden="true">
-        {/* Hullámok alul */}
-        <path
-          d="M0 120 Q25 110 50 120 T100 120 T150 120 T200 120 L200 150 L0 150 Z"
-          fill="rgba(255,255,255,0.2)"
-        />
-        <path
-          d="M0 130 Q25 122 50 130 T100 130 T150 130 T200 130 L200 150 L0 150 Z"
-          fill="rgba(255,255,255,0.3)"
-        />
-        {/* Mikrofon közepen */}
-        <g transform="translate(85 40)">
-          <rect
-            x="8"
-            y="0"
-            width="14"
-            height="26"
-            rx="7"
-            fill="#fdf6e3"
-            stroke="#0a3a36"
-            strokeWidth="1.5"
-          />
-          <path
-            d="M4 22 A11 11 0 0 0 26 22"
-            fill="none"
-            stroke="#fdf6e3"
-            strokeWidth="2.5"
-          />
-          <line x1="15" y1="33" x2="15" y2="46" stroke="#fdf6e3" strokeWidth="2.5" />
-          <line x1="9" y1="46" x2="21" y2="46" stroke="#fdf6e3" strokeWidth="2.5" strokeLinecap="round" />
-        </g>
-        {/* Jegy bal fent */}
-        <g transform="translate(30 25)" opacity="0.75">
-          <rect x="0" y="0" width="20" height="14" rx="2" fill="#f9a03f" />
-          <line x1="0" y1="7" x2="20" y2="7" stroke="#fff" strokeDasharray="1 1" />
-        </g>
-        {/* Hangjegy jobb fent */}
-        <g transform="translate(145 30)" opacity="0.75">
-          <circle cx="4" cy="18" r="4" fill="#fdf6e3" />
-          <line x1="8" y1="18" x2="8" y2="2" stroke="#fdf6e3" strokeWidth="2" />
-          <path d="M8 2 Q16 4 16 10" fill="none" stroke="#fdf6e3" strokeWidth="2" />
-        </g>
-      </svg>
-    </div>
   );
 }

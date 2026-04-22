@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { getContent } from "@/lib/locale";
 import { canonicalUrl } from "@/lib/seo";
 import BeachPageShell from "@/components/layout/BeachPageShell";
@@ -28,16 +29,33 @@ export default async function RunningPage() {
       subtitle={running.subtitle}
     >
       <div className="mx-auto max-w-4xl">
-        {/* Illusztrált futó hero */}
+        {/* Futás hero kép */}
         <div
           className="mb-8 overflow-hidden rounded-3xl shadow-xl"
           style={{
-            background:
-              "linear-gradient(180deg, #5fb6e0 0%, #87c9e6 50%, #3e89a3 100%)",
-            minHeight: 200,
+            minHeight: 220,
           }}
         >
-          <RunnerIllustration />
+          <div className="relative aspect-[16/7] min-h-[220px] w-full">
+            <Image
+              src={running.image}
+              alt={running.title}
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 900px"
+              className="object-cover"
+            />
+          </div>
+        </div>
+
+        <div className="mb-8 flex justify-center">
+          <Image
+            src="/images/branding/43e3a57583f727d87fb1271bb22963ef.jpg"
+            alt="Széchenyi Terv embléma"
+            width={360}
+            height={86}
+            className="h-auto w-full max-w-[360px] rounded-xl border border-white/30 bg-white/95 p-2"
+          />
         </div>
 
         {/* INGYENES szalag */}
@@ -250,66 +268,5 @@ export default async function RunningPage() {
         </div>
       </div>
     </BeachPageShell>
-  );
-}
-
-function RunnerIllustration() {
-  return (
-    <svg
-      viewBox="0 0 600 200"
-      preserveAspectRatio="xMidYMid slice"
-      className="h-full w-full"
-      aria-hidden="true"
-    >
-      {/* Nap */}
-      <circle cx="510" cy="45" r="22" fill="#f2c94c" />
-      <circle cx="510" cy="45" r="34" fill="#f2c94c" opacity="0.3" />
-
-      {/* Felhők */}
-      <g opacity="0.9">
-        <ellipse cx="100" cy="35" rx="28" ry="12" fill="#ffffff" />
-        <ellipse cx="128" cy="30" rx="24" ry="14" fill="#ffffff" />
-      </g>
-      <g opacity="0.85">
-        <ellipse cx="320" cy="55" rx="26" ry="11" fill="#ffffff" />
-        <ellipse cx="345" cy="48" rx="22" ry="13" fill="#ffffff" />
-      </g>
-
-      {/* Szárazföld / vonal */}
-      <path d="M0 155 L600 155" stroke="#fdf6e3" strokeWidth="2" strokeDasharray="8 8" opacity="0.6" />
-
-      {/* Futó alakja */}
-      <g transform="translate(260 110)">
-        {/* Fej */}
-        <circle cx="0" cy="0" r="10" fill="#fdd9a8" />
-        <path d="M-8 -5 Q0 -14 8 -5" fill="#4a3020" />
-        {/* Test */}
-        <path d="M0 10 L-4 30" stroke="#ef7a1f" strokeWidth="7" strokeLinecap="round" />
-        {/* Karok */}
-        <path d="M-4 18 L-18 8" stroke="#fdd9a8" strokeWidth="5" strokeLinecap="round" />
-        <path d="M-4 18 L10 22" stroke="#fdd9a8" strokeWidth="5" strokeLinecap="round" />
-        {/* Lábak (futó póz) */}
-        <path d="M-4 30 L-12 48" stroke="#0e4844" strokeWidth="6" strokeLinecap="round" />
-        <path d="M-4 30 L10 42 L14 50" stroke="#0e4844" strokeWidth="6" strokeLinecap="round" fill="none" />
-        {/* Sportcipő */}
-        <ellipse cx="-12" cy="48" rx="7" ry="3" fill="#fdf6e3" />
-        <ellipse cx="14" cy="50" rx="7" ry="3" fill="#fdf6e3" />
-      </g>
-
-      {/* Hangjegyek lebegve */}
-      <g transform="translate(380 90)" opacity="0.85">
-        <circle cx="0" cy="10" r="4" fill="#fdf6e3" />
-        <line x1="4" y1="10" x2="4" y2="-4" stroke="#fdf6e3" strokeWidth="2" />
-      </g>
-      <g transform="translate(420 60)" opacity="0.8">
-        <circle cx="0" cy="10" r="4" fill="#fdf6e3" />
-        <line x1="4" y1="10" x2="4" y2="-6" stroke="#fdf6e3" strokeWidth="2" />
-        <path d="M4 -6 Q10 -4 10 2" stroke="#fdf6e3" strokeWidth="2" fill="none" />
-      </g>
-
-      {/* Víz hullámok alul */}
-      <path d="M0 175 Q50 170 100 175 T200 175 T300 175 T400 175 T500 175 T600 175 L600 200 L0 200 Z" fill="#3e89a3" />
-      <path d="M0 185 Q50 181 100 185 T200 185 T300 185 T400 185 T500 185 T600 185 L600 200 L0 200 Z" fill="#1d5a74" />
-    </svg>
   );
 }

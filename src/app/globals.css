@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800;900&family=Pacifico&display=swap');
 @import "tailwindcss";
 
 /* ============================================================
@@ -70,10 +69,11 @@
   --color-navy-900: #0a3a36;
   --color-navy-950: #03181a;
 
-  /* -------- Fontok: Bebas Neue (display) + Poppins (body) + Pacifico (script) -------- */
-  --font-display: "Bebas Neue", "Impact", system-ui, sans-serif;
-  --font-sans:    "Poppins", system-ui, sans-serif;
-  --font-script:  "Pacifico", cursive;
+  /* -------- Fontok: next/font/google tölti be, --font-bebas / --font-poppins / --font-pacifico
+     kerül az <html> elemre class-ként; az alábbi @theme változók arra hivatkoznak. -------- */
+  --font-display: var(--font-bebas, "Bebas Neue"), "Impact", system-ui, sans-serif;
+  --font-sans:    var(--font-poppins, "Poppins"), system-ui, sans-serif;
+  --font-script:  var(--font-pacifico, "Pacifico"), cursive;
 
   /* -------- Egyedi animációk (jazzdesign1) -------- */
   --animate-bob:        bob 5.5s ease-in-out infinite;
@@ -85,6 +85,22 @@
   --animate-float-b:    floatB 5s ease-in-out infinite;
   --animate-pulse-ring: pulseRing 2.2s ease-out infinite;
   --animate-rise:       rise linear infinite;
+}
+
+/* ============================================================
+   Hero bemeneteli animáció — staggerelt fade-in+slide-up betöltéskor
+   ============================================================ */
+@keyframes heroEnter {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   Scroll-reveal — fadeInUp (LineupTeaser kártyák, CTA szekció stb.)
+   ============================================================ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ============================================================
@@ -468,8 +484,13 @@ p { text-wrap: pretty; }
   .animate-float-a,
   .animate-float-b,
   .animate-pulse-ring,
-  .animate-rise {
+  .animate-rise,
+  [class*="hero-enter"],
+  [style*="heroEnter"],
+  [style*="fadeInUp"] {
     animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 

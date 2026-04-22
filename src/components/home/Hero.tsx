@@ -71,6 +71,7 @@ export default function Hero({
         {/* Pacifico badge — kisebb telefonon kompakt, asztalon teljes méret */}
         <div
           className="mb-2 inline-flex -rotate-3 items-center gap-1.5 rounded bg-ink-800 px-2.5 py-1.5 shadow-[0_8px_24px_rgba(0,0,0,0.18)] sm:mb-4 sm:gap-2.5 sm:px-4 sm:py-2.5"
+          style={{ animation: "heroEnter 0.7s cubic-bezier(0.22,1,0.36,1) 0.08s both" }}
         >
           <span className="font-display text-[1.35rem] leading-none text-orange-500 sm:text-[2rem]">
             10.
@@ -90,6 +91,7 @@ export default function Hero({
             letterSpacing: "0.01em",
             textShadow:
               "0 4px 0 rgba(0,0,0,0.08), 0 10px 30px rgba(24,103,138,0.25)",
+            animation: "heroEnter 0.75s cubic-bezier(0.22,1,0.36,1) 0.2s both",
           }}
         >
           {titleLine1}
@@ -100,7 +102,10 @@ export default function Hero({
         </h1>
 
         {/* Dátum / helyszín sor — 13px mobilon, 20px asztalon */}
-        <p className="my-2 text-[13px] font-bold tracking-[0.02em] text-ink-800 sm:my-4 sm:text-[16px] md:my-5 md:text-[20px]">
+        <p
+          className="my-2 text-[13px] font-bold tracking-[0.02em] text-ink-800 sm:my-4 sm:text-[16px] md:my-5 md:text-[20px]"
+          style={{ animation: "heroEnter 0.7s cubic-bezier(0.22,1,0.36,1) 0.35s both" }}
+        >
           <strong className="text-orange-500">{dateEmphasis}</strong>
           <span className="px-1.5">·</span>
           <span>{dateSuffix}</span>
@@ -110,16 +115,20 @@ export default function Hero({
         <Link
           href={ctaUrl}
           className="group inline-flex items-center gap-2 rounded-full bg-orange-500 px-5 py-2.5 font-sans text-[13px] font-extrabold uppercase tracking-[0.08em] text-white shadow-[0_6px_0_var(--color-orange-700),0_10px_20px_rgba(255,98,0,0.35)] transition-all duration-200 hover:-translate-y-[3px] hover:shadow-[0_13px_0_var(--color-orange-700),0_22px_34px_rgba(255,98,0,0.45)] active:translate-y-1 active:shadow-[0_3px_0_var(--color-orange-700),0_6px_12px_rgba(255,98,0,0.35)] sm:gap-3 sm:px-8 sm:py-[18px] sm:text-base sm:shadow-[0_10px_0_var(--color-orange-700),0_16px_30px_rgba(255,98,0,0.35)]"
+          style={{ animation: "heroEnter 0.7s cubic-bezier(0.22,1,0.36,1) 0.5s both" }}
         >
           {ctaLabel}
-          <span className="grid h-6 w-6 place-items-center rounded-full bg-white text-xs font-black text-orange-500 sm:h-7 sm:w-7 sm:text-sm">
+          <span className="grid h-6 w-6 place-items-center rounded-full bg-white text-xs font-black text-orange-500 transition-transform duration-200 group-hover:translate-x-1 sm:h-7 sm:w-7 sm:text-sm">
             ➜
           </span>
         </Link>
       </div>
 
       {/* ====== JOBB: kacsa + strandlabda + mentőöv + kagyló ====== */}
-      <div className="order-1 md:order-2">
+      <div
+        className="order-1 md:order-2"
+        style={{ animation: "heroEnter 0.9s cubic-bezier(0.22,1,0.36,1) 0.15s both" }}
+      >
         <HeroBeachProps />
       </div>
     </section>
@@ -166,7 +175,6 @@ function HeroBeachProps() {
         alt="Mentőöv"
         width={200}
         height={200}
-        priority
         className="hero-half-dip animate-float-a absolute left-[8%] top-[58%] z-[2] h-[70px] w-[70px] sm:left-[10%] sm:h-[98px] sm:w-[98px] md:left-[10%] md:top-[56%] md:h-[140px] md:w-[140px]"
       />
 
@@ -177,7 +185,6 @@ function HeroBeachProps() {
         alt="Strandlabda"
         width={180}
         height={180}
-        priority
         className="hero-half-dip animate-float-b absolute left-[10%] top-[75%] z-[2] h-[50px] w-[50px] sm:left-[12%] sm:top-[76%] sm:h-[70px] sm:w-[70px] md:left-[-12%] md:top-[83%] md:h-[105px] md:w-[105px]"
       />
 

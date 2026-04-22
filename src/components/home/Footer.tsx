@@ -4,7 +4,7 @@
  * Alul copyright + jogi szalag.
  *
  * A tartalom a `getContent()`-ből jön, hogy HU/EN továbbra is működjön.
- * A dizájn a `assets/logo19_hu.svg` logót használja.
+ * A dizájn az egyszerűsített logót használja.
  */
 
 import Image from "next/image";
@@ -48,11 +48,11 @@ export default async function Footer() {
         {/* ===== Márka + cím + szocmédia ===== */}
         <div>
           <Image
-            src="/images/design1/logo19_hu.svg"
+            src="/images/branding/logo_simple.png"
             alt={c.meta.siteTitle}
-            width={160}
-            height={110}
-            className="mb-3.5 h-[110px] w-auto"
+            width={150}
+            height={76}
+            className="mb-3.5 h-[76px] w-auto"
           />
           <p className="text-[13px] leading-[1.6] opacity-[0.88]">
             {c.contact.organizer}

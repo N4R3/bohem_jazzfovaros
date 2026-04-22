@@ -11,18 +11,13 @@
  */
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
-
-type DayKey = "all" | "cs" | "pe" | "sz" | "va";
 
 export type LineupArtist = {
   name: string;
   genre: string;
-  /** Nap rövidítés a chip-hez */
-  day: "CSÜT" | "PÉN" | "SZO" | "VAS";
-  /** Szűrő-kulcs */
-  key: Exclude<DayKey, "all">;
   /** Háttérszín a sziluett mögé — a jazzdesign1 minden kártyához eltérő szín */
   color: string;
   /** Opcionális portré URL — ha megadjuk, azt rakjuk be placeholder helyett */
@@ -39,49 +34,28 @@ type LineupTeaserProps = {
 /* A X. Bohém JAZZFŐVÁROS 2026 valós fellépői (jazzfovaros.hu/fellepok).
    A színek egy 8-elemű palettából ciklikusan választódnak, hogy a kártyák
    változatosak maradjanak a vizuális design-ban. */
-const DEFAULT_ARTISTS: LineupArtist[] = [
-  { name: "Jazz Camp All Stars",               genre: "Klasszikus Jazz",             day: "CSÜT", key: "cs", color: "#6BA4BF" },
-  { name: "Tom White & the Mad Circus",        genre: "Vintage Jazz",                day: "CSÜT", key: "cs", color: "#C7A27B" },
-  { name: "Bérczesi Jazz Band",                genre: "Klasszikus Jazz",             day: "PÉN",  key: "pe", color: "#7A9E7E" },
-  { name: "Bolba Éva",                         genre: "Jazz ének",                   day: "PÉN",  key: "pe", color: "#B06A6A" },
-  { name: "Pribojszki Mátyás",                 genre: "Blues / Szájharmónika",       day: "PÉN",  key: "pe", color: "#8E7AAD" },
-  { name: "Ken Aoki",                          genre: "Banjo",                       day: "PÉN",  key: "pe", color: "#6B8FBF" },
-  { name: "Farkas Norbert Trio",               genre: "Nagybőgő",                    day: "PÉN",  key: "pe", color: "#C29144" },
-  { name: "Sir Oliver Mally & P. Schneider",   genre: "Blues Duo",                   day: "PÉN",  key: "pe", color: "#9E6B6B" },
-  { name: "Festival All Stars",                genre: "Nemzetközi All-Stars",        day: "PÉN",  key: "pe", color: "#4E8E9E" },
-  { name: "Korb Attila Ensemble",              genre: "Harsona / Trombita",          day: "PÉN",  key: "pe", color: "#A98B4C" },
-  { name: "Bohém Ragtime Jazz Band",           genre: "Ragtime / Klasszikus",        day: "SZO",  key: "sz", color: "#6E8256" },
-  { name: "Emanuele Urso „King of Swing\"",    genre: "Swing / Klasszikus",          day: "SZO",  key: "sz", color: "#8B5A7A" },
-  { name: "Clotile Yana",                      genre: "Jazz ének",                   day: "SZO",  key: "sz", color: "#5F8DA0" },
-  { name: "Lukács Eszter & Gyárfás István",    genre: "Jazz duó",                    day: "SZO",  key: "sz", color: "#8A6F50" },
-  { name: "Hunter Burgamy",                    genre: "Banjo / Gitár",               day: "SZO",  key: "sz", color: "#7A6AA8" },
-  { name: "Cseh Balázs Trio",                  genre: "Jazz Dob",                    day: "SZO",  key: "sz", color: "#6BA4BF" },
-  { name: "Nagy Iván Solo",                    genre: "Jazz Zongora",                day: "SZO",  key: "sz", color: "#C7A27B" },
-  { name: "Farkas Péter „Bubu\" Quartet",      genre: "Nagybőgő",                    day: "SZO",  key: "sz", color: "#7A9E7E" },
-  { name: "Dániel Balázs Trio",                genre: "Jazz Zongora",                day: "VAS",  key: "va", color: "#B06A6A" },
-  { name: "Hungarian Jazz Embassy",            genre: "Klasszikus Jazz",             day: "VAS",  key: "va", color: "#8E7AAD" },
-  { name: "Nanna Carling",                     genre: "Klasszikus / Swing",          day: "VAS",  key: "va", color: "#6B8FBF" },
-  { name: "Best of Jazz Camp",                 genre: "Jazztábori produkciók",       day: "VAS",  key: "va", color: "#C29144" },
-];
-
-const FILTERS: { key: DayKey; label: string }[] = [
-  { key: "all", label: "MIND" },
-  { key: "cs",  label: "CSÜT" },
-  { key: "pe",  label: "PÉN" },
-  { key: "sz",  label: "SZO" },
-  { key: "va",  label: "VAS" },
-];
+const DEFAULT_ARTISTS: LineupArtist[] = [];
 
 export default function LineupTeaser({
   title    = "Fellépők",
   lede     = "Több mint 120 zenész, 10+ országból — négy napon keresztül a kecskeméti strandon.",
   artists  = DEFAULT_ARTISTS,
 }: LineupTeaserProps) {
-  const [filter, setFilter] = useState<DayKey>("all");
-  const list = useMemo(
-    () => artists.filter((a) => filter === "all" || a.key === filter),
-    [artists, filter],
-  );
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) { setRevealed(true); obs.disconnect(); }
+      },
+      { threshold: 0.05, rootMargin: "0px 0px -40px 0px" }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   return (
     <section
@@ -111,29 +85,13 @@ export default function LineupTeaser({
           {lede}
         </p>
 
-        {/* Szűrő chip-ek */}
-        <div className="mb-9 flex flex-wrap justify-center gap-2">
-          {FILTERS.map((f) => (
-            <button
-              key={f.key}
-              type="button"
-              onClick={() => setFilter(f.key)}
-              className={cn(
-                "rounded-full border-[1.5px] px-[18px] py-2 text-[13px] font-bold uppercase tracking-[0.06em] text-white transition-all duration-200",
-                filter === f.key
-                  ? "border-orange-500 bg-orange-500 shadow-[0_6px_16px_rgba(255,98,0,0.4)]"
-                  : "border-white/30 bg-white/15 hover:bg-white/25",
-              )}
-            >
-              {f.label}
-            </button>
-          ))}
-        </div>
-
         {/* Kártyarács */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-[18px] md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-          {list.map((a, i) => (
-            <ArtistCard key={`${a.name}-${i}`} artist={a} index={i} />
+        <div
+          ref={gridRef}
+          className="grid grid-cols-2 gap-3 sm:gap-[18px] md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+        >
+          {artists.map((a, i) => (
+            <ArtistCard key={`${a.name}-${i}`} artist={a} index={i} revealed={revealed} />
           ))}
         </div>
       </div>
@@ -142,14 +100,16 @@ export default function LineupTeaser({
 }
 
 /* ============================================================
-   Egy fellépő kártya — cream gradient, sziluett portré, nap pill
-   ============================================================ */
+  Egy fellépő kártya — cream gradient, sziluett portré
+  ============================================================ */
 function ArtistCard({
   artist,
   index,
+  revealed,
 }: {
   artist: LineupArtist;
   index: number;
+  revealed: boolean;
 }) {
   /* A páros kártyák enyhén balra, a páratlanok jobbra dőlnek hover-kor.
      A Tailwind JIT-nek statikus class-stringek kellenek — ezért két
@@ -159,15 +119,22 @@ function ArtistCard({
       ? "hover:-rotate-[0.5deg]"
       : "hover:rotate-[0.8deg]";
 
+  /* Stagger-delay: max 10 kártyányi késleltetés (~600ms), hogy ne
+     kelljen sokat várni a rács végéig. */
+  const delay = Math.min(index, 10) * 55;
+
   return (
-    <article
+    <Link
+      href={`/lineup/?artist=${encodeURIComponent(artist.name)}`}
       className={cn(
-        "group flex cursor-pointer flex-col overflow-hidden rounded-[14px] bg-cream-50 shadow-[0_8px_22px_rgba(0,0,0,0.15)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_18px_40px_rgba(0,0,0,0.25)]",
+        "group flex cursor-pointer transform-gpu flex-col overflow-hidden rounded-[14px] bg-cream-50 shadow-[0_8px_22px_rgba(0,0,0,0.15)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_18px_40px_rgba(0,0,0,0.25)]",
         tiltClass,
       )}
       style={{
-        backgroundImage:
-          "linear-gradient(180deg, #FFF6D6 0%, #FFECB3 100%)",
+        backgroundImage: "linear-gradient(180deg, #FFF6D6 0%, #FFECB3 100%)",
+        ...(revealed
+          ? { animation: `fadeInUp 0.55s cubic-bezier(0.22,1,0.36,1) ${delay}ms both` }
+          : { opacity: 0 }),
       }}
     >
       {/* Portré 1:1 */}
@@ -196,11 +163,8 @@ function ArtistCard({
         <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-orange-500">
           {artist.genre}
         </div>
-        <span className="mt-1.5 inline-block rounded-full bg-ink-800 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-sun-400">
-          {artist.day}
-        </span>
       </div>
-    </article>
+    </Link>
   );
 }
 

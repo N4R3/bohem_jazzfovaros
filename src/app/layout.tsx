@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { Bebas_Neue, Poppins, Pacifico } from "next/font/google";
 import { getContent, getLocale } from "@/lib/locale";
 import { BASE_URL, canonicalUrl } from "@/lib/seo";
 import Scripts from "@/components/analytics/Scripts";
@@ -10,9 +11,28 @@ import BackgroundWrapper from "@/components/layout/BackgroundWrapper";
 
 export const dynamic = "force-dynamic";
 
-/* Fontok (Poppins body, Bebas Neue display, Pacifico script) a
-   globals.css-ben @import-olódnak a Google Fonts CDN-ről — pontosan
-   úgy, ahogy a jazzdesign1/Bohem Jazzfovaros 2026.html csinálja. */
+/* Fontok next/font/google segítségével töltődnek be — azonos originről
+   szolgáltatva, render-blocking nélkül, automatikus preload-dal. */
+const bebasNeue = Bebas_Neue({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-bebas",
+  display: "swap",
+});
+
+const poppins = Poppins({
+  weight: ["400", "500", "600", "700", "800", "900"],
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-poppins",
+  display: "swap",
+});
+
+const pacifico = Pacifico({
+  weight: "400",
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-pacifico",
+  display: "swap",
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -50,6 +70,11 @@ export async function generateMetadata(): Promise<Metadata> {
       description: c.meta.siteDescription,
       images: [ogImage],
     },
+    icons: {
+      icon: "/favicon.png",
+      shortcut: "/favicon.png",
+      apple: "/favicon.png",
+    },
     robots: {
       index: true,
       follow: true,
@@ -76,7 +101,11 @@ export default async function RootLayout({
   const c = await getContent();
 
   return (
-    <html lang={isEn ? "en" : "hu"} suppressHydrationWarning>
+    <html
+      lang={isEn ? "en" : "hu"}
+      className={`${bebasNeue.variable} ${poppins.variable} ${pacifico.variable}`}
+      suppressHydrationWarning
+    >
       <body className="font-sans antialiased text-ink-800">
         <Scripts />
 

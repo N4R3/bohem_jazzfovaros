@@ -23,6 +23,7 @@ import StatsBar from "@/components/home/StatsBar";
 import LineupTeaser from "@/components/home/LineupTeaser";
 import CtaSection from "@/components/home/CtaSection";
 import Sponsors from "@/components/home/Sponsors";
+import { BASE } from "@/content/base";
 
 export const metadata: Metadata = {
   alternates: { canonical: canonicalUrl("/") },
@@ -70,6 +71,14 @@ export default async function HomePage() {
      kiemeltnek, a város/helyszín stringet simának küldjük. */
   const festivalDatesEmphasis = (c.meta.festivalDates || "2026. AUGUSZTUS 6–9.").toUpperCase();
   const venueLine = `${(c.meta.venue || "Domb Beach").toUpperCase()}, ${(c.meta.city || "Kecskemét").toUpperCase()}`;
+  const teaserPalette = ["#6BA4BF", "#C7A27B", "#7A9E7E", "#B06A6A", "#8E7AAD", "#6B8FBF", "#C29144", "#9E6B6B"];
+  const imageByName = new Map(BASE.artists.map((artist) => [artist.name, artist.image]));
+  const lineupTeaserArtists = c.lineup.artists.map((artist, index) => ({
+    name: artist.name,
+    genre: artist.genre,
+    color: teaserPalette[index % teaserPalette.length],
+    image: imageByName.get(artist.name),
+  }));
 
   return (
     <>
@@ -115,7 +124,7 @@ export default async function HomePage() {
           />
 
           {/* 6. FELLÉPŐK — 15 kártya + szűrő chip-ek */}
-          <LineupTeaser title={c.home.lineupTeaserTitle} />
+          <LineupTeaser title={c.home.lineupTeaserTitle} artists={lineupTeaserArtists} />
 
           {/* 7. Nagy narancs "Vedd meg a jegyed most!" CTA */}
           <CtaSection

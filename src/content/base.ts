@@ -20,7 +20,7 @@ export const BASE = {
     en: "Kecskemét, Hungary",
   },
   gps: "46.903819, 19.666032",
-  mapImage: "/images/map/festival-map.jpg",
+  mapImage: "/images/gallery/article-upload/7/901a43ed59ac4878d276b1b8a5b20640.jpg",
 
   ticketUrl: "https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/",
   ticketUrlEn: "https://jazzfovaros.jegy.hu/?lang=en",
@@ -31,7 +31,7 @@ export const BASE = {
     youtube: "https://www.youtube.com/@jazzfovaros",
   },
 
-  videoUrl: "https://www.youtube.com/embed/GEXbBkFjHC0",
+  videoUrl: "https://youtu.be/4gGiiNwHe6E?si=oWmWHfA1osnkVOn9",
 
   contact: {
     organizer: {
@@ -155,7 +155,7 @@ export const BASE = {
       hu: "Előreutalás aug. 7. éjfélig, helyszíni nevezés verseny napján 8:30–9:45",
       en: "Bank transfer until midnight Aug 7, on-site registration on race day 8:30–9:45",
     },
-    image: "/images/running/futas.jpg",
+    image: "/images/running/41711b19ad6e3238c075641e18d4f468.jpg",
     contactEmail: "iusegy@gmail.com",
     contactPhone: "+36-30-960-2112",
     contactUrl: "https://jazzfovaros.hu/futas",
@@ -169,7 +169,7 @@ export const BASE = {
   /* VI. JAZZFŐVÁROS jazztábor — 2026. aug. 4-9.
      Helyszín: Neumann János Egyetem, Kecskemét. Szervezi: Pepita Egyesület. */
   camp: {
-    videoUrl: "https://www.youtube.com/embed/V7hQehNWpYo",
+    videoUrl: "https://www.youtube.com/embed/bSbwtaxe5WE",
     entryUrl:
       "https://docs.google.com/forms/d/e/1FAIpQLSdCuzKK9Z1yN2XCaRgGt0mxnC_tv0DxcdxVTujNRn9fniNCXg/viewform",
     supporters: [
