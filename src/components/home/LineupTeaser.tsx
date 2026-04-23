@@ -61,7 +61,7 @@ export default function LineupTeaser({
     <section
       id="fellepok"
       aria-label="Fellépők"
-      className="relative z-[2] px-5 py-20 sm:px-8"
+      className="reveal-on-scroll relative z-[2] px-5 py-20 sm:px-8"
     >
       <div className="mx-auto max-w-[1160px]">
         {/* Cím + aláhúzás */}

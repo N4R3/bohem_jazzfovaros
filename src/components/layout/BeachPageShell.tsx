@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import SubpageBubbles from "@/components/layout/SubpageBubbles";
 
 /**
  * BeachPageShell — egységes aloldal-szerkezet a főoldal design-nyelvén.
@@ -39,17 +40,15 @@ export default function BeachPageShell({
   tight = false,
 }: BeachPageShellProps) {
   return (
-    <>
+    <div className="relative overflow-hidden">
+      <SubpageBubbles />
       {/* ============================================================
           Rövid fejléc sáv — átlátszó, hogy a body gradient látszik
           ============================================================ */}
       <section
         aria-label="Oldal fejléc"
-        className="relative overflow-hidden"
+        className="relative z-10 overflow-hidden"
       >
-        {/* Lebegő buborékok a főoldal Hero-jából átemelve */}
-        <HeaderBubbles />
-
         <div className="relative z-10 mx-auto max-w-[1400px] px-5 py-14 text-center sm:px-8 sm:py-20">
           {eyebrow && (
             <p className="mb-3 font-display text-xs font-bold uppercase tracking-[0.28em] text-cream-50/95 drop-shadow">
@@ -77,50 +76,12 @@ export default function BeachPageShell({
       {/* ============================================================
           Content szekció — átlátszó háttér, a body óceán gradient látszik
           ============================================================ */}
-      <section className={tight ? "py-10 sm:py-14" : "py-14 sm:py-20"}>
+      <section className={`${tight ? "py-10 sm:py-14" : "py-14 sm:py-20"} relative z-10`}>
         <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-10">
-          {children}
+          <div className="reveal-on-scroll">{children}</div>
         </div>
       </section>
-    </>
-  );
-}
-
-/* ============================================================
-   HeaderBubbles — enyhe animált buborékok a fejléc hátterében.
-   ============================================================ */
-function HeaderBubbles() {
-  const bubbles = [
-    { cx: 80,   cy: 60,  r: 12, o: 0.35, d: 0 },
-    { cx: 220,  cy: 130, r: 8,  o: 0.4,  d: 0.8 },
-    { cx: 480,  cy: 50,  r: 18, o: 0.25, d: 1.4 },
-    { cx: 760,  cy: 100, r: 11, o: 0.45, d: 2.1 },
-    { cx: 1080, cy: 160, r: 14, o: 0.3,  d: 0.5 },
-    { cx: 1280, cy: 70,  r: 9,  o: 0.5,  d: 2.6 },
-    { cx: 340,  cy: 210, r: 7,  o: 0.5,  d: 3.2 },
-  ];
-
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 1400 280"
-      preserveAspectRatio="xMidYMin slice"
-      className="pointer-events-none absolute inset-0 h-full w-full"
-    >
-      <g fill="#fff">
-        {bubbles.map((b, i) => (
-          <circle
-            key={i}
-            cx={b.cx}
-            cy={b.cy}
-            r={b.r}
-            opacity={b.o}
-            className="animate-bubble"
-            style={{ animationDelay: `${b.d}s` }}
-          />
-        ))}
-      </g>
-    </svg>
+    </div>
   );
 }
 

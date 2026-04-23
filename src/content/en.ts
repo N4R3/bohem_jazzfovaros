@@ -59,13 +59,13 @@ export const en: SiteContent = {
       },
     ],
 
-    /* Matches the official jazzfovaros.hu stats line:
-       "4 days, 4 stages, 10 countries, 120 musicians, 40 hours of music" */
+    /* Home orange stats bar copy:
+       "4 days, 10+ countries, 120+ musicians, 40+ hours of music" */
     highlights: [
       { value: "4", label: "Days", icon: "calendar" },
-      { value: "4", label: "Stages", icon: "mic" },
-      { value: "10", label: "Countries", icon: "globe" },
-      { value: "120", label: "Musicians", icon: "music" },
+      { value: "10+", label: "Countries", icon: "globe" },
+      { value: "120+", label: "Musicians", icon: "music" },
+      { value: "40+", label: "Hours of music", icon: "mic" },
     ],
 
     lineupTeaserTitle: "This Year's Performers",

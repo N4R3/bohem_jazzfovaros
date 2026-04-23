@@ -60,13 +60,13 @@ export const hu: SiteContent = {
       },
     ],
 
-    /* A jazzfovaros.hu hivatalos statisztikái:
-       "4 nap, 4 színpad, 10 ország, 120 zenész, 40 óra zene" */
+    /* A főoldali narancs stat-sáv szövege:
+       "4 nap, 10+ ország, 120+ zenész, 40+ óra zene" */
     highlights: [
       { value: "4", label: "Nap", icon: "calendar" },
-      { value: "4", label: "Színpad", icon: "mic" },
-      { value: "10", label: "Ország", icon: "globe" },
-      { value: "120", label: "Zenész", icon: "music" },
+      { value: "10+", label: "Ország", icon: "globe" },
+      { value: "120+", label: "Zenész", icon: "music" },
+      { value: "40+", label: "Óra zene", icon: "mic" },
     ],
 
     lineupTeaserTitle: "Idei fellépők",

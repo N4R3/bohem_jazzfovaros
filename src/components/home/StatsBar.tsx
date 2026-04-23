@@ -49,7 +49,7 @@ export default function StatsBar({ items, ariaLabel = "Festival statistics" }: P
   return (
     <section
       aria-label={ariaLabel}
-      className="relative z-[2] mt-8 bg-orange-500 px-5 py-9 text-white sm:px-8"
+      className="reveal-on-scroll relative z-[2] mt-8 bg-orange-500 px-5 py-9 text-white sm:px-8"
       style={{ boxShadow: "0 10px 30px rgba(255,98,0,0.25)" }}
     >
       {/* Szaggatott felül + alul */}
@@ -95,11 +95,13 @@ function StatItem({
         entries.forEach((en) => {
           if (en.isIntersecting) {
             setDone(true);
-            const dur = 1200;
+            const dur = 1800;
             const t0 = performance.now();
             const tick = (t: number) => {
               const p = Math.min(1, (t - t0) / dur);
-              const v = Math.round(target * (1 - Math.pow(1 - p, 3)));
+              // Smoother ease-out curve, with no final jump.
+              const eased = 1 - Math.pow(1 - p, 4);
+              const v = p < 1 ? Math.floor(target * eased) : target;
               setValue(v);
               if (p < 1) requestAnimationFrame(tick);
             };
@@ -139,7 +141,7 @@ function StatItem({
         className="font-display text-[64px] leading-none text-white"
       >
         {value}
-        {suffix && value >= target ? <span>{suffix}</span> : null}
+        {suffix ? <span>{suffix}</span> : null}
       </span>
 
       {/* Kis felirat */}

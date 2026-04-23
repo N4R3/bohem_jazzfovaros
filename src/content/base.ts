@@ -22,8 +22,8 @@ export const BASE = {
   gps: "46.903819, 19.666032",
   mapImage: "/images/gallery/article-upload/7/901a43ed59ac4878d276b1b8a5b20640.jpg",
 
-  ticketUrl: "https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/",
-  ticketUrlEn: "https://jazzfovaros.jegy.hu/?lang=en",
+  ticketUrl: "https://jazzfovaros.jegy.hu",
+  ticketUrlEn: "https://jazzfovaros.jegy.hu",
 
   socials: {
     facebook: "https://www.facebook.com/jazzfovaros",
@@ -113,7 +113,7 @@ export const BASE = {
         description: "",
         price: { hu: "19 950 Ft/fő/éjtől", en: "from HUF 19,950 / person / night" },
         distance: { hu: "15 perc sétára a fesztiváltól", en: "15 min walk from the festival" },
-        bookingUrl: "https://www.marriott.com/en-us/hotels/kebfp-four-points-kecskemet/overview/",
+        bookingUrl: "https://www.fourpointskecskemet.hu",
         images: ["/images/gallery/article-upload/7/5a36f63f2a4884d5bbce6487650c12a8.jpg", "/images/gallery/article-upload/7/90bccfe85ae92aca5ea7043c74403f22.jpg"],
         stars: 4,
       },
@@ -122,7 +122,7 @@ export const BASE = {
         description: "",
         price: { hu: "20 500 Ft/fő/éjtől", en: "from HUF 20,500 / person / night" },
         distance: { hu: "5 perc sétára a fesztiváltól", en: "5 min walk from the festival" },
-        bookingUrl: "https://aquahotel.hu",
+        bookingUrl: "https://aquahotelkecskemet.hu/?gad_source=1&gad_campaignid=22312818610&gbraid=0AAAAA9Z_U-GvZPT5abqbVU-QVQ8ETxIjk&gclid=CjwKCAjwhqfPBhBWEiwAZo196uTZ16udQMZQ-a49HBy9Zsn_5OEmxtUkyKY3KPmzKuhRuATnR-nm-hoChI8QAvD_BwE",
         images: ["/images/gallery/article-upload/7/ef0b833861a7c84f579a3504360c5154.jpg", "/images/gallery/article-upload/7/3ef93e48c76988c0f19eccc9ad715b1d.jpg"],
         stars: 3,
       },
@@ -132,7 +132,7 @@ export const BASE = {
         price: { hu: "Kemping árak regisztráció alapján", en: "Camping rates on registration" },
         distance: { hu: "Közvetlenül a helyszín mellett", en: "Directly next to the venue" },
         bookingUrl: "https://tokemping.hu",
-        images: ["/images/gallery/article-upload/7/0dc2762525a8391a278ee88a03f15282.jpg"],
+        images: ["/images/accommodation/to_kemping.jpg"],
         stars: undefined,
       },
     ],

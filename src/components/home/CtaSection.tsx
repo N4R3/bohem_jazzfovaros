@@ -38,7 +38,7 @@ export default function CtaSection({
   return (
     <section
       aria-label="Jegyvásárlás CTA"
-      className="relative z-[2] px-5 pb-14 pt-20 text-center text-white sm:px-8"
+      className="reveal-on-scroll relative z-[2] px-5 pb-14 pt-20 text-center text-white sm:px-8"
     >
       <h2
         className="m-0 mb-3 font-display font-normal uppercase leading-none"

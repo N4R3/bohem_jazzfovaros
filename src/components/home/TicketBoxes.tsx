@@ -19,16 +19,18 @@ type Box = {
 export default async function TicketBoxes() {
   const c = await getContent();
   const isEn = c.otherLocale.label === "HU";
-  const ticketUrl = c.info.ticketUrl || "#";
+  const ticketUrl = "https://jazzfovaros.jegy.hu";
+  const passUrl =
+    "https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/6a097896-ee32-47ce-bb15-438d58bff51d";
   const BOXES: Box[] = isEn
     ? [
         { emoji: "🎟️", title: "Day Ticket", sub: "Choose your day", href: ticketUrl },
-        { emoji: "🎫", title: "Pass", sub: "4 days · unlimited entry", href: ticketUrl },
+        { emoji: "🎫", title: "Pass", sub: "4 days · unlimited entry", href: passUrl },
         { emoji: "⭐", title: "VIP Ticket", sub: "Premium experience · catering", href: ticketUrl },
       ]
     : [
         { emoji: "🎟️", title: "Napijegy", sub: "Válaszd ki a napod", href: ticketUrl },
-        { emoji: "🎫", title: "Bérlet", sub: "4 nap · korlátlan belépés", href: ticketUrl },
+        { emoji: "🎫", title: "Bérlet", sub: "4 nap · korlátlan belépés", href: passUrl },
         { emoji: "⭐", title: "VIP jegy", sub: "Kiemelt élmény · catering", href: ticketUrl },
       ];
 
@@ -53,15 +55,8 @@ function TicketBox({ emoji, title, sub, href }: Box) {
   return (
     <Link
       href={href}
-      className="group relative flex items-center gap-4 overflow-hidden rounded-[14px] bg-orange-500 px-6 py-[22px] text-white shadow-[0_8px_0_var(--color-orange-700),0_14px_30px_rgba(255,98,0,0.35)] transition-all duration-[250ms] hover:-translate-y-[5px] hover:shadow-[0_13px_0_var(--color-orange-700),0_22px_40px_rgba(255,98,0,0.5)]"
+      className="group reveal-on-scroll-fast relative flex items-center gap-4 overflow-hidden rounded-[14px] bg-orange-500 px-6 py-[22px] text-white shadow-[0_8px_0_var(--color-orange-700),0_14px_30px_rgba(255,98,0,0.35)] transition-all duration-[250ms] hover:-translate-y-[5px] hover:shadow-[0_13px_0_var(--color-orange-700),0_22px_40px_rgba(255,98,0,0.5)]"
     >
-      {/* Szaggatott ticket-stub vonal bal oldalt */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 left-0 w-[60px] bg-white/10"
-        style={{ borderRight: "2px dashed rgba(255,255,255,0.3)" }}
-      />
-
       {/* Ikon négyzet */}
       <span
         aria-hidden="true"
@@ -70,8 +65,8 @@ function TicketBox({ emoji, title, sub, href }: Box) {
         {emoji}
       </span>
 
-      {/* Szöveg */}
-      <span className="relative z-[1] flex flex-col">
+      {/* Szöveg — a szaggatott vonal az ikon vége és a szöveg kezdete között, félig */}
+      <span className="relative z-[1] flex flex-col border-l-2 border-dashed border-white/25 pl-4">
         <span className="font-display text-[24px] uppercase leading-none tracking-[0.05em]">
           {title}
         </span>

@@ -67,7 +67,7 @@ export default function Sponsors({ levels = DEFAULT_LEVELS }: SponsorsProps) {
     <section
       aria-label="Támogatók, szponzorok, partnerek"
       id="supporters"
-      className="relative z-[2] px-5 pb-10 pt-14 text-center sm:px-8"
+      className="reveal-on-scroll relative z-[2] px-5 pb-10 pt-14 text-center sm:px-8"
     >
       <div className="mx-auto max-w-[1160px]">
         {levels.map((level, idx) => (
