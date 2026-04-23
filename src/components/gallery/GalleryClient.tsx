@@ -88,29 +88,26 @@ export default function GalleryClient({ images }: Props) {
 
       {open !== null && (
         <div
-          className="fixed inset-0 z-[220] flex items-center justify-center bg-[#03181a]/88 p-2 sm:p-4"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#03181a]/72 p-2 sm:p-4"
           onClick={close}
         >
           <div
-            className="relative flex w-full max-w-6xl flex-col items-center"
+            className="relative flex max-h-[calc(100dvh-12px)] w-full max-w-6xl flex-col items-center overflow-hidden sm:max-h-[calc(100dvh-20px)]"
           >
             <div
-              className="flex w-full items-center justify-center sm:rounded-xl sm:bg-[#03181a] sm:p-2"
+              className="flex min-h-0 w-full flex-1 items-center justify-center sm:rounded-xl sm:bg-[#03181a] sm:p-2"
               onClick={(e) => e.stopPropagation()}
             >
               <img
                 src={images[open].src}
                 alt={images[open].alt || `Fotó ${open + 1}`}
-                className="h-auto w-auto max-w-[calc(100vw-16px)] rounded-md object-contain sm:max-w-[calc(100vw-48px)] sm:rounded-lg"
-                style={{
-                  maxHeight: "calc(100dvh - var(--navbar-height, 76px) - 210px)",
-                }}
+                className="h-auto w-auto max-h-[calc(100dvh-220px)] max-w-[calc(100vw-16px)] rounded-md object-contain sm:max-h-[calc(100dvh-250px)] sm:max-w-[calc(100vw-48px)] sm:rounded-lg lg:max-h-[calc(100dvh-270px)]"
                 loading="eager"
               />
             </div>
 
             <div
-              className="mt-2 flex w-full max-w-4xl shrink-0 flex-wrap items-center justify-between gap-3 rounded-xl bg-[#083a44]/90 px-3 py-2 sm:mt-3 sm:px-4"
+              className="mt-2 flex w-full max-w-4xl shrink-0 flex-wrap items-center justify-between gap-3 rounded-xl bg-[#083a44]/92 px-3 py-2 sm:mt-3 sm:px-4"
               onClick={(e) => e.stopPropagation()}
             >
               <p className="max-w-full break-all text-[11px] font-semibold tracking-wide text-cream-50 sm:text-sm">{currentLabel}</p>
