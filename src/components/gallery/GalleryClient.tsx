@@ -38,6 +38,9 @@ export default function GalleryClient({ images }: Props) {
     };
   }, [open, close, prev, next]);
 
+  const currentLabel =
+    open !== null ? images[open].alt || `Galéria kép ${open + 1}` : "";
+
   return (
     <>
       <div
@@ -85,45 +88,44 @@ export default function GalleryClient({ images }: Props) {
 
       {open !== null && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+          className="fixed inset-0 z-[160] flex items-center justify-center bg-[#03181a]/80 p-3 backdrop-blur-[3px] sm:p-5"
           onClick={close}
         >
           <div
-            className="relative flex max-h-screen max-w-5xl w-full flex-col items-center"
+            className="relative flex w-full max-w-6xl flex-col rounded-2xl border border-white/15 bg-[#0e4844]/65 p-2 shadow-[0_24px_64px_rgba(0,0,0,0.45)] sm:p-3"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-[var(--color-navy-900)] shadow-2xl">
+            <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-[#03181a] shadow-2xl">
               <Image
                 src={images[open].src}
                 alt={images[open].alt || `Fotó ${open + 1}`}
                 fill
                 sizes="(max-width: 1280px) 100vw, 1280px"
                 className="object-contain"
-                priority
+                loading="eager"
               />
-              {images[open].alt && (
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 px-6 py-4">
-                  <p className="text-sm text-white/80">{images[open].alt}</p>
-                </div>
-              )}
             </div>
 
-            <div className="mt-4 flex items-center gap-4">
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-[#083a44]/80 px-3 py-2 sm:px-4">
+              <p className="text-sm font-semibold tracking-wide text-cream-50">{currentLabel}</p>
+              <span className="text-xs font-bold uppercase tracking-wider text-orange-400">
+                {open + 1} / {images.length}
+              </span>
+            </div>
+
+            <div className="mt-3 flex items-center justify-center gap-4 pb-1">
               <button
                 onClick={prev}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-white transition-colors hover:border-[var(--color-gold-500)] hover:text-[var(--color-gold-400)]"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-orange-400/55 bg-[#052a33] text-cream-50 transition-colors hover:bg-orange-500 hover:text-white"
                 aria-label="Previous"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M15 18l-6-6 6-6" />
                 </svg>
               </button>
-              <span className="text-sm text-white/50">
-                {open + 1} / {images.length}
-              </span>
               <button
                 onClick={next}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-white transition-colors hover:border-[var(--color-gold-500)] hover:text-[var(--color-gold-400)]"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-orange-400/55 bg-[#052a33] text-cream-50 transition-colors hover:bg-orange-500 hover:text-white"
                 aria-label="Next"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -134,7 +136,7 @@ export default function GalleryClient({ images }: Props) {
 
             <button
               onClick={close}
-              className="absolute -top-3 -right-3 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white/70 transition-colors hover:border-white/50 hover:text-white"
+              className="absolute -right-2 -top-2 flex h-9 w-9 items-center justify-center rounded-full border border-orange-400/60 bg-[#052a33] text-cream-50 transition-colors hover:bg-orange-500 hover:text-white"
               aria-label="Close"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
