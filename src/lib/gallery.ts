@@ -35,7 +35,7 @@ async function collectImagePaths(dir: string): Promise<string[]> {
 }
 
 export async function getGalleryImagesFromPublic(): Promise<GalleryImage[]> {
-  const root = path.join(process.cwd(), "public", "images", "gelria");
+  const root = path.join(process.cwd(), "public", "images", "galeria");
 
   try {
     const files = await collectImagePaths(root);
