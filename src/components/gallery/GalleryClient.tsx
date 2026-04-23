@@ -88,30 +88,38 @@ export default function GalleryClient({ images }: Props) {
 
       {open !== null && (
         <div
-          className="fixed inset-0 z-[160] flex items-start justify-center bg-[#03181a]/88 px-3 pb-3 pt-[calc(var(--navbar-height,76px)+8px)] sm:px-5 sm:pb-5 sm:pt-[calc(var(--navbar-height,76px)+16px)]"
+          className="fixed inset-0 z-[220] flex items-center justify-center bg-[#03181a]/88 p-2 sm:p-5"
           onClick={close}
         >
           <div
-            className="relative flex max-h-[calc(100dvh-var(--navbar-height,76px)-20px)] min-h-0 w-full max-w-6xl flex-col rounded-2xl border border-white/15 bg-[#0e4844]/65 p-2 shadow-[0_18px_48px_rgba(0,0,0,0.42)] sm:p-3"
-            onClick={(e) => e.stopPropagation()}
+            className="relative flex w-full max-w-6xl flex-col items-center"
           >
-            <div className="flex min-h-0 flex-1 items-center justify-center rounded-xl bg-[#03181a] p-2 sm:p-3">
+            <div
+              className="flex w-full items-center justify-center sm:rounded-xl sm:bg-[#03181a] sm:p-3"
+              onClick={(e) => e.stopPropagation()}
+            >
               <img
                 src={images[open].src}
                 alt={images[open].alt || `Fotó ${open + 1}`}
-                className="h-auto max-h-full w-auto max-w-full rounded-lg object-contain"
+                className="h-auto max-h-[78vh] w-auto max-w-full rounded-md object-contain sm:max-h-[80vh] sm:rounded-lg"
                 loading="eager"
               />
             </div>
 
-            <div className="mt-3 flex shrink-0 flex-wrap items-center justify-between gap-3 rounded-xl bg-[#083a44]/80 px-3 py-2 sm:px-4">
+            <div
+              className="mt-2 flex w-full max-w-4xl shrink-0 flex-wrap items-center justify-between gap-3 rounded-xl bg-[#083a44]/90 px-3 py-2 sm:mt-3 sm:px-4"
+              onClick={(e) => e.stopPropagation()}
+            >
               <p className="max-w-full break-all text-xs font-semibold tracking-wide text-cream-50 sm:text-sm">{currentLabel}</p>
               <span className="text-xs font-bold uppercase tracking-wider text-orange-400">
                 {open + 1} / {images.length}
               </span>
             </div>
 
-            <div className="mt-3 flex shrink-0 items-center justify-center gap-4 pb-1">
+            <div
+              className="mt-2 flex shrink-0 items-center justify-center gap-4 pb-1 sm:mt-3"
+              onClick={(e) => e.stopPropagation()}
+            >
               <button
                 onClick={prev}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-orange-400/55 bg-[#052a33] text-cream-50 transition-colors hover:bg-orange-500 hover:text-white"
@@ -134,8 +142,9 @@ export default function GalleryClient({ images }: Props) {
 
             <button
               onClick={close}
-              className="absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded-full border border-orange-400/60 bg-[#052a33] text-cream-50 transition-colors hover:bg-orange-500 hover:text-white"
+              className="absolute right-1 top-1 flex h-9 w-9 items-center justify-center rounded-full border border-orange-400/60 bg-[#052a33] text-cream-50 transition-colors hover:bg-orange-500 hover:text-white sm:right-2 sm:top-2"
               aria-label="Close"
+              onMouseDown={(e) => e.stopPropagation()}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M18 6L6 18M6 6l12 12" />
