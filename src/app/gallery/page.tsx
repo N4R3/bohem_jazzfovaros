@@ -3,6 +3,7 @@ import { getContent } from "@/lib/locale";
 import { canonicalUrl } from "@/lib/seo";
 import BeachPageShell from "@/components/layout/BeachPageShell";
 import GalleryClient from "@/components/gallery/GalleryClient";
+import { getGalleryImagesFromPublic } from "@/lib/gallery";
 
 export async function generateMetadata(): Promise<Metadata> {
   const c = await getContent();
@@ -21,6 +22,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function GalleryPage() {
   const c = await getContent();
   const { gallery } = c;
+  const autoImages = await getGalleryImagesFromPublic();
+  const images = autoImages.length > 0 ? autoImages : gallery.images;
 
   return (
     <BeachPageShell
@@ -28,7 +31,7 @@ export default async function GalleryPage() {
       title={gallery.title}
       subtitle={gallery.subtitle}
     >
-      <GalleryClient images={gallery.images} />
+      <GalleryClient images={images} />
     </BeachPageShell>
   );
 }
