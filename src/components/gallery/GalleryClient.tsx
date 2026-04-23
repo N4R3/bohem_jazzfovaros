@@ -88,20 +88,23 @@ export default function GalleryClient({ images }: Props) {
 
       {open !== null && (
         <div
-          className="fixed inset-0 z-[220] flex items-center justify-center bg-[#03181a]/88 p-2 sm:p-5"
+          className="fixed inset-0 z-[220] flex items-center justify-center bg-[#03181a]/88 p-2 sm:p-4"
           onClick={close}
         >
           <div
             className="relative flex w-full max-w-6xl flex-col items-center"
           >
             <div
-              className="flex w-full items-center justify-center sm:rounded-xl sm:bg-[#03181a] sm:p-3"
+              className="flex w-full items-center justify-center sm:rounded-xl sm:bg-[#03181a] sm:p-2"
               onClick={(e) => e.stopPropagation()}
             >
               <img
                 src={images[open].src}
                 alt={images[open].alt || `Fotó ${open + 1}`}
-                className="h-auto max-h-[78vh] w-auto max-w-full rounded-md object-contain sm:max-h-[80vh] sm:rounded-lg"
+                className="h-auto w-auto max-w-[calc(100vw-16px)] rounded-md object-contain sm:max-w-[calc(100vw-48px)] sm:rounded-lg"
+                style={{
+                  maxHeight: "calc(100dvh - var(--navbar-height, 76px) - 210px)",
+                }}
                 loading="eager"
               />
             </div>
@@ -110,19 +113,19 @@ export default function GalleryClient({ images }: Props) {
               className="mt-2 flex w-full max-w-4xl shrink-0 flex-wrap items-center justify-between gap-3 rounded-xl bg-[#083a44]/90 px-3 py-2 sm:mt-3 sm:px-4"
               onClick={(e) => e.stopPropagation()}
             >
-              <p className="max-w-full break-all text-xs font-semibold tracking-wide text-cream-50 sm:text-sm">{currentLabel}</p>
+              <p className="max-w-full break-all text-[11px] font-semibold tracking-wide text-cream-50 sm:text-sm">{currentLabel}</p>
               <span className="text-xs font-bold uppercase tracking-wider text-orange-400">
                 {open + 1} / {images.length}
               </span>
             </div>
 
             <div
-              className="mt-2 flex shrink-0 items-center justify-center gap-4 pb-1 sm:mt-3"
+              className="mt-2 flex shrink-0 items-center justify-center gap-3 pb-1 sm:mt-3 sm:gap-4"
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={prev}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-orange-400/55 bg-[#052a33] text-cream-50 transition-colors hover:bg-orange-500 hover:text-white"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-orange-400/55 bg-[#052a33] text-cream-50 transition-colors hover:bg-orange-500 hover:text-white sm:h-10 sm:w-10"
                 aria-label="Previous"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -131,7 +134,7 @@ export default function GalleryClient({ images }: Props) {
               </button>
               <button
                 onClick={next}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-orange-400/55 bg-[#052a33] text-cream-50 transition-colors hover:bg-orange-500 hover:text-white"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-orange-400/55 bg-[#052a33] text-cream-50 transition-colors hover:bg-orange-500 hover:text-white sm:h-10 sm:w-10"
                 aria-label="Next"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
