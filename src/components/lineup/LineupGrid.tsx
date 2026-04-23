@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
+import { createPortal } from "react-dom";
 import type { Artist } from "@/lib/types";
 
 export type LineupArtist = Artist & {
@@ -30,6 +31,12 @@ export default function LineupGrid({
   ticketLabel,
 }: Props) {
   const [activeArtist, setActiveArtist] = useState<LineupArtist | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    return () => setIsMounted(false);
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -193,118 +200,122 @@ export default function LineupGrid({
         })}
       </div>
 
-      <AnimatePresence>
-        {activeArtist && (
-          <motion.div
-            className="fixed inset-0 z-[120] flex items-end justify-center bg-black/65 p-0 sm:items-center sm:p-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setActiveArtist(null)}
-          >
-            <motion.article
-              className="max-h-[95dvh] w-full max-w-5xl overflow-auto rounded-t-3xl bg-[#ececec] shadow-2xl sm:rounded-3xl"
-              initial={{ y: 40, opacity: 0, scale: 0.98 }}
-              animate={{ y: 0, opacity: 1, scale: 1 }}
-              exit={{ y: 24, opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.24 }}
-              onClick={(event) => event.stopPropagation()}
-            >
-              <div className="grid gap-0 md:grid-cols-[1.05fr_1.4fr]">
-                <div className="relative min-h-[260px] md:min-h-full">
-                  {activeArtist.image ? (
-                    <Image
-                      src={activeArtist.image}
-                      alt={activeArtist.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 40vw"
-                      className="object-cover"
-                    />
-                  ) : (
-                    <ArtistPlaceholder />
-                  )}
-                </div>
-
-                <div className="flex flex-col p-5 sm:p-7">
-                  <div className="mb-3 flex items-start justify-between gap-4">
-                    <h2
-                      className="inline-block px-2 py-1 text-lg font-black uppercase sm:text-2xl"
-                      style={{ background: "#147a6d", color: "#ffffff" }}
-                    >
-                      {activeArtist.name}
-                    </h2>
-                    <button
-                      type="button"
-                      onClick={() => setActiveArtist(null)}
-                      className="rounded-full border px-2.5 py-1 text-xs font-bold uppercase"
-                      style={{ borderColor: "rgba(10,58,54,0.35)", color: "rgba(10,58,54,0.8)" }}
-                    >
-                      Bezár
-                    </button>
-                  </div>
-
-                  <p className="text-sm uppercase tracking-wide" style={{ color: "rgba(10,58,54,0.8)" }}>
-                    {stageLabels[activeArtist.stage]}
-                  </p>
-
-                  <p className="mt-3 text-sm leading-7" style={{ color: "rgba(10,58,54,0.9)" }}>
-                    {activeArtist.details || activeArtist.bio || "A részletes fellépő-leírás hamarosan frissül."}
-                  </p>
-
-                  {activeArtist.lineup && activeArtist.lineup.length > 0 && (
-                    <div className="mt-4 border-t pt-4" style={{ borderColor: "rgba(10,58,54,0.16)" }}>
-                      <p className="text-sm font-black uppercase tracking-wide" style={{ color: "#145e56" }}>
-                        Közreműködők
-                      </p>
-                      <ul className="mt-2 space-y-1">
-                        {activeArtist.lineup.map((member) => (
-                          <li key={member} className="text-sm" style={{ color: "rgba(10,58,54,0.88)" }}>
-                            {member}
-                          </li>
-                        ))}
-                      </ul>
+      {isMounted &&
+        createPortal(
+          <AnimatePresence>
+            {activeArtist && (
+              <motion.div
+                className="fixed inset-0 z-[180] flex items-end justify-center bg-black/65 p-0 sm:items-center sm:p-6"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setActiveArtist(null)}
+              >
+                <motion.article
+                  className="max-h-[95dvh] w-full max-w-5xl overflow-auto rounded-t-3xl bg-[#ececec] shadow-2xl sm:rounded-3xl"
+                  initial={{ y: 40, opacity: 0, scale: 0.98 }}
+                  animate={{ y: 0, opacity: 1, scale: 1 }}
+                  exit={{ y: 24, opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.24 }}
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  <div className="grid gap-0 md:grid-cols-[1.05fr_1.4fr]">
+                    <div className="relative min-h-[260px] md:min-h-full">
+                      {activeArtist.image ? (
+                        <Image
+                          src={activeArtist.image}
+                          alt={activeArtist.name}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 40vw"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <ArtistPlaceholder />
+                      )}
                     </div>
-                  )}
 
-                  <div className="mt-6 flex flex-wrap gap-3 border-t pt-4" style={{ borderColor: "rgba(10,58,54,0.16)" }}>
-                    {activeArtist.website && (
-                      <a
-                        href={activeArtist.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider"
-                        style={{ background: "#0d5f56", color: "#fff" }}
-                      >
-                        Weboldal
-                      </a>
-                    )}
-                    {activeArtist.youtube && (
-                      <a
-                        href={activeArtist.youtube}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider"
-                        style={{ background: "#b12020", color: "#fff" }}
-                      >
-                        YouTube
-                      </a>
-                    )}
-                    <a
-                      href={ticketUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider"
-                      style={{ background: "var(--color-accent-500)", color: "#fff" }}
-                    >
-                      {ticketLabel}
-                    </a>
+                    <div className="flex flex-col p-5 sm:p-7">
+                      <div className="mb-3 flex items-start justify-between gap-4">
+                        <h2
+                          className="inline-block px-2 py-1 text-lg font-black uppercase sm:text-2xl"
+                          style={{ background: "#147a6d", color: "#ffffff" }}
+                        >
+                          {activeArtist.name}
+                        </h2>
+                        <button
+                          type="button"
+                          onClick={() => setActiveArtist(null)}
+                          className="rounded-full border px-2.5 py-1 text-xs font-bold uppercase"
+                          style={{ borderColor: "rgba(10,58,54,0.35)", color: "rgba(10,58,54,0.8)" }}
+                        >
+                          Bezár
+                        </button>
+                      </div>
+
+                      <p className="text-sm uppercase tracking-wide" style={{ color: "rgba(10,58,54,0.8)" }}>
+                        {stageLabels[activeArtist.stage]}
+                      </p>
+
+                      <p className="mt-3 text-sm leading-7" style={{ color: "rgba(10,58,54,0.9)" }}>
+                        {activeArtist.details || activeArtist.bio || "A részletes fellépő-leírás hamarosan frissül."}
+                      </p>
+
+                      {activeArtist.lineup && activeArtist.lineup.length > 0 && (
+                        <div className="mt-4 border-t pt-4" style={{ borderColor: "rgba(10,58,54,0.16)" }}>
+                          <p className="text-sm font-black uppercase tracking-wide" style={{ color: "#145e56" }}>
+                            Közreműködők
+                          </p>
+                          <ul className="mt-2 space-y-1">
+                            {activeArtist.lineup.map((member) => (
+                              <li key={member} className="text-sm" style={{ color: "rgba(10,58,54,0.88)" }}>
+                                {member}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      <div className="mt-6 flex flex-wrap gap-3 border-t pt-4" style={{ borderColor: "rgba(10,58,54,0.16)" }}>
+                        {activeArtist.website && (
+                          <a
+                            href={activeArtist.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider"
+                            style={{ background: "#0d5f56", color: "#fff" }}
+                          >
+                            Weboldal
+                          </a>
+                        )}
+                        {activeArtist.youtube && (
+                          <a
+                            href={activeArtist.youtube}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider"
+                            style={{ background: "#b12020", color: "#fff" }}
+                          >
+                            YouTube
+                          </a>
+                        )}
+                        <a
+                          href={ticketUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider"
+                          style={{ background: "var(--color-accent-500)", color: "#fff" }}
+                        >
+                          {ticketLabel}
+                        </a>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </motion.article>
-          </motion.div>
+                </motion.article>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body
         )}
-      </AnimatePresence>
     </>
   );
 }

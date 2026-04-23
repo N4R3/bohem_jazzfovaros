@@ -103,6 +103,11 @@ export default async function LineupPage() {
       details: "Hazai nagybőgős előadó, klasszikus jazz formációk visszatérő közreműködője.",
       lineup: ["Farkas Norbert (sb)"],
     },
+    "Farkas Péter \"Bubu\"": {
+      details:
+        "Tradicionális jazz és swing produkciók keresett nagybőgőse, rendszeres közreműködő hazai fesztiválokon.",
+      lineup: ["Farkas Péter \"Bubu\" (sb)"],
+    },
     "Festival All Stars": {
       details:
         "Nemzetközi all-stars projekt magyar és külföldi vendégművészekkel, külön pénteki és szombati felállással.",
@@ -154,10 +159,27 @@ export default async function LineupPage() {
         "Sokoldalú hangszeres (harsona, trombita, szaxofon, zongora, ének), korábban a Bohém Ragtime Jazz Band tagja, folyamatosan turnézó szabadúszó jazzmuzsikus.",
       lineup: ["Korb Attila (tb, tp, bass-sax, p, voc)"],
     },
+    "Lukács Eszter": {
+      details:
+        "A fesztivál visszatérő jazzénekes fellépője, a klasszikus és mainstream jazz vokális világának képviselője.",
+      lineup: ["Lukács Eszter (voc)"],
+    },
     "Nagy Iván": {
       details:
         "A stride-zongorázás elkötelezett képviselője, számos hazai swing- és jazzformáció közreműködője.",
       lineup: ["Nagy Iván (p)"],
+    },
+    "Nanna Carling": {
+      details:
+        "Svédországi tradicionális jazz előadó, több hangszerrel és énekkel is rendszeresen szerepel nemzetközi fesztiválokon.",
+      lineup: ["Nanna Carling"],
+      website: "https://www.nannacarling.com",
+      youtube: "https://www.youtube.com/@nannacarling",
+    },
+    "Pribojszki Mátyás": {
+      details:
+        "Díjazott blues-harmonika előadó és zenekarvezető, a hazai blues és jazz szcéna meghatározó alakja.",
+      lineup: ["Pribojszki Mátyás (harmonika, voc)"],
     },
     "Sir Oliver Mally & Peter Schneider Duo": {
       details: "Osztrák-német blues duó, akusztikus gitárra és énekre épülő műsorral.",
@@ -189,9 +211,12 @@ export default async function LineupPage() {
     return {
       ...artist,
       image: baseArtist?.image ?? artist.image,
-      details: details?.details || artist.bio,
+      details:
+        details?.details ||
+        artist.bio ||
+        `${artist.name} a JAZZFŐVÁROS 2026 fellépői között szerepel (${artist.origin}).`,
       lineup: details?.lineup,
-      website: details?.website,
+      website: details?.website ?? "https://jazzfovaros.hu/fellepok",
       youtube: details?.youtube,
     };
   });
