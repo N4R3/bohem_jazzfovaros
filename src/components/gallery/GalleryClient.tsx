@@ -88,20 +88,18 @@ export default function GalleryClient({ images }: Props) {
 
       {open !== null && (
         <div
-          className="fixed inset-0 z-[160] flex items-center justify-center bg-[#03181a]/80 p-3 backdrop-blur-[3px] sm:p-5"
+          className="fixed inset-0 z-[160] flex items-center justify-center bg-[#03181a]/85 p-3 sm:p-5"
           onClick={close}
         >
           <div
-            className="relative flex w-full max-w-6xl flex-col rounded-2xl border border-white/15 bg-[#0e4844]/65 p-2 shadow-[0_24px_64px_rgba(0,0,0,0.45)] sm:p-3"
+            className="relative flex w-full max-w-6xl flex-col rounded-2xl border border-white/15 bg-[#0e4844]/65 p-2 shadow-[0_18px_48px_rgba(0,0,0,0.42)] sm:p-3"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-[#03181a] shadow-2xl">
-              <Image
+            <div className="flex w-full items-center justify-center rounded-xl bg-[#03181a] p-2 sm:p-3">
+              <img
                 src={images[open].src}
                 alt={images[open].alt || `Fotó ${open + 1}`}
-                fill
-                sizes="(max-width: 1280px) 100vw, 1280px"
-                className="object-contain"
+                className="h-auto max-h-[76vh] w-auto max-w-full rounded-lg"
                 loading="eager"
               />
             </div>

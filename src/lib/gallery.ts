@@ -10,16 +10,7 @@ function isImageFile(filePath: string): boolean {
 }
 
 function toTitleFromFilename(filename: string): string {
-  const base = filename.replace(/\.[^.]+$/, "");
-  const looksLikeHash = /^[a-f0-9]{16,}$/i.test(base);
-  const mostlyNumeric = /^[0-9]{6,}$/.test(base);
-  if (looksLikeHash || mostlyNumeric) {
-    return "JAZZFŐVÁROS galéria";
-  }
-  return base
-    .replace(/[_-]+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+  return filename.replace(/\.[^.]+$/, "").trim();
 }
 
 async function collectImagePaths(dir: string): Promise<string[]> {
