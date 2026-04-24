@@ -1,9 +1,15 @@
 import type { Locale, SiteContent } from "./types";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { hu } from "@/content/hu";
 import { en } from "@/content/en";
 
 const LOCALE_COOKIE = "NEXT_LOCALE";
+
+function getLocaleFromHost(host: string): Locale {
+  if (host.includes("jazzcapital.hu")) return "en";
+  if (host.includes("jazzfovaros.hu")) return "hu";
+  return "hu";
+}
 
 function isInternalPath(href: string): boolean {
   return href.startsWith("/") && !href.startsWith("//");
@@ -57,8 +63,11 @@ function localizeContent(content: SiteContent, locale: Locale): SiteContent {
 
 export async function getLocale(): Promise<Locale> {
   const cookieStore = await cookies();
-  const locale = cookieStore.get(LOCALE_COOKIE)?.value;
-  return locale === "en" ? "en" : "hu";
+  const cookieLocale = cookieStore.get(LOCALE_COOKIE)?.value;
+  if (cookieLocale === "en" || cookieLocale === "hu") return cookieLocale;
+
+  const host = (await headers()).get("host") || "";
+  return getLocaleFromHost(host);
 }
 
 export async function getContent(): Promise<SiteContent> {

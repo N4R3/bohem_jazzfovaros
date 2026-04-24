@@ -22,7 +22,7 @@ import TicketBoxes from "@/components/home/TicketBoxes";
 import StatsBar from "@/components/home/StatsBar";
 import LineupTeaser from "@/components/home/LineupTeaser";
 import CtaSection from "@/components/home/CtaSection";
-import Sponsors from "@/components/home/Sponsors";
+import SzechenyiPopup from "@/components/home/SzechenyiPopup";
 import { BASE } from "@/content/base";
 
 export const metadata: Metadata = {
@@ -134,10 +134,9 @@ export default async function HomePage() {
             buttonUrl={c.info.ticketUrl}
           />
 
-          {/* 8. Támogatók / Szponzorok / Partnerek */}
-          <Sponsors />
         </div>
       </div>
+      <SzechenyiPopup />
     </>
   );
 }

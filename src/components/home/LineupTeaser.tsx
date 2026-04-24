@@ -12,7 +12,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 
 export type LineupArtist = {
@@ -41,27 +40,12 @@ export default function LineupTeaser({
   lede     = "Több mint 120 zenész, 10+ országból — négy napon keresztül a kecskeméti strandon.",
   artists  = DEFAULT_ARTISTS,
 }: LineupTeaserProps) {
-  const gridRef = useRef<HTMLDivElement>(null);
-  const [revealed, setRevealed] = useState(false);
-
-  useEffect(() => {
-    const el = gridRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) { setRevealed(true); obs.disconnect(); }
-      },
-      { threshold: 0.05, rootMargin: "0px 0px -40px 0px" }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
 
   return (
     <section
       id="fellepok"
       aria-label="Fellépők"
-      className="reveal-on-scroll relative z-[2] px-5 py-20 sm:px-8"
+      className="relative z-[2] px-5 py-20 sm:px-8"
     >
       <div className="mx-auto max-w-[1160px]">
         {/* Cím + aláhúzás */}
@@ -87,11 +71,10 @@ export default function LineupTeaser({
 
         {/* Kártyarács */}
         <div
-          ref={gridRef}
           className="grid grid-cols-2 gap-3 sm:gap-[18px] md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
         >
           {artists.map((a, i) => (
-            <ArtistCard key={`${a.name}-${i}`} artist={a} index={i} revealed={revealed} />
+            <ArtistCard key={`${a.name}-${i}`} artist={a} index={i} />
           ))}
         </div>
       </div>
@@ -105,23 +88,14 @@ export default function LineupTeaser({
 function ArtistCard({
   artist,
   index,
-  revealed,
 }: {
   artist: LineupArtist;
   index: number;
-  revealed: boolean;
 }) {
-  /* A páros kártyák enyhén balra, a páratlanok jobbra dőlnek hover-kor.
-     A Tailwind JIT-nek statikus class-stringek kellenek — ezért két
-     különálló class-string szerepel, és index szerint választunk. */
   const tiltClass =
     index % 2 === 0
       ? "hover:-rotate-[0.5deg]"
       : "hover:rotate-[0.8deg]";
-
-  /* Stagger-delay: max 10 kártyányi késleltetés (~600ms), hogy ne
-     kelljen sokat várni a rács végéig. */
-  const delay = Math.min(index, 10) * 55;
 
   return (
     <Link
@@ -130,12 +104,7 @@ function ArtistCard({
         "group flex cursor-pointer transform-gpu flex-col overflow-hidden rounded-[14px] bg-cream-50 shadow-[0_8px_22px_rgba(0,0,0,0.15)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_18px_40px_rgba(0,0,0,0.25)]",
         tiltClass,
       )}
-      style={{
-        backgroundImage: "linear-gradient(180deg, #FFF6D6 0%, #FFECB3 100%)",
-        ...(revealed
-          ? { animation: `fadeInUp 0.55s cubic-bezier(0.22,1,0.36,1) ${delay}ms both` }
-          : { opacity: 0 }),
-      }}
+      style={{ backgroundImage: "linear-gradient(180deg, #FFF6D6 0%, #FFECB3 100%)" }}
     >
       {/* Portré 1:1 */}
       <div className="relative aspect-square overflow-hidden">

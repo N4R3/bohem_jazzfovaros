@@ -20,11 +20,13 @@ export const hu: SiteContent = {
     { label: "Jegyek & Infó", href: "/info/" },
     { label: "Szállás", href: "/szallas/" },
     { label: "Térkép", href: "/terkep/" },
-    { label: "Galéria", href: "/gallery/" },
     { label: "Jazztábor", href: "/tabor/" },
     { label: "Futás", href: "/futas/" },
     { label: "Kapcsolat", href: "/contact/" },
   ],
+
+  szechenyiImage: "/images/43e3a57583f727d87fb1271bb22963ef.jpg",
+  houseRulesPdf: "/documents/hazirend.pdf",
 
   otherLocale: {
     label: "EN",
@@ -208,28 +210,24 @@ export const hu: SiteContent = {
     ticketUrl: BASE.ticketUrl,
 
     ticketTiers: [
-      { label: "Super Early Bird bérlet (első 200 vásárlónak ajándék fesztiválszékkel)", price: "19 900 Ft", highlight: true },
-      { label: "Early Bird bérlet", price: "19 900 Ft" },
-      { label: "Lazy Bird bérlet", price: "24 900 Ft" },
-      { label: "4 napos bérlet (márc. 31-ig Early Bird, jún. 30-ig Lazy Bird)", price: "29 900 Ft" },
-      { label: "4 napos VIP-bérlet (étel-ital fogyasztással a VIP-sátorban)", price: "59 900 Ft" },
-      { label: "Bérlet kecskemétieknek (6000–6050 irányítószám)", price: "16 900 Ft" },
-      { label: "Diákbérlet (7–18 éves kor)", price: "7 900 Ft" },
-      { label: "Napijegy – csütörtök", price: "5 900 Ft" },
-      { label: "Napijegy – péntek", price: "9 900 Ft" },
-      { label: "Napijegy – szombat", price: "11 900 Ft" },
-      { label: "Napijegy – vasárnap", price: "3 900 Ft" },
-      { label: "Esti napijegy (péntek–szombat, 21:00 után)", price: "4 900 Ft" },
+      { label: "Lazy Bird bérlet (augusztus 7–10.)", price: "24 900 Ft" },
+      { label: "4 napos bérlet (augusztus 7–10.)", price: "29 900 Ft" },
+      { label: "3 napos bérlet (bármely 3 nap)", price: "26 900 Ft" },
+      { label: "2 napos bérlet (bármely 2 nap)", price: "22 900 Ft" },
+      { label: "Napijegy csütörtök (aug. 7.)", price: "10 900 Ft" },
+      { label: "Napijegy péntek (aug. 8.)", price: "10 900 Ft" },
+      { label: "Napijegy szombat (aug. 9.)", price: "14 900 Ft" },
+      { label: "Napijegy vasárnap (aug. 10.)", price: "9 900 Ft" },
+      { label: "VIP bérlet (4 nap)", price: "89 900 Ft" },
+      { label: "VIP napijegy", price: "24 900 Ft" },
+      { label: "Kedvezményes 4 napos bérlet (diák, nyugdíjas)", price: "24 900 Ft" },
+      { label: "Kedvezményes napijegy (diák, nyugdíjas)", price: "8 900 Ft" },
     ],
 
     ticketNote:
       "A belépő minden esetben egy karszalag, amit a helyszínen kapsz meg az elővásárláskor kapott számlád ellenében. A belépés 6 éves korig felnőtt kíséretével ingyenes — gyerekeknek ne vegyél belépőt! (6 évesnek az számít, aki 2020. augusztus 9. után született.) OTP SZÉP-kártyával a fesztivál alatt a II. kapunál a fesztiválirodában tudsz fizetni. A helyszínen is tudsz jegyet venni (I. és II. kapu, valamint fesztiváliroda). Figyelem: ételt és italt behozni tilos!",
 
     sections: [
-      {
-        title: "Helyszín",
-        body: "Domb Beach (Benkó Zoltán Szabadidőközpont), Kecskemét, Csabay Géza körút — a kórház és a Kecskeméti Fürdő között. A fesztiválterületre két kapun lehet belépni: az I. kapu CSAK 9:00–20:00 között van nyitva; a II. kapu folyamatosan nyitva tart. GPS: 46.903819, 19.666032",
-      },
       {
         title: "Belépés és biztonság",
         body: "Érvényes jegy vagy bérlet szükséges a belépéshez. A belépő egy karszalag, amit a helyszínen kapsz meg. Ételt és italt behozni tilos — a bejáratnál a biztonsági személyzet ellenőrizheti a táskádat. SZÉP-kártyás fizetés a fesztivál alatt a II. kapunál lehetséges.",

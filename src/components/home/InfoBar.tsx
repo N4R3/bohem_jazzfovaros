@@ -2,13 +2,15 @@
  * InfoBar — narancs sáv a Hero alján, jazzdesign1 1:1.
  *
  *  - Felül + alul szaggatott perforált csík (`.perf-line`)
- *  - 📅 dátum-pill + 📍 helyszín-pill (kis áttetsző fehér körben emoji)
- *  - jobbra kis fehér "Jegyvásárlás →" CTA pill
- *
- *  A jegyvásárlás kerül hover-re jobbra
+ *  - 📅 dátum-pill + 📍 helyszín-pill
+ *  - jobbra "Jegyvásárlás →" CTA pill
  */
 
 import Link from "next/link";
+
+const ORANGE_BAR = "#FC7F3C";
+const ORANGE_TEXT = "#FCCB89";
+const BLUE = "#17345F";
 
 type InfoBarProps = {
   date?: string;
@@ -26,8 +28,8 @@ export default function InfoBar({
   return (
     <section
       aria-label="Dátum és helyszín"
-      className="info-bar relative z-[2] bg-orange-500 px-5 py-[22px] text-white sm:px-8"
-      style={{ boxShadow: "0 10px 24px rgba(255,98,0,0.25)" }}
+      className="info-bar relative z-[2] px-5 py-[22px] sm:px-8"
+      style={{ background: ORANGE_BAR, boxShadow: "0 10px 24px rgba(0,0,0,0.2)" }}
     >
       {/* Felső szaggatott sáv */}
       <span
@@ -36,35 +38,42 @@ export default function InfoBar({
       />
 
       <div className="mx-auto flex max-w-[1320px] flex-wrap items-center justify-start gap-x-10 gap-y-3 sm:justify-center">
-        {/* 📅 Dátum pill */}
-        <span className="inline-flex items-center gap-3 text-[16px] font-bold uppercase tracking-[0.05em]">
+        {/* Dátum - kék szöveg narancs alapon */}
+        <span
+          className="inline-flex items-center gap-3 text-[16px] font-bold uppercase tracking-[0.05em]"
+          style={{ color: BLUE }}
+        >
           <span
-            aria-hidden="true"
-            className="grid h-[22px] w-[22px] place-items-center rounded-full bg-white/20 text-[12px] leading-none"
+            className="grid h-[22px] w-[22px] place-items-center rounded-full text-[12px]"
+            style={{ background: "rgba(12,60,85,0.2)" }}
           >
             📅
           </span>
           {date}
         </span>
 
-        {/* 📍 Helyszín pill */}
-        <span className="inline-flex items-center gap-3 text-[16px] font-bold uppercase tracking-[0.05em]">
+        {/* Helyszín - kék szöveg narancs alapon */}
+        <span
+          className="inline-flex items-center gap-3 text-[16px] font-bold uppercase tracking-[0.05em]"
+          style={{ color: BLUE }}
+        >
           <span
-            aria-hidden="true"
-            className="grid h-[22px] w-[22px] place-items-center rounded-full bg-white/20 text-[12px] leading-none"
+            className="grid h-[22px] w-[22px] place-items-center rounded-full text-[12px]"
+            style={{ background: "rgba(12,60,85,0.2)" }}
           >
             📍
           </span>
           {venue}
         </span>
 
-        {/* Fehér Jegyvásárlás CTA — jobbra tolva asztalon */}
+        {/* Jegyvásárlás gomb - kék alapon narancs szöveg */}
         <Link
           href={ticketUrl}
-          className="group ml-auto inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[13px] font-extrabold uppercase tracking-[0.08em] text-orange-500 transition-transform duration-200 hover:translate-x-1"
+          className="ml-auto inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[13px] font-extrabold uppercase tracking-[0.08em] transition-transform duration-200 hover:translate-x-1"
+          style={{ background: BLUE, color: ORANGE_TEXT }}
         >
           {ticketLabel}
-          <span aria-hidden="true">→</span>
+          <span>→</span>
         </Link>
       </div>
 

@@ -255,6 +255,7 @@ export default async function LineupPage() {
       eyebrow={`${c.meta.festivalDates} · ${c.meta.city}`}
       title={lineup.title}
       subtitle={lineup.subtitle}
+      compact
     >
       <LineupGrid
         artists={artists}

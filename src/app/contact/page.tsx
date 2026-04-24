@@ -30,13 +30,15 @@ export default async function ContactPage() {
       <div className="grid gap-8 lg:grid-cols-2">
         {/* Bal: Szervező + kapcsolat */}
         <section
-          className="relative overflow-hidden rounded-2xl p-6 shadow-xl sm:p-8"
+          className="relative flex flex-col overflow-hidden rounded-2xl p-6 shadow-xl sm:p-8"
           style={{ background: "var(--color-cream-50)" }}
         >
           <div
             className="absolute inset-x-0 top-0 h-1.5"
             style={{ background: "var(--color-accent-500)" }}
           />
+
+          {/* 1. Fejléc - szervező neve */}
           <h2
             className="mb-5 font-display text-2xl font-black uppercase leading-tight sm:text-3xl"
             style={{ color: "var(--color-teal-900)" }}
@@ -44,6 +46,7 @@ export default async function ContactPage() {
             {contact.organizer}
           </h2>
 
+          {/* 2. Kapcsolati adatok */}
           <div className="flex flex-col gap-4">
             <Row
               icon={
@@ -98,12 +101,13 @@ export default async function ContactPage() {
             </Row>
           </div>
 
+          {/* 3. Önkéntes CTA - középső rész */}
           {contact.volunteerText && contact.volunteerUrl && (
             <a
               href={contact.volunteerUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 flex items-start gap-3 rounded-xl px-5 py-4 text-sm font-semibold transition-all hover:-translate-y-0.5"
+              className="mt-6 flex items-center gap-3 rounded-xl px-5 py-4 text-sm font-semibold transition-all hover:translate-y-[-2px]"
               style={{
                 background: "var(--color-accent-500)",
                 color: "#fdf6e3",
@@ -117,15 +121,17 @@ export default async function ContactPage() {
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
-                className="mt-0.5 shrink-0"
+                className="shrink-0"
               >
                 <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M12 3a5 5 0 100 10 5 5 0 000-10zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
               </svg>
-              <span>{contact.volunteerText} →</span>
+              <span>{contact.volunteerText}</span>
+              <span className="ml-auto">→</span>
             </a>
           )}
 
-          <div className="mt-6 flex gap-3">
+          {/* 4. Social gombok - legalul */}
+          <div className="mt-auto pt-6 flex gap-3">
             <SocialIcon href={contact.socials.facebook} label="Facebook">
               <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987H8.078V12h2.36V9.797c0-2.33 1.387-3.616 3.51-3.616 1.017 0 2.08.182 2.08.182v2.286h-1.172c-1.155 0-1.515.717-1.515 1.452V12h2.578l-.412 2.891h-2.166v6.987C18.343 21.128 22 16.991 22 12z" />
             </SocialIcon>

@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import SubpageBubbles from "@/components/layout/SubpageBubbles";
 
 /**
  * BeachPageShell — egységes aloldal-szerkezet a főoldal design-nyelvén.
@@ -26,10 +25,13 @@ interface BeachPageShellProps {
   /** Lap tartalma — ez a sötét teal content szekcióba kerül */
   children: ReactNode;
   /**
-   * Ha igaz, a content szekció padding-je kisebb (pl. galéria esetén
-   * a kártyarács a szekció szélességével együtt nyílik).
+   * Ha igaz, a content szekció padding-je kisebb.
    */
   tight?: boolean;
+  /**
+   * Ha igaz, a fejléc és a tartalom közötti tér kisebb (program, lineup).
+   */
+  compact?: boolean;
 }
 
 export default function BeachPageShell({
@@ -38,10 +40,10 @@ export default function BeachPageShell({
   eyebrow,
   children,
   tight = false,
+  compact = false,
 }: BeachPageShellProps) {
   return (
     <div className="relative overflow-hidden">
-      <SubpageBubbles />
       {/* ============================================================
           Rövid fejléc sáv — átlátszó, hogy a body gradient látszik
           ============================================================ */}
@@ -49,9 +51,9 @@ export default function BeachPageShell({
         aria-label="Oldal fejléc"
         className="relative z-10 overflow-hidden"
       >
-        <div className="relative z-10 mx-auto max-w-[1400px] px-5 py-14 text-center sm:px-8 sm:py-20">
+        <div className={`relative z-10 mx-auto max-w-[1400px] px-5 text-center sm:px-8 ${compact ? "py-4 sm:py-5" : "py-8 sm:py-12"}`}>
           {eyebrow && (
-            <p className="mb-3 font-display text-xs font-bold uppercase tracking-[0.28em] text-cream-50/95 drop-shadow">
+            <p className="mb-2 font-display text-xs font-bold uppercase tracking-[0.28em] text-cream-50/95 drop-shadow">
               {eyebrow}
             </p>
           )}
@@ -65,7 +67,7 @@ export default function BeachPageShell({
             {title}
           </h1>
           {subtitle && (
-            <p className="mx-auto mt-4 max-w-2xl text-sm font-semibold text-cream-50/90 sm:text-base">
+            <p className={`mx-auto max-w-2xl text-sm font-semibold text-cream-50/90 sm:text-base ${compact ? "mt-2" : "mt-4"}`}>
               {subtitle}
             </p>
           )}
@@ -76,9 +78,9 @@ export default function BeachPageShell({
       {/* ============================================================
           Content szekció — átlátszó háttér, a body óceán gradient látszik
           ============================================================ */}
-      <section className={`${tight ? "py-10 sm:py-14" : "py-14 sm:py-20"} relative z-10`}>
+      <section className={`${tight ? "py-6 sm:py-10" : compact ? "py-4 sm:py-6" : "py-10 sm:py-14"} relative z-10`}>
         <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-10">
-          <div className="reveal-on-scroll">{children}</div>
+          <div>{children}</div>
         </div>
       </section>
     </div>

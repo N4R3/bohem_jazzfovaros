@@ -109,6 +109,8 @@ export interface CampScheduleItem {
 }
 
 export interface SiteContent {
+  szechenyiImage?: string;
+  houseRulesPdf?: string;
   meta: {
     siteTitle: string;
     siteDescription: string;

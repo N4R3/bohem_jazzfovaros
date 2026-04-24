@@ -75,24 +75,7 @@
   --font-sans:    var(--font-poppins, "Poppins"), system-ui, sans-serif;
   --font-script:  var(--font-pacifico, "Pacifico"), cursive;
 
-  /* -------- Egyedi animációk (jazzdesign1) -------- */
-  --animate-bob:        bob 5.5s ease-in-out infinite;
-  --animate-bubble:     bubble 7s ease-in-out infinite;
-  --animate-ring:       ring 6s ease-in-out infinite;
-  --animate-ball:       ball 4.5s ease-in-out infinite;
-  --animate-duck-bob:   duckBob 4.5s ease-in-out infinite;
-  --animate-float-a:    floatA 6s ease-in-out infinite;
-  --animate-float-b:    floatB 5s ease-in-out infinite;
-  --animate-pulse-ring: pulseRing 2.2s ease-out infinite;
-  --animate-rise:       rise linear infinite;
-}
-
-/* ============================================================
-   Hero bemeneteli animáció — staggerelt fade-in+slide-up betöltéskor
-   ============================================================ */
-@keyframes heroEnter {
-  from { opacity: 0; transform: translateY(22px); }
-  to   { opacity: 1; transform: translateY(0); }
+  /* Animációk kikapcsolva — az oldal teljesen statikus */
 }
 
 @keyframes pageEnter {
@@ -110,14 +93,6 @@
 
 .page-enter {
   animation: pageEnter 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-/* ============================================================
-   Scroll-reveal — fadeInUp (LineupTeaser kártyák, CTA szekció stb.)
-   ============================================================ */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(28px); }
-  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ============================================================
@@ -181,95 +156,9 @@
 }
 
 /* ============================================================
-   Hero + dekor animációk (jazzdesign1 1:1 másolata)
+   Statikus design — animációk kikapcsolva
    ============================================================ */
-@keyframes bob {
-  0%, 100% { transform: translateY(0) rotate(0); }
-  50%      { transform: translateY(-8px) rotate(-2deg); }
-}
-@keyframes bubble {
-  0%, 100% { transform: translateY(0);     opacity: 0.35; }
-  50%      { transform: translateY(-16px); opacity: 0.7;  }
-}
-@keyframes ring {
-  0%, 100% { transform: rotate(-10deg) translateY(0); }
-  50%      { transform: rotate(-14deg) translateY(-6px); }
-}
-@keyframes ball {
-  0%, 100% { transform: translateY(0) rotate(0); }
-  50%      { transform: translateY(-6px) rotate(14deg); }
-}
 
-/* jazzdesign1 specifikus mozgások */
-@keyframes duckBob {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-18px); }
-}
-@keyframes floatA {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-14px); }
-}
-@keyframes floatB {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-20px); }
-}
-@keyframes pulseRing {
-  0%   { box-shadow: 0 0 0 0 rgba(255,98,0,0.55), 0 20px 40px rgba(0,0,0,0.35); }
-  80%  { box-shadow: 0 0 0 32px rgba(255,98,0,0), 0 20px 40px rgba(0,0,0,0.35); }
-  100% { box-shadow: 0 0 0 0 rgba(255,98,0,0), 0 20px 40px rgba(0,0,0,0.35); }
-}
-@keyframes rise {
-  from { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
-  10%  { opacity: 1; }
-  to   { transform: translateY(-110vh) translateX(30px) scale(1.2); opacity: 0; }
-}
-
-@keyframes bubbleAscendPage {
-  0% {
-    bottom: -72px;
-    opacity: 0;
-    transform: translateX(0) scale(0.86);
-  }
-  15% {
-    opacity: var(--bubble-opacity, 0.36);
-  }
-  50% {
-    transform: translateX(16px) scale(1);
-  }
-  85% {
-    opacity: calc(var(--bubble-opacity, 0.36) * 0.82);
-  }
-  100% {
-    bottom: 105%;
-    opacity: 0;
-    transform: translateX(-12px) scale(1.08);
-  }
-}
-
-.subpage-bubble {
-  animation-name: bubbleAscendPage;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  will-change: bottom, transform, opacity;
-}
-
-/* --- Régi keyframe nevek backward compat --- */
-@keyframes card-fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .subpage-bubble {
-    animation: none !important;
-  }
-}
 
 /* ============================================================
    Alap body — jazzdesign1 világos #f5fbfd háttér + Poppins
@@ -340,7 +229,7 @@ p { text-wrap: pretty; }
   .hero-fold > section[aria-label="Hero"] {
     height: calc(100svh - var(--navbar-height, 76px));
     background-color: #bfe6f5;
-    background-image: url('/images/design1/header_mobile.png');
+    background-image: url('/images/header_phone1.png');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center bottom;
@@ -352,8 +241,9 @@ p { text-wrap: pretty; }
 /* ---------- TABLET + DESKTOP (min-width: 960px) ----------
    A hero-fold egy flex oszlop, ami kitölti az első képernyőt.
    A hero tartalom középen, az info-bar `margin-top: auto` → a képernyő alján.
-   A háttér képet egy `::before` pseudo-element adja az info-bar FÖLÖTT;
-   a sun.png overlay-t egy `::after` teszi a jobb felső sarokba. */
+   A header háttérképe CSAK a Hero szekciót fedi (nem a narancs info sávot), így
+   `background-position: ... bottom` alatt a kép földrajzi alja a sáv tetejéhez
+   igazodik – nem vágódik le úgy, mintha a grafika alja a sáv alá kerülne. */
 @media (min-width: 960px) {
   .hero-fold {
     position: relative;
@@ -361,7 +251,7 @@ p { text-wrap: pretty; }
     flex-direction: column;
     min-height: calc(100svh - var(--navbar-height, 76px));
     background-color: #bfe6f5;
-    overflow: hidden;   /* ::after sun overlay clipelése a szél mentén */
+    overflow: hidden;   /* túlnyúló dekor/overlay clipeléséhez */
   }
 
   /* Hero szekció tölti a fennmaradó teret + középre igazítva */
@@ -372,23 +262,19 @@ p { text-wrap: pretty; }
     z-index: 2;
   }
 
-  /* Info-bar lezárja az első képernyőt, a képernyő aljához tapadva.
-     Az info-bar saját narancs bg-je teljesen opaque, így a háttérkép alatta
-     nem látszik — nem kell a ::before-t bottom inset-tel limitálni. */
-  .hero-fold > section[aria-label="Dátum és helyszín"] {
-    flex: 0 0 auto;
-    margin-top: auto;
-    position: relative;
-    z-index: 2;
-  }
-
-  /* Háttér kép — TELJES hero-fold területet kitölti (info-bar orange alá is
-     benyúl, de az info-bar opaque, így eltakarja). Cover → nincs üres sáv. */
-  .hero-fold::before {
+  /* Háttérkép:
+     - csak a Hero szekció magasságát fedi (nem megy be a narancs info-sáv alá),
+     - de 100vw széles, ezért a viewport két széléig ér. */
+  .hero-fold > section[aria-label="Hero"]::before {
     content: '';
     position: absolute;
-    inset: 0;
-    background-image: url('/images/design1/header_simple.png');
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    background-color: #bfe6f5;
+    background-image: url('/images/header_normal1.png');
     background-repeat: no-repeat;
     background-position: center bottom;
     background-size: cover;
@@ -396,29 +282,24 @@ p { text-wrap: pretty; }
     z-index: 0;
   }
 
-  /* Sun overlay — jobb felső sarok.
-     Kisebb méret + 4-stop radiális mask: a mag (0–26%) teljes erővel látszik
-     (telített sárga), majd 26–42% között meredeken 20%-ra esik, 42–55% között
-     nagyon halvány 5%-ra, és 55–70% között lágyan elolvad a háttérben. A
-     legkülső él így szinte észrevétlenül összeolvad az égbolt-kék háttérrel,
-     nincs éles perem. A `saturate/brightness` filter a sárgát tovább mélyíti. */
-  .hero-fold::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: clamp(240px, 32vw, 540px);
-    height: clamp(220px, 30vw, 500px);
-    background-image: url('/images/design1/sun.png');
-    background-repeat: no-repeat;
-    background-position: top right;
-    background-size: contain;
-    -webkit-mask-image: radial-gradient(circle at 100% 0%, #000 0%, #000 26%, rgba(0,0,0,0.20) 42%, rgba(0,0,0,0.05) 55%, transparent 70%);
-            mask-image: radial-gradient(circle at 100% 0%, #000 0%, #000 26%, rgba(0,0,0,0.20) 42%, rgba(0,0,0,0.05) 55%, transparent 70%);
-    filter: saturate(1.55) brightness(1.08);
-    pointer-events: none;
-    z-index: 1;
-    opacity: 1;
+  /* Info-bar lezárja az első képernyőt, a képernyő aljához tapadva. */
+  .hero-fold > section[aria-label="Dátum és helyszín"] {
+    flex: 0 0 auto;
+    margin-top: auto;
+    position: relative;
+    z-index: 2;
+  }
+}
+
+/* ---------- 960–1439: keskenyebb / magasabb desktop (pl. 4:3, 5:4) ----------
+   `cover` marad, hogy felül is kitöltse a Hero-t (nincs világoskék sáv) —
+   a korábbi `112% auto` okozott üresen maradó magasságot. A fókuszt jobbra
+   húzzuk, hogy a jobb oldali motívum (kacsa) ne vágódjon le: a látható
+   keret a kép belseje felé csúszik, nem a jobb peremét. */
+@media (min-width: 960px) and (max-width: 1439px) {
+  .hero-fold > section[aria-label="Hero"]::before {
+    background-size: cover;
+    background-position: 82% bottom;
   }
 }
 
@@ -426,8 +307,8 @@ p { text-wrap: pretty; }
    21:9 monitor, vagy nagyon széles laptop → wide header használata.
    A kép AR-e 2.365, így cover-rel torzítás nélkül illeszkedik. */
 @media (min-width: 960px) and (min-aspect-ratio: 2/1) {
-  .hero-fold::before {
-    background-image: url('/images/design1/header_simple_wide.png');
+  .hero-fold > section[aria-label="Hero"]::before {
+    background-image: url('/images/header_wide1.png');
     background-position: right bottom;
   }
 }

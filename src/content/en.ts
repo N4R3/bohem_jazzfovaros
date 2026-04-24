@@ -20,10 +20,12 @@ export const en: SiteContent = {
     { label: "Tickets & Info", href: "/info/" },
     { label: "Accommodation", href: "/szallas/" },
     { label: "Map & Transport", href: "/terkep/" },
-    { label: "Gallery", href: "/gallery/" },
     { label: "Jazz Camp", href: "/tabor/" },
     { label: "Contact", href: "/contact/" },
   ],
+
+  szechenyiImage: "/images/43e3a57583f727d87fb1271bb22963ef.jpg",
+  houseRulesPdf: "/documents/hazirend.pdf",
 
   otherLocale: {
     label: "HU",
@@ -204,28 +206,24 @@ export const en: SiteContent = {
     ticketUrl: BASE.ticketUrlEn,
 
     ticketTiers: [
-      { label: "Super Early Bird Pass (first 200 buyers get a free festival chair)", price: "HUF 19,900", highlight: true },
-      { label: "Early Bird Pass", price: "HUF 19,900" },
-      { label: "Lazy Bird Pass", price: "HUF 24,900" },
-      { label: "4-Day Pass (Early Bird until Mar 31, Lazy Bird until Jun 30)", price: "HUF 29,900" },
-      { label: "4-Day VIP Pass (food & drink in VIP marquee)", price: "HUF 59,900" },
-      { label: "4-Day Pass for Kecskemét residents (postcode 6000–6050)", price: "HUF 16,900" },
-      { label: "Student Pass (age 7–18)", price: "HUF 7,900" },
-      { label: "Day ticket – Thursday", price: "HUF 5,900" },
-      { label: "Day ticket – Friday", price: "HUF 9,900" },
-      { label: "Day ticket – Saturday", price: "HUF 11,900" },
-      { label: "Day ticket – Sunday", price: "HUF 3,900" },
-      { label: "Evening ticket – Friday or Saturday (from 21:00)", price: "HUF 4,900" },
+      { label: "Lazy Bird Pass (August 7–10)", price: "HUF 24,900" },
+      { label: "4-Day Pass (August 7–10)", price: "HUF 29,900" },
+      { label: "3-Day Pass (any 3 days)", price: "HUF 26,900" },
+      { label: "2-Day Pass (any 2 days)", price: "HUF 22,900" },
+      { label: "Day Ticket Thursday (Aug 7)", price: "HUF 10,900" },
+      { label: "Day Ticket Friday (Aug 8)", price: "HUF 10,900" },
+      { label: "Day Ticket Saturday (Aug 9)", price: "HUF 14,900" },
+      { label: "Day Ticket Sunday (Aug 10)", price: "HUF 9,900" },
+      { label: "VIP Pass (4 days)", price: "HUF 89,900" },
+      { label: "VIP Day Ticket", price: "HUF 24,900" },
+      { label: "Discounted 4-Day Pass (student, senior)", price: "HUF 24,900" },
+      { label: "Discounted Day Ticket (student, senior)", price: "HUF 8,900" },
     ],
 
     ticketNote:
       "Your ticket is a wristband collected at the venue in exchange for your pre-purchase receipt. Entry is free for children under 6 when accompanied by an adult — do not buy a ticket for them. OTP SZÉP card payments accepted at Gate II during the festival. Tickets are also available at Gate I and Gate II on site. No food or drink may be brought into the festival area.",
 
     sections: [
-      {
-        title: "Venue",
-        body: "Domb Beach (Benkó Zoltán Recreation Centre), Csabay Géza körút, Kecskemét — between the hospital and Kecskemét Spa. Gate I is open 9:00–20:00 only. Gate II is open continuously. GPS: 46.903819, 19.666032",
-      },
       {
         title: "Entry & Security",
         body: "A valid ticket or pass is required for entry. Your ticket is a wristband issued at the venue. No food or drink may be brought into the festival area — security staff may check bags at entry.",
@@ -284,6 +282,8 @@ export const en: SiteContent = {
     phone: BASE.contact.phone,
     phone2: BASE.contact.phone2En,
     phone2Name: BASE.contact.phone2NameEn,
+    volunteerText: "I would like to be a volunteer",
+    volunteerUrl: BASE.contact.volunteerUrl,
     pressEmail: BASE.contact.pressEmail,
     pressTitle: "Press & Accreditation",
     pressText:
@@ -364,7 +364,11 @@ export const en: SiteContent = {
     location: BASE.running.location.en,
     description:
       "The Bohém JAZZ CAPITAL Run takes place on the Saturday of the festival at 10:00. Start and finish at the festival finish gate. Choose from three distances: 2,300 m, 11,500 m, or 5 × 2,300 m relay. Entry fee: HUF 2,500 by bank transfer before midnight on Aug 7 (Kecskeméti Jazz Foundation account: 11732002-20302115) or HUF 3,000 on site in cash or by card. Changing rooms and bag storage provided. Every participant receives a race-logo t-shirt; snacks and water at the finish line.",
-    distances: BASE.running.distances,
+    distances: [
+      { label: "2 300 m", distance: "2 300 m", fee: "HUF 2 500" },
+      { label: "11 500 m", distance: "11 500 m", fee: "HUF 2 500" },
+      { label: "5 × 2 300 m relay", distance: "5 × 2 300 m", fee: "HUF 2 500 / person" },
+    ],
     entryUrl: BASE.running.entryUrl,
     entryLabel: "Register Online →",
     entryDeadline: BASE.running.entryDeadline.en,

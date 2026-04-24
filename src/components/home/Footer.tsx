@@ -25,7 +25,7 @@ export default async function Footer() {
      `/info/` és `/contact/` URL-ekre mutat. */
   const infoLinks = [
     { label: isEn ? "FAQ" : "GYIK", href: `${rootPrefix}/info/` },
-    { label: isEn ? "House Rules" : "Házirend", href: `${rootPrefix}/info/` },
+    { label: isEn ? "House Rules" : "Házirend", href: c.houseRulesPdf || "#" },
     { label: isEn ? "Accessibility" : "Akadálymentesítés", href: `${rootPrefix}/info/` },
     { label: isEn ? "Volunteers" : "Önkéntesnek", href: c.contact?.volunteerUrl || `${rootPrefix}/contact/` },
     { label: isEn ? "Press" : "Sajtó", href: `${rootPrefix}/contact/` },
@@ -37,22 +37,150 @@ export default async function Footer() {
 
   return (
     <footer
-      className="relative z-[2] px-5 pb-6 pt-14 text-white sm:px-8"
+      className="relative z-[2] px-5 pb-6 pt-8 text-white sm:px-8"
       style={{
         background:
           "linear-gradient(180deg, rgba(12, 60, 85, 0.85), rgba(8, 42, 60, 0.95))",
         marginTop: 40,
       }}
     >
+      {/* ===== Támogatók / Szponzorok logói — LEGFELÜL ===== */}
+      {c.sponsors && c.sponsors.main.length > 0 && (
+        <div className="mx-auto mb-10 max-w-[1160px] border-b border-white/15 pb-8">
+          <p
+            className="mb-4 text-center font-display font-normal uppercase tracking-[0.1em] text-orange-500"
+            style={{ fontSize: 22 }}
+          >
+            {isEn ? "Main Supporters" : "Főtámogatók"}
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-5">
+            {c.sponsors.main.map((s) => (
+              s.url && /^https?:\/\//.test(s.url) ? (
+                <a
+                  key={s.name}
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={s.name}
+                  className="opacity-90 transition-opacity hover:opacity-100"
+                >
+                  <Image
+                    src={s.logo}
+                    alt={s.name}
+                    width={80}
+                    height={40}
+                    className="h-14 w-auto object-contain sm:h-16"
+                  />
+                </a>
+              ) : (
+                <span key={s.name} title={s.name} className="opacity-85">
+                  <Image
+                    src={s.logo}
+                    alt={s.name}
+                    width={80}
+                    height={40}
+                    className="h-14 w-auto object-contain sm:h-16"
+                  />
+                </span>
+              )
+            ))}
+          </div>
+          {c.sponsors.sponsors.length > 0 && (
+            <>
+              <p
+                className="mt-6 mb-3 text-center font-display font-normal uppercase tracking-[0.1em] text-orange-400"
+                style={{ fontSize: 22 }}
+              >
+                {isEn ? "Sponsors" : "Szponzorok"}
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-4">
+              {c.sponsors.sponsors.map((s) => (
+                s.url && /^https?:\/\//.test(s.url) ? (
+                  <a
+                    key={s.name}
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={s.name}
+                    className="opacity-85 transition-opacity hover:opacity-100"
+                  >
+                    <Image
+                      src={s.logo}
+                      alt={s.name}
+                      width={64}
+                      height={32}
+                      className="h-11 w-auto object-contain sm:h-[52px]"
+                    />
+                  </a>
+                ) : (
+                  <span key={s.name} title={s.name} className="opacity-80">
+                    <Image
+                      src={s.logo}
+                      alt={s.name}
+                      width={64}
+                      height={32}
+                      className="h-11 w-auto object-contain sm:h-[52px]"
+                    />
+                  </span>
+                )
+              ))}
+              </div>
+            </>
+          )}
+          {c.sponsors.partners.length > 0 && (
+            <>
+              <p
+                className="mt-6 mb-3 text-center font-display font-normal uppercase tracking-[0.1em] text-orange-400"
+                style={{ fontSize: 22 }}
+              >
+                {isEn ? "Partners" : "Partnerek"}
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                {c.sponsors.partners.map((s) => (
+                  s.url && /^https?:\/\//.test(s.url) ? (
+                    <a
+                      key={s.name}
+                      href={s.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={s.name}
+                      className="opacity-85 transition-opacity hover:opacity-100"
+                    >
+                      <Image
+                        src={s.logo}
+                        alt={s.name}
+                        width={56}
+                        height={28}
+                        className="h-10 w-auto object-contain sm:h-12"
+                      />
+                    </a>
+                  ) : (
+                    <span key={s.name} title={s.name} className="opacity-75">
+                      <Image
+                        src={s.logo}
+                        alt={s.name}
+                        width={56}
+                        height={28}
+                        className="h-10 w-auto object-contain sm:h-12"
+                      />
+                    </span>
+                  )
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
       <div className="mx-auto grid max-w-[1160px] gap-10 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1fr]">
         {/* ===== Márka + cím + szocmédia ===== */}
         <div>
           <Image
             src="/images/branding/logo_simple.png"
             alt={c.meta.siteTitle}
-            width={150}
-            height={76}
-            className="mb-3.5 h-[76px] w-auto"
+            width={160}
+            height={70}
+            className="mb-3.5 h-[64px] w-auto sm:h-[72px]"
           />
           <p className="text-[13px] leading-[1.6] opacity-[0.88]">
             {c.contact.organizer}
@@ -155,15 +283,26 @@ export default async function Footer() {
       </div>
 
       {/* ===== Alsó szalag: copyright + jogi linkek ===== */}
-      <div className="mx-auto mt-10 flex max-w-[1160px] flex-wrap justify-between gap-2 border-t border-white/15 pt-5 text-[12px] opacity-70">
+      <div className="mx-auto mt-8 flex max-w-[1160px] flex-wrap justify-between gap-2 border-t border-white/15 pt-5 text-[12px] opacity-70">
         <span>{c.footer.copyright}</span>
         <span>
           {c.footer.legalLinks.slice(0, 2).map((item, index) => (
             <span key={item.href + item.label}>
               {index > 0 ? " · " : ""}
-              <Link href={item.href} className="hover:text-sun-400">
-                {item.label}
-              </Link>
+              {item.href.toLowerCase().endsWith(".pdf") ? (
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-sun-400"
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link href={item.href} className="hover:text-sun-400">
+                  {item.label}
+                </Link>
+              )}
             </span>
           ))}
           {" · "}
@@ -201,9 +340,10 @@ function FooterCol({
 
 function FooterLink({ href, label }: { href: string; label: string }) {
   const isExternal = /^https?:\/\//.test(href);
+  const isPdf = href.toLowerCase().endsWith(".pdf");
   return (
     <li>
-      {isExternal ? (
+      {isExternal || isPdf ? (
         <a
           href={href}
           target="_blank"
@@ -239,7 +379,7 @@ function SocialIcon({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="grid h-[38px] w-[38px] place-items-center rounded-full bg-white/10 transition-all duration-200 hover:-translate-y-[3px] hover:bg-orange-500"
+      className="grid h-[38px] w-[38px] place-items-center rounded-full bg-white/10 transition-colors hover:bg-orange-500"
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
         {children}

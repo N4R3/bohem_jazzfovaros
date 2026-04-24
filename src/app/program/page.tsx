@@ -33,6 +33,7 @@ export default async function ProgramPage() {
       eyebrow={`${c.meta.festivalDates} · ${c.meta.city}`}
       title={program.title}
       subtitle={program.subtitle}
+      compact
     >
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         {program.days.map((day, idx) => {
@@ -40,12 +41,10 @@ export default async function ProgramPage() {
           return (
             <article
               key={day.date}
-              className="flex flex-col overflow-hidden rounded-2xl shadow-xl transition-transform hover:-translate-y-1"
+              className="flex flex-col overflow-hidden rounded-2xl shadow-xl"
               style={{
                 background: "var(--color-cream-50)",
                 boxShadow: "0 12px 30px rgba(0,0,0,0.3)",
-                animation: "card-fade-in 0.6s ease-out backwards",
-                animationDelay: `${idx * 80}ms`,
               }}
             >
               {/* nap fejléce — színkódolva */}

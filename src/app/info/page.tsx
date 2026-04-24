@@ -20,6 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function InfoPage() {
   const c = await getContent();
   const { info } = c;
+  const isEn = c.otherLocale.label === "HU";
 
   return (
     <BeachPageShell
@@ -47,7 +48,7 @@ export default async function InfoPage() {
                   href={info.ticketUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-xs font-extrabold uppercase tracking-wider transition-transform hover:scale-[1.04]"
+                  className="inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-xs font-extrabold uppercase tracking-wider"
                   style={{
                     background: "var(--color-accent-700)",
                     color: "#fdf6e3",
@@ -101,11 +102,7 @@ export default async function InfoPage() {
             <section
               key={section.title}
               className="relative overflow-hidden rounded-2xl p-6 shadow-xl sm:p-7"
-              style={{
-                background: "var(--color-cream-50)",
-                animation: "card-fade-in 0.55s ease-out backwards",
-                animationDelay: `${i * 70}ms`,
-              }}
+              style={{ background: "var(--color-cream-50)" }}
             >
               <div
                 className="absolute inset-x-0 top-0 h-1.5"
@@ -169,7 +166,7 @@ export default async function InfoPage() {
             href={info.ticketUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative flex items-center justify-center gap-2 overflow-hidden rounded-2xl px-6 py-6 text-center font-display text-lg font-black uppercase tracking-wide transition-transform hover:scale-[1.02]"
+            className="group relative flex items-center justify-center gap-2 overflow-hidden rounded-2xl px-6 py-6 text-center font-display text-lg font-black uppercase tracking-wide"
             style={{
               background: "var(--color-accent-500)",
               color: "#fdf6e3",
@@ -181,6 +178,44 @@ export default async function InfoPage() {
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </a>
+
+          {/* Helyszín / térkép blokk */}
+          <section
+            className="relative overflow-hidden rounded-2xl shadow-xl"
+            style={{ background: "var(--color-cream-50)" }}
+          >
+            <div
+              className="absolute inset-x-0 top-0 h-1.5"
+              style={{ background: "var(--color-accent-500)" }}
+              aria-hidden="true"
+            />
+            <div className="p-5 sm:p-6">
+              <h3
+                className="mb-3 font-display text-xl font-black uppercase"
+                style={{ color: "var(--color-teal-900)" }}
+              >
+                {isEn ? "Venue & Map" : "Helyszín"}
+              </h3>
+              <p
+                className="mb-3 text-sm leading-relaxed"
+                style={{ color: "rgba(10,58,54,0.78)" }}
+              >
+                Domb Beach, Kecskemét
+              </p>
+              <div className="overflow-hidden rounded-xl border border-black/10">
+                <iframe
+                  title={isEn ? "Domb Beach venue map" : "Domb Beach helyszín térkép"}
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2726.5!2d19.666032!3d46.903819!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDbCsDU0JzEzLjgiTiAxOcKwMzknNTcuNyJF!5e0!3m2!1shu!2shu!4v1700000000000!5m2!1shu!2shu"
+                  width="100%"
+                  height="260"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+            </div>
+          </section>
         </aside>
       </div>
     </BeachPageShell>
