@@ -10,9 +10,26 @@ export type LineupArtist = Artist & {
   image?: string;
   details?: string;
   lineup?: string[];
+  /** Oldalszinten összefésült (Sanity + statikus fallback) */
   website?: string;
   youtube?: string;
 };
+
+function lineupWeb(a: LineupArtist) {
+  return a.website ?? a.websiteUrl;
+}
+function lineupYoutube(a: LineupArtist) {
+  return a.youtube ?? a.youtubeUrl;
+}
+function hasLineupLinks(a: LineupArtist) {
+  return Boolean(
+    lineupWeb(a) ||
+      lineupYoutube(a) ||
+      a.facebookUrl ||
+      a.instagramUrl ||
+      a.spotifyUrl
+  );
+}
 
 type Props = {
   artists: LineupArtist[];
@@ -141,11 +158,11 @@ export default function LineupGrid({
                   {artist.details || artist.bio || "Koppints a részletes fellépő-adatokhoz."}
                 </p>
 
-                {(artist.website || artist.youtube) && (
+                {hasLineupLinks(artist) && (
                   <div className="mt-4 flex flex-wrap gap-2">
-                    {artist.website && (
+                    {lineupWeb(artist) && (
                       <a
-                        href={artist.website}
+                        href={lineupWeb(artist)}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(event) => event.stopPropagation()}
@@ -155,9 +172,9 @@ export default function LineupGrid({
                         Weboldal
                       </a>
                     )}
-                    {artist.youtube && (
+                    {lineupYoutube(artist) && (
                       <a
-                        href={artist.youtube}
+                        href={lineupYoutube(artist)}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(event) => event.stopPropagation()}
@@ -165,6 +182,42 @@ export default function LineupGrid({
                         style={{ background: "#b12020", color: "#fff" }}
                       >
                         YouTube
+                      </a>
+                    )}
+                    {artist.facebookUrl && (
+                      <a
+                        href={artist.facebookUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(event) => event.stopPropagation()}
+                        className="inline-flex items-center rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider"
+                        style={{ background: "#1877f2", color: "#fff" }}
+                      >
+                        Facebook
+                      </a>
+                    )}
+                    {artist.instagramUrl && (
+                      <a
+                        href={artist.instagramUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(event) => event.stopPropagation()}
+                        className="inline-flex items-center rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider"
+                        style={{ background: "#e4405f", color: "#fff" }}
+                      >
+                        Instagram
+                      </a>
+                    )}
+                    {artist.spotifyUrl && (
+                      <a
+                        href={artist.spotifyUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(event) => event.stopPropagation()}
+                        className="inline-flex items-center rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider"
+                        style={{ background: "#1db954", color: "#fff" }}
+                      >
+                        Spotify
                       </a>
                     )}
                   </div>
@@ -276,9 +329,9 @@ export default function LineupGrid({
                       )}
 
                       <div className="mt-6 flex flex-wrap gap-3 border-t pt-4" style={{ borderColor: "rgba(10,58,54,0.16)" }}>
-                        {activeArtist.website && (
+                        {lineupWeb(activeArtist) && (
                           <a
-                            href={activeArtist.website}
+                            href={lineupWeb(activeArtist)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider"
@@ -287,15 +340,48 @@ export default function LineupGrid({
                             Weboldal
                           </a>
                         )}
-                        {activeArtist.youtube && (
+                        {lineupYoutube(activeArtist) && (
                           <a
-                            href={activeArtist.youtube}
+                            href={lineupYoutube(activeArtist)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider"
                             style={{ background: "#b12020", color: "#fff" }}
                           >
                             YouTube
+                          </a>
+                        )}
+                        {activeArtist.facebookUrl && (
+                          <a
+                            href={activeArtist.facebookUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider"
+                            style={{ background: "#1877f2", color: "#fff" }}
+                          >
+                            Facebook
+                          </a>
+                        )}
+                        {activeArtist.instagramUrl && (
+                          <a
+                            href={activeArtist.instagramUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider"
+                            style={{ background: "#e4405f", color: "#fff" }}
+                          >
+                            Instagram
+                          </a>
+                        )}
+                        {activeArtist.spotifyUrl && (
+                          <a
+                            href={activeArtist.spotifyUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider"
+                            style={{ background: "#1db954", color: "#fff" }}
+                          >
+                            Spotify
                           </a>
                         )}
                         <a

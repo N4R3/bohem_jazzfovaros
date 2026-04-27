@@ -153,13 +153,30 @@ export async function getVisibleTicketsWithFallback(): Promise<TicketTier[]> {
   }
 }
 
+function trimOrUndef(s?: string | null): string | undefined {
+  const t = typeof s === "string" ? s.trim() : "";
+  return t || undefined;
+}
+
+/** URL mezők: üres string / whitespace nem gátolja a Sanityből jövő értéket; ha hiányzik a protocol, pótoljuk. */
+function externalLink(s?: string | null): string | undefined {
+  const t = trimOrUndef(s);
+  if (!t) return undefined;
+  if (/^https?:\/\//i.test(t)) return t;
+  return `https://${t}`;
+}
+
 export async function getPerformersWithFallback(): Promise<Artist[]> {
   const c = await getContent();
   const locale = await getLocale();
   if (!isSanityConfigured()) return c.lineup.artists;
 
   try {
-    const performers = await sanityClient.fetch<SanityPerformer[]>(getPerformersQuery);
+    const performers = await sanityClient.fetch<SanityPerformer[]>(
+      getPerformersQuery,
+      {},
+      { next: { revalidate: 0 } },
+    );
     if (!performers?.length) return c.lineup.artists;
 
     return performers.map((performer) => ({
@@ -178,8 +195,11 @@ export async function getPerformersWithFallback(): Promise<Artist[]> {
       stage: "main",
       time: "",
       origin: "",
-      websiteUrl: performer.websiteUrl || undefined,
-      youtubeUrl: performer.youtubeUrl || undefined,
+      websiteUrl: externalLink(performer.websiteUrl),
+      youtubeUrl: externalLink(performer.youtubeUrl),
+      facebookUrl: externalLink(performer.facebookUrl),
+      instagramUrl: externalLink(performer.instagramUrl),
+      spotifyUrl: externalLink(performer.spotifyUrl),
     }));
   } catch {
     return c.lineup.artists;

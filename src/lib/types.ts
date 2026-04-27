@@ -11,6 +11,9 @@ export interface Artist {
   origin: string;
   websiteUrl?: string;
   youtubeUrl?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  spotifyUrl?: string;
 }
 
 export interface ScheduleSlot {
