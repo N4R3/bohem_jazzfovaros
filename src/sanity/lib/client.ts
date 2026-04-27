@@ -11,8 +11,12 @@ export const sanityApiVersion =
   process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2026-01-01";
 export const sanityReadToken = process.env.SANITY_API_READ_TOKEN;
 
+if (!sanityProjectId) {
+  throw new Error("Missing NEXT_PUBLIC_SANITY_PROJECT_ID");
+}
+
 export const sanityClient = createClient({
-  projectId: sanityProjectId || "demo",
+  projectId: sanityProjectId,
   dataset: sanityDataset,
   apiVersion: sanityApiVersion,
   useCdn: true,

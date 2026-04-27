@@ -4,7 +4,10 @@ import { visionTool } from "@sanity/vision";
 import { schemaTypes } from "./src/sanity/schemaTypes";
 import { deskStructure } from "./src/sanity/deskStructure";
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "demo";
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID?.trim() || "";
+if (!projectId) {
+  throw new Error("Missing NEXT_PUBLIC_SANITY_PROJECT_ID");
+}
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
 
 export default defineConfig({
