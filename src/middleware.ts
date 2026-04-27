@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 const LOCALE_COOKIE = "NEXT_LOCALE";
 
+function getLocaleFromHost(host: string): "hu" | "en" {
+  if (host.includes("jazzcapital.hu")) return "en";
+  return "hu";
+}
+
 function isBypassedPath(pathname: string): boolean {
   return (
     pathname.startsWith("/_next") ||
@@ -14,6 +19,8 @@ function isBypassedPath(pathname: string): boolean {
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const host = request.headers.get("host") ?? "";
+  const hostLocale = getLocaleFromHost(host);
 
   if (isBypassedPath(pathname)) {
     return NextResponse.next();
@@ -34,7 +41,7 @@ export function middleware(request: NextRequest) {
   }
 
   const response = NextResponse.next();
-  response.cookies.set(LOCALE_COOKIE, "hu", {
+  response.cookies.set(LOCALE_COOKIE, hostLocale, {
     path: "/",
     sameSite: "lax",
     maxAge: 60 * 60 * 24 * 365,

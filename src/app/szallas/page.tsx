@@ -1,21 +1,22 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { getContent } from "@/lib/locale";
-import { canonicalUrl } from "@/lib/seo";
+import { getContent, getLocale } from "@/lib/locale";
 import BeachPageShell from "@/components/layout/BeachPageShell";
+import { getAccommodationContent } from "@/sanity/lib/content";
+import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
   const c = await getContent();
-  return {
-    title: c.accommodation.title,
-    description: c.accommodation.subtitle,
-    alternates: { canonical: canonicalUrl("/szallas/") },
-    openGraph: {
-      title: `${c.accommodation.title} · ${c.meta.siteTitle}`,
-      description: c.accommodation.subtitle,
-      url: canonicalUrl("/szallas/"),
-    },
-  };
+  return buildPageMetadataWithSanity({
+    slug: "szallas",
+    path: "/szallas/",
+    locale,
+    fallbackTitle: c.accommodation.title,
+    fallbackDescription: c.accommodation.subtitle,
+    fallbackOgImage: "/images/og-image.jpg",
+    siteTitle: c.meta.siteTitle,
+  });
 }
 
 function Stars({ count }: { count: number }) {
@@ -39,13 +40,17 @@ function Stars({ count }: { count: number }) {
 
 export default async function AccommodationPage() {
   const c = await getContent();
-  const { accommodation } = c;
+  const locale = await getLocale();
+  const accommodation = await getAccommodationContent(locale);
+  const isEn = c.otherLocale.label === "HU";
 
   return (
     <BeachPageShell
       eyebrow="Domb Beach · Kecskemét"
       title={accommodation.title}
       subtitle={accommodation.subtitle}
+      canonicalPath="/szallas/"
+      locale={isEn ? "en" : "hu"}
     >
       {accommodation.note && (
         <p

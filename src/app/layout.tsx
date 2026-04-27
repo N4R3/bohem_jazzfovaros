@@ -2,12 +2,14 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Bebas_Neue, Poppins, Pacifico } from "next/font/google";
 import { getContent, getLocale } from "@/lib/locale";
-import { BASE_URL, canonicalUrl } from "@/lib/seo";
+import { BASE_URL, canonicalUrl, metadataAlternates } from "@/lib/seo";
 import Scripts from "@/components/analytics/Scripts";
 import CookieBanner from "@/components/analytics/CookieBanner";
 import Navbar from "@/components/home/Navbar";
 import Footer from "@/components/home/Footer";
 import BackgroundWrapper from "@/components/layout/BackgroundWrapper";
+import AppShell from "@/components/layout/AppShell";
+import { organizationSchema, websiteSchema } from "@/lib/structuredData";
 
 export const dynamic = "force-dynamic";
 
@@ -39,8 +41,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const isEn = locale === "en";
   const c = await getContent();
   const ogImage = `${BASE_URL}/images/og-image.jpg`;
-  const localizedPath = isEn ? "/en/" : "/";
-  const alternatePath = isEn ? "/" : "/en/";
+  const localizedPath = "/";
 
   return {
     metadataBase: new URL(BASE_URL),
@@ -49,16 +50,11 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s · ${c.meta.siteTitle}`,
     },
     description: c.meta.siteDescription,
-    alternates: {
-      canonical: canonicalUrl(localizedPath),
-      languages: {
-        [isEn ? "hu" : "en"]: canonicalUrl(alternatePath),
-      },
-    },
+    alternates: metadataAlternates(localizedPath, locale),
     openGraph: {
       title: c.meta.siteTitle,
       description: c.meta.siteDescription,
-      url: canonicalUrl(localizedPath),
+      url: canonicalUrl(localizedPath, locale),
       siteName: c.meta.siteTitle,
       locale: isEn ? "en_GB" : "hu_HU",
       type: "website",
@@ -107,33 +103,53 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="font-sans antialiased text-ink-800">
-        <Scripts />
-
-        {/* Akadálymentes skip-to-content link — billentyűzet navigációhoz */}
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-orange-500 focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-white"
+        <AppShell
+          publicShell={
+            <>
+              <Scripts />
+              <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                  __html: JSON.stringify(
+                    websiteSchema(locale, c.meta.siteTitle, c.meta.siteDescription),
+                  ),
+                }}
+              />
+              <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                  __html: JSON.stringify(
+                    organizationSchema(locale, {
+                      name: c.contact.organizer,
+                      logo: "/images/header_logo.png",
+                      sameAs: [
+                        c.contact.socials.facebook,
+                        c.contact.socials.instagram,
+                        c.contact.socials.youtube,
+                      ],
+                    }),
+                  ),
+                }}
+              />
+              <a
+                href="#main-content"
+                className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-orange-500 focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-white"
+              >
+                {isEn ? "Skip to content" : "Ugrás a tartalomhoz"}
+              </a>
+              <Navbar content={c} />
+              <BackgroundWrapper>
+                <main id="main-content" className="pt-[76px]">
+                  {children}
+                </main>
+                <Footer />
+              </BackgroundWrapper>
+              <CookieBanner />
+            </>
+          }
         >
-          {isEn ? "Skip to content" : "Ugrás a tartalomhoz"}
-        </a>
-
-        {/* Globális fixed fehér navigáció (jazzdesign1) */}
-        <Navbar content={c} />
-
-        <BackgroundWrapper>
-          {/* Oldal-tartalom — a page.tsx-ek itt renderelődnek.
-              A Navbar `fixed` (76px magas), ezért a main a
-              jazzdesign1 `.page-bg { margin-top: var(--navbar-height) }`
-              megoldásához hasonlóan pt-[76px] kap. */}
-          <main id="main-content" className="pt-[76px]">
-            {children}
-          </main>
-
-          {/* Globális footer (minden oldalon) */}
-          <Footer />
-        </BackgroundWrapper>
-
-        <CookieBanner />
+          {children}
+        </AppShell>
       </body>
     </html>
   );

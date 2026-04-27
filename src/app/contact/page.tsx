@@ -1,31 +1,36 @@
 import type { Metadata } from "next";
-import { getContent } from "@/lib/locale";
-import { canonicalUrl } from "@/lib/seo";
+import { getContent, getLocale } from "@/lib/locale";
 import BeachPageShell from "@/components/layout/BeachPageShell";
+import { getContactContent } from "@/sanity/lib/content";
+import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
   const c = await getContent();
-  return {
-    title: c.contact.title,
-    description: c.contact.subtitle,
-    alternates: { canonical: canonicalUrl("/contact/") },
-    openGraph: {
-      title: `${c.contact.title} · ${c.meta.siteTitle}`,
-      description: c.contact.subtitle,
-      url: canonicalUrl("/contact/"),
-    },
-  };
+  return buildPageMetadataWithSanity({
+    slug: "contact",
+    path: "/contact/",
+    locale,
+    fallbackTitle: c.contact.title,
+    fallbackDescription: c.contact.subtitle,
+    fallbackOgImage: "/images/og-image.jpg",
+    siteTitle: c.meta.siteTitle,
+  });
 }
 
 export default async function ContactPage() {
   const c = await getContent();
-  const { contact } = c;
+  const locale = await getLocale();
+  const contact = await getContactContent(locale);
+  const isEn = c.otherLocale.label === "HU";
 
   return (
     <BeachPageShell
       eyebrow="JAZZFŐVÁROS KFT."
       title={contact.title}
       subtitle={contact.subtitle}
+      canonicalPath="/contact/"
+      locale={isEn ? "en" : "hu"}
     >
       <div className="grid gap-8 lg:grid-cols-2">
         {/* Bal: Szervező + kapcsolat */}

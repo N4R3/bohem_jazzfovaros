@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import type { Locale } from "@/lib/types";
+import { breadcrumbSchema } from "@/lib/structuredData";
 
 /**
  * BeachPageShell — egységes aloldal-szerkezet a főoldal design-nyelvén.
@@ -32,6 +34,14 @@ interface BeachPageShellProps {
    * Ha igaz, a fejléc és a tartalom közötti tér kisebb (program, lineup).
    */
   compact?: boolean;
+  /**
+   * Canonical path ehhez az aloldalhoz (pl. "/lineup/"), Breadcrumb schema-hoz.
+   */
+  canonicalPath?: string;
+  /**
+   * Nyelv a breadcrumb schema URL-ekhez.
+   */
+  locale?: Locale;
 }
 
 export default function BeachPageShell({
@@ -41,9 +51,25 @@ export default function BeachPageShell({
   children,
   tight = false,
   compact = false,
+  canonicalPath,
+  locale = "hu",
 }: BeachPageShellProps) {
+  const breadcrumbJsonLd =
+    canonicalPath
+      ? breadcrumbSchema(locale, [
+          { name: locale === "en" ? "Home" : "Főoldal", path: "/" },
+          { name: title, path: canonicalPath },
+        ])
+      : null;
+
   return (
     <div className="relative overflow-hidden">
+      {breadcrumbJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        />
+      )}
       {/* ============================================================
           Rövid fejléc sáv — átlátszó, hogy a body gradient látszik
           ============================================================ */}

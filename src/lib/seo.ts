@@ -1,18 +1,27 @@
 import { getBuildLocale } from "./buildLocale";
+import type { Locale } from "./types";
 
-function locale(): ReturnType<typeof getBuildLocale> {
+function normalizeSiteUrl(url: string): string {
+  return url.replace(/\/$/, "");
+}
+
+export const SITE_URL_HU = normalizeSiteUrl(
+  process.env.NEXT_PUBLIC_SITE_URL_HU ?? "https://jazzfovaros.hu",
+);
+export const SITE_URL_EN = normalizeSiteUrl(
+  process.env.NEXT_PUBLIC_SITE_URL_EN ?? "https://jazzcapital.hu",
+);
+
+function buildLocale(): Locale {
   return getBuildLocale();
 }
 
-export const BASE_URL: string =
-  locale() === "en"
-    ? (process.env.NEXT_PUBLIC_SITE_URL_EN ?? "https://jazzcapital.hu").replace(/\/$/, "")
-    : (process.env.NEXT_PUBLIC_SITE_URL_HU ?? "https://jazzfovaros.hu").replace(/\/$/, "");
+export function siteUrlForLocale(locale: Locale): string {
+  return locale === "en" ? SITE_URL_EN : SITE_URL_HU;
+}
 
-export const ALT_URL: string =
-  locale() === "en"
-    ? (process.env.NEXT_PUBLIC_SITE_URL_HU ?? "https://jazzfovaros.hu").replace(/\/$/, "")
-    : (process.env.NEXT_PUBLIC_SITE_URL_EN ?? "https://jazzcapital.hu").replace(/\/$/, "");
+export const BASE_URL: string = siteUrlForLocale(buildLocale());
+export const ALT_URL: string = siteUrlForLocale(buildLocale() === "en" ? "hu" : "en");
 
 /**
  * HU/EN gomb cél URL-je (build időben égetve).
@@ -37,7 +46,7 @@ export function getLanguageSwitchUrl(): string {
     const noSlash = raw.replace(/\/$/, "");
     return noSlash.startsWith("http") ? noSlash : noSlash.startsWith("/") ? noSlash || "/" : `https://${noSlash}`;
   }
-  const loc = locale();
+  const loc = buildLocale();
   if (loc === "hu") {
     const en = process.env.NEXT_PUBLIC_SITE_URL_EN?.trim();
     if (en) return en.replace(/\/$/, "");
@@ -49,6 +58,17 @@ export function getLanguageSwitchUrl(): string {
   }
 }
 
-export function canonicalUrl(path: string = "/"): string {
-  return `${BASE_URL}${path}`;
+export function canonicalUrl(path: string = "/", locale?: Locale): string {
+  return `${siteUrlForLocale(locale ?? buildLocale())}${path}`;
+}
+
+export function metadataAlternates(path: string, locale: Locale) {
+  return {
+    canonical: canonicalUrl(path, locale),
+    languages: {
+      hu: canonicalUrl(path, "hu"),
+      en: canonicalUrl(path, "en"),
+      "x-default": canonicalUrl(path, "hu"),
+    },
+  };
 }

@@ -1,20 +1,21 @@
 import type { Metadata } from "next";
-import { getContent } from "@/lib/locale";
-import { canonicalUrl } from "@/lib/seo";
+import { getContent, getLocale } from "@/lib/locale";
 import BeachPageShell from "@/components/layout/BeachPageShell";
+import { getProgramContent } from "@/sanity/lib/content";
+import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
   const c = await getContent();
-  return {
-    title: c.program.title,
-    description: c.program.subtitle,
-    alternates: { canonical: canonicalUrl("/program/") },
-    openGraph: {
-      title: `${c.program.title} · ${c.meta.siteTitle}`,
-      description: c.program.subtitle,
-      url: canonicalUrl("/program/"),
-    },
-  };
+  return buildPageMetadataWithSanity({
+    slug: "program",
+    path: "/program/",
+    locale,
+    fallbackTitle: c.program.title,
+    fallbackDescription: c.program.subtitle,
+    fallbackOgImage: "/images/og-image.jpg",
+    siteTitle: c.meta.siteTitle,
+  });
 }
 
 const dayAccents = [
@@ -26,7 +27,9 @@ const dayAccents = [
 
 export default async function ProgramPage() {
   const c = await getContent();
-  const { program } = c;
+  const locale = await getLocale();
+  const program = await getProgramContent(locale);
+  const isEn = c.otherLocale.label === "HU";
 
   return (
     <BeachPageShell
@@ -34,6 +37,8 @@ export default async function ProgramPage() {
       title={program.title}
       subtitle={program.subtitle}
       compact
+      canonicalPath="/program/"
+      locale={isEn ? "en" : "hu"}
     >
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         {program.days.map((day, idx) => {

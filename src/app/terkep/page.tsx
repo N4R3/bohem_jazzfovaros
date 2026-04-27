@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { getContent } from "@/lib/locale";
-import { canonicalUrl } from "@/lib/seo";
-import { BASE } from "@/content/base";
+import { getContent, getLocale } from "@/lib/locale";
 import BeachPageShell from "@/components/layout/BeachPageShell";
+import { getTransportContent, getVenueContent } from "@/sanity/lib/content";
+import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
   const c = await getContent();
-  return {
-    title: c.map.title,
-    description: c.map.subtitle,
-    alternates: { canonical: canonicalUrl("/terkep/") },
-    openGraph: {
-      title: `${c.map.title} · ${c.meta.siteTitle}`,
-      description: c.map.subtitle,
-      url: canonicalUrl("/terkep/"),
-    },
-  };
+  return buildPageMetadataWithSanity({
+    slug: "terkep",
+    path: "/terkep/",
+    locale,
+    fallbackTitle: c.map.title,
+    fallbackDescription: c.map.subtitle,
+    fallbackOgImage: "/images/og-image.jpg",
+    siteTitle: c.meta.siteTitle,
+  });
 }
 
 const iconPaths: Record<string, string> = {
@@ -28,15 +28,20 @@ const iconPaths: Record<string, string> = {
 
 export default async function MapPage() {
   const c = await getContent();
-  const { map } = c;
-  const gps = map.gps.replace(/\s/g, "");
-  const mapsUrl = `https://www.google.com/maps?q=${gps}&z=15&output=embed`;
+  const locale = await getLocale();
+  const venueContent = await getVenueContent(locale);
+  const transportDirections = await getTransportContent(locale);
+  const isEn = c.otherLocale.label === "HU";
+  const gps = venueContent.gps.replace(/\s/g, "");
+  const mapsUrl = venueContent.mapEmbedUrl;
 
   return (
     <BeachPageShell
-      eyebrow={BASE.venue.hu}
-      title={map.title}
-      subtitle={map.subtitle}
+      eyebrow={venueContent.eyebrow}
+      title={venueContent.title}
+      subtitle={venueContent.subtitle}
+      canonicalPath="/terkep/"
+      locale={isEn ? "en" : "hu"}
     >
       {/* Google Maps */}
       <div
@@ -49,7 +54,7 @@ export default async function MapPage() {
         <div className="aspect-video w-full bg-[#0a3a36]">
           <iframe
             src={mapsUrl}
-            title={`${map.title} — ${BASE.venue.hu}`}
+            title={`${venueContent.title} — ${venueContent.eyebrow}`}
             loading="lazy"
             allowFullScreen
             className="h-full w-full border-0"
@@ -66,14 +71,14 @@ export default async function MapPage() {
           <strong className="font-extrabold uppercase tracking-wider">
             Info:
           </strong>{" "}
-          {map.mapNote}
+          {venueContent.description}
         </div>
       </div>
 
       {/* Akciógombok */}
       <div className="mb-12 flex flex-wrap justify-center gap-3">
         <a
-          href={`https://maps.google.com/?q=${gps}`}
+          href={venueContent.googleMapsUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-extrabold uppercase tracking-wider shadow-lg transition-transform hover:scale-[1.04]"
@@ -90,7 +95,7 @@ export default async function MapPage() {
           Google Maps
         </a>
         <a
-          href={`https://www.google.com/maps/dir/?api=1&destination=${gps}`}
+          href={venueContent.directionsUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 rounded-full border-2 px-6 py-3 text-sm font-extrabold uppercase tracking-wider transition-colors"
@@ -113,7 +118,7 @@ export default async function MapPage() {
             border: "1px solid rgba(253,246,227,0.18)",
           }}
         >
-          GPS: {map.gps}
+          GPS: {venueContent.gps}
         </span>
       </div>
 
@@ -128,7 +133,7 @@ export default async function MapPage() {
       >
         <div className="relative">
           <Image
-            src={map.mapImage}
+            src={venueContent.mapImage}
             alt="JAZZFŐVÁROS fesztiváltérkép"
             width={1400}
             height={900}
@@ -147,7 +152,7 @@ export default async function MapPage() {
 
         <div className="flex flex-wrap gap-2 border-t border-white/20 px-4 py-4 sm:px-5">
           <a
-            href={map.mapImage}
+            href={venueContent.mapImage}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-extrabold uppercase tracking-wider"
@@ -156,7 +161,7 @@ export default async function MapPage() {
             Térkép megnyitása nagyban
           </a>
           <a
-            href={`https://www.google.com/maps/dir/?api=1&destination=${gps}`}
+            href={venueContent.directionsUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-extrabold uppercase tracking-wider"
@@ -180,7 +185,7 @@ export default async function MapPage() {
       </h2>
 
       <div className="grid gap-5 sm:grid-cols-2">
-        {map.directions.map((dir, i) => (
+        {transportDirections.map((dir, i) => (
           <DirectionCard key={`${dir.mode}-${i}`} dir={dir} index={i} />
         ))}
       </div>

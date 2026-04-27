@@ -1,37 +1,42 @@
 import type { Metadata } from "next";
-import { getContent } from "@/lib/locale";
-import { canonicalUrl } from "@/lib/seo";
+import { getContent, getLocale } from "@/lib/locale";
+import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 import BeachPageShell from "@/components/layout/BeachPageShell";
+import { getVisibleTicketsWithFallback } from "@/sanity/lib/content";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
   const c = await getContent();
-  return {
-    title: c.info.title,
-    description: c.info.subtitle,
-    alternates: { canonical: canonicalUrl("/info/") },
-    openGraph: {
-      title: `${c.info.title} · ${c.meta.siteTitle}`,
-      description: c.info.subtitle,
-      url: canonicalUrl("/info/"),
-    },
-  };
+  return buildPageMetadataWithSanity({
+    slug: "info",
+    path: "/info/",
+    locale,
+    fallbackTitle: c.info.title,
+    fallbackDescription: c.info.subtitle,
+    fallbackOgImage: "/images/og-image.jpg",
+    siteTitle: c.meta.siteTitle,
+  });
 }
 
 export default async function InfoPage() {
   const c = await getContent();
+  const sanityTickets = await getVisibleTicketsWithFallback();
   const { info } = c;
   const isEn = c.otherLocale.label === "HU";
+  const ticketTiers = sanityTickets.length ? sanityTickets : info.ticketTiers || [];
 
   return (
     <BeachPageShell
       eyebrow={`${c.meta.festivalDates}`}
       title={info.title}
       subtitle={info.subtitle}
+      canonicalPath="/info/"
+      locale={isEn ? "en" : "hu"}
     >
       <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr]">
         <div className="flex flex-col gap-6">
           {/* Ticket tiers */}
-          {info.ticketTiers && info.ticketTiers.length > 0 && (
+          {ticketTiers.length > 0 && (
             <section
               className="relative overflow-hidden rounded-2xl p-6 sm:p-8"
               style={{
@@ -62,7 +67,7 @@ export default async function InfoPage() {
               </div>
 
               <ul className="flex flex-col divide-y" style={{ borderColor: "rgba(255,255,255,0.18)" }}>
-                {info.ticketTiers.map((tier) => (
+                {ticketTiers.map((tier) => (
                   <li
                     key={tier.label}
                     className="flex items-baseline justify-between gap-4 py-3"

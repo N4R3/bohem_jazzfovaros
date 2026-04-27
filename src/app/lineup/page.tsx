@@ -1,27 +1,30 @@
 import type { Metadata } from "next";
-import { getContent } from "@/lib/locale";
-import { canonicalUrl } from "@/lib/seo";
+import { getContent, getLocale } from "@/lib/locale";
 import { BASE } from "@/content/base";
 import BeachPageShell from "@/components/layout/BeachPageShell";
 import LineupGrid, { type LineupArtist } from "@/components/lineup/LineupGrid";
+import { getPerformersWithFallback } from "@/sanity/lib/content";
+import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
   const c = await getContent();
-  return {
-    title: c.lineup.title,
-    description: c.lineup.subtitle,
-    alternates: { canonical: canonicalUrl("/lineup/") },
-    openGraph: {
-      title: `${c.lineup.title} · ${c.meta.siteTitle}`,
-      description: c.lineup.subtitle,
-      url: canonicalUrl("/lineup/"),
-    },
-  };
+  return buildPageMetadataWithSanity({
+    slug: "lineup",
+    path: "/lineup/",
+    locale,
+    fallbackTitle: c.lineup.title,
+    fallbackDescription: c.lineup.subtitle,
+    fallbackOgImage: "/images/og-image.jpg",
+    siteTitle: c.meta.siteTitle,
+  });
 }
 
 export default async function LineupPage() {
   const c = await getContent();
   const { lineup } = c;
+  const isEn = c.otherLocale.label === "HU";
+  const lineupArtists = await getPerformersWithFallback();
 
   const dayLabels: Record<string, string> = {
     thursday: lineup.filterThursday,
@@ -234,7 +237,7 @@ export default async function LineupPage() {
     },
   };
 
-  const artists: LineupArtist[] = lineup.artists.map((artist) => {
+  const artists: LineupArtist[] = lineupArtists.map((artist) => {
     const baseArtist = baseArtistByName.get(artist.name);
     const details = performerDetailsHu[artist.name];
     return {
@@ -256,6 +259,8 @@ export default async function LineupPage() {
       title={lineup.title}
       subtitle={lineup.subtitle}
       compact
+      canonicalPath="/lineup/"
+      locale={isEn ? "en" : "hu"}
     >
       <LineupGrid
         artists={artists}

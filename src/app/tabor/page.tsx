@@ -1,31 +1,34 @@
 import type { Metadata } from "next";
-import { getContent } from "@/lib/locale";
-import { canonicalUrl } from "@/lib/seo";
+import { getContent, getLocale } from "@/lib/locale";
 import BeachPageShell from "@/components/layout/BeachPageShell";
+import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
   const c = await getContent();
-  return {
-    title: c.camp.title,
-    description: c.camp.subtitle,
-    alternates: { canonical: canonicalUrl("/tabor/") },
-    openGraph: {
-      title: `${c.camp.title} · ${c.meta.siteTitle}`,
-      description: c.camp.subtitle,
-      url: canonicalUrl("/tabor/"),
-    },
-  };
+  return buildPageMetadataWithSanity({
+    slug: "tabor",
+    path: "/tabor/",
+    locale,
+    fallbackTitle: c.camp.title,
+    fallbackDescription: c.camp.subtitle,
+    fallbackOgImage: "/images/og-image.jpg",
+    siteTitle: c.meta.siteTitle,
+  });
 }
 
 export default async function CampPage() {
   const c = await getContent();
   const { camp } = c;
+  const isEn = c.otherLocale.label === "HU";
 
   return (
     <BeachPageShell
       eyebrow="Swing · Lindy Hop · Jazz Improvizáció"
       title={camp.title}
       subtitle={camp.subtitle}
+      canonicalPath="/tabor/"
+      locale={isEn ? "en" : "hu"}
     >
       <div className="mx-auto max-w-4xl">
         {camp.videoUrl && (

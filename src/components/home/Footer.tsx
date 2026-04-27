@@ -10,9 +10,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getContent } from "@/lib/locale";
+import { getFooterSponsorsWithFallback } from "@/sanity/lib/content";
 
 export default async function Footer() {
   const c = await getContent();
+  const sponsors = await getFooterSponsorsWithFallback();
   const isEn = c.otherLocale.label === "HU";
   const rootPrefix = isEn ? "/en" : "";
 
@@ -45,7 +47,7 @@ export default async function Footer() {
       }}
     >
       {/* ===== Támogatók / Szponzorok logói — LEGFELÜL ===== */}
-      {c.sponsors && c.sponsors.main.length > 0 && (
+      {sponsors && sponsors.main.length > 0 && (
         <div className="mx-auto mb-10 max-w-[1160px] border-b border-white/15 pb-8">
           <p
             className="mb-4 text-center font-display font-normal uppercase tracking-[0.1em] text-orange-500"
@@ -54,7 +56,7 @@ export default async function Footer() {
             {isEn ? "Main Supporters" : "Főtámogatók"}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-5">
-            {c.sponsors.main.map((s) => (
+            {sponsors.main.map((s) => (
               s.url && /^https?:\/\//.test(s.url) ? (
                 <a
                   key={s.name}
@@ -85,7 +87,7 @@ export default async function Footer() {
               )
             ))}
           </div>
-          {c.sponsors.sponsors.length > 0 && (
+          {sponsors.sponsors.length > 0 && (
             <>
               <p
                 className="mt-6 mb-3 text-center font-display font-normal uppercase tracking-[0.1em] text-orange-400"
@@ -94,7 +96,7 @@ export default async function Footer() {
                 {isEn ? "Sponsors" : "Szponzorok"}
               </p>
               <div className="flex flex-wrap items-center justify-center gap-4">
-              {c.sponsors.sponsors.map((s) => (
+              {sponsors.sponsors.map((s) => (
                 s.url && /^https?:\/\//.test(s.url) ? (
                   <a
                     key={s.name}
@@ -127,7 +129,7 @@ export default async function Footer() {
               </div>
             </>
           )}
-          {c.sponsors.partners.length > 0 && (
+          {sponsors.partners.length > 0 && (
             <>
               <p
                 className="mt-6 mb-3 text-center font-display font-normal uppercase tracking-[0.1em] text-orange-400"
@@ -136,7 +138,7 @@ export default async function Footer() {
                 {isEn ? "Partners" : "Partnerek"}
               </p>
               <div className="flex flex-wrap items-center justify-center gap-3">
-                {c.sponsors.partners.map((s) => (
+                {sponsors.partners.map((s) => (
                   s.url && /^https?:\/\//.test(s.url) ? (
                     <a
                       key={s.name}

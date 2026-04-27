@@ -12,8 +12,9 @@
  */
 
 import type { Metadata } from "next";
-import { getContent } from "@/lib/locale";
-import { BASE_URL, canonicalUrl } from "@/lib/seo";
+import { getContent, getLocale } from "@/lib/locale";
+import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
+import { musicEventSchema } from "@/lib/structuredData";
 
 import Hero from "@/components/home/Hero";
 import InfoBar from "@/components/home/InfoBar";
@@ -24,47 +25,40 @@ import LineupTeaser from "@/components/home/LineupTeaser";
 import CtaSection from "@/components/home/CtaSection";
 import SzechenyiPopup from "@/components/home/SzechenyiPopup";
 import { BASE } from "@/content/base";
+import { getPopupSettingsWithFallback } from "@/sanity/lib/content";
 
-export const metadata: Metadata = {
-  alternates: { canonical: canonicalUrl("/") },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const c = await getContent();
+  return buildPageMetadataWithSanity({
+    slug: "home",
+    path: "/",
+    locale,
+    fallbackTitle: c.meta.siteTitle,
+    fallbackDescription: c.meta.siteDescription,
+    fallbackOgImage: "/images/og-image.jpg",
+    siteTitle: c.meta.siteTitle,
+  });
+}
 
 export default async function HomePage() {
   const c = await getContent();
+  const popupSettings = await getPopupSettingsWithFallback();
+  const locale = c.otherLocale.label === "HU" ? "en" : "hu";
 
-  /* JSON-LD schema.org MusicEvent — kereső optimalizáció */
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "MusicEvent",
+  /* JSON-LD schema.org MusicEvent — kereső és LLM-értelmezés */
+  const jsonLd = musicEventSchema({
     name: c.meta.siteTitle,
     description: c.meta.siteDescription,
+    locale,
     startDate: "2026-08-06",
     endDate: "2026-08-09",
-    eventStatus: "https://schema.org/EventScheduled",
-    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-    location: {
-      "@type": "Place",
-      name: c.meta.venue,
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Kecskemét",
-        addressCountry: "HU",
-      },
-    },
-    organizer: {
-      "@type": "Organization",
-      name: "JAZZFŐVÁROS Kft.",
-      url: BASE_URL,
-    },
-    url: canonicalUrl("/"),
-    image: `${BASE_URL}/images/og-image.jpg`,
-    offers: {
-      "@type": "Offer",
-      url: c.info.ticketUrl,
-      availability: "https://schema.org/InStock",
-      priceCurrency: "HUF",
-    },
-  };
+    venueName: c.meta.venue,
+    city: "Kecskemét",
+    organizerName: "JAZZFŐVÁROS Kft.",
+    imagePath: "/images/og-image.jpg",
+    ticketUrl: c.info.ticketUrl,
+  });
 
   /* A jazzdesign1 hero dátum/helyszín sora a narancs em-kiemelt dátum + ·
      + helyszín formát használja. A lokalizált `festivalDates` stringet em-
@@ -136,7 +130,12 @@ export default async function HomePage() {
 
         </div>
       </div>
-      <SzechenyiPopup />
+      <SzechenyiPopup
+        enabled={popupSettings.isEnabled}
+        imageSrc={popupSettings.imageSrc}
+        altText={popupSettings.altText}
+        storageKey={popupSettings.sessionStorageKey}
+      />
     </>
   );
 }

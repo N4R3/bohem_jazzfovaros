@@ -1,32 +1,35 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { getContent } from "@/lib/locale";
-import { canonicalUrl } from "@/lib/seo";
+import { getContent, getLocale } from "@/lib/locale";
 import BeachPageShell from "@/components/layout/BeachPageShell";
+import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
   const c = await getContent();
-  return {
-    title: c.running.title,
-    description: c.running.subtitle,
-    alternates: { canonical: canonicalUrl("/futas/") },
-    openGraph: {
-      title: `${c.running.title} · ${c.meta.siteTitle}`,
-      description: c.running.subtitle,
-      url: canonicalUrl("/futas/"),
-    },
-  };
+  return buildPageMetadataWithSanity({
+    slug: "futas",
+    path: "/futas/",
+    locale,
+    fallbackTitle: c.running.title,
+    fallbackDescription: c.running.subtitle,
+    fallbackOgImage: "/images/og-image.jpg",
+    siteTitle: c.meta.siteTitle,
+  });
 }
 
 export default async function RunningPage() {
   const c = await getContent();
   const { running } = c;
+  const isEn = c.otherLocale.label === "HU";
 
   return (
     <BeachPageShell
       eyebrow={`${running.date} · ${running.time}`}
       title={running.title}
       subtitle={running.subtitle}
+      canonicalPath="/futas/"
+      locale={isEn ? "en" : "hu"}
     >
       <div className="mx-auto max-w-4xl">
         {/* Futás hero kép */}

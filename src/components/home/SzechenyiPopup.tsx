@@ -10,22 +10,35 @@ const IMAGE_SRC = "/images/43e3a57583f727d87fb1271bb22963ef.jpg";
  * Főoldali Széchenyi Terv – egyszer session-enként, stabil, fix + img (nem next/image).
  * sessionStorage: csak a kliens useEffect-ében.
  */
-export default function SzechenyiPopup() {
+type SzechenyiPopupProps = {
+  enabled?: boolean;
+  imageSrc?: string;
+  altText?: string;
+  storageKey?: string;
+};
+
+export default function SzechenyiPopup({
+  enabled = true,
+  imageSrc = IMAGE_SRC,
+  altText = "Széchenyi Terv támogatási információ",
+  storageKey = STORAGE_KEY,
+}: SzechenyiPopupProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    if (!enabled) return;
     setMounted(true);
     try {
-      const alreadyShown = window.sessionStorage.getItem(STORAGE_KEY);
+      const alreadyShown = window.sessionStorage.getItem(storageKey);
       if (!alreadyShown) {
         setIsOpen(true);
-        window.sessionStorage.setItem(STORAGE_KEY, "true");
+        window.sessionStorage.setItem(storageKey, "true");
       }
     } catch {
       setIsOpen(true);
     }
-  }, []);
+  }, [enabled, storageKey]);
 
   if (!mounted || !isOpen) return null;
 
@@ -71,8 +84,8 @@ export default function SzechenyiPopup() {
         </button>
 
         <img
-          src={IMAGE_SRC}
-          alt="Széchenyi Terv támogatási információ"
+          src={imageSrc}
+          alt={altText}
           className="
             block
             h-auto
