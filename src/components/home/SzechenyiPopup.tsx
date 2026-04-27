@@ -45,7 +45,7 @@ export default function SzechenyiPopup({
     } catch {
       setIsOpen(true);
     }
-  }, [enabled, storageKey]);
+  }, [enabled, storageKey, onlyOnHomepage, isHomepage]);
 
   if (!mounted || !isOpen) return null;
 

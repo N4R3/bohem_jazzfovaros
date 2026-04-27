@@ -244,12 +244,12 @@ export default async function LineupPage() {
       ...artist,
       image: baseArtist?.image ?? artist.image,
       details:
-        details?.details ||
         artist.bio ||
+        details?.details ||
         `${artist.name} a JAZZFŐVÁROS 2026 fellépői között szerepel (${artist.origin}).`,
       lineup: details?.lineup,
-      website: details?.website,
-      youtube: details?.youtube,
+      website: artist.websiteUrl || details?.website,
+      youtube: artist.youtubeUrl || details?.youtube,
     };
   });
 

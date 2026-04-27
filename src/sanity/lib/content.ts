@@ -172,6 +172,8 @@ export async function getPerformersWithFallback(): Promise<Artist[]> {
       stage: "main",
       time: "",
       origin: "",
+      websiteUrl: performer.websiteUrl || undefined,
+      youtubeUrl: performer.youtubeUrl || undefined,
     }));
   } catch {
     return c.lineup.artists;

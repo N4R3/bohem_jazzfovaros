@@ -9,6 +9,8 @@ export interface Artist {
   stage: "main" | "club";
   time: string;
   origin: string;
+  websiteUrl?: string;
+  youtubeUrl?: string;
 }
 
 export interface ScheduleSlot {
