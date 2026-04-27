@@ -9,3 +9,4 @@
   NODE_VERSION = "20"
   NEXT_PUBLIC_SITE_URL_HU = "https://bohemjazz.netlify.app"
   NEXT_PUBLIC_SITE_URL_EN = "https://buhemjazzen.netlify.app"
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SANITY_DATASET,NEXT_PUBLIC_SANITY_API_VERSION"
