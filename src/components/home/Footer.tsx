@@ -39,10 +39,9 @@ export default async function Footer() {
 
   return (
     <footer
-      className="relative z-[2] px-5 pb-6 pt-8 text-white sm:px-8"
+      className="relative z-[2] px-5 pb-6 pt-8 text-black sm:px-8"
       style={{
-        background:
-          "linear-gradient(180deg, rgba(12, 60, 85, 0.85), rgba(8, 42, 60, 0.95))",
+        background: "#ffffff",
         marginTop: 40,
       }}
     >
