@@ -292,6 +292,9 @@ const performers: SeedDocument[] = BASE.artists.map((artist, index) => ({
   },
 }));
 
+/* Sorrend: hu.map.directions — 1) autó, 2) vonat, 3) busz távolsági, 4) helyi busz */
+const transportItemIcons: Array<"car" | "train" | "bus"> = ["car", "train", "bus", "bus"];
+
 const transportItems: SeedDocument[] = hu.map.directions.map((direction, index) => {
   const enDirection = en.map.directions[index];
   return {
@@ -301,7 +304,7 @@ const transportItems: SeedDocument[] = hu.map.directions.map((direction, index) 
     titleEn: enDirection?.mode || direction.mode,
     descriptionHu: direction.text,
     descriptionEn: enDirection?.text || direction.text,
-    icon: (direction as { mode: string; icon?: string; text: string }).icon || "bus",
+    icon: transportItemIcons[index] ?? "bus",
     url: "",
     order: index + 1,
     isActive: true,
