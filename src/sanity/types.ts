@@ -47,6 +47,7 @@ export type SiteSettings = {
 };
 
 export type PopupSettings = {
+  _rev?: string;
   isEnabled?: boolean;
   image?: SanityImageRef;
   imagePath?: string;

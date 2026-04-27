@@ -92,6 +92,12 @@ export async function getPopupSettingsWithFallback() {
   try {
     const settings = await sanityClient.fetch<PopupSettings>(getPopupSettingsQuery);
     if (!settings) throw new Error("No popup settings");
+    const baseKey = settings.sessionStorageKey || "szechenyiPopupShown";
+    /* Minden publikáláskor változik a _rev: új kulcs = a „már láttam” session nem gátol
+       re-enable után, és kép/szöveg módosításnál is érthető viselkedés. */
+    const sessionStorageKey = settings._rev
+      ? `${baseKey}__${settings._rev.replace(/:/g, "_")}`
+      : baseKey;
     return {
       isEnabled: settings.isEnabled ?? true,
       imageSrc:
@@ -104,7 +110,7 @@ export async function getPopupSettingsWithFallback() {
         (locale === "en"
           ? "Széchenyi Plan support information"
           : "Széchenyi Terv támogatási információ"),
-      sessionStorageKey: settings.sessionStorageKey || "szechenyiPopupShown",
+      sessionStorageKey,
       showOnlyOnHomepage: settings.showOnlyOnHomepage ?? true,
     };
   } catch {

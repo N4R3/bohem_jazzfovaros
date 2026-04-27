@@ -2,6 +2,7 @@ export const getSiteSettingsQuery = `*[_type == "siteSettings"][0]`;
 
 export const getPopupSettingsQuery = `*[_type == "popupSettings"][0]{
   _id,
+  _rev,
   isEnabled,
   image,
   imagePath,
