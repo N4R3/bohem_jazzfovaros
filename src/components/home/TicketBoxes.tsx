@@ -8,6 +8,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { getContent } from "@/lib/locale";
+import { getTicketUrlWithFallback } from "@/sanity/lib/content";
 
 type Box = {
   emoji: string;
@@ -19,7 +20,8 @@ type Box = {
 export default async function TicketBoxes() {
   const c = await getContent();
   const isEn = c.otherLocale.label === "HU";
-  const ticketUrl = "https://jazzfovaros.jegy.hu";
+  const locale = isEn ? "en" : "hu";
+  const ticketUrl = await getTicketUrlWithFallback(locale);
   const passUrl =
     "https://jazzfovaros.jegy.hu/program/x-bohem-jazzfovaros-fesztival-berletek/6a097896-ee32-47ce-bb15-438d58bff51d";
   const BOXES: Box[] = isEn

@@ -198,7 +198,7 @@ function DirectionCard({
   dir,
   index,
 }: {
-  dir: { mode: string; icon: string; text: string };
+  dir: { mode: string; icon: string; text: string; url?: string };
   index: number;
 }) {
   const iconPath = iconPaths[dir.icon] ?? iconPaths.car;
@@ -252,6 +252,20 @@ function DirectionCard({
           >
             {dir.text}
           </p>
+          {dir.url && (
+            <a
+              href={dir.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider transition-colors hover:underline"
+              style={{ color: "var(--color-accent-600)" }}
+            >
+              Menetrend
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M7 17L17 7M17 7H7M17 7v10" />
+              </svg>
+            </a>
+          )}
         </div>
       </div>
     </article>

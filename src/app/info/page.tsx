@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getContent, getLocale } from "@/lib/locale";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 import BeachPageShell from "@/components/layout/BeachPageShell";
-import { getVisibleTicketsWithFallback } from "@/sanity/lib/content";
+import { getVisibleTicketsWithFallback, getTicketUrlWithFallback } from "@/sanity/lib/content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -20,9 +20,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function InfoPage() {
   const c = await getContent();
-  const sanityTickets = await getVisibleTicketsWithFallback();
-  const { info } = c;
   const isEn = c.otherLocale.label === "HU";
+  const locale = isEn ? "en" : "hu";
+  const [sanityTickets, ticketUrl] = await Promise.all([
+    getVisibleTicketsWithFallback(),
+    getTicketUrlWithFallback(locale),
+  ]);
+  const { info } = c;
   const ticketTiers = sanityTickets.length ? sanityTickets : info.ticketTiers || [];
 
   return (
@@ -50,7 +54,7 @@ export default async function InfoPage() {
                   {info.ticketCta}
                 </h2>
                 <a
-                  href={info.ticketUrl}
+                  href={ticketUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-xs font-extrabold uppercase tracking-wider"

@@ -25,7 +25,11 @@ import LineupTeaser from "@/components/home/LineupTeaser";
 import CtaSection from "@/components/home/CtaSection";
 import SzechenyiPopup from "@/components/home/SzechenyiPopup";
 import { BASE } from "@/content/base";
-import { getPopupSettingsWithFallback, getPerformersWithFallback } from "@/sanity/lib/content";
+import {
+  getPopupSettingsWithFallback,
+  getPerformersWithFallback,
+  getTicketUrlWithFallback,
+} from "@/sanity/lib/content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -44,9 +48,10 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function HomePage() {
   const c = await getContent();
   const locale = c.otherLocale.label === "HU" ? "en" : "hu";
-  const [popupSettings, performers] = await Promise.all([
+  const [popupSettings, performers, ticketUrl] = await Promise.all([
     getPopupSettingsWithFallback(),
     getPerformersWithFallback(),
+    getTicketUrlWithFallback(locale),
   ]);
 
   /* JSON-LD schema.org MusicEvent — kereső és LLM-értelmezés */
@@ -60,7 +65,7 @@ export default async function HomePage() {
     city: "Kecskemét",
     organizerName: "JAZZFŐVÁROS Kft.",
     imagePath: "/images/og-image.jpg",
-    ticketUrl: c.info.ticketUrl,
+      ticketUrl: ticketUrl,
   });
 
   /* A jazzdesign1 hero dátum/helyszín sora a narancs em-kiemelt dátum + ·
@@ -94,12 +99,12 @@ export default async function HomePage() {
       <div className="page-bg">
         {/* ===== Felső kép-rész: Hero + Info-bar (flex column asztalon) ===== */}
         <div className="hero-fold">
-          <Hero ctaLabel={c.home.heroCta} ctaUrl={c.info.ticketUrl} />
+          <Hero ctaLabel={c.home.heroCta} ctaUrl={ticketUrl} />
           <InfoBar
             date={festivalDatesEmphasis}
             venue={venueLine}
             ticketLabel={c.home.heroCta}
-            ticketUrl={c.info.ticketUrl}
+            ticketUrl={ticketUrl}
           />
         </div>
 
@@ -128,7 +133,7 @@ export default async function HomePage() {
             title={c.home.ctaBannerTitle}
             subtitle={c.home.ctaBannerSubtitle}
             buttonLabel={c.home.ctaBannerButton}
-            buttonUrl={c.info.ticketUrl}
+            buttonUrl={ticketUrl}
           />
 
         </div>
@@ -138,6 +143,7 @@ export default async function HomePage() {
         imageSrc={popupSettings.imageSrc}
         altText={popupSettings.altText}
         storageKey={popupSettings.sessionStorageKey}
+        onlyOnHomepage={popupSettings.showOnlyOnHomepage}
       />
     </>
   );

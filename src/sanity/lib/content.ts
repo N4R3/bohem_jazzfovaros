@@ -394,6 +394,7 @@ export async function getTransportContent(locale: "hu" | "en") {
         mode: localized(locale, item.titleHu, item.titleEn),
         icon: item.icon || guessTransportIcon(localized(locale, item.titleHu, item.titleEn)),
         text: localized(locale, item.descriptionHu, item.descriptionEn),
+        url: item.url || "",
       }))
       .filter((item) => item.mode && item.text);
 
@@ -420,6 +421,7 @@ export async function getContactContent(locale: "hu" | "en") {
         localized(locale, siteSettings.volunteerButtonLabelHu, siteSettings.volunteerButtonLabelEn) ||
         c.contact.volunteerText,
       volunteerUrl: siteSettings.volunteerUrl || c.contact.volunteerUrl,
+      houseRulesPdf: siteSettings.houseRulesPdf || c.houseRulesPdf,
       socials: {
         facebook: siteSettings.facebookUrl || c.contact.socials.facebook,
         instagram: siteSettings.instagramUrl || c.contact.socials.instagram,
@@ -428,5 +430,20 @@ export async function getContactContent(locale: "hu" | "en") {
     };
   } catch {
     return c.contact;
+  }
+}
+
+export async function getTicketUrlWithFallback(locale: "hu" | "en"): Promise<string> {
+  const c = await getContent();
+  const fallback = c.info.ticketUrl || "#";
+  if (!isSanityConfigured()) return fallback;
+
+  try {
+    const siteSettings = await sanityClient.fetch<SiteSettings | null>(getSiteSettingsQuery);
+    if (!siteSettings) return fallback;
+    const url = locale === "en" ? siteSettings.ticketUrlEn : siteSettings.ticketUrlHu;
+    return url || fallback;
+  } catch {
+    return fallback;
   }
 }

@@ -10,12 +10,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getContent } from "@/lib/locale";
-import { getFooterSponsorsWithFallback } from "@/sanity/lib/content";
+import { getFooterSponsorsWithFallback, getContactContent } from "@/sanity/lib/content";
 
 export default async function Footer() {
   const c = await getContent();
-  const sponsors = await getFooterSponsorsWithFallback();
   const isEn = c.otherLocale.label === "HU";
+  const locale = isEn ? "en" : "hu";
+  const [sponsors, contact] = await Promise.all([
+    getFooterSponsorsWithFallback(),
+    getContactContent(locale),
+  ]);
   const rootPrefix = isEn ? "/en" : "";
 
   /* A jazzdesign1 nav szekciója 5 rövid linket mutat: itt a site 5 fő
@@ -27,15 +31,16 @@ export default async function Footer() {
      `/info/` és `/contact/` URL-ekre mutat. */
   const infoLinks = [
     { label: isEn ? "FAQ" : "GYIK", href: `${rootPrefix}/info/` },
-    { label: isEn ? "House Rules" : "Házirend", href: c.houseRulesPdf || "#" },
+    { label: isEn ? "House Rules" : "Házirend", href: (contact as { houseRulesPdf?: string }).houseRulesPdf || c.houseRulesPdf || "#" },
     { label: isEn ? "Accessibility" : "Akadálymentesítés", href: `${rootPrefix}/info/` },
     { label: isEn ? "Volunteers" : "Önkéntesnek", href: c.contact?.volunteerUrl || `${rootPrefix}/contact/` },
     { label: isEn ? "Press" : "Sajtó", href: `${rootPrefix}/contact/` },
   ];
 
-  const phone = c.contact?.phone   || "+36 76 000 000";
-  const email = c.contact?.email   || "info@bohemjazzfovaros.hu";
+  const phone = contact?.phone || c.contact?.phone || "+36 76 000 000";
+  const email = contact?.email || c.contact?.email || "info@bohemjazzfovaros.hu";
   const city  = `${c.meta?.city || "Kecskemét"}, Domb Beach`;
+  const socials = contact?.socials || c.contact?.socials;
 
   return (
     <footer
@@ -197,13 +202,13 @@ export default async function Footer() {
           </p>
           <div className="mt-3.5 flex gap-2.5">
             <SocialIcon
-              href={c.contact?.socials?.facebook || "https://facebook.com"}
+              href={socials?.facebook || "https://facebook.com"}
               label="Facebook"
             >
               <path d="M13 22v-8h3l1-4h-4V7.5c0-1.2.3-2 2-2h2V2h-3c-3 0-5 1.8-5 5v3H6v4h3v8h4z" />
             </SocialIcon>
             <SocialIcon
-              href={c.contact?.socials?.instagram || "https://instagram.com"}
+              href={socials?.instagram || "https://instagram.com"}
               label="Instagram"
             >
               <g fill="none" stroke="#fff" strokeWidth="2">
@@ -213,7 +218,7 @@ export default async function Footer() {
               </g>
             </SocialIcon>
             <SocialIcon
-              href={c.contact?.socials?.youtube || "https://youtube.com"}
+              href={socials?.youtube || "https://youtube.com"}
               label="YouTube"
             >
               <path d="M22 12s0-3.3-.4-4.9c-.2-.9-.9-1.6-1.8-1.8C18.3 5 12 5 12 5s-6.3 0-7.8.3c-.9.2-1.6.9-1.8 1.8C2 8.7 2 12 2 12s0 3.3.4 4.9c.2.9.9 1.6 1.8 1.8 1.5.3 7.8.3 7.8.3s6.3 0 7.8-.3c.9-.2 1.6-.9 1.8-1.8.4-1.6.4-4.9.4-4.9zM10 15V9l5 3-5 3z" />

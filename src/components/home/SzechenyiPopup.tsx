@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { usePathname } from "next/navigation";
 
 const STORAGE_KEY = "szechenyiPopupShown";
 const IMAGE_SRC = "/images/43e3a57583f727d87fb1271bb22963ef.jpg";
@@ -9,12 +10,14 @@ const IMAGE_SRC = "/images/43e3a57583f727d87fb1271bb22963ef.jpg";
 /**
  * Főoldali Széchenyi Terv – egyszer session-enként, stabil, fix + img (nem next/image).
  * sessionStorage: csak a kliens useEffect-ében.
+ * onlyOnHomepage: ha true, csak / és /en/ útvonalon jelenik meg.
  */
 type SzechenyiPopupProps = {
   enabled?: boolean;
   imageSrc?: string;
   altText?: string;
   storageKey?: string;
+  onlyOnHomepage?: boolean;
 };
 
 export default function SzechenyiPopup({
@@ -22,12 +25,16 @@ export default function SzechenyiPopup({
   imageSrc = IMAGE_SRC,
   altText = "Széchenyi Terv támogatási információ",
   storageKey = STORAGE_KEY,
+  onlyOnHomepage = true,
 }: SzechenyiPopupProps) {
+  const pathname = usePathname() || "";
+  const isHomepage = pathname === "/" || pathname === "/en" || pathname === "/en/";
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     if (!enabled) return;
+    if (onlyOnHomepage && !isHomepage) return;
     setMounted(true);
     try {
       const alreadyShown = window.sessionStorage.getItem(storageKey);
