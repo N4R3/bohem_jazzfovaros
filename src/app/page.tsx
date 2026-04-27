@@ -25,7 +25,7 @@ import LineupTeaser from "@/components/home/LineupTeaser";
 import CtaSection from "@/components/home/CtaSection";
 import SzechenyiPopup from "@/components/home/SzechenyiPopup";
 import { BASE } from "@/content/base";
-import { getPopupSettingsWithFallback } from "@/sanity/lib/content";
+import { getPopupSettingsWithFallback, getPerformersWithFallback } from "@/sanity/lib/content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -43,8 +43,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   const c = await getContent();
-  const popupSettings = await getPopupSettingsWithFallback();
   const locale = c.otherLocale.label === "HU" ? "en" : "hu";
+  const [popupSettings, performers] = await Promise.all([
+    getPopupSettingsWithFallback(),
+    getPerformersWithFallback(),
+  ]);
 
   /* JSON-LD schema.org MusicEvent — kereső és LLM-értelmezés */
   const jsonLd = musicEventSchema({
@@ -67,11 +70,11 @@ export default async function HomePage() {
   const venueLine = `${(c.meta.venue || "Domb Beach").toUpperCase()}, ${(c.meta.city || "Kecskemét").toUpperCase()}`;
   const teaserPalette = ["#6BA4BF", "#C7A27B", "#7A9E7E", "#B06A6A", "#8E7AAD", "#6B8FBF", "#C29144", "#9E6B6B"];
   const imageByName = new Map(BASE.artists.map((artist) => [artist.name, artist.image]));
-  const lineupTeaserArtists = c.lineup.artists.map((artist, index) => ({
+  const lineupTeaserArtists = performers.map((artist, index) => ({
     name: artist.name,
     genre: artist.genre,
     color: teaserPalette[index % teaserPalette.length],
-    image: imageByName.get(artist.name),
+    image: artist.image || imageByName.get(artist.name),
   }));
 
   return (

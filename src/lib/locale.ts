@@ -1,5 +1,6 @@
 import type { Locale, SiteContent } from "./types";
 import { cookies, headers } from "next/headers";
+import { cache } from "react";
 import { hu } from "@/content/hu";
 import { en } from "@/content/en";
 
@@ -61,17 +62,17 @@ function localizeContent(content: SiteContent, locale: Locale): SiteContent {
   };
 }
 
-export async function getLocale(): Promise<Locale> {
+export const getLocale = cache(async (): Promise<Locale> => {
   const cookieStore = await cookies();
   const cookieLocale = cookieStore.get(LOCALE_COOKIE)?.value;
   if (cookieLocale === "en" || cookieLocale === "hu") return cookieLocale;
 
   const host = (await headers()).get("host") || "";
   return getLocaleFromHost(host);
-}
+});
 
-export async function getContent(): Promise<SiteContent> {
+export const getContent = cache(async (): Promise<SiteContent> => {
   const locale = await getLocale();
   const source = locale === "en" ? en : hu;
   return localizeContent(source, locale);
-}
+});

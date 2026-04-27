@@ -147,6 +147,7 @@ export type SanityTransportItem = {
   titleEn?: string;
   descriptionHu?: string;
   descriptionEn?: string;
+  icon?: string;
   url?: string;
   order?: number;
   isActive?: boolean;

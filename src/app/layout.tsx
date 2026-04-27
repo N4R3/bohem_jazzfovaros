@@ -11,8 +11,6 @@ import BackgroundWrapper from "@/components/layout/BackgroundWrapper";
 import AppShell from "@/components/layout/AppShell";
 import { organizationSchema, websiteSchema } from "@/lib/structuredData";
 
-export const dynamic = "force-dynamic";
-
 /* Fontok next/font/google segítségével töltődnek be — azonos originről
    szolgáltatva, render-blocking nélkül, automatikus preload-dal. */
 const bebasNeue = Bebas_Neue({

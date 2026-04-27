@@ -301,6 +301,7 @@ const transportItems: SeedDocument[] = hu.map.directions.map((direction, index) 
     titleEn: enDirection?.mode || direction.mode,
     descriptionHu: direction.text,
     descriptionEn: enDirection?.text || direction.text,
+    icon: (direction as { mode: string; icon?: string; text: string }).icon || "bus",
     url: "",
     order: index + 1,
     isActive: true,

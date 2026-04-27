@@ -27,10 +27,11 @@ const iconPaths: Record<string, string> = {
 };
 
 export default async function MapPage() {
-  const c = await getContent();
-  const locale = await getLocale();
-  const venueContent = await getVenueContent(locale);
-  const transportDirections = await getTransportContent(locale);
+  const [c, locale] = await Promise.all([getContent(), getLocale()]);
+  const [venueContent, transportDirections] = await Promise.all([
+    getVenueContent(locale),
+    getTransportContent(locale),
+  ]);
   const isEn = c.otherLocale.label === "HU";
   const gps = venueContent.gps.replace(/\s/g, "");
   const mapsUrl = venueContent.mapEmbedUrl;

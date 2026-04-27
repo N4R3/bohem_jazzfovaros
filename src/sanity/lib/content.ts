@@ -44,7 +44,10 @@ export async function getFooterSponsorsWithFallback() {
         group.sponsors
           .map((sponsor) => ({
             name: sponsor.name || "",
-            logo: sponsor.logo ? urlFor(sponsor.logo)?.width(400).url() || "" : "",
+            logo:
+              (sponsor.logo ? urlFor(sponsor.logo)?.width(400).url() : null) ||
+              sponsor.logoPath ||
+              "",
             url: sponsor.url || "",
           }))
           .filter((sponsor) => sponsor.name && sponsor.logo),
@@ -93,6 +96,7 @@ export async function getPopupSettingsWithFallback() {
       isEnabled: settings.isEnabled ?? true,
       imageSrc:
         (settings.image ? urlFor(settings.image)?.width(1400).url() : null) ||
+        settings.imagePath ||
         c.szechenyiImage ||
         "/images/43e3a57583f727d87fb1271bb22963ef.jpg",
       altText:
@@ -152,9 +156,9 @@ export async function getPerformersWithFallback(): Promise<Artist[]> {
     const performers = await sanityClient.fetch<SanityPerformer[]>(getPerformersQuery);
     if (!performers?.length) return c.lineup.artists;
 
-    return performers.map((performer, index) => ({
+    return performers.map((performer) => ({
       name: performer.name,
-      genre: "",
+      genre: performer.shortDescriptionHu || performer.shortDescriptionEn || "",
       bio:
         (locale === "en" ? performer.bioEn : performer.bioHu) ||
         performer.bioHu ||
@@ -162,6 +166,7 @@ export async function getPerformersWithFallback(): Promise<Artist[]> {
         "",
       image:
         (performer.image ? urlFor(performer.image)?.width(800).height(800).url() : null) ||
+        performer.imagePath ||
         undefined,
       day: "friday",
       stage: "main",
@@ -171,6 +176,13 @@ export async function getPerformersWithFallback(): Promise<Artist[]> {
   } catch {
     return c.lineup.artists;
   }
+}
+
+function guessTransportIcon(mode: string): string {
+  const lower = mode.toLowerCase();
+  if (lower.includes("vonat") || lower.includes("train") || lower.includes("rail")) return "train";
+  if (lower.includes("autó") || lower.includes("car") || lower.includes("auto")) return "car";
+  return "bus";
 }
 
 function localized(locale: "hu" | "en", huValue?: string, enValue?: string): string {
@@ -295,7 +307,11 @@ export async function getAccommodationContent(locale: "hu" | "en") {
         distance: localized(locale, item.distanceHu, item.distanceEn),
         bookingUrl: item.bookingUrl || item.websiteUrl || "#",
         bookingLabel: locale === "en" ? "Book now →" : "Foglalás →",
-        images: item.image ? [urlFor(item.image)?.width(1400).url() || ""] : [],
+        images: item.image
+          ? [urlFor(item.image)?.width(1400).url() || ""]
+          : item.imagePath
+            ? [item.imagePath]
+            : [],
         stars: undefined,
       }))
       .map((hotel) => ({
@@ -376,7 +392,7 @@ export async function getTransportContent(locale: "hu" | "en") {
       .filter((item) => item.isActive !== false)
       .map((item) => ({
         mode: localized(locale, item.titleHu, item.titleEn),
-        icon: "bus",
+        icon: item.icon || guessTransportIcon(localized(locale, item.titleHu, item.titleEn)),
         text: localized(locale, item.descriptionHu, item.descriptionEn),
       }))
       .filter((item) => item.mode && item.text);
