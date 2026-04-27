@@ -380,7 +380,7 @@ function SocialIcon({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="grid h-[38px] w-[38px] place-items-center rounded-full bg-white/10 transition-colors hover:bg-orange-500"
+      className="grid h-[38px] w-[38px] place-items-center rounded-full bg-black/80 transition-colors hover:bg-orange-500"
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
         {children}
