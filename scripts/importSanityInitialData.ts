@@ -38,6 +38,7 @@ async function run() {
     ...initialData.pages,
     ...initialData.programItems,
     ...initialData.accommodationItems,
+    ...initialData.transportItems,
   ];
 
   for (const doc of docs) {

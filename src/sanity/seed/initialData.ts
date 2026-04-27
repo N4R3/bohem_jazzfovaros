@@ -139,6 +139,122 @@ const tickets: SeedDocument[] = [
   },
 ];
 
+const performerDetailsByName: Record<
+  string,
+  { bioHu: string; websiteUrl?: string; youtubeUrl?: string }
+> = {
+  "Bérczesi Jazz Band": {
+    bioHu:
+      "Bérczesi Róbert (Hiperkarma) különleges vendégprojektje. Klasszikus jazzt és bohém lendületet ötvöző formáció.",
+    websiteUrl: "https://jazzfovaros.hu/bg/performer-popup/190",
+    youtubeUrl: "https://www.youtube.com/watch?v=zjxCe4WunMY",
+  },
+  "Bohém Ragtime Jazz Band": {
+    bioHu:
+      "Az eMeRTon-díjas kecskeméti csapat 1985-ben alakult, repertoárjuk a ragtime-tól a New Orleans-i jazzen és dixielanden át a swingig terjed.",
+    websiteUrl: "http://www.bohemragtime.com",
+    youtubeUrl: "https://youtu.be/WphNjExWanE?si=RFRy3lOJDkOrdc2q",
+  },
+  "Bolba Éva": {
+    bioHu:
+      "Nemzetközileg is aktív jazzénekes, Európa mellett az USA-ban és Ázsiában is fellépett. A JAZZterlánc megálmodója.",
+    websiteUrl: "https://www.facebook.com/jazzterlanc/",
+    youtubeUrl: "https://www.youtube.com/watch?v=-2mzm8Fiq4w",
+  },
+  "Cseh Balázs": {
+    bioHu:
+      "A régi stílusú jazzdobolás specialistája, tapasztalt stúdiózenész és több formáció tagja.",
+    websiteUrl: "https://www.facebook.com/balazs.cseh.50",
+    youtubeUrl: "https://www.youtube.com/watch?v=N4lvyrNWswY",
+  },
+  "Dániel Balázs": {
+    bioHu:
+      "Mr. Firehand, a boogie-woogie magyar nagykövete és az egyik legvirtuózabb hazai zongorista.",
+    websiteUrl: "https://mrfirehand.com/",
+    youtubeUrl: "https://www.youtube.com/watch?v=ZqMxZbwIjm0",
+  },
+  "Dennert Árpád": {
+    bioHu:
+      "Az Árpi Show, a Benkó Dixieland és számos más hazai jazz-zenekar meghatározó hangszerese.",
+    websiteUrl: "https://www.facebook.com/dennertarpi",
+    youtubeUrl: "https://www.youtube.com/watch?v=j_m-5v4lxrM",
+  },
+  'Emanuele Urso "King of Swing"': {
+    bioHu: "Az olasz swingélet kiemelt alakja, a fesztivál nemzetközi vendégművésze.",
+    websiteUrl: "https://emanueleurso.it",
+    youtubeUrl: "https://www.youtube.com/watch?v=q1Gh8TQ9e3I",
+  },
+  "Festival All Stars": {
+    bioHu:
+      "Nemzetközi all-stars projekt magyar és külföldi vendégművészekkel, külön pénteki és szombati felállással.",
+    websiteUrl: "https://jazzfovaros.hu/bg/performer-popup/84",
+  },
+  "Gyárfás István": {
+    bioHu:
+      "A mainstream jazz egyik legismertebb hazai gitárosa, több évtizedes pályafutással és nemzetközi együttműködésekkel.",
+    websiteUrl: "https://www.facebook.com/istvan.gyarfas.1",
+    youtubeUrl: "https://www.youtube.com/watch?v=yCY9M9atxRI",
+  },
+  "Hungarian Jazz Embassy": {
+    bioHu: "Hazai jazz-elit formáció, kifejezetten a fesztiválra összeállított felállással.",
+    websiteUrl: "https://www.facebook.com/szalokygroup/",
+  },
+  "Hunter Burgamy": {
+    bioHu: "Amerikai gitáros/bendzsós és énekes, tradicionális jazz és swing vonalon.",
+    websiteUrl: "https://www.hunterburgamy.com/",
+  },
+  "Jazz Camp All Stars": {
+    bioHu:
+      "A JAZZFŐVÁROS jazztábor tanárai és zenésztársaik spontán örömzenélésre összeálló nyitónapi csapata.",
+    websiteUrl: "https://www.jazzfovaros.hu/jazztabor",
+  },
+  "Ken Aoki": {
+    bioHu: "Világszínvonalú bendzsóművész, a fesztivál egyik közönségkedvenc nemzetközi fellépője.",
+    websiteUrl: "https://www.facebook.com/vegavox",
+    youtubeUrl: "https://www.youtube.com/watch?v=eXFc-JfW2r8",
+  },
+  "Korb Attila": {
+    bioHu:
+      "Sokoldalú hangszeres (harsona, trombita, szaxofon, zongora, ének), folyamatosan turnézó szabadúszó jazzmuzsikus.",
+    websiteUrl: "https://www.facebook.com/attila.korb.7",
+    youtubeUrl: "https://www.youtube.com/watch?v=QcoDBs6_SBM",
+  },
+  "Nagy Iván": {
+    bioHu:
+      "A stride-zongorázás elkötelezett képviselője, számos hazai swing- és jazzformáció közreműködője.",
+    websiteUrl: "https://www.facebook.com/ivan.nagy.7161",
+    youtubeUrl: "https://www.youtube.com/watch?v=7Sv_XN6bK3o",
+  },
+  "Nanna Carling": {
+    bioHu:
+      "Svédországi tradicionális jazz előadó, több hangszerrel és énekkel is rendszeresen szerepel nemzetközi fesztiválokon.",
+    websiteUrl: "https://www.nannacarling.com",
+    youtubeUrl: "https://www.youtube.com/@nannacarling",
+  },
+  "Sir Oliver Mally & Peter Schneider Duo": {
+    bioHu: "Osztrák-német blues duó, akusztikus gitárra és énekre épülő műsorral.",
+    websiteUrl: "https://sir-oliver.com",
+    youtubeUrl: "https://www.youtube.com/watch?v=nP5MVYLVKEI",
+  },
+  "Swingtáncórák kezdőknek": {
+    bioHu:
+      "Kezdő swingtáncórák több időpontban a fesztivál alatt, magyar és nemzetközi közönségnek.",
+    websiteUrl: "https://www.swinglight.hu",
+    youtubeUrl: "https://www.youtube.com/watch?v=CZ0e0rtanGM",
+  },
+  "Szalóky Béla": {
+    bioHu:
+      "Multiinstrumentalista, a magyar oldtimer-jazz meghatározó alakja, rendszeres nemzetközi fesztiválvendég.",
+    websiteUrl: "http://szaloky.com/",
+    youtubeUrl: "https://www.youtube.com/watch?v=R91MRLsUi_s",
+  },
+  "Tom White & the Mad Circus": {
+    bioHu: "A rockabilly magyar királyai, erős színpadi energiával és vintage hangzással.",
+    websiteUrl: "http://www.tomwhite.hu/",
+    youtubeUrl: "https://www.youtube.com/watch?v=jVIMTO5gd48",
+  },
+};
+
 const performers: SeedDocument[] = BASE.artists.map((artist, index) => ({
   _id: `performer-${index + 1}`,
   _type: "performer",
@@ -155,12 +271,12 @@ const performers: SeedDocument[] = BASE.artists.map((artist, index) => ({
   imagePath: artist.image || "", // TODO: Studio-ban image upload kell, majd ide image asset referencia.
   shortDescriptionHu: `${artist.genre} · ${artist.origin}`,
   shortDescriptionEn: `${artist.genre} · ${artist.origin}`,
-  bioHu: "",
+  bioHu: performerDetailsByName[artist.name]?.bioHu || "",
   bioEn: "",
-  websiteUrl: "",
+  websiteUrl: performerDetailsByName[artist.name]?.websiteUrl || "",
   facebookUrl: "",
   instagramUrl: "",
-  youtubeUrl: "",
+  youtubeUrl: performerDetailsByName[artist.name]?.youtubeUrl || "",
   spotifyUrl: "",
   order: index + 1,
   isFeatured: index < 8,
@@ -175,6 +291,21 @@ const performers: SeedDocument[] = BASE.artists.map((artist, index) => ({
     noIndex: false,
   },
 }));
+
+const transportItems: SeedDocument[] = hu.map.directions.map((direction, index) => {
+  const enDirection = en.map.directions[index];
+  return {
+    _id: `transport-${index + 1}`,
+    _type: "transportItem",
+    titleHu: direction.mode,
+    titleEn: enDirection?.mode || direction.mode,
+    descriptionHu: direction.text,
+    descriptionEn: enDirection?.text || direction.text,
+    url: "",
+    order: index + 1,
+    isActive: true,
+  };
+});
 
 const pages: SeedDocument[] = [
   {
@@ -511,5 +642,6 @@ export const initialData = {
   pages,
   programItems,
   accommodationItems,
+  transportItems,
 };
 
