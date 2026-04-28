@@ -19,10 +19,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const dayAccents = [
-  { bg: "#e84a5f", text: "#fdf6e3", label: "#fde0d0" },
-  { bg: "#ef7a1f", text: "#fdf6e3", label: "#fde2c8" },
-  { bg: "#f2c94c", text: "#0e4844", label: "#4a3a20" },
-  { bg: "#1f7e73", text: "#fdf6e3", label: "#a0d8d0" },
+  { bg: "#f2c94c", text: "#3d2e12", label: "#5a451a" }, // csütörtök - sárga
+  { bg: "#2f80ed", text: "#f5f9ff", label: "#d6e7ff" }, // péntek - kék
+  { bg: "#1f7e73", text: "#f3fbf9", label: "#b7e4dd" }, // szombat - zöld
+  { bg: "#e84a5f", text: "#fff6f4", label: "#ffd9d2" }, // vasárnap - piros
 ];
 
 export default async function ProgramPage() {
