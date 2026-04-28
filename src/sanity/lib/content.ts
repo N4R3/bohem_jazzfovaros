@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { getContent, getLocale } from "@/lib/locale";
 import type { Artist, Hotel, ScheduleDay, TicketTier } from "@/lib/types";
 import { BASE } from "@/content/base";
@@ -26,7 +27,20 @@ import type {
   SponsorCategoryWithSponsors,
 } from "../types";
 
-export async function getFooterSponsorsWithFallback() {
+/** Egységes ISR a Sanity hívásokhoz (kevesebb API terhelés, friss tartalom ~30 mp-en belül). */
+const SANITY_FETCH_NEXT = { next: { revalidate: 30 } } as const;
+
+/** Egy HTTP kérésen belül egyetlen siteSettings lekérés (contact + jegy URL + hasonló). */
+const getSiteSettingsCached = cache(async (): Promise<SiteSettings | null> => {
+  if (!isSanityConfigured()) return null;
+  try {
+    return await sanityClient.fetch<SiteSettings | null>(getSiteSettingsQuery, {}, SANITY_FETCH_NEXT);
+  } catch {
+    return null;
+  }
+});
+
+export const getFooterSponsorsWithFallback = cache(async () => {
   const c = await getContent();
   const locale = await getLocale();
 
@@ -35,6 +49,8 @@ export async function getFooterSponsorsWithFallback() {
   try {
     const groups = await sanityClient.fetch<SponsorCategoryWithSponsors[]>(
       getSponsorsGroupedByCategoryQuery,
+      {},
+      SANITY_FETCH_NEXT,
     );
     if (!groups?.length) return c.sponsors;
 
@@ -70,9 +86,9 @@ export async function getFooterSponsorsWithFallback() {
   } catch {
     return c.sponsors;
   }
-}
+});
 
-export async function getPopupSettingsWithFallback() {
+export const getPopupSettingsWithFallback = cache(async () => {
   const c = await getContent();
   const locale = await getLocale();
 
@@ -90,7 +106,7 @@ export async function getPopupSettingsWithFallback() {
   }
 
   try {
-    const settings = await sanityClient.fetch<PopupSettings>(getPopupSettingsQuery);
+    const settings = await sanityClient.fetch<PopupSettings>(getPopupSettingsQuery, {}, SANITY_FETCH_NEXT);
     if (!settings) throw new Error("No popup settings");
     const baseKey = settings.sessionStorageKey || "szechenyiPopupShown";
     /* Minden publikáláskor változik a _rev: új kulcs = a „már láttam” session nem gátol
@@ -125,15 +141,15 @@ export async function getPopupSettingsWithFallback() {
       showOnlyOnHomepage: true,
     };
   }
-}
+});
 
-export async function getVisibleTicketsWithFallback(): Promise<TicketTier[]> {
+export const getVisibleTicketsWithFallback = cache(async (): Promise<TicketTier[]> => {
   const c = await getContent();
   const locale = await getLocale();
   if (!isSanityConfigured()) return c.info.ticketTiers || [];
 
   try {
-    const tickets = await sanityClient.fetch<SanityTicket[]>(getVisibleTicketsQuery);
+    const tickets = await sanityClient.fetch<SanityTicket[]>(getVisibleTicketsQuery, {}, SANITY_FETCH_NEXT);
     if (!tickets?.length) return c.info.ticketTiers || [];
 
     return tickets
@@ -151,7 +167,7 @@ export async function getVisibleTicketsWithFallback(): Promise<TicketTier[]> {
   } catch {
     return c.info.ticketTiers || [];
   }
-}
+});
 
 function trimOrUndef(s?: string | null): string | undefined {
   const t = typeof s === "string" ? s.trim() : "";
@@ -166,17 +182,13 @@ function externalLink(s?: string | null): string | undefined {
   return `https://${t}`;
 }
 
-export async function getPerformersWithFallback(): Promise<Artist[]> {
+export const getPerformersWithFallback = cache(async (): Promise<Artist[]> => {
   const c = await getContent();
   const locale = await getLocale();
   if (!isSanityConfigured()) return c.lineup.artists;
 
   try {
-    const performers = await sanityClient.fetch<SanityPerformer[]>(
-      getPerformersQuery,
-      {},
-      { next: { revalidate: 0 } },
-    );
+    const performers = await sanityClient.fetch<SanityPerformer[]>(getPerformersQuery, {}, SANITY_FETCH_NEXT);
     if (!performers?.length) return c.lineup.artists;
 
     return performers.map((performer) => ({
@@ -204,7 +216,7 @@ export async function getPerformersWithFallback(): Promise<Artist[]> {
   } catch {
     return c.lineup.artists;
   }
-}
+});
 
 function guessTransportIcon(mode: string): string {
   const lower = mode.toLowerCase();
@@ -246,14 +258,14 @@ function normalizeStage(stage?: string): "main" | "club" {
   return "club";
 }
 
-export async function getProgramContent(locale: "hu" | "en") {
+export const getProgramContent = cache(async (locale: "hu" | "en") => {
   const c = await getContent();
 
   if (!isSanityConfigured()) return c.program;
 
   try {
     const [programItems, programPage] = await Promise.all([
-      sanityClient.fetch<SanityProgramItem[]>(getProgramItemsQuery),
+      sanityClient.fetch<SanityProgramItem[]>(getProgramItemsQuery, {}, SANITY_FETCH_NEXT),
       sanityClient.fetch<{
         titleHu?: string;
         titleEn?: string;
@@ -263,6 +275,8 @@ export async function getProgramContent(locale: "hu" | "en") {
         `*[_type == "page" && slug.current == "program" && isActive == true][0]{
           titleHu,titleEn,heroDescriptionHu,heroDescriptionEn
         }`,
+        {},
+        SANITY_FETCH_NEXT,
       ),
     ]);
 
@@ -315,15 +329,15 @@ export async function getProgramContent(locale: "hu" | "en") {
   } catch {
     return c.program;
   }
-}
+});
 
-export async function getAccommodationContent(locale: "hu" | "en") {
+export const getAccommodationContent = cache(async (locale: "hu" | "en") => {
   const c = await getContent();
 
   if (!isSanityConfigured()) return c.accommodation;
 
   try {
-    const items = await sanityClient.fetch<SanityAccommodation[]>(getAccommodationItemsQuery);
+    const items = await sanityClient.fetch<SanityAccommodation[]>(getAccommodationItemsQuery, {}, SANITY_FETCH_NEXT);
     if (!items?.length) return c.accommodation;
 
     const hotels: Hotel[] = items
@@ -355,9 +369,9 @@ export async function getAccommodationContent(locale: "hu" | "en") {
   } catch {
     return c.accommodation;
   }
-}
+});
 
-export async function getVenueContent(locale: "hu" | "en") {
+export const getVenueContent = cache(async (locale: "hu" | "en") => {
   const c = await getContent();
   if (!isSanityConfigured()) {
     return {
@@ -374,7 +388,7 @@ export async function getVenueContent(locale: "hu" | "en") {
   }
 
   try {
-    const venue = await sanityClient.fetch<SanityVenue | null>(getVenueQuery);
+    const venue = await sanityClient.fetch<SanityVenue | null>(getVenueQuery, {}, SANITY_FETCH_NEXT);
     if (!venue) throw new Error("No venue");
     const gps =
       venue.latitude !== undefined && venue.longitude !== undefined
@@ -406,14 +420,14 @@ export async function getVenueContent(locale: "hu" | "en") {
       subtitle: c.map.subtitle,
     };
   }
-}
+});
 
-export async function getTransportContent(locale: "hu" | "en") {
+export const getTransportContent = cache(async (locale: "hu" | "en") => {
   const c = await getContent();
   if (!isSanityConfigured()) return c.map.directions;
 
   try {
-    const items = await sanityClient.fetch<SanityTransportItem[]>(getTransportItemsQuery);
+    const items = await sanityClient.fetch<SanityTransportItem[]>(getTransportItemsQuery, {}, SANITY_FETCH_NEXT);
     if (!items?.length) return c.map.directions;
 
     const directions = items
@@ -430,14 +444,14 @@ export async function getTransportContent(locale: "hu" | "en") {
   } catch {
     return c.map.directions;
   }
-}
+});
 
-export async function getContactContent(locale: "hu" | "en") {
+export const getContactContent = cache(async (locale: "hu" | "en") => {
   const c = await getContent();
   if (!isSanityConfigured()) return c.contact;
 
   try {
-    const siteSettings = await sanityClient.fetch<SiteSettings | null>(getSiteSettingsQuery);
+    const siteSettings = await getSiteSettingsCached();
     if (!siteSettings) return c.contact;
 
     return {
@@ -459,19 +473,19 @@ export async function getContactContent(locale: "hu" | "en") {
   } catch {
     return c.contact;
   }
-}
+});
 
-export async function getTicketUrlWithFallback(locale: "hu" | "en"): Promise<string> {
+export const getTicketUrlWithFallback = cache(async (locale: "hu" | "en"): Promise<string> => {
   const c = await getContent();
   const fallback = c.info.ticketUrl || "#";
   if (!isSanityConfigured()) return fallback;
 
   try {
-    const siteSettings = await sanityClient.fetch<SiteSettings | null>(getSiteSettingsQuery);
+    const siteSettings = await getSiteSettingsCached();
     if (!siteSettings) return fallback;
     const url = locale === "en" ? siteSettings.ticketUrlEn : siteSettings.ticketUrlHu;
     return url || fallback;
   } catch {
     return fallback;
   }
-}
+});

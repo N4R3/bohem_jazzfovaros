@@ -66,9 +66,11 @@ export async function getSeoMetadataForPage(
   }
 
   try {
-    const page = await sanityClient.fetch<{ seo?: SeoFields } | null>(getPageBySlugQuery, {
-      slug: input.slug,
-    });
+    const page = await sanityClient.fetch<{ seo?: SeoFields } | null>(
+      getPageBySlugQuery,
+      { slug: input.slug },
+      { next: { revalidate: 30 } },
+    );
     const seo = page?.seo;
 
     const title = localized(input.locale, seo?.seoTitleHu, seo?.seoTitleEn) || input.fallbackTitle;

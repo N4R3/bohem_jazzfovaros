@@ -6,8 +6,8 @@ import LineupGrid, { type LineupArtist } from "@/components/lineup/LineupGrid";
 import { getPerformersWithFallback } from "@/sanity/lib/content";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 
-/** Fellépők CMS adatai (linkek) minden kérésnél frissen — ne ragadjon be statikus/Next cache. */
-export const dynamic = "force-dynamic";
+/** CMS tartalom ISR: ~30 mp-en belül frissül (content.ts SANITY_FETCH_NEXT). */
+export const revalidate = 30;
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
