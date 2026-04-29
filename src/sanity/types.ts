@@ -57,6 +57,15 @@ export type PopupSettings = {
   showOnlyOnHomepage?: boolean;
 };
 
+export type SanityPerformerTag = {
+  _id: string;
+  titleHu?: string;
+  titleEn?: string;
+  slug?: { current?: string };
+  order?: number;
+  isActive?: boolean;
+};
+
 export type SanityPerformer = {
   _id: string;
   name: string;
@@ -73,6 +82,55 @@ export type SanityPerformer = {
   imagePath?: string;
   order?: number;
   isFeatured?: boolean;
+  isActive?: boolean;
+  tags?: SanityPerformerTag[];
+  seo?: SeoFields;
+};
+
+export type SanityStage = {
+  _id: string;
+  nameHu?: string;
+  nameEn?: string;
+  slug?: { current?: string };
+  order?: number;
+  isActive?: boolean;
+};
+
+export type SanityNavigationItem = {
+  _id: string;
+  labelHu?: string;
+  labelEn?: string;
+  order?: number;
+  isActive?: boolean;
+  showInHeader?: boolean;
+  showInFooter?: boolean;
+  openInNewTab?: boolean;
+  href?: string;
+  externalUrl?: string;
+  page?: {
+    _id?: string;
+    slug?: { current?: string };
+    titleHu?: string;
+    titleEn?: string;
+    isActive?: boolean;
+  } | null;
+  parent?: { _id?: string; labelHu?: string; labelEn?: string } | null;
+};
+
+export type SanityPage = {
+  _id: string;
+  titleHu?: string;
+  titleEn?: string;
+  slug?: { current?: string };
+  heroTitleHu?: string;
+  heroTitleEn?: string;
+  heroDescriptionHu?: string;
+  heroDescriptionEn?: string;
+  pageBodyHu?: string;
+  pageBodyEn?: string;
+  programDisplayMode?: "structured" | "freeText" | "both";
+  programBodyHu?: string;
+  programBodyEn?: string;
   isActive?: boolean;
   seo?: SeoFields;
 };
@@ -120,6 +178,7 @@ export type SanityProgramItem = {
   startTime?: string;
   endTime?: string;
   stage?: string;
+  stageRef?: SanityStage | null;
   category?: string;
   performers?: Array<{ _id: string; name?: string; slug?: { current?: string } }>;
   order?: number;
