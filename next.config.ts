@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_BUILD_LOCALE: getBuildLocale(),
   },
+  reactStrictMode: true,
+  poweredByHeader: false,
   trailingSlash: true,
   images: {
     unoptimized: true,

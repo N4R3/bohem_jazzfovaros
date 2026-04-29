@@ -33,17 +33,12 @@ function hasLineupLinks(a: LineupArtist) {
 
 type Props = {
   artists: LineupArtist[];
-  stageLabels: {
-    main: string;
-    club: string;
-  };
   ticketUrl: string;
   ticketLabel: string;
 };
 
 export default function LineupGrid({
   artists,
-  stageLabels,
   ticketUrl,
   ticketLabel,
 }: Props) {
@@ -100,8 +95,9 @@ export default function LineupGrid({
     <>
       <div className="grid gap-5 sm:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-4">
         {artists.map((artist, i) => {
-          const stageLabel = stageLabels[artist.stage];
-
+          /* A fellépőhöz nem tartozik megbízható színpad/műfaj a Sanity-ben; ezért a kártyán
+             nem mutatunk félrevezető badge-et. A modálban is csak akkor jelenik meg színpad-szöveg,
+             ha a stageLabels-ben tényleges érték van. */
           return (
             <motion.button
               type="button"
@@ -136,13 +132,21 @@ export default function LineupGrid({
                   <ArtistPlaceholder />
                 )}
 
-                <span
-                  className="absolute left-3 top-3 rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider shadow-lg"
-                  style={{ background: "var(--color-accent-500)", color: "#fdf6e3" }}
-                >
-                  {artist.genre}
-                </span>
-
+                {/* Sanity-ből származó címkék (performer.tags). Ha nincs tag, semmi
+                    nem jelenik meg — sosem mutatunk shortDescription-t tag-ként. */}
+                {artist.tags && artist.tags.length > 0 && (
+                  <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+                    {artist.tags.slice(0, 3).map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider shadow-lg"
+                        style={{ background: "var(--color-accent-500)", color: "#fdf6e3" }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-1 flex-col p-5">
@@ -224,15 +228,12 @@ export default function LineupGrid({
                 )}
 
                 <div
-                  className="mt-4 flex items-center justify-between gap-3 border-t pt-3"
+                  className="mt-4 flex items-center justify-end gap-3 border-t pt-3"
                   style={{ borderColor: "rgba(10,58,54,0.12)" }}
                 >
-                  <span
-                    className="text-[10px] font-extrabold uppercase tracking-wider"
-                    style={{ color: "var(--color-teal-800)" }}
-                  >
-                    {stageLabel}
-                  </span>
+                  {/* A színpad-címke eltávolítva: a fellépőhöz Sanity-ben nincs valós stage-érték,
+                      a hardcode-olt „main" csak megtévesztő volt. A program-oldali színpad
+                      megjelenítés a programItem.stage mezőből származik. */}
                   <span
                     className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-wider"
                     style={{
@@ -305,9 +306,8 @@ export default function LineupGrid({
                         </button>
                       </div>
 
-                      <p className="text-sm uppercase tracking-wide" style={{ color: "rgba(10,58,54,0.8)" }}>
-                        {stageLabels[activeArtist.stage]}
-                      </p>
+                      {/* A modálban sem jelenítünk meg színpad-címkét, mivel a fellépőhöz
+                          nem kötődik megbízható stage-érték. */}
 
                       <p className="mt-3 text-sm leading-7" style={{ color: "rgba(10,58,54,0.9)" }}>
                         {activeArtist.details || activeArtist.bio || "A részletes fellépő-leírás hamarosan frissül."}

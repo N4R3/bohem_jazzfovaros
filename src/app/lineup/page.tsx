@@ -29,13 +29,6 @@ export default async function LineupPage() {
   const isEn = c.otherLocale.label === "HU";
   const lineupArtists = await getPerformersWithFallback();
 
-  const dayLabels: Record<string, string> = {
-    thursday: lineup.filterThursday,
-    friday: lineup.filterFriday,
-    saturday: lineup.filterSaturday,
-    sunday: lineup.filterSunday,
-  };
-
   const baseArtistByName = new Map(BASE.artists.map((artist) => [artist.name, artist]));
 
   const performerDetailsHu: Record<
@@ -267,7 +260,6 @@ export default async function LineupPage() {
     >
       <LineupGrid
         artists={artists}
-        stageLabels={{ main: lineup.stageMain, club: lineup.stageClub }}
         ticketUrl={BASE.ticketUrl}
         ticketLabel="Jegyvásárlás"
       />

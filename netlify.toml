@@ -5,6 +5,9 @@
 [build]
   command = "npm run build"
 
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
 [build.environment]
   NODE_VERSION = "20"
   NEXT_PUBLIC_SITE_URL_HU = "https://bohemjazz.netlify.app"

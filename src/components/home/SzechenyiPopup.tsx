@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const STORAGE_KEY = "szechenyiPopupShown";
 const IMAGE_SRC = "/images/43e3a57583f727d87fb1271bb22963ef.jpg";
 
 /**
- * Főoldali Széchenyi Terv – egyszer session-enként, stabil, fix + img (nem next/image).
+ * Főoldali Széchenyi Terv – egyszer session-enként, stabil, fix megjelenés.
  * sessionStorage: csak a kliens useEffect-ében.
  * onlyOnHomepage: ha true, csak / és /en/ útvonalon jelenik meg.
  */
@@ -90,9 +91,11 @@ export default function SzechenyiPopup({
           ×
         </button>
 
-        <img
+        <Image
           src={imageSrc}
           alt={altText}
+          width={1520}
+          height={860}
           className="
             block
             h-auto
@@ -100,6 +103,7 @@ export default function SzechenyiPopup({
             max-h-[calc(100dvh-2rem)]
             object-contain
           "
+          priority
         />
       </div>
     </>

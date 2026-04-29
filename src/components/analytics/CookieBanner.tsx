@@ -14,6 +14,12 @@ import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "cookie_consent";
 
+declare global {
+  interface Window {
+    dataLayer?: Array<Record<string, unknown>>;
+  }
+}
+
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false);
 
@@ -26,8 +32,8 @@ export default function CookieBanner() {
   function accept() {
     localStorage.setItem(STORAGE_KEY, "accepted");
     setVisible(false);
-    if (typeof window !== "undefined" && Array.isArray((window as any).dataLayer)) {
-      (window as any).dataLayer.push({ event: "cookie_consent_accepted" });
+    if (typeof window !== "undefined" && Array.isArray(window.dataLayer)) {
+      window.dataLayer.push({ event: "cookie_consent_accepted" });
     }
   }
 

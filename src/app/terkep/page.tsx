@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { getContent, getLocale } from "@/lib/locale";
 import BeachPageShell from "@/components/layout/BeachPageShell";
-import { getTransportContent, getVenueContent } from "@/sanity/lib/content";
+import PageBody from "@/components/layout/PageBody";
+import { getTransportContent, getVenueContent, getPageContentBySlug } from "@/sanity/lib/content";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -28,22 +29,23 @@ const iconPaths: Record<string, string> = {
 
 export default async function MapPage() {
   const [c, locale] = await Promise.all([getContent(), getLocale()]);
-  const [venueContent, transportDirections] = await Promise.all([
+  const [venueContent, transportDirections, page] = await Promise.all([
     getVenueContent(locale),
     getTransportContent(locale),
+    getPageContentBySlug("terkep", locale),
   ]);
   const isEn = c.otherLocale.label === "HU";
-  const gps = venueContent.gps.replace(/\s/g, "");
   const mapsUrl = venueContent.mapEmbedUrl;
 
   return (
     <BeachPageShell
       eyebrow={venueContent.eyebrow}
-      title={venueContent.title}
-      subtitle={venueContent.subtitle}
+      title={page.heroTitle || venueContent.title}
+      subtitle={page.heroDescription || venueContent.subtitle}
       canonicalPath="/terkep/"
       locale={isEn ? "en" : "hu"}
     >
+      {page.body && <PageBody text={page.body} />}
       {/* Google Maps */}
       <div
         className="mx-auto mb-8 overflow-hidden rounded-3xl border-4 shadow-2xl"
