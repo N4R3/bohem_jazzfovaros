@@ -14,7 +14,7 @@ export const getPopupSettingsQuery = `*[_type == "popupSettings"][0]{
 
 export const getVenueQuery = `*[_type == "venue"][0]`;
 
-export const getPerformersQuery = `*[_type == "performer" && isActive == true] | order(order asc) {
+const PERFORMER_PROJECTION = `{
   _id,
   name,
   slug,
@@ -32,29 +32,13 @@ export const getPerformersQuery = `*[_type == "performer" && isActive == true] |
   order,
   isFeatured,
   isActive,
+  "tags": tags[]->{ _id, titleHu, titleEn, order, isActive },
   seo
 }`;
 
-export const getFeaturedPerformersQuery = `*[_type == "performer" && isActive == true && isFeatured == true] | order(order asc) {
-  _id,
-  name,
-  slug,
-  image,
-  imagePath,
-  shortDescriptionHu,
-  shortDescriptionEn,
-  bioHu,
-  bioEn,
-  websiteUrl,
-  facebookUrl,
-  instagramUrl,
-  youtubeUrl,
-  spotifyUrl,
-  order,
-  isFeatured,
-  isActive,
-  seo
-}`;
+export const getPerformersQuery = `*[_type == "performer" && isActive == true] | order(order asc) ${PERFORMER_PROJECTION}`;
+
+export const getFeaturedPerformersQuery = `*[_type == "performer" && isActive == true && isFeatured == true] | order(order asc) ${PERFORMER_PROJECTION}`;
 
 export const getProgramItemsQuery = `*[_type == "programItem" && isActive == true] | order(date asc, startTime asc, order asc) {
   _id,
@@ -66,6 +50,7 @@ export const getProgramItemsQuery = `*[_type == "programItem" && isActive == tru
   startTime,
   endTime,
   stage,
+  "stageRef": stageRef->{ _id, nameHu, nameEn, slug },
   category,
   performers[]->{
     _id,
@@ -76,6 +61,45 @@ export const getProgramItemsQuery = `*[_type == "programItem" && isActive == tru
   isActive,
   seo
 }`;
+
+export const getStagesQuery = `*[_type == "stage" && isActive == true] | order(order asc) { _id, nameHu, nameEn, slug, order, isActive }`;
+
+export const getPerformerTagsQuery = `*[_type == "performerTag" && isActive == true] | order(order asc) { _id, titleHu, titleEn, slug, order, isActive }`;
+
+export const getNavigationItemsQuery = `*[_type == "navigationItem" && isActive == true] | order(order asc) {
+  _id,
+  labelHu,
+  labelEn,
+  order,
+  isActive,
+  showInHeader,
+  showInFooter,
+  openInNewTab,
+  href,
+  externalUrl,
+  "page": page->{ _id, slug, titleHu, titleEn, isActive },
+  "parent": parent->{ _id, labelHu, labelEn }
+}`;
+
+export const getActivePageBySlugQuery = `*[_type == "page" && slug.current == $slug && isActive == true][0]{
+  _id,
+  titleHu,
+  titleEn,
+  slug,
+  heroTitleHu,
+  heroTitleEn,
+  heroDescriptionHu,
+  heroDescriptionEn,
+  pageBodyHu,
+  pageBodyEn,
+  programDisplayMode,
+  programBodyHu,
+  programBodyEn,
+  isActive,
+  seo
+}`;
+
+export const getAllActivePageSlugsQuery = `*[_type == "page" && isActive == true && defined(slug.current)].slug.current`;
 
 export const getTicketsQuery = `*[_type == "ticket"] | order(order asc)`;
 

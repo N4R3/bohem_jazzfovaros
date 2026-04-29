@@ -6,7 +6,8 @@ export interface Artist {
   bio: string;
   image?: string;
   day: "thursday" | "friday" | "saturday" | "sunday";
-  stage: "main" | "club";
+  /** Helyszín / színpad megnevezése. Sanity programItem.stage értéke közvetlenül; szabad szöveg. */
+  stage: string;
   time: string;
   origin: string;
   websiteUrl?: string;
@@ -14,12 +15,15 @@ export interface Artist {
   facebookUrl?: string;
   instagramUrl?: string;
   spotifyUrl?: string;
+  /** Sanity-ből származó címkék (műfaj, jelleg). Üres tömb / undefined = nincs badge. */
+  tags?: string[];
 }
 
 export interface ScheduleSlot {
   time: string;
   artist: string;
-  stage: "main" | "club";
+  /** A programItem.stage szabad szöveges értéke (pl. "Main Stage", "Club", "Beach"). */
+  stage: string;
   duration: number;
   note?: string;
 }
@@ -76,6 +80,10 @@ export interface SponsorSection {
 export interface NavItem {
   label: string;
   href: string;
+  /** Külső URL? Ilyenkor új ablakban nyílik. */
+  external?: boolean;
+  /** Felülírja az alapértelmezett new-tab logikát. */
+  openInNewTab?: boolean;
 }
 
 export interface Highlight {
@@ -164,6 +172,10 @@ export interface SiteContent {
     days: ScheduleDay[];
     stageMain: string;
     stageClub: string;
+    /** Sanity-ből érkező szabad szöveges programleírás. Ha kitöltött, megjelenhet a lista helyett vagy mellett. */
+    freeText?: string;
+    /** Megjelenítési mód a Sanity Page (slug=program) dokumentumból. Default: "structured". */
+    displayMode?: "structured" | "freeText" | "both";
   };
   info: {
     title: string;
