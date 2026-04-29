@@ -5,6 +5,8 @@ import { BASE } from "@/content/base";
 import { sanityClient, isSanityConfigured } from "./client";
 import {
   getAccommodationItemsQuery,
+  getActivePageBySlugQuery,
+  getNavigationItemsQuery,
   getPerformersQuery,
   getProgramItemsQuery,
   getPopupSettingsQuery,
@@ -18,6 +20,8 @@ import { urlFor } from "./image";
 import type {
   PopupSettings,
   SanityAccommodation,
+  SanityNavigationItem,
+  SanityPage,
   SanityProgramItem,
   SanityPerformer,
   SanityTicket,
@@ -26,6 +30,7 @@ import type {
   SiteSettings,
   SponsorCategoryWithSponsors,
 } from "../types";
+import type { NavItem } from "@/lib/types";
 
 /** Egységes ISR a Sanity hívásokhoz (kevesebb API terhelés, friss tartalom ~30 mp-en belül). */
 const SANITY_FETCH_NEXT = { next: { revalidate: 30 } } as const;
@@ -191,28 +196,35 @@ export const getPerformersWithFallback = cache(async (): Promise<Artist[]> => {
     const performers = await sanityClient.fetch<SanityPerformer[]>(getPerformersQuery, {}, SANITY_FETCH_NEXT);
     if (!performers?.length) return c.lineup.artists;
 
-    return performers.map((performer) => ({
-      name: performer.name,
-      genre: performer.shortDescriptionHu || performer.shortDescriptionEn || "",
-      bio:
-        (locale === "en" ? performer.bioEn : performer.bioHu) ||
-        performer.bioHu ||
-        performer.bioEn ||
-        "",
-      image:
-        (performer.image ? urlFor(performer.image)?.width(800).height(800).url() : null) ||
-        performer.imagePath ||
-        undefined,
-      day: "friday",
-      stage: "main",
-      time: "",
-      origin: "",
-      websiteUrl: externalLink(performer.websiteUrl),
-      youtubeUrl: externalLink(performer.youtubeUrl),
-      facebookUrl: externalLink(performer.facebookUrl),
-      instagramUrl: externalLink(performer.instagramUrl),
-      spotifyUrl: externalLink(performer.spotifyUrl),
-    }));
+    return performers.map((performer) => {
+      const tags = (performer.tags || [])
+        .filter((tag) => tag?.isActive !== false)
+        .map((tag) => localized(locale, tag.titleHu, tag.titleEn))
+        .filter((s) => s.length > 0);
+      return {
+        name: performer.name,
+        genre: performer.shortDescriptionHu || performer.shortDescriptionEn || "",
+        bio:
+          (locale === "en" ? performer.bioEn : performer.bioHu) ||
+          performer.bioHu ||
+          performer.bioEn ||
+          "",
+        image:
+          (performer.image ? urlFor(performer.image)?.width(800).height(800).url() : null) ||
+          performer.imagePath ||
+          undefined,
+        day: "friday" as const,
+        stage: "",
+        time: "",
+        origin: "",
+        websiteUrl: externalLink(performer.websiteUrl),
+        youtubeUrl: externalLink(performer.youtubeUrl),
+        facebookUrl: externalLink(performer.facebookUrl),
+        instagramUrl: externalLink(performer.instagramUrl),
+        spotifyUrl: externalLink(performer.spotifyUrl),
+        tags: tags.length ? tags : undefined,
+      };
+    });
   } catch {
     return c.lineup.artists;
   }
@@ -245,18 +257,12 @@ function calculateDuration(startTime?: string, endTime?: string): number {
   return end - start;
 }
 
-function normalizeStage(stage?: string): "main" | "club" {
-  const value = (stage || "").toLowerCase();
-  if (
-    value.includes("main") ||
-    value.includes("nagys") ||
-    value.includes("fő") ||
-    value.includes("fo")
-  ) {
-    return "main";
-  }
-  return "club";
-}
+/**
+ * A programItem.stage értéket a megjelenítésnél nyersen átengedjük (egyetlen forrás = a Sanity mező).
+ * A korábbi `normalizeStage` heurisztika átírta volna a címkét „main"/„club"-ra, az UI-on viszont
+ * ez félrevezető volt. A frontend most a nyers stage szöveget jeleníti meg, a kétszínes
+ * háttér pedig egyszerű név-egyezés alapján dől el.
+ */
 
 export const getProgramContent = cache(async (locale: "hu" | "en") => {
   const c = await getContent();
@@ -266,21 +272,24 @@ export const getProgramContent = cache(async (locale: "hu" | "en") => {
   try {
     const [programItems, programPage] = await Promise.all([
       sanityClient.fetch<SanityProgramItem[]>(getProgramItemsQuery, {}, SANITY_FETCH_NEXT),
-      sanityClient.fetch<{
-        titleHu?: string;
-        titleEn?: string;
-        heroDescriptionHu?: string;
-        heroDescriptionEn?: string;
-      } | null>(
-        `*[_type == "page" && slug.current == "program" && isActive == true][0]{
-          titleHu,titleEn,heroDescriptionHu,heroDescriptionEn
-        }`,
-        {},
+      sanityClient.fetch<SanityPage | null>(
+        getActivePageBySlugQuery,
+        { slug: "program" },
         SANITY_FETCH_NEXT,
       ),
     ]);
 
-    if (!programItems?.length) return c.program;
+    /* Szabad szöveges program-leírás + megjelenítési mód a Page (slug=program) dokumentumból. */
+    const freeText = localized(
+      locale,
+      programPage?.programBodyHu,
+      programPage?.programBodyEn,
+    ).trim();
+    const rawMode = programPage?.programDisplayMode;
+    const displayMode: "structured" | "freeText" | "both" =
+      rawMode === "freeText" || rawMode === "both" ? rawMode : "structured";
+
+    if (!programItems?.length && !freeText) return c.program;
 
     const dayMap = new Map<string, ScheduleDay>();
     for (const item of programItems) {
@@ -298,10 +307,25 @@ export const getProgramContent = cache(async (locale: "hu" | "en") => {
         dayMap.set(date, { label: dayLabel, date, slots: [] });
       }
 
+      /* Stage: elsőbbség a stageRef-en (új CMS megoldás), fallback a legacy `stage` szöveg.
+         A frontend nyersen mutatja, nincs heurisztikus átírás. */
+      const stageFromRef = item.stageRef
+        ? localized(locale, item.stageRef.nameHu, item.stageRef.nameEn).trim()
+        : "";
+      const stageLabel = stageFromRef || (item.stage || "").trim();
+
+      /* Cím: ha vannak fellépők, az ő neveiket fűzzük össze; egyébként a programItem cím. */
+      const performerNames = (item.performers || [])
+        .map((p) => p?.name || "")
+        .filter((n) => n.length > 0);
+      const itemTitle = localized(locale, item.titleHu, item.titleEn);
+      const artistLabel =
+        performerNames.length > 0 ? performerNames.join(", ") : itemTitle;
+
       dayMap.get(date)?.slots.push({
         time: item.startTime || "",
-        artist: localized(locale, item.titleHu, item.titleEn),
-        stage: normalizeStage(item.stage),
+        artist: artistLabel,
+        stage: stageLabel,
         duration: calculateDuration(item.startTime, item.endTime),
         note: localized(locale, item.descriptionHu, item.descriptionEn) || undefined,
       });
@@ -325,6 +349,8 @@ export const getProgramContent = cache(async (locale: "hu" | "en") => {
       stageMain: c.program.stageMain,
       stageClub: c.program.stageClub,
       days: days.length ? days : c.program.days,
+      freeText: freeText || undefined,
+      displayMode,
     };
   } catch {
     return c.program;
@@ -474,6 +500,135 @@ export const getContactContent = cache(async (locale: "hu" | "en") => {
     return c.contact;
   }
 });
+
+/**
+ * Sanity-ből szerkeszthető oldal-tartalom. A fix oldalakon (tabor, futas, contact, …) a hero
+ * cím / leírás és a `pageBody` szöveges tartalom hozzáadható a meglévő dizájn fölé. Ha nincs
+ * Sanity adat (vagy az isActive=false), a fix oldal saját kódbeli tartalma változatlan marad.
+ */
+export const getPageContentBySlug = cache(
+  async (
+    slug: string,
+    locale: "hu" | "en",
+  ): Promise<{
+    heroTitle?: string;
+    heroDescription?: string;
+    body?: string;
+    seo?: SanityPage["seo"];
+    found: boolean;
+  }> => {
+    if (!isSanityConfigured()) return { found: false };
+    try {
+      const page = await sanityClient.fetch<SanityPage | null>(
+        getActivePageBySlugQuery,
+        { slug },
+        SANITY_FETCH_NEXT,
+      );
+      if (!page) return { found: false };
+      return {
+        heroTitle: localized(locale, page.heroTitleHu, page.heroTitleEn) || undefined,
+        heroDescription:
+          localized(locale, page.heroDescriptionHu, page.heroDescriptionEn) || undefined,
+        body: localized(locale, page.pageBodyHu, page.pageBodyEn).trim() || undefined,
+        seo: page.seo,
+        found: true,
+      };
+    } catch {
+      return { found: false };
+    }
+  },
+);
+
+/**
+ * Navigation menü (header / footer) Sanity-ből, fallback a kódban rögzített `c.nav` tömbre.
+ * A linket az alábbi prioritás alapján képezzük:
+ *   externalUrl  >  href  >  page.slug → fix oldal route vagy /oldal/[slug]
+ */
+const FIX_PAGE_SLUGS = new Set([
+  "home",
+  "info",
+  "lineup",
+  "program",
+  "contact",
+  "szallas",
+  "terkep",
+  "futas",
+  "tabor",
+  "aszf",
+]);
+
+function navHrefFromPageSlug(slug: string | undefined): string | null {
+  if (!slug) return null;
+  if (slug === "home") return "/";
+  if (FIX_PAGE_SLUGS.has(slug)) return `/${slug}/`;
+  /* Új információs oldal a dinamikus /oldal/[slug] route-on érhető el. */
+  return `/oldal/${slug}/`;
+}
+
+function buildNavItem(
+  item: SanityNavigationItem,
+  locale: "hu" | "en",
+): NavItem | null {
+  const label = localized(locale, item.labelHu, item.labelEn);
+  if (!label) return null;
+  const ext = (item.externalUrl || "").trim();
+  if (ext) {
+    return { label, href: ext, external: true, openInNewTab: true };
+  }
+  const href = (item.href || "").trim();
+  if (href) {
+    return {
+      label,
+      href,
+      external: /^https?:\/\//i.test(href),
+      openInNewTab: item.openInNewTab === true,
+    };
+  }
+  const slug = item.page?.slug?.current;
+  const fromPage = navHrefFromPageSlug(slug);
+  if (fromPage && item.page?.isActive !== false) {
+    return {
+      label,
+      href: fromPage,
+      external: false,
+      openInNewTab: item.openInNewTab === true,
+    };
+  }
+  return null;
+}
+
+export const getNavigationWithFallback = cache(
+  async (
+    placement: "header" | "footer" = "header",
+  ): Promise<NavItem[]> => {
+    const c = await getContent();
+    const locale = await getLocale();
+    if (!isSanityConfigured()) return c.nav;
+    try {
+      const items = await sanityClient.fetch<SanityNavigationItem[]>(
+        getNavigationItemsQuery,
+        {},
+        SANITY_FETCH_NEXT,
+      );
+      if (!items?.length) return c.nav;
+      const filtered = items.filter((item) =>
+        placement === "header"
+          ? item.showInHeader !== false
+          : item.showInFooter === true,
+      );
+      const built = filtered
+        .map((item) => buildNavItem(item, locale))
+        .filter((n): n is NavItem => n !== null);
+      return built.length > 0
+        ? built
+        : placement === "footer"
+          ? c.nav.slice(0, 5)
+          : c.nav;
+    } catch {
+      return placement === "footer" ? c.nav.slice(0, 5) : c.nav;
+    }
+  },
+);
 
 export const getTicketUrlWithFallback = cache(async (locale: "hu" | "en"): Promise<string> => {
   const c = await getContent();
