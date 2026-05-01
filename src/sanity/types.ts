@@ -142,6 +142,46 @@ export type SanityPage = {
   secondaryButtonLabelEn?: string;
   secondaryButtonUrlHu?: string;
   secondaryButtonUrlEn?: string;
+  campEyebrowHu?: string;
+  campEyebrowEn?: string;
+  campScheduleSectionTitleHu?: string;
+  campScheduleSectionTitleEn?: string;
+  campScheduleBlocks?: Array<{
+    titleHu?: string;
+    titleEn?: string;
+    bulletsHu?: string;
+    bulletsEn?: string;
+  }>;
+  campSupportersSectionTitleHu?: string;
+  campSupportersSectionTitleEn?: string;
+  campSupporters?: Array<{
+    nameHu?: string;
+    nameEn?: string;
+    url?: string;
+  }>;
+  runningEyebrowHu?: string;
+  runningEyebrowEn?: string;
+  runningFreeEntryBannerHu?: string;
+  runningFreeEntryBannerEn?: string;
+  runningCardDateHu?: string;
+  runningCardDateEn?: string;
+  runningCardTime?: string;
+  runningCardLocationHu?: string;
+  runningCardLocationEn?: string;
+  runningDistancesSectionTitleHu?: string;
+  runningDistancesSectionTitleEn?: string;
+  runningDistanceRows?: Array<{
+    categoryHu?: string;
+    categoryEn?: string;
+    distanceHu?: string;
+    distanceEn?: string;
+    feeHu?: string;
+    feeEn?: string;
+  }>;
+  runningEntryDeadlineHu?: string;
+  runningEntryDeadlineEn?: string;
+  runningResultsNoteHu?: string;
+  runningResultsNoteEn?: string;
   isActive?: boolean;
   seo?: SeoFields;
 };

@@ -29,9 +29,21 @@ export default async function CampPage() {
   const entryUrl = page.primaryButton?.url || camp.entryUrl;
   const entryLabel = page.primaryButton?.label || camp.entryLabel;
 
+  const campCms = page.campCms;
+  const eyebrow =
+    campCms?.eyebrow ||
+    (locale === "en" ? "Swing · Lindy Hop · Jazz improvisation" : "Swing · Lindy Hop · Jazz Improvizáció");
+  const scheduleTitle = campCms?.scheduleSectionTitle ?? camp.scheduleTitle;
+  const scheduleBlocks =
+    campCms?.scheduleBlocks ??
+    camp.schedule.map((b) => ({ title: b.day, items: b.items }));
+  const supportersTitle =
+    campCms?.supportersSectionTitle ?? (locale === "en" ? "Supporters" : "Támogatók");
+  const supportersList = campCms?.supporters ?? camp.supporters.map((s) => ({ name: s.name, url: s.url }));
+
   return (
     <BeachPageShell
-      eyebrow="Swing · Lindy Hop · Jazz Improvizáció"
+      eyebrow={eyebrow}
       title={page.heroTitle || camp.title}
       subtitle={page.heroDescription || camp.subtitle}
       canonicalPath="/tabor/"
@@ -92,13 +104,13 @@ export default async function CampPage() {
             textShadow: "0 2px 10px rgba(0,0,0,0.3)",
           }}
         >
-          {camp.scheduleTitle}
+          {scheduleTitle}
         </h2>
 
         <div className="flex flex-col gap-5">
-          {camp.schedule.map((block, i) => (
+          {scheduleBlocks.map((block, i) => (
             <article
-              key={block.day}
+              key={`${block.title}-${i}`}
               className="relative overflow-hidden rounded-2xl p-6 shadow-xl sm:p-7"
               style={{
                 background: "var(--color-cream-50)",
@@ -115,7 +127,7 @@ export default async function CampPage() {
                 className="mb-4 font-display text-lg font-black uppercase leading-tight"
                 style={{ color: "var(--color-teal-900)" }}
               >
-                {block.day}
+                {block.title}
               </h3>
               <ul className="flex flex-col gap-2">
                 {block.items.map((item, k) => (
@@ -136,16 +148,16 @@ export default async function CampPage() {
           ))}
         </div>
 
-        {camp.supporters.length > 0 && (
+        {supportersList.length > 0 && (
           <div className="mt-12">
             <p
               className="mb-4 text-center text-xs font-black uppercase tracking-[0.22em]"
               style={{ color: "var(--color-accent-500)" }}
             >
-              Támogatók
+              {supportersTitle}
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              {camp.supporters.map((s) => (
+              {supportersList.map((s) => (
                 <a
                   key={s.name}
                   href={s.url}

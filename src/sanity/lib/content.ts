@@ -179,6 +179,114 @@ function trimOrUndef(s?: string | null): string | undefined {
   return t || undefined;
 }
 
+function splitBulletLines(raw?: string | null): string[] {
+  if (!raw?.trim()) return [];
+  return raw
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
+/** Támogató link: # és üres megmarad, egyébként protocol pótlás. */
+function supporterHref(raw?: string | null): string {
+  const t = typeof raw === "string" ? raw.trim() : "";
+  if (!t || t === "#") return "#";
+  if (/^https?:\/\//i.test(t)) return t;
+  return `https://${t}`;
+}
+
+export type CampPageCmsOverlay = {
+  eyebrow?: string;
+  scheduleSectionTitle?: string;
+  scheduleBlocks?: Array<{ title: string; items: string[] }>;
+  supportersSectionTitle?: string;
+  supporters?: Array<{ name: string; url: string }>;
+};
+
+export type RunningPageCmsOverlay = {
+  eyebrow?: string;
+  freeEntryBanner?: string;
+  cardDate?: string;
+  cardTime?: string;
+  cardLocation?: string;
+  distancesSectionTitle?: string;
+  distanceRows?: Array<{ category: string; distance: string; fee: string }>;
+  entryDeadline?: string;
+  resultsNote?: string;
+};
+
+function buildCampOverlay(page: SanityPage, locale: "hu" | "en"): CampPageCmsOverlay {
+  const blocksRaw = page.campScheduleBlocks;
+  let scheduleBlocks: CampPageCmsOverlay["scheduleBlocks"];
+  if (blocksRaw?.length) {
+    const mapped = blocksRaw
+      .map((b) => {
+        const title = localized(locale, b.titleHu, b.titleEn).trim();
+        const items = splitBulletLines(localized(locale, b.bulletsHu, b.bulletsEn));
+        return title ? { title, items } : null;
+      })
+      .filter((x): x is { title: string; items: string[] } => x !== null);
+    scheduleBlocks = mapped.length > 0 ? mapped : undefined;
+  }
+
+  let supporters: CampPageCmsOverlay["supporters"];
+  const supportersRaw = page.campSupporters;
+  if (supportersRaw?.length) {
+    const mapped = supportersRaw
+      .map((s) => {
+        const name = localized(locale, s.nameHu, s.nameEn).trim();
+        return name ? { name, url: supporterHref(s.url) } : null;
+      })
+      .filter((x): x is { name: string; url: string } => x !== null);
+    supporters = mapped.length > 0 ? mapped : undefined;
+  }
+
+  return {
+    eyebrow: trimOrUndef(localized(locale, page.campEyebrowHu, page.campEyebrowEn)),
+    scheduleSectionTitle: trimOrUndef(
+      localized(locale, page.campScheduleSectionTitleHu, page.campScheduleSectionTitleEn),
+    ),
+    scheduleBlocks,
+    supportersSectionTitle: trimOrUndef(
+      localized(locale, page.campSupportersSectionTitleHu, page.campSupportersSectionTitleEn),
+    ),
+    supporters,
+  };
+}
+
+function buildRunningOverlay(page: SanityPage, locale: "hu" | "en"): RunningPageCmsOverlay {
+  let distanceRows: RunningPageCmsOverlay["distanceRows"];
+  const rowsRaw = page.runningDistanceRows;
+  if (rowsRaw?.length) {
+    const mapped = rowsRaw.map((r) => ({
+      category: localized(locale, r.categoryHu, r.categoryEn).trim(),
+      distance: localized(locale, r.distanceHu, r.distanceEn).trim(),
+      fee: localized(locale, r.feeHu, r.feeEn).trim(),
+    }));
+    distanceRows = mapped.some((r) => r.category || r.distance || r.fee) ? mapped : undefined;
+  }
+
+  return {
+    eyebrow: trimOrUndef(localized(locale, page.runningEyebrowHu, page.runningEyebrowEn)),
+    freeEntryBanner: trimOrUndef(
+      localized(locale, page.runningFreeEntryBannerHu, page.runningFreeEntryBannerEn),
+    ),
+    cardDate: trimOrUndef(localized(locale, page.runningCardDateHu, page.runningCardDateEn)),
+    cardTime: trimOrUndef(page.runningCardTime),
+    cardLocation: trimOrUndef(
+      localized(locale, page.runningCardLocationHu, page.runningCardLocationEn),
+    ),
+    distancesSectionTitle: trimOrUndef(
+      localized(locale, page.runningDistancesSectionTitleHu, page.runningDistancesSectionTitleEn),
+    ),
+    distanceRows,
+    entryDeadline: trimOrUndef(
+      localized(locale, page.runningEntryDeadlineHu, page.runningEntryDeadlineEn),
+    ),
+    resultsNote: trimOrUndef(localized(locale, page.runningResultsNoteHu, page.runningResultsNoteEn)),
+  };
+}
+
 /** URL mezők: üres string / whitespace nem gátolja a Sanityből jövő értéket; ha hiányzik a protocol, pótoljuk. */
 function externalLink(s?: string | null): string | undefined {
   const t = trimOrUndef(s);
@@ -518,6 +626,8 @@ export const getPageContentBySlug = cache(
     body2?: string;
     primaryButton?: { label: string; url: string };
     secondaryButton?: { label: string; url: string };
+    campCms?: CampPageCmsOverlay;
+    runningCms?: RunningPageCmsOverlay;
     seo?: SanityPage["seo"];
     found: boolean;
   }> => {
@@ -546,6 +656,8 @@ export const getPageContentBySlug = cache(
           primaryLabel && primaryUrl ? { label: primaryLabel, url: primaryUrl } : undefined,
         secondaryButton:
           secondaryLabel && secondaryUrl ? { label: secondaryLabel, url: secondaryUrl } : undefined,
+        campCms: slug === "tabor" ? buildCampOverlay(page, locale) : undefined,
+        runningCms: slug === "futas" ? buildRunningOverlay(page, locale) : undefined,
         seo: page.seo,
         found: true,
       };

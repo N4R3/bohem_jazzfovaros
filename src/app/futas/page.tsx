@@ -78,9 +78,52 @@ export default async function RunningPage() {
   const secondaryLabel = page.secondaryButton?.label ||
     (isEn ? "Download registration form" : "Nevezési lap letöltése");
 
+  const rc = page.runningCms;
+  const eyebrow = rc?.eyebrow ?? `${running.date} · ${running.time}`;
+  const freeEntryBanner = rc?.freeEntryBanner ?? running.freeTicketNote;
+  const cardDate = rc?.cardDate ?? running.date;
+  const cardTime = rc?.cardTime ?? running.time;
+  const cardLocation = rc?.cardLocation ?? running.location;
+  const distancesSectionTitle =
+    rc?.distancesSectionTitle ?? (locale === "en" ? "Distances & fees" : "Távok & Díjak");
+  const distanceRows =
+    rc?.distanceRows ??
+    running.distances.map((d) => ({
+      category: d.label,
+      distance: d.distance,
+      fee: d.fee,
+    }));
+  const entryDeadline = rc?.entryDeadline ?? running.entryDeadline;
+  const resultsNote = rc?.resultsNote ?? running.resultsNote;
+  const mainBody =
+    page.body2 && page.body2.trim().length > 0 ? page.body2 : running.description;
+
+  const ui =
+    locale === "en"
+      ? {
+          cardDate: "Date",
+          cardTime: "Time",
+          cardVenue: "Venue",
+          tableCategory: "Category",
+          tableDistance: "Distance",
+          tableFee: "Fee",
+          deadlineLead: "Entry deadline:",
+          contact: "Contact",
+        }
+      : {
+          cardDate: "Dátum",
+          cardTime: "Időpont",
+          cardVenue: "Helyszín",
+          tableCategory: "Kategória",
+          tableDistance: "Táv",
+          tableFee: "Díj",
+          deadlineLead: "Nevezési határidő:",
+          contact: "Kapcsolat",
+        };
+
   return (
     <BeachPageShell
-      eyebrow={`${running.date} · ${running.time}`}
+      eyebrow={eyebrow}
       title={page.heroTitle || running.title}
       subtitle={page.heroDescription || running.subtitle}
       canonicalPath="/futas/"
@@ -121,7 +164,7 @@ export default async function RunningPage() {
         </div>
 
         {/* INGYENES szalag */}
-        {running.freeTicketNote && (
+        {freeEntryBanner && (
           <div
             className="mb-8 rounded-2xl px-6 py-5 text-center shadow-xl"
             style={{
@@ -131,7 +174,7 @@ export default async function RunningPage() {
             }}
           >
             <p className="text-sm font-black uppercase tracking-wider sm:text-base">
-              {running.freeTicketNote}
+              {freeEntryBanner}
             </p>
           </div>
         )}
@@ -139,9 +182,9 @@ export default async function RunningPage() {
         {/* Kulcs info kártyák */}
         <div className="mb-8 grid gap-4 sm:grid-cols-3">
           {[
-            { label: "Dátum", value: running.date },
-            { label: "Időpont", value: running.time, big: true },
-            { label: "Helyszín", value: running.location },
+            { label: ui.cardDate, value: cardDate },
+            { label: ui.cardTime, value: cardTime, big: true },
+            { label: ui.cardVenue, value: cardLocation },
           ].map((card, i) => (
             <div
               key={card.label}
@@ -172,8 +215,8 @@ export default async function RunningPage() {
           ))}
         </div>
 
-        {/* Leírás */}
-        {page.showSecondBody && page.body2 ? <PageBody text={page.body2} /> : <PageBody text={running.description} />}
+        {/* Leírás — Sanity „Második szövegblokk” kitöltve felülírja a statikus futás leírást */}
+        <PageBody text={mainBody} />
 
         {/* Távok */}
         <div
@@ -185,7 +228,7 @@ export default async function RunningPage() {
             style={{ background: "var(--color-accent-500)", color: "#fdf6e3" }}
           >
             <h3 className="font-display text-lg font-black uppercase tracking-wider">
-              Távok & Díjak
+              {distancesSectionTitle}
             </h3>
           </div>
           <table className="w-full text-sm">
@@ -201,24 +244,24 @@ export default async function RunningPage() {
                   className="px-5 py-3 text-left text-[11px] font-black uppercase tracking-wider"
                   style={{ color: "var(--color-accent-700)" }}
                 >
-                  Kategória
+                  {ui.tableCategory}
                 </th>
                 <th
                   className="px-5 py-3 text-left text-[11px] font-black uppercase tracking-wider"
                   style={{ color: "var(--color-accent-700)" }}
                 >
-                  Táv
+                  {ui.tableDistance}
                 </th>
                 <th
                   className="px-5 py-3 text-right text-[11px] font-black uppercase tracking-wider"
                   style={{ color: "var(--color-accent-700)" }}
                 >
-                  Díj
+                  {ui.tableFee}
                 </th>
               </tr>
             </thead>
             <tbody>
-              {running.distances.map((d, i) => (
+              {distanceRows.map((d, i) => (
                 <tr
                   key={i}
                   className="border-b last:border-0"
@@ -228,7 +271,7 @@ export default async function RunningPage() {
                     className="px-5 py-3 font-bold"
                     style={{ color: "var(--color-teal-900)" }}
                   >
-                    {d.label}
+                    {d.category}
                   </td>
                   <td
                     className="px-5 py-3"
@@ -258,9 +301,9 @@ export default async function RunningPage() {
             style={{ color: "var(--color-teal-900)" }}
           >
             <strong className="font-black uppercase tracking-wider">
-              Nevezési határidő:
+              {ui.deadlineLead}
             </strong>{" "}
-            {running.entryDeadline}
+            {entryDeadline}
           </p>
         </div>
 
@@ -268,7 +311,7 @@ export default async function RunningPage() {
           className="mb-8 text-sm leading-relaxed"
           style={{ color: "rgba(253,246,227,0.88)" }}
         >
-          {running.resultsNote}
+          {resultsNote}
         </p>
 
         <div className="mb-10 flex flex-wrap items-center justify-center gap-4">
@@ -283,7 +326,7 @@ export default async function RunningPage() {
             className="text-xs font-black uppercase tracking-[0.22em]"
             style={{ color: "var(--color-accent-600)" }}
           >
-            Kapcsolat
+            {ui.contact}
           </p>
           <p className="mt-2" style={{ color: "var(--color-teal-900)" }}>
             <a

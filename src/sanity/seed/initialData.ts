@@ -16,6 +16,40 @@ function sanitizeForId(value: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
+const seedCampScheduleBlocks = hu.camp.schedule.map((block, i) => {
+  const enBlock = en.camp.schedule[i];
+  return {
+    _type: "campScheduleBlock",
+    _key: `camp-sched-${i}`,
+    titleHu: block.day,
+    titleEn: enBlock?.day ?? "",
+    bulletsHu: block.items.join("\n"),
+    bulletsEn: (enBlock?.items ?? []).join("\n"),
+  };
+});
+
+const seedCampSupporters = BASE.camp.supporters.map((s, i) => ({
+  _type: "campSupporter",
+  _key: `camp-sup-${i}`,
+  nameHu: s.name,
+  nameEn: s.name,
+  url: s.url === "#" ? "https://kedozrt.hu/" : s.url,
+}));
+
+const seedRunningDistanceRows = hu.running.distances.map((d, i) => {
+  const ed = en.running.distances[i];
+  return {
+    _type: "runningDistanceRow",
+    _key: `run-dist-${i}`,
+    categoryHu: d.label,
+    categoryEn: ed?.label ?? d.label,
+    distanceHu: d.distance,
+    distanceEn: ed?.distance ?? d.distance,
+    feeHu: d.fee,
+    feeEn: ed?.fee ?? d.fee,
+  };
+});
+
 const sponsorCategoryIds = {
   main: "sponsorCategory-main",
   sponsors: "sponsorCategory-sponsors",
@@ -735,6 +769,22 @@ const pages: SeedDocument[] = [
     showSecondBody: true,
     pageBody2Hu: "A Bohém JAZZFŐVÁROS Futás hagyományosan a fesztivál szombati napján kerül megrendezésre, 10:00 órai rajtidővel. A rajt és a cél is a fesztiválterület célkapujánál. Három táv közül választhatsz: 2 300 m, 11 500 m, vagy 5 × 2 300 m váltófutás. Nevezési díj 2 500 Ft előreutalással (aug. 7. éjfélig a Kecskeméti Jazz Alapítvány számlájára: 11732002-20302115), vagy 3 000 Ft a helyszínen készpénzben, illetve bankkártyával. Öltöző és ruhamegőrzés biztosított. Minden nevező a verseny logójával ellátott pólót kap, a célban harapnivaló és ásványvíz vár.",
     pageBody2En: "The Bohém JAZZFŐVÁROS Run traditionally takes place on the Saturday of the festival, with a 10:00 start time. Both the start and finish are at the festival's goal gate. You can choose from three distances: 2,300 m, 11,500 m, or 5 × 2,300 m relay. Entry fee is 2,500 Ft by advance transfer (by Aug 7 midnight to the Kecskemét Jazz Foundation account: 11732002-20302115), or 3,000 Ft on-site in cash or by bank card. Changing rooms and storage are provided. Every participant receives a t-shirt with the competition logo, and snacks and mineral water await at the finish line.",
+    runningEyebrowHu: `${hu.running.date} · ${hu.running.time}`,
+    runningEyebrowEn: `${en.running.date} · ${en.running.time}`,
+    runningFreeEntryBannerHu: hu.running.freeTicketNote,
+    runningFreeEntryBannerEn: en.running.freeTicketNote,
+    runningCardDateHu: hu.running.date,
+    runningCardDateEn: en.running.date,
+    runningCardTime: hu.running.time,
+    runningCardLocationHu: hu.running.location,
+    runningCardLocationEn: en.running.location,
+    runningDistancesSectionTitleHu: "Távok & Díjak",
+    runningDistancesSectionTitleEn: "Distances & fees",
+    runningDistanceRows: seedRunningDistanceRows,
+    runningEntryDeadlineHu: hu.running.entryDeadline,
+    runningEntryDeadlineEn: en.running.entryDeadline,
+    runningResultsNoteHu: hu.running.resultsNote,
+    runningResultsNoteEn: en.running.resultsNote,
     primaryButtonLabelHu: hu.running.entryLabel,
     primaryButtonLabelEn: en.running.entryLabel,
     primaryButtonUrlHu: BASE.running.entryUrl,
@@ -764,6 +814,14 @@ const pages: SeedDocument[] = [
     showSecondBody: true,
     pageBody2Hu: "A klasszikus (régi, táncolható) jazz iránt érdeklődőket várjuk teljesen kezdőktől a haladókig, korhatár nélkül. Hangszeres vagy énekesi előképzettség (pl. zeneiskola) szükséges, de várunk érdeklődő passzív résztvevőket is! A tábor résztvevői 5 × 40 perc egyéni órát kapnak, délutánonként közös zenekari gyakorlattal. A fesztivál utolsó napján a jazztábor legjobb produkciói zárják a JAZZFŐVÁROS műsorát a Nagysátorban. A tábort a Pepita Egyesület és a Neumann János Egyetem szervezi, a swingtánckurzusokat aug. 6-8. között a Pepita Egyesület koordinálja.",
     pageBody2En: "We welcome those interested in classic (old, danceable) jazz from complete beginners to advanced players, with no age limit. Instrumental or vocal background (e.g., music school) is required, but we also welcome interested passive participants! Camp participants receive 5 × 40 minutes of individual lessons, with ensemble practice in the afternoons. On the last day of the festival, the jazz camp's best performances will close the JAZZFŐVÁROS program at the Main Tent. The camp is organized by the Pepita Association and the Neumann János University, with swing dance courses coordinated by the Pepita Association on Aug 6-8.",
+    campEyebrowHu: "Swing · Lindy Hop · Jazz Improvizáció",
+    campEyebrowEn: "Swing · Lindy Hop · Jazz improvisation",
+    campScheduleSectionTitleHu: hu.camp.scheduleTitle,
+    campScheduleSectionTitleEn: en.camp.scheduleTitle,
+    campScheduleBlocks: seedCampScheduleBlocks,
+    campSupportersSectionTitleHu: "Támogatók",
+    campSupportersSectionTitleEn: "Supporters",
+    campSupporters: seedCampSupporters,
     primaryButtonLabelHu: hu.camp.entryLabel,
     primaryButtonLabelEn: en.camp.entryLabel,
     primaryButtonUrlHu: BASE.camp.entryUrl,
