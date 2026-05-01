@@ -19,7 +19,8 @@ export const sanityClient = createClient({
   projectId: sanityProjectId,
   dataset: sanityDataset,
   apiVersion: sanityApiVersion,
-  useCdn: true,
+  /* CDN nélkül: a publikált tartalom és a Studio-ban látott állapot gyorsabban egyezik (kevesebb „régi cache”). */
+  useCdn: false,
   token: sanityReadToken,
 });
 

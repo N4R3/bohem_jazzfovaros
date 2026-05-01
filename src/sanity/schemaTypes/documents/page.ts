@@ -34,7 +34,7 @@ export const pageType = defineType({
   title: "Oldal (Page)",
   type: "document",
   description:
-    "Egy szerkeszthető oldal. A Studio csak azokat a mezőket mutatja az adott slug mellett, amelyek az adott útvonalon ténylegesen megjelennek. Új oldal: állítsd be a slugot — ez alapján bővülnek/szűkülnek a mezők.",
+    "Egy szerkeszthető oldal. A Studio csak azokat a mezőket mutatja az adott slug mellett, amelyek az adott útvonalon ténylegesen megjelennek. Új oldal: állítsd be a slugot — ez alapján bővülnek/szűkülnek a mezők. FONTOS: ha a honlap tele van szöveggel, de itt pl. a tábor „program blokkok” üresek, a honlap valószínűleg a kódbeli alapszöveget mutatja (nem biztos, hogy hiba). Szinkron: lokálisan futtasd a „npm run sanity:seed” importot írási tokennel, vagy másold be a szöveget ide — ezután Publish.",
   fields: [
     defineField({
       name: "titleHu",
@@ -222,7 +222,7 @@ export const pageType = defineType({
       title: "Tábor — program blokkok (kártyák)",
       type: "array",
       description:
-        "Minden blokk egy kártya: cím + bullet lista (EN soronként). Ha üres, a kódbeli statikus menetrend marad.",
+        "Minden blokk egy kártya: cím + bullet lista (Enterrel soronként). Üres lista = a honlap a repo-ban lévő alap menetrendet mutatja (hu.ts/en.ts), ezért a Studio és az élő oldal eltérhet. Kezdő töltés: npm run sanity:seed.",
       hidden: ({ document }) => slugCurrent(document) !== SLUG_TABOR,
       of: [
         defineArrayMember({
@@ -378,7 +378,8 @@ export const pageType = defineType({
       name: "runningDistanceRows",
       title: "Futás — távok sorai",
       type: "array",
-      description: "Ha van sor, felülírja a statikus táblázatot.",
+      description:
+        "Ha van sor, ez adja a táblázatot. Üres = honlap a kódbeli táblázatot mutatja (Studio és oldal eltérhet). Kezdő töltés: npm run sanity:seed.",
       hidden: ({ document }) => slugCurrent(document) !== SLUG_FUTAS,
       of: [
         defineArrayMember({

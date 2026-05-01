@@ -38,6 +38,26 @@ export const deskStructure: StructureResolver = (S) =>
       S.documentTypeListItem("navigationItem").title("🧭 Navigáció / Menü"),
       S.documentTypeListItem("page").title("📄 Oldalak (Pages)"),
 
+      S.listItem()
+        .title("⚡ Jazztábor — Page (slug: tabor)")
+        .id("page-list-tabor")
+        .child(
+          S.documentList()
+            .title("Jazztábor Page")
+            .filter('_type == "page" && slug.current == "tabor"')
+            .defaultOrdering([{ field: "_updatedAt", direction: "desc" }]),
+        ),
+
+      S.listItem()
+        .title("⚡ Futás — Page (slug: futas)")
+        .id("page-list-futas")
+        .child(
+          S.documentList()
+            .title("Futás Page")
+            .filter('_type == "page" && slug.current == "futas"')
+            .defaultOrdering([{ field: "_updatedAt", direction: "desc" }]),
+        ),
+
       S.divider(),
 
       S.documentTypeListItem("programItem").title("📅 Program tételek"),

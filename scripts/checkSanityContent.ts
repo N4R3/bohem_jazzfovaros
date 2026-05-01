@@ -206,6 +206,92 @@ async function checkPages() {
       log("warning", `Page noIndex (${slug})`, "seo.noIndex = true (nem indexel a build alapján a meta)");
     }
   }
+
+  /* Tábor / Futás: CMS blokkok — üres esetén a honlap statikus (hu/en) tartalmat mutat, a Studio „üresnek” tűnik */
+  type CampFutRow = {
+    _id?: string;
+    slug?: string;
+    isActive?: boolean;
+    campBlockCount?: number;
+    campSupporterCount?: number;
+    runRowCount?: number;
+  };
+
+  const campFut = (await sanityClient.fetch(
+    `*[_type == "page" && slug.current in ["tabor","futas"]]{
+    _id,
+    "slug": slug.current,
+    isActive,
+    "campBlockCount": count(campScheduleBlocks),
+    "campSupporterCount": count(campSupporters),
+    "runRowCount": count(runningDistanceRows)
+  }`,
+  )) as CampFutRow[];
+
+  const bySlug = new Map<string, CampFutRow[]>();
+  for (const row of campFut || []) {
+    const s = row.slug || "";
+    if (!s) continue;
+    const list = bySlug.get(s) ?? [];
+    list.push(row);
+    bySlug.set(s, list);
+  }
+  for (const [slugKey, list] of bySlug) {
+    if (list.length > 1) {
+      log(
+        "warning",
+        `Page duplikált slug (${slugKey})`,
+        `${list.length} dokumentum ugyanazzal a sluggal — a frontend az egyiket választja véletlenszerűen ([0]). Hagyj meg egy aktív példányt.`,
+      );
+    }
+  }
+
+  const tabor = campFut?.find((r: CampFutRow) => r.slug === "tabor");
+  const futas = campFut?.find((r: CampFutRow) => r.slug === "futas");
+
+  if (!tabor) {
+    log("error", "Page tabor", "Nincs slug=tabor dokumentum");
+  } else if (tabor.isActive === false) {
+    log("warning", "Page tabor", "Inaktív — a getPageContentBySlug nem tölti (fallback marad)");
+  } else {
+    const blocks = tabor.campBlockCount ?? 0;
+    const sup = tabor.campSupporterCount ?? 0;
+    if (blocks === 0) {
+      log(
+        "warning",
+        "Page tabor — campScheduleBlocks",
+        "Üres — a honlap a kódbeli menetrendet mutatja, nem ezt a mezőt. Futtasd: npm run sanity:seed (vagy töltsd ki Studio-ban és Publish).",
+      );
+    } else {
+      log("ok", "Page tabor — campScheduleBlocks", `${blocks} blokk`);
+    }
+    if (sup === 0) {
+      log(
+        "warning",
+        "Page tabor — campSupporters",
+        "Üres — a honlap a statikus támogató listát mutatja.",
+      );
+    } else {
+      log("ok", "Page tabor — campSupporters", `${sup} támogató`);
+    }
+  }
+
+  if (!futas) {
+    log("error", "Page futas", "Nincs slug=futas dokumentum");
+  } else if (futas.isActive === false) {
+    log("warning", "Page futas", "Inaktív — getPageContentBySlug nem tölti");
+  } else {
+    const rows = futas.runRowCount ?? 0;
+    if (rows === 0) {
+      log(
+        "warning",
+        "Page futas — runningDistanceRows",
+        "Üres — a honlap a kódbeli távok táblázatát mutatja. Futtasd: npm run sanity:seed vagy töltsd ki Studio-ban.",
+      );
+    } else {
+      log("ok", "Page futas — runningDistanceRows", `${rows} sor`);
+    }
+  }
 }
 
 async function checkPerformers() {

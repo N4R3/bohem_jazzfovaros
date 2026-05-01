@@ -36,6 +36,8 @@ A Studio **nem minden oldalon mutatja az összes mezőt**. A **Slug** mező ért
 
 Ha egy mezőt nem látsz: ellenőrizd, hogy a dokumentum **slug** mezője pontosan a kívánt érték (pl. `tabor`, `futas`).
 
+**„A honlap tele van, a Studio meg üres” — ez gyakran nem hiba:** sok mezőnél (pl. tábor programkártyák, futás táblázat) **üres Sanity = a honlap a kódban tárolt magyar/angol alapszöveget mutatja**. A Studio-ban akkor látod ugyanazt, ha kitöltöd a mezőket **és** rányomsz a **Publish**-ra, vagy egyszer lefuttatod a **`npm run sanity:seed`** importot (fejlesztői gépen, írási tokennel). Gyors megnyitás a Studioban: bal menü → **⚡ Jazztábor — Page** / **⚡ Futás — Page**.
+
 ### Közös mezők (több fix és új oldal esetén)
 
 | Mező | Hatás |
