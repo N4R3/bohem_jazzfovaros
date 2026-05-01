@@ -139,158 +139,336 @@ const tickets: SeedDocument[] = [
   },
 ];
 
+/* ============================================================
+   PerformerTag seed — alap műfajok és kategóriák.
+   A Studio-ban az ügyfél tetszőlegesen bővítheti a listát.
+   ============================================================ */
+const performerTagSeedItems: Array<{ id: string; titleHu: string; titleEn: string; order: number }> = [
+  { id: "tag-jazz", titleHu: "Jazz", titleEn: "Jazz", order: 1 },
+  { id: "tag-swing", titleHu: "Swing", titleEn: "Swing", order: 2 },
+  { id: "tag-blues", titleHu: "Blues", titleEn: "Blues", order: 3 },
+  { id: "tag-ragtime", titleHu: "Ragtime", titleEn: "Ragtime", order: 4 },
+  { id: "tag-dixieland", titleHu: "Dixieland", titleEn: "Dixieland", order: 5 },
+  { id: "tag-boogie", titleHu: "Boogie-woogie", titleEn: "Boogie-woogie", order: 6 },
+  { id: "tag-vocal", titleHu: "Énekes jazz", titleEn: "Vocal jazz", order: 7 },
+  { id: "tag-piano", titleHu: "Zongora", titleEn: "Piano", order: 8 },
+  { id: "tag-guitar", titleHu: "Gitár", titleEn: "Guitar", order: 9 },
+  { id: "tag-banjo", titleHu: "Bendzsó", titleEn: "Banjo", order: 10 },
+  { id: "tag-brass", titleHu: "Fúvós", titleEn: "Brass", order: 11 },
+  { id: "tag-bass", titleHu: "Bőgő", titleEn: "Double bass", order: 12 },
+  { id: "tag-drums", titleHu: "Dob", titleEn: "Drums", order: 13 },
+  { id: "tag-dance", titleHu: "Tánc", titleEn: "Dance", order: 14 },
+  { id: "tag-international", titleHu: "Nemzetközi vendég", titleEn: "International guest", order: 15 },
+  { id: "tag-hungarian", titleHu: "Magyar fellépő", titleEn: "Hungarian performer", order: 16 },
+];
+
+const performerTags: SeedDocument[] = performerTagSeedItems.map((tag) => ({
+  _id: tag.id,
+  _type: "performerTag",
+  titleHu: tag.titleHu,
+  titleEn: tag.titleEn,
+  slug: { _type: "slug", current: tag.id.replace(/^tag-/, "") },
+  order: tag.order,
+  isActive: true,
+}));
+
+/* Tag-hozzárendelések fellépőnként (max 3 / fellépő).
+   Ha egy név itt nincs, csak az automatikus „magyar / nemzetközi" tag kerül rá
+   (származás alapján), plusz egy általános „Jazz". */
+const performerTagsByName: Record<string, string[]> = {
+  "Bérczesi Jazz Band": ["tag-jazz", "tag-vocal"],
+  "Bohém Ragtime Jazz Band": ["tag-ragtime", "tag-dixieland", "tag-jazz"],
+  "Bolba Éva": ["tag-vocal", "tag-jazz"],
+  "Clotile Yana": ["tag-vocal", "tag-jazz"],
+  "Cseh Balázs": ["tag-drums", "tag-jazz"],
+  "Dániel Balázs": ["tag-boogie", "tag-piano", "tag-blues"],
+  "Dennert Árpád": ["tag-brass", "tag-dixieland", "tag-jazz"],
+  'Emanuele Urso "King of Swing"': ["tag-swing", "tag-jazz"],
+  "Farkas Norbert": ["tag-bass", "tag-jazz"],
+  'Farkas Péter "Bubu"': ["tag-bass", "tag-jazz"],
+  "Festival All Stars": ["tag-jazz", "tag-swing"],
+  "Gyárfás István": ["tag-guitar", "tag-jazz"],
+  "Hungarian Jazz Embassy": ["tag-jazz", "tag-swing"],
+  "Hunter Burgamy": ["tag-banjo", "tag-guitar", "tag-jazz"],
+  "Jazz Camp All Stars": ["tag-jazz"],
+  "Ken Aoki": ["tag-banjo", "tag-jazz"],
+  "Korb Attila": ["tag-brass", "tag-jazz", "tag-vocal"],
+  "Lukács Eszter": ["tag-vocal", "tag-jazz"],
+  "Nagy Iván": ["tag-piano", "tag-jazz"],
+  "Nanna Carling": ["tag-swing", "tag-jazz"],
+  "Pribojszki Mátyás": ["tag-blues", "tag-jazz"],
+  "Sir Oliver Mally & Peter Schneider Duo": ["tag-blues", "tag-guitar"],
+  "Szalóky Béla": ["tag-brass", "tag-jazz"],
+  "Tom White & the Mad Circus": ["tag-swing", "tag-jazz"],
+  "Swingtáncórák kezdőknek": ["tag-dance", "tag-swing"],
+};
+
+/* Hungarian / International tag ráerősítése a származás alapján. */
+const HUNGARIAN_ORIGINS = new Set(["Magyarország"]);
+function tagsFromOrigin(origin: string): string[] {
+  if (HUNGARIAN_ORIGINS.has(origin)) return ["tag-hungarian"];
+  if (origin && origin !== "Magyarország") return ["tag-international"];
+  return [];
+}
+
+/* Egy fellépő végleges címkelistája (max 4): kézi + származási tag, dedup-pal. */
+function resolvePerformerTagIds(name: string, origin: string): string[] {
+  const manual = performerTagsByName[name] || [];
+  const origin_ = tagsFromOrigin(origin);
+  const merged: string[] = [];
+  for (const t of [...manual, ...origin_]) {
+    if (!merged.includes(t)) merged.push(t);
+  }
+  return merged.slice(0, 4);
+}
+
+/* Egyszerű genre → angol fordítás a shortDescription-höz. */
+const genreEnByHu: Record<string, string> = {
+  "Classic Jazz": "Classic jazz",
+  "Ragtime / Classic Jazz": "Ragtime / classic jazz",
+  "Jazz Vocal": "Jazz vocals",
+  "Jazz Drums": "Jazz drums",
+  "Jazz Piano": "Jazz piano",
+  "Clarinet / Tenor Sax": "Clarinet / tenor sax",
+  "Swing / Classic Jazz": "Swing / classic jazz",
+  "Double Bass": "Double bass",
+  "International All-Stars": "International all-stars",
+  "Jazz Guitar": "Jazz guitar",
+  "Banjo / Guitar": "Banjo / guitar",
+  Banjo: "Banjo",
+  "Trombone / Trumpet / Piano / Vocal": "Trombone / trumpet / piano / vocals",
+  "Classic Jazz / Swing": "Classic jazz / swing",
+  "Blues / Jazz Harmonica": "Blues / jazz harmonica",
+  Blues: "Blues",
+  "Trumpet / Trombone": "Trumpet / trombone",
+  "Vintage Jazz": "Vintage jazz",
+  "Swing Dance Lesson": "Swing dance lesson",
+};
+
+/* Eredet → angol fordítás. */
+const originEnByHu: Record<string, string> = {
+  Magyarország: "Hungary",
+  USA: "USA",
+  Olaszország: "Italy",
+  Japán: "Japan",
+  Svédország: "Sweden",
+  Nemzetközi: "International",
+  "Ausztria / Németország": "Austria / Germany",
+};
+
+function shortDescriptionEnFrom(genreHu: string, originHu: string): string {
+  const g = genreEnByHu[genreHu] || genreHu;
+  const o = originEnByHu[originHu] || originHu;
+  return o ? `${g} · ${o}` : g;
+}
+
 const performerDetailsByName: Record<
   string,
-  { bioHu: string; websiteUrl?: string; youtubeUrl?: string }
+  { bioHu: string; bioEn?: string; websiteUrl?: string; youtubeUrl?: string }
 > = {
   "Bérczesi Jazz Band": {
     bioHu:
       "Bérczesi Róbert (Hiperkarma) különleges vendégprojektje. Klasszikus jazzt és bohém lendületet ötvöző formáció.",
+    bioEn:
+      "A special guest project led by Róbert Bérczesi (Hiperkarma), blending classic jazz with bohemian energy.",
     websiteUrl: "https://jazzfovaros.hu/bg/performer-popup/190",
     youtubeUrl: "https://www.youtube.com/watch?v=zjxCe4WunMY",
   },
   "Bohém Ragtime Jazz Band": {
     bioHu:
       "Az eMeRTon-díjas kecskeméti csapat 1985-ben alakult, repertoárjuk a ragtime-tól a New Orleans-i jazzen és dixielanden át a swingig terjed.",
+    bioEn:
+      "Founded in Kecskemét in 1985, this eMeRTon-awarded ensemble plays a wide range from ragtime through New Orleans jazz and dixieland to swing.",
     websiteUrl: "http://www.bohemragtime.com",
     youtubeUrl: "https://youtu.be/WphNjExWanE?si=RFRy3lOJDkOrdc2q",
   },
   "Bolba Éva": {
     bioHu:
       "Nemzetközileg is aktív jazzénekes, Európa mellett az USA-ban és Ázsiában is fellépett. A JAZZterlánc megálmodója.",
+    bioEn:
+      "Internationally active jazz singer who has performed across Europe, the United States and Asia. Founder of the JAZZterlánc series.",
     websiteUrl: "https://www.facebook.com/jazzterlanc/",
     youtubeUrl: "https://www.youtube.com/watch?v=-2mzm8Fiq4w",
   },
   "Cseh Balázs": {
     bioHu:
       "A régi stílusú jazzdobolás specialistája, tapasztalt stúdiózenész és több formáció tagja.",
+    bioEn:
+      "A specialist of vintage jazz drumming, experienced studio musician and member of several Hungarian jazz formations.",
     websiteUrl: "https://www.facebook.com/balazs.cseh.50",
     youtubeUrl: "https://www.youtube.com/watch?v=N4lvyrNWswY",
   },
   "Dániel Balázs": {
     bioHu:
       "Mr. Firehand, a boogie-woogie magyar nagykövete és az egyik legvirtuózabb hazai zongorista.",
+    bioEn:
+      "Known as Mr. Firehand, Hungary's leading boogie-woogie ambassador and one of the most virtuoso pianists on the local scene.",
     websiteUrl: "https://mrfirehand.com/",
     youtubeUrl: "https://www.youtube.com/watch?v=ZqMxZbwIjm0",
   },
   "Dennert Árpád": {
     bioHu:
       "Az Árpi Show, a Benkó Dixieland és számos más hazai jazz-zenekar meghatározó hangszerese.",
+    bioEn:
+      "A defining clarinet and tenor sax player of Árpi Show, the Benkó Dixieland Band and many other Hungarian jazz ensembles.",
     websiteUrl: "https://www.facebook.com/dennertarpi",
     youtubeUrl: "https://www.youtube.com/watch?v=j_m-5v4lxrM",
   },
   'Emanuele Urso "King of Swing"': {
     bioHu: "Az olasz swingélet kiemelt alakja, a fesztivál nemzetközi vendégművésze.",
+    bioEn:
+      "A leading figure of the Italian swing scene and an international guest of the festival.",
     websiteUrl: "https://emanueleurso.it",
     youtubeUrl: "https://www.youtube.com/watch?v=q1Gh8TQ9e3I",
   },
   "Festival All Stars": {
     bioHu:
       "Nemzetközi all-stars projekt magyar és külföldi vendégművészekkel, külön pénteki és szombati felállással.",
+    bioEn:
+      "An international all-stars project featuring Hungarian and foreign guest artists, with separate Friday and Saturday line-ups.",
     websiteUrl: "https://jazzfovaros.hu/bg/performer-popup/84",
   },
   "Gyárfás István": {
     bioHu:
       "A mainstream jazz egyik legismertebb hazai gitárosa, több évtizedes pályafutással és nemzetközi együttműködésekkel.",
+    bioEn:
+      "One of the best-known Hungarian mainstream jazz guitarists, with decades of experience and international collaborations.",
     websiteUrl: "https://www.facebook.com/istvan.gyarfas.1",
     youtubeUrl: "https://www.youtube.com/watch?v=yCY9M9atxRI",
   },
   "Hungarian Jazz Embassy": {
     bioHu: "Hazai jazz-elit formáció, kifejezetten a fesztiválra összeállított felállással.",
+    bioEn:
+      "A top-tier Hungarian jazz formation assembled specifically for the Bohém Jazz Capital festival.",
     websiteUrl: "https://www.facebook.com/szalokygroup/",
   },
   "Hunter Burgamy": {
     bioHu: "Amerikai gitáros/bendzsós és énekes, tradicionális jazz és swing vonalon.",
+    bioEn:
+      "American guitarist, banjo player and vocalist working in traditional jazz and swing.",
     websiteUrl: "https://www.hunterburgamy.com/",
   },
   "Jazz Camp All Stars": {
     bioHu:
       "A JAZZFŐVÁROS jazztábor tanárai és zenésztársaik spontán örömzenélésre összeálló nyitónapi csapata.",
+    bioEn:
+      "A spontaneous opening-night session by the teachers and musician friends of the Bohém Jazz Capital camp.",
     websiteUrl: "https://www.jazzfovaros.hu/jazztabor",
   },
   "Ken Aoki": {
     bioHu: "Világszínvonalú bendzsóművész, a fesztivál egyik közönségkedvenc nemzetközi fellépője.",
+    bioEn:
+      "A world-class banjo player from Japan and one of the festival's much-loved international returning guests.",
     websiteUrl: "https://www.facebook.com/vegavox",
     youtubeUrl: "https://www.youtube.com/watch?v=eXFc-JfW2r8",
   },
   "Korb Attila": {
     bioHu:
       "Sokoldalú hangszeres (harsona, trombita, szaxofon, zongora, ének), folyamatosan turnézó szabadúszó jazzmuzsikus.",
+    bioEn:
+      "A versatile multi-instrumentalist (trombone, trumpet, sax, piano and vocals) and a constantly touring freelance jazz musician.",
     websiteUrl: "https://www.facebook.com/attila.korb.7",
     youtubeUrl: "https://www.youtube.com/watch?v=QcoDBs6_SBM",
   },
   "Nagy Iván": {
     bioHu:
       "A stride-zongorázás elkötelezett képviselője, számos hazai swing- és jazzformáció közreműködője.",
+    bioEn:
+      "A dedicated representative of stride piano playing, contributor to many Hungarian swing and jazz formations.",
     websiteUrl: "https://www.facebook.com/ivan.nagy.7161",
     youtubeUrl: "https://www.youtube.com/watch?v=7Sv_XN6bK3o",
   },
   "Nanna Carling": {
     bioHu:
       "Svédországi tradicionális jazz előadó, több hangszerrel és énekkel is rendszeresen szerepel nemzetközi fesztiválokon.",
+    bioEn:
+      "A Swedish traditional jazz performer who regularly appears at international festivals on multiple instruments and as a vocalist.",
     websiteUrl: "https://www.nannacarling.com",
     youtubeUrl: "https://www.youtube.com/@nannacarling",
   },
   "Sir Oliver Mally & Peter Schneider Duo": {
     bioHu: "Osztrák-német blues duó, akusztikus gitárra és énekre épülő műsorral.",
+    bioEn:
+      "Austrian-German blues duo built around acoustic guitar and vocals.",
     websiteUrl: "https://sir-oliver.com",
     youtubeUrl: "https://www.youtube.com/watch?v=nP5MVYLVKEI",
   },
   "Swingtáncórák kezdőknek": {
     bioHu:
       "Kezdő swingtáncórák több időpontban a fesztivál alatt, magyar és nemzetközi közönségnek.",
+    bioEn:
+      "Beginner-friendly swing dance lessons running at multiple times during the festival, open to local and international guests.",
     websiteUrl: "https://www.swinglight.hu",
     youtubeUrl: "https://www.youtube.com/watch?v=CZ0e0rtanGM",
   },
   "Szalóky Béla": {
     bioHu:
       "Multiinstrumentalista, a magyar oldtimer-jazz meghatározó alakja, rendszeres nemzetközi fesztiválvendég.",
+    bioEn:
+      "Multi-instrumentalist and one of the defining figures of Hungarian oldtimer jazz, a regular guest at international festivals.",
     websiteUrl: "http://szaloky.com/",
     youtubeUrl: "https://www.youtube.com/watch?v=R91MRLsUi_s",
   },
   "Tom White & the Mad Circus": {
     bioHu: "A rockabilly magyar királyai, erős színpadi energiával és vintage hangzással.",
+    bioEn:
+      "The kings of Hungarian rockabilly, with high-energy stage shows and a strong vintage sound.",
     websiteUrl: "http://www.tomwhite.hu/",
     youtubeUrl: "https://www.youtube.com/watch?v=jVIMTO5gd48",
   },
 };
 
-const performers: SeedDocument[] = BASE.artists.map((artist, index) => ({
-  _id: `performer-${index + 1}`,
-  _type: "performer",
-  name: artist.name,
-  slug: {
-    _type: "slug",
-    current: artist.name
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, ""),
-  },
-  imagePath: artist.image || "", // TODO: Studio-ban image upload kell, majd ide image asset referencia.
-  shortDescriptionHu: `${artist.genre} · ${artist.origin}`,
-  shortDescriptionEn: `${artist.genre} · ${artist.origin}`,
-  bioHu: performerDetailsByName[artist.name]?.bioHu || "",
-  bioEn: "",
-  websiteUrl: performerDetailsByName[artist.name]?.websiteUrl || "",
-  facebookUrl: "",
-  instagramUrl: "",
-  youtubeUrl: performerDetailsByName[artist.name]?.youtubeUrl || "",
-  spotifyUrl: "",
-  order: index + 1,
-  isFeatured: index < 8,
-  isActive: true,
-  seo: {
-    seoTitleHu: `${artist.name} | Bohém JAZZFŐVÁROS`,
-    seoTitleEn: `${artist.name} | Bohém JAZZ CAPITAL`,
-    seoDescriptionHu: "",
-    seoDescriptionEn: "",
-    canonicalOverrideHu: "",
-    canonicalOverrideEn: "",
-    noIndex: false,
-  },
-}));
+/* Név → performer dokumentum-id (programItem performers ref-ekhez). */
+const performerIdByName: Record<string, string> = {};
+BASE.artists.forEach((artist, index) => {
+  performerIdByName[artist.name] = `performer-${index + 1}`;
+});
+
+const performers: SeedDocument[] = BASE.artists.map((artist, index) => {
+  const details = performerDetailsByName[artist.name];
+  const tagIds = resolvePerformerTagIds(artist.name, artist.origin);
+  return {
+    _id: `performer-${index + 1}`,
+    _type: "performer",
+    name: artist.name,
+    slug: {
+      _type: "slug",
+      current: artist.name
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, ""),
+    },
+    imagePath: artist.image || "", // legacy fallback; Studio-ban a `image` mezőbe érdemes feltölteni
+    shortDescriptionHu: `${artist.genre} · ${artist.origin}`,
+    shortDescriptionEn: shortDescriptionEnFrom(artist.genre, artist.origin),
+    bioHu: details?.bioHu || "",
+    bioEn: details?.bioEn || "",
+    websiteUrl: details?.websiteUrl || "",
+    facebookUrl: "",
+    instagramUrl: "",
+    youtubeUrl: details?.youtubeUrl || "",
+    spotifyUrl: "",
+    tags: tagIds.map((tid, i) => ({
+      _key: `tag-ref-${index}-${i}`,
+      _type: "reference",
+      _ref: tid,
+    })),
+    order: index + 1,
+    isFeatured: index < 8,
+    isActive: true,
+    seo: {
+      seoTitleHu: `${artist.name} | Bohém JAZZFŐVÁROS`,
+      seoTitleEn: `${artist.name} | Bohém JAZZ CAPITAL`,
+      seoDescriptionHu: details?.bioHu || "",
+      seoDescriptionEn: details?.bioEn || "",
+      canonicalOverrideHu: "",
+      canonicalOverrideEn: "",
+      noIndex: false,
+    },
+  };
+});
 
 /* Sorrend: hu.map.directions — 1) autó, 2) vonat, 3) busz távolsági, 4) helyi busz */
 const transportItemIcons: Array<"car" | "train" | "bus"> = ["car", "train", "bus", "bus"];
@@ -310,6 +488,85 @@ const transportItems: SeedDocument[] = hu.map.directions.map((direction, index) 
     isActive: true,
   };
 });
+
+/* ============================================================
+   Page body szövegek — alapértelmezett, ügyfél által szerkeszthető
+   tartalom a fix oldalakra. Csak HU/EN szabad szöveg, soremelésekkel.
+   ============================================================ */
+const pageBodyContent: Record<string, { hu: string; en: string }> = {
+  home: {
+    hu: "",
+    en: "",
+  },
+  info: {
+    hu: "",
+    en: "",
+  },
+  lineup: {
+    hu: "",
+    en: "",
+  },
+  program: {
+    hu: "",
+    en: "",
+  },
+  contact: {
+    hu: `${hu.contact.organizer}
+
+E-mail: ${BASE.contact.email}
+Telefon: ${BASE.contact.phone}
+
+Cím: ${BASE.contact.address.hu}
+
+Önkéntes munkára jelentkezni a fenti e-mailen, vagy a kapcsolódó űrlapon keresztül lehet.`,
+    en: `${en.contact.organizer}
+
+Email: ${BASE.contact.email}
+Phone: ${BASE.contact.phone}
+
+Address: ${BASE.contact.address.en}
+
+To volunteer, write to the email above or use the linked form.`,
+  },
+  szallas: {
+    hu: hu.accommodation.note || "",
+    en: en.accommodation.note || "",
+  },
+  terkep: {
+    hu: `Helyszín: ${BASE.venue.hu}
+Cím: ${BASE.contact.address.hu}
+
+A részletes megközelítési útmutatókat (autó, vonat, busz) az alábbi kártyákon találod.`,
+    en: `Venue: ${BASE.venue.en}
+Address: ${BASE.contact.address.en}
+
+Detailed directions (car, train, bus) are listed below.`,
+  },
+  futas: {
+    hu: `Bohém JAZZFŐVÁROS Futás — ${BASE.running.date.hu}, ${BASE.running.time}.
+Helyszín: ${BASE.running.location.hu}.
+
+Nevezés: ${BASE.running.entryUrl}
+Nevezési határidő: ${BASE.running.entryDeadline.hu}.
+
+Lebonyolító: Iustitia Egyesület. Kapcsolat: ${BASE.running.contactEmail}, ${BASE.running.contactPhone}.`,
+    en: `Bohém JAZZ CAPITAL Run — ${BASE.running.date.en}, ${BASE.running.time}.
+Location: ${BASE.running.location.en}.
+
+Registration: ${BASE.running.entryUrl}
+Deadline: ${BASE.running.entryDeadline.en}.
+
+Organised by the Iustitia Association. Contact: ${BASE.running.contactEmail}, ${BASE.running.contactPhone}.`,
+  },
+  tabor: {
+    hu: hu.camp.description,
+    en: en.camp.description,
+  },
+  aszf: {
+    hu: hu.terms.body,
+    en: en.terms.body,
+  },
+};
 
 const pages: SeedDocument[] = [
   {
@@ -397,6 +654,7 @@ const pages: SeedDocument[] = [
         "Daily schedule for Bohém Jazz Capital 2026: concerts, start times and stages.",
       noIndex: false,
     },
+    programDisplayMode: "structured",
     order: 4,
     isActive: true,
   },
@@ -534,11 +792,63 @@ const pages: SeedDocument[] = [
   },
 ];
 
+/* pageBody mezők injektálása slug alapján. */
+for (const page of pages) {
+  const slugObj = (page as Record<string, unknown>).slug as
+    | { current?: string }
+    | undefined;
+  const slug = slugObj?.current ?? "";
+  const body = pageBodyContent[slug];
+  if (body) {
+    page.pageBodyHu = body.hu;
+    page.pageBodyEn = body.en;
+  }
+}
+
+/* Stage seed — két alap színpad. Ha új helyszín kell, az ügyfél a Studio-ban veszi fel. */
+const stageIds = {
+  main: "stage-main",
+  club: "stage-club",
+} as const;
+
+const stages: SeedDocument[] = [
+  {
+    _id: stageIds.main,
+    _type: "stage",
+    nameHu: "Main Stage",
+    nameEn: "Main Stage",
+    slug: { _type: "slug", current: "main-stage" },
+    order: 1,
+    isActive: true,
+  },
+  {
+    _id: stageIds.club,
+    _type: "stage",
+    nameHu: "Club Stage",
+    nameEn: "Club Stage",
+    slug: { _type: "slug", current: "club-stage" },
+    order: 2,
+    isActive: true,
+  },
+];
+
 const programItems: SeedDocument[] = hu.program.days.flatMap((day, dayIndex) =>
   day.slots.map((slot, slotIndex) => {
     const enDay = en.program.days[dayIndex];
     const enSlot = enDay?.slots?.[slotIndex];
     const idPart = sanitizeForId(`${day.date}-${slot.time}-${slot.artist}`);
+    const isMain = slot.stage === "main";
+    /* Performer ref: csak ha a slot.artist név pontosan szerepel a BASE.artists listában. */
+    const performerId = performerIdByName[slot.artist];
+    const performersRefs = performerId
+      ? [
+          {
+            _key: `perf-ref-${dayIndex}-${slotIndex}`,
+            _type: "reference",
+            _ref: performerId,
+          },
+        ]
+      : [];
     return {
       _id: `program-${idPart || `${dayIndex + 1}-${slotIndex + 1}`}`,
       _type: "programItem",
@@ -549,13 +859,52 @@ const programItems: SeedDocument[] = hu.program.days.flatMap((day, dayIndex) =>
       date: day.date,
       startTime: slot.time || "",
       endTime: "",
-      stage: slot.stage === "main" ? "Main Stage" : "Club Stage",
+      stage: isMain ? "Main Stage" : "Club Stage",
+      stageRef: { _type: "reference", _ref: isMain ? stageIds.main : stageIds.club },
+      performers: performersRefs,
       category: "",
       order: dayIndex * 100 + slotIndex + 1,
       isActive: true,
     };
   }),
 );
+
+/* Navigation seed — a jelenlegi NAV_ITEMS hu.ts alapján; mindegyik header-en, az első 5 + Kapcsolat
+   a footer-ben is. Az ügyfél innen tudja átrendezni / elrejteni / új linket felvenni. */
+const navItemsSeed: Array<{
+  id: string;
+  labelHu: string;
+  labelEn: string;
+  pageId?: string;
+  href?: string;
+  order: number;
+  inFooter: boolean;
+}> = [
+  { id: "home", labelHu: "Főoldal", labelEn: "Home", pageId: "page-home", order: 1, inFooter: true },
+  { id: "lineup", labelHu: "Fellépők", labelEn: "Performers", pageId: "page-lineup", order: 2, inFooter: true },
+  { id: "program", labelHu: "Programok", labelEn: "Program", pageId: "page-program", order: 3, inFooter: true },
+  { id: "info", labelHu: "Jegyek & Infó", labelEn: "Tickets & Info", pageId: "page-info", order: 4, inFooter: true },
+  { id: "szallas", labelHu: "Szállás", labelEn: "Accommodation", pageId: "page-szallas", order: 5, inFooter: true },
+  { id: "terkep", labelHu: "Térkép", labelEn: "Map", pageId: "page-terkep", order: 6, inFooter: false },
+  { id: "tabor", labelHu: "Jazztábor", labelEn: "Jazz Camp", pageId: "page-tabor", order: 7, inFooter: false },
+  { id: "futas", labelHu: "Futás", labelEn: "Run", pageId: "page-futas", order: 8, inFooter: false },
+  { id: "contact", labelHu: "Kapcsolat", labelEn: "Contact", pageId: "page-contact", order: 9, inFooter: true },
+];
+
+const navigationItems: SeedDocument[] = navItemsSeed.map((nav) => ({
+  _id: `nav-${nav.id}`,
+  _type: "navigationItem",
+  labelHu: nav.labelHu,
+  labelEn: nav.labelEn,
+  page: nav.pageId ? { _type: "reference", _ref: nav.pageId } : undefined,
+  href: nav.href || "",
+  externalUrl: "",
+  openInNewTab: false,
+  order: nav.order,
+  isActive: true,
+  showInHeader: true,
+  showInFooter: nav.inFooter,
+}));
 
 const accommodationItems: SeedDocument[] = hu.accommodation.hotels.map((hotel, index) => {
   const enHotel = en.accommodation.hotels[index];
@@ -642,9 +991,12 @@ export const initialData = {
   sponsorCategories,
   sponsors,
   tickets,
+  performerTags,
   performers,
   pages,
+  stages,
   programItems,
+  navigationItems,
   accommodationItems,
   transportItems,
 };

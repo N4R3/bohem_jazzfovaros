@@ -7,6 +7,7 @@ import Scripts from "@/components/analytics/Scripts";
 import CookieBanner from "@/components/analytics/CookieBanner";
 import Navbar from "@/components/home/Navbar";
 import Footer from "@/components/home/Footer";
+import { getNavigationWithFallback } from "@/sanity/lib/content";
 import BackgroundWrapper from "@/components/layout/BackgroundWrapper";
 import AppShell from "@/components/layout/AppShell";
 import { organizationSchema, websiteSchema } from "@/lib/structuredData";
@@ -93,6 +94,9 @@ export default async function RootLayout({
   const locale = await getLocale();
   const isEn = locale === "en";
   const c = await getContent();
+  /* Sanity-ből érkező header navigáció — fallback a c.nav-ra. Az ISR (~30s)
+     a content.ts-ben van beállítva, így a layout statikus marad. */
+  const headerNav = await getNavigationWithFallback("header");
 
   return (
     <html
@@ -135,7 +139,7 @@ export default async function RootLayout({
               >
                 {isEn ? "Skip to content" : "Ugrás a tartalomhoz"}
               </a>
-              <Navbar content={c} />
+              <Navbar content={c} navOverride={headerNav} />
               <BackgroundWrapper>
                 <main id="main-content" className="pt-[76px]">
                   {children}

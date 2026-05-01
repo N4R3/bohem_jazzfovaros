@@ -42,7 +42,7 @@ export default function SponsorsSection({ sponsors, mainTitle, sponsorsTitle, pa
             >
               {label}
             </h3>
-            <ul className="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            <ul className="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-x-10 gap-y-2">
               {items.map((s) => (
                 <li key={s.name}>
                   <a

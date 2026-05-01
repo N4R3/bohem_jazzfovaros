@@ -48,3 +48,18 @@
 - Real GTM/GA4/Ads IDs in hosting env
 - SponsorsSection: render actual `<img>` tags once logo files are placed
 - Map page: embed real Google Maps iframe once confirmed
+
+## Phase 8 — Sanity seed teljessége + Studio UX ✅
+
+### Completed
+- **Performer.tags + performerTag seed**: 16 alap címke (Jazz, Swing, Blues, Ragtime, Dixieland, Boogie, Vocal, Piano, Guitar, Banjo, Brass, Bass, Drums, Dance, International / Hungarian). Minden fellépőhöz max 4 címke (1-3 kézi + származási alapján).
+- **Performer EN bio**: Mind a 20 részletezett fellépőhöz angol bio. SEO description is HU/EN bio-ból töltődik.
+- **Performer shortDescriptionEn**: Műfaj + származás külön HU és külön EN szótárból (pl. „Jazz vocals · USA”).
+- **Schema lazítás**: `performer.image` és `sponsor.logo` `required()` levéve — a seed `imagePath` / `logoPath` legacy útvonallal érkezik, így a Studio nem dob validation hibát.
+- **Page bodies**: minden fix oldalra (`tabor`, `futas`, `aszf`, `contact`, `szallas`, `terkep`) szerkeszthető szöveg-tartalom; SEO mező + Hero mellett valódi szöveg is szerkeszthető.
+- **ProgramItem.performers ref**: minden program-tétel, ahol a fellépő szerepel a fellépőlistában, automatikus referenciával jön (név alapján).
+- **Studio UX**: HU labelek és magyar `description`-ök minden dokumentum-típusra (siteSettings, popupSettings, accommodation, sponsor, ticket, venue). Legacy `imagePath` / `logoPath` mezők `readOnly`, hogy ne ütközzenek a kép-feltöltéssel.
+- **QA script bővítés** (`npm run sanity:check-content`): új ellenőrzések — page hero/title üres, új info-oldalon kötelező pageBody, performer.tags megléte aktív fellépőknél, bioEn megléte ahol bioHu kitöltött.
+
+### Import sorrend
+A `scripts/importSanityInitialData.ts` most a `performerTags`-et a `performers` előtt küldi fel, hogy a tag-referenciák ne lógjanak.

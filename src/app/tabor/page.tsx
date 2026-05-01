@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { getContent, getLocale } from "@/lib/locale";
 import BeachPageShell from "@/components/layout/BeachPageShell";
+import PageBody from "@/components/layout/PageBody";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
+import { getPageContentBySlug } from "@/sanity/lib/content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -19,17 +21,20 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function CampPage() {
   const c = await getContent();
+  const locale = await getLocale();
   const { camp } = c;
   const isEn = c.otherLocale.label === "HU";
+  const page = await getPageContentBySlug("tabor", locale);
 
   return (
     <BeachPageShell
       eyebrow="Swing · Lindy Hop · Jazz Improvizáció"
-      title={camp.title}
-      subtitle={camp.subtitle}
+      title={page.heroTitle || camp.title}
+      subtitle={page.heroDescription || camp.subtitle}
       canonicalPath="/tabor/"
       locale={isEn ? "en" : "hu"}
     >
+      {page.body && <PageBody text={page.body} />}
       <div className="mx-auto max-w-4xl">
         {camp.videoUrl && (
           <div

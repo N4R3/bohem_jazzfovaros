@@ -83,7 +83,7 @@ export default function Sponsors({ levels = DEFAULT_LEVELS }: SponsorsProps) {
               />
             </h3>
 
-            <div className="mx-auto flex max-w-[900px] flex-wrap justify-center gap-x-7 gap-y-3.5">
+            <div className="mx-auto flex max-w-[900px] flex-wrap justify-center gap-x-12 gap-y-3.5">
               {level.entries.map((e) => (
                 <LogoChip key={e} label={e} size={level.size || "md"} />
               ))}

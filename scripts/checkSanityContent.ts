@@ -116,8 +116,20 @@ async function checkPages() {
     "szallas", "terkep", "futas", "tabor", "aszf"
   ];
 
-  const pages = await sanityClient.fetch(`*[_type == "page"]{ "slug": slug.current, seo }`);
-  const existingSlugs = new Set(pages.map((p: { slug?: string }) => p.slug).filter(Boolean));
+  const pages = await sanityClient.fetch(
+    `*[_type == "page"]{
+      "slug": slug.current,
+      titleHu, titleEn,
+      heroTitleHu, heroTitleEn,
+      heroDescriptionHu, heroDescriptionEn,
+      pageBodyHu, pageBodyEn,
+      isActive,
+      seo
+    }`,
+  );
+  const existingSlugs = new Set(
+    pages.map((p: { slug?: string }) => p.slug).filter(Boolean),
+  );
 
   const missing = requiredSlugs.filter((s) => !existingSlugs.has(s));
   if (missing.length > 0) {
@@ -126,8 +138,43 @@ async function checkPages() {
     log("ok", "Pages — szükséges slugok", "Mind a 10 megvan");
   }
 
-  for (const page of pages as { slug?: string; seo?: Record<string, unknown> }[]) {
+  type PageRow = {
+    slug?: string;
+    titleHu?: string;
+    titleEn?: string;
+    heroTitleHu?: string;
+    heroTitleEn?: string;
+    heroDescriptionHu?: string;
+    heroDescriptionEn?: string;
+    pageBodyHu?: string;
+    pageBodyEn?: string;
+    isActive?: boolean;
+    seo?: Record<string, unknown>;
+  };
+
+  for (const page of pages as PageRow[]) {
     const slug = page.slug || "unknown";
+    if (!nonEmpty(page.titleHu) && !nonEmpty(page.titleEn)) {
+      log("error", `Page title (${slug})`, "titleHu és titleEn is üres");
+    }
+    if (!nonEmpty(page.heroTitleHu) && !nonEmpty(page.heroTitleEn)) {
+      log("warning", `Page hero title (${slug})`, "heroTitleHu/En üres — fallback a saját oldal címre");
+    }
+    if (!nonEmpty(page.heroDescriptionHu) && !nonEmpty(page.heroDescriptionEn)) {
+      log("warning", `Page hero leírás (${slug})`, "heroDescriptionHu/En üres (SEO fallback-hez ajánlott)");
+    }
+    /* Új info-oldal (nem fix slug): legyen pageBody, különben semmit nem mutat. */
+    const isFixed = requiredSlugs.includes(slug);
+    if (!isFixed && page.isActive !== false) {
+      if (!nonEmpty(page.pageBodyHu) && !nonEmpty(page.pageBodyEn)) {
+        log(
+          "error",
+          `Page body (${slug})`,
+          "Új info-oldal aktív, de pageBodyHu/En üres — a /oldal/[slug] üres lapot adna",
+        );
+      }
+    }
+
     const seo = page.seo || {};
     const need = ["seoTitleHu", "seoTitleEn", "seoDescriptionHu", "seoDescriptionEn"] as const;
     const missingSeo: string[] = [];
@@ -146,30 +193,74 @@ async function checkPages() {
 }
 
 async function checkPerformers() {
+  type PerfRow = {
+    _id?: string;
+    name?: string;
+    isActive?: boolean;
+    image?: unknown;
+    imagePath?: string;
+    shortDescriptionHu?: string;
+    shortDescriptionEn?: string;
+    bioHu?: string;
+    bioEn?: string;
+    tagCount?: number;
+  };
   const performers = await sanityClient.fetch(
-    `*[_type == "performer"]{ _id, name, isActive, image, imagePath, shortDescriptionHu, shortDescriptionEn }`,
-  );
+    `*[_type == "performer"]{
+      _id, name, isActive, image, imagePath,
+      shortDescriptionHu, shortDescriptionEn,
+      bioHu, bioEn,
+      "tagCount": count(tags)
+    }`,
+  ) as PerfRow[];
   if (performers.length === 0) {
     log("error", "Performers (darab)", "Egy sincs");
     return;
   }
   log("ok", "Performers (darab)", `${performers.length} db`);
 
-  const noImage = performers.filter((p: { image?: unknown; imagePath?: string }) => !p.image && !p.imagePath);
+  const noImage = performers.filter((p) => !p.image && !p.imagePath);
   if (noImage.length > 0) {
     log("error", "Performers — kép (image vagy imagePath)", `${noImage.length} db-nak nincs: kritikus a lineuphoz/főoldalhoz`);
   } else {
     log("ok", "Performers — kép", "Minden dokihoz van image vagy imagePath");
   }
 
-  const noShort = performers.filter(
-    (p: { isActive?: boolean; shortDescriptionHu?: string; shortDescriptionEn?: string }) =>
-      p.isActive !== false && !nonEmpty(p.shortDescriptionHu) && !nonEmpty(p.shortDescriptionEn),
+  const activePerformers = performers.filter((p) => p.isActive !== false);
+
+  const noShort = activePerformers.filter(
+    (p) => !nonEmpty(p.shortDescriptionHu) && !nonEmpty(p.shortDescriptionEn),
   );
   if (noShort.length > 0) {
-    log("warning", "Performers — rövid leírás (HU/EN)", `${noShort.length} aktívnak üres a short description (a teaser műfajhoz jó lenne)`);
+    log("warning", "Performers — rövid leírás (HU/EN)", `${noShort.length} aktívnak üres a short description`);
   } else {
     log("ok", "Performers — rövid leírás", "Aktívak: van HU vagy EN short");
+  }
+
+  /* Címke: aktív fellépőnél elvárás, hogy legyen legalább 1 tag (a kártyán badge). */
+  const noTags = activePerformers.filter((p) => (p.tagCount || 0) === 0);
+  if (noTags.length > 0) {
+    log(
+      "warning",
+      "Performers — címke (tags)",
+      `${noTags.length} aktív fellépőnek nincs címkéje (a kártyán nem jelenik meg badge)`,
+    );
+  } else {
+    log("ok", "Performers — címke", "Minden aktív fellépőhöz van min. 1 tag");
+  }
+
+  /* bioEn: ha bioHu kitöltött, az EN-t is várjuk (kétnyelvű oldal). */
+  const noBioEn = activePerformers.filter(
+    (p) => nonEmpty(p.bioHu) && !nonEmpty(p.bioEn),
+  );
+  if (noBioEn.length > 0) {
+    log(
+      "warning",
+      "Performers — bioEn",
+      `${noBioEn.length} fellépőnek van HU bio-ja, de hiányzik az EN bio`,
+    );
+  } else {
+    log("ok", "Performers — bioEn", "Aki HU-val rendelkezik, EN-vel is");
   }
 }
 
@@ -250,7 +341,10 @@ async function checkTickets() {
 async function checkProgramItems() {
   const items = await sanityClient.fetch(
     `*[_type == "programItem" && isActive == true] | order(date asc, startTime asc) {
-      _id, titleHu, titleEn, date, startTime, stage, isActive
+      _id, titleHu, titleEn, date, startTime, stage,
+      "stageRefId": stageRef._ref,
+      "performerCount": count(performers),
+      isActive
     }`,
   );
   if (items.length === 0) {
@@ -260,9 +354,11 @@ async function checkProgramItems() {
   let err = 0;
   for (const it of items) {
     const id = it._id || "unknown";
-    if (!nonEmpty(it.titleHu) || !nonEmpty(it.titleEn)) {
+    const hasTitle = nonEmpty(it.titleHu) || nonEmpty(it.titleEn);
+    const hasPerformers = (it.performerCount || 0) > 0;
+    if (!hasTitle && !hasPerformers) {
       err += 1;
-      log("error", `ProgramItem (${id}) — cím`, "titleHu vagy titleEn üres");
+      log("error", `ProgramItem (${id}) — cím / fellépő`, "Nincs sem titleHu/En, sem performers ref");
     }
     if (!nonEmpty(it.date)) {
       err += 1;
@@ -272,13 +368,111 @@ async function checkProgramItems() {
       err += 1;
       log("error", `ProgramItem (${id}) — startTime`, "Időpont üres");
     }
-    if (!nonEmpty(it.stage)) {
+    /* Színpad: stageRef VAGY legacy stage szöveg legalább egyik kell. */
+    if (!nonEmpty(it.stageRefId) && !nonEmpty(it.stage)) {
       err += 1;
-      log("error", `ProgramItem (${id}) — stage`, "Színpad üres");
+      log("error", `ProgramItem (${id}) — színpad`, "Sem stageRef, sem legacy stage nincs kitöltve");
     }
   }
   if (err === 0) {
     log("ok", "Program items (aktív)", `${items.length} tétel, kötelező mezők kitöltve`);
+  }
+}
+
+async function checkProgramPageDisplayMode() {
+  const programPage = await sanityClient.fetch(
+    `*[_type == "page" && slug.current == "program"][0]{
+      programDisplayMode, programBodyHu, programBodyEn, isActive
+    }`,
+  );
+  if (!programPage) {
+    log("warning", "Program page", "Nincs page dokumentum 'program' sluggal");
+    return;
+  }
+  const mode = programPage.programDisplayMode;
+  if (mode && !["structured", "freeText", "both"].includes(mode)) {
+    log("error", "Program page — programDisplayMode", `Érvénytelen érték: ${mode}`);
+    return;
+  }
+  log("ok", "Program page — programDisplayMode", mode || "structured (default)");
+  if ((mode === "freeText" || mode === "both") &&
+      !nonEmpty(programPage.programBodyHu) && !nonEmpty(programPage.programBodyEn)) {
+    log(
+      "error",
+      "Program page — programBody (HU/EN)",
+      `programDisplayMode=${mode}, de a programBody mind a két nyelven üres`,
+    );
+  }
+}
+
+async function checkStages() {
+  const stages = await sanityClient.fetch(
+    `*[_type == "stage"] { _id, nameHu, nameEn, isActive }`,
+  );
+  if (!stages.length) {
+    log("warning", "Stages", "Nincs egy stage dokumentum sem (stageRef-et nem tudsz választani)");
+    return;
+  }
+  const noName = stages.filter(
+    (s: { nameHu?: string; nameEn?: string }) => !nonEmpty(s.nameHu) && !nonEmpty(s.nameEn),
+  );
+  if (noName.length > 0) {
+    log("error", "Stages — név", `${noName.length} stage-nek üres a nameHu és nameEn`);
+  } else {
+    log("ok", "Stages", `${stages.length} db, mindegyiknek van neve`);
+  }
+}
+
+async function checkPerformerTags() {
+  const tags = await sanityClient.fetch(
+    `*[_type == "performerTag"] { _id, titleHu, titleEn }`,
+  );
+  if (!tags.length) {
+    log("warning", "PerformerTag", "Nincs címke felvéve (a fellépő-kártyákon nem jelenik meg badge)");
+    return;
+  }
+  const bad = tags.filter(
+    (t: { titleHu?: string; titleEn?: string }) => !nonEmpty(t.titleHu) && !nonEmpty(t.titleEn),
+  );
+  if (bad.length > 0) {
+    log("error", "PerformerTag — név", `${bad.length} címke üres titleHu+titleEn-nel`);
+  } else {
+    log("ok", "PerformerTag", `${tags.length} címke rendben`);
+  }
+}
+
+async function checkNavigationItems() {
+  const items = await sanityClient.fetch(
+    `*[_type == "navigationItem" && isActive == true] | order(order asc) {
+      _id, labelHu, labelEn, "pageSlug": page->slug.current, href, externalUrl, showInHeader, showInFooter, order
+    }`,
+  );
+  if (!items.length) {
+    log("warning", "Navigation items", "Nincs egy aktív menüpont sem (a frontend a statikus c.nav-ot fogja mutatni)");
+    return;
+  }
+  const headerCount = items.filter((i: { showInHeader?: boolean }) => i.showInHeader !== false).length;
+  if (headerCount === 0) {
+    log("error", "Navigation — header", "Egy menüpont sincs header-en (showInHeader)");
+  } else {
+    log("ok", "Navigation — header", `${headerCount} menüpont`);
+  }
+  let err = 0;
+  for (const it of items) {
+    const id = it._id || "unknown";
+    if (!nonEmpty(it.labelHu) && !nonEmpty(it.labelEn)) {
+      err += 1;
+      log("error", `Navigation (${id}) — felirat`, "labelHu és labelEn is üres");
+    }
+    const hasTarget =
+      nonEmpty(it.externalUrl) || nonEmpty(it.href) || nonEmpty(it.pageSlug);
+    if (!hasTarget) {
+      err += 1;
+      log("error", `Navigation (${id}) — célpont`, "Nincs page ref, href, és nincs externalUrl sem");
+    }
+  }
+  if (err === 0) {
+    log("ok", "Navigation items", `${items.length} aktív, mindegyikhez van felirat + célpont`);
   }
 }
 
@@ -365,6 +559,10 @@ async function main() {
     await checkSponsorCategories();
     await checkTickets();
     await checkProgramItems();
+    await checkProgramPageDisplayMode();
+    await checkStages();
+    await checkPerformerTags();
+    await checkNavigationItems();
     await checkAccommodation();
     await checkTransportItems();
 

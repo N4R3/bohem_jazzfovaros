@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { getContent, getLocale } from "@/lib/locale";
 import BeachPageShell from "@/components/layout/BeachPageShell";
+import PageBody from "@/components/layout/PageBody";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
+import { getPageContentBySlug } from "@/sanity/lib/content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -20,17 +22,20 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RunningPage() {
   const c = await getContent();
+  const locale = await getLocale();
   const { running } = c;
   const isEn = c.otherLocale.label === "HU";
+  const page = await getPageContentBySlug("futas", locale);
 
   return (
     <BeachPageShell
       eyebrow={`${running.date} · ${running.time}`}
-      title={running.title}
-      subtitle={running.subtitle}
+      title={page.heroTitle || running.title}
+      subtitle={page.heroDescription || running.subtitle}
       canonicalPath="/futas/"
       locale={isEn ? "en" : "hu"}
     >
+      {page.body && <PageBody text={page.body} />}
       <div className="mx-auto max-w-4xl">
         {/* Futás hero kép */}
         <div

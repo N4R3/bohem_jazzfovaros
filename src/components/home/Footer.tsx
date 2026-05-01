@@ -10,21 +10,27 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getContent } from "@/lib/locale";
-import { getFooterSponsorsWithFallback, getContactContent } from "@/sanity/lib/content";
+import {
+  getFooterSponsorsWithFallback,
+  getContactContent,
+  getNavigationWithFallback,
+} from "@/sanity/lib/content";
 
 export default async function Footer() {
   const c = await getContent();
   const isEn = c.otherLocale.label === "HU";
   const locale = isEn ? "en" : "hu";
-  const [sponsors, contact] = await Promise.all([
+  const [sponsors, contact, footerNavSanity] = await Promise.all([
     getFooterSponsorsWithFallback(),
     getContactContent(locale),
+    getNavigationWithFallback("footer"),
   ]);
   const rootPrefix = isEn ? "/en" : "";
 
-  /* A jazzdesign1 nav szekciója 5 rövid linket mutat: itt a site 5 fő
-     oldalát vesszük a lokalizált nav-listából (az első 5-öt). */
-  const footerNav = c.nav.slice(0, 5);
+  /* A jazzdesign1 nav szekciója 5 rövid linket mutat. Elsősorban a Sanity-ben
+     `showInFooter: true`-ra kapcsolt navigationItem-eket használjuk; ha nincs ilyen,
+     a kódbeli `c.nav` első 5 eleme a fallback. */
+  const footerNav = (footerNavSanity.length > 0 ? footerNavSanity : c.nav.slice(0, 5)).slice(0, 6);
 
   /* Az Info oszlop statikusan a reference design szerint: GYIK / Házirend /
      Akadálymentesítés / Önkéntesnek / Sajtó. A meglévő aloldal-link
@@ -59,7 +65,7 @@ export default async function Footer() {
           >
             {isEn ? "Main Supporters" : "Főtámogatók"}
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-5">
+          <div className="flex flex-wrap items-center justify-center gap-16">
             {sponsors.main.map((s) => (
               s.url && /^https?:\/\//.test(s.url) ? (
                 <a
@@ -99,7 +105,7 @@ export default async function Footer() {
               >
                 {isEn ? "Sponsors" : "Szponzorok"}
               </p>
-              <div className="flex flex-wrap items-center justify-center gap-4">
+              <div className="flex flex-wrap items-center justify-center gap-12">
               {sponsors.sponsors.map((s) => (
                 s.url && /^https?:\/\//.test(s.url) ? (
                   <a
@@ -141,7 +147,7 @@ export default async function Footer() {
               >
                 {isEn ? "Partners" : "Partnerek"}
               </p>
-              <div className="flex flex-wrap items-center justify-center gap-3">
+              <div className="flex flex-wrap items-center justify-center gap-10">
                 {sponsors.partners.map((s) => (
                   s.url && /^https?:\/\//.test(s.url) ? (
                     <a

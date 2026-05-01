@@ -3,6 +3,7 @@ import { getContent, getLocale } from "@/lib/locale";
 import Container from "@/components/ui/Container";
 import { breadcrumbSchema } from "@/lib/structuredData";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
+import { getPageContentBySlug } from "@/sanity/lib/content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -22,10 +23,16 @@ export default async function TermsPage() {
   const c = await getContent();
   const { terms } = c;
   const locale = c.otherLocale.label === "HU" ? "en" : "hu";
+  const page = await getPageContentBySlug("aszf", locale);
+  const title = page.heroTitle || terms.title;
   const breadcrumbJsonLd = breadcrumbSchema(locale, [
     { name: locale === "en" ? "Home" : "Főoldal", path: "/" },
-    { name: terms.title, path: "/aszf/" },
+    { name: title, path: "/aszf/" },
   ]);
+
+  /* A Sanity-ben írt pageBody felülírja a kódbeli `terms.body`-t (ha kitöltött).
+     Ez lehetővé teszi az ÁSZF teljes szerkesztését a Studio-ban. */
+  const bodyText = page.body || terms.body;
 
   return (
     <div className="min-h-screen bg-[var(--color-cream-50)] py-20">
@@ -36,11 +43,16 @@ export default async function TermsPage() {
       <Container>
         <div className="mx-auto max-w-2xl">
           <h1 className="mb-8 font-display text-3xl font-bold text-[var(--color-navy-900)] sm:text-4xl">
-            {terms.title}
+            {title}
           </h1>
+          {page.heroDescription && (
+            <p className="mb-6 text-base leading-relaxed text-[var(--color-navy-900)]/80">
+              {page.heroDescription}
+            </p>
+          )}
           <div className="prose prose-neutral max-w-none rounded-2xl border border-[var(--color-cream-200)] bg-white p-8 shadow-sm">
-            {terms.body.split("\n\n").map((paragraph, i) => (
-              <p key={i} className="mb-4 text-sm leading-relaxed text-[var(--color-navy-900)]/70 last:mb-0">
+            {bodyText.split(/\n{2,}/).map((paragraph, i) => (
+              <p key={i} className="mb-4 whitespace-pre-line text-sm leading-relaxed text-[var(--color-navy-900)]/70 last:mb-0">
                 {paragraph}
               </p>
             ))}

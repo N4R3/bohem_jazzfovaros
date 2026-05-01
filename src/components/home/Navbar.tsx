@@ -17,10 +17,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/cn";
-import type { SiteContent } from "@/lib/types";
+import type { NavItem, SiteContent } from "@/lib/types";
 
 type Props = {
   content: SiteContent;
+  /** Sanity-ből jövő navigáció (header). Ha üres / nincs, a c.nav-ot használjuk. */
+  navOverride?: NavItem[];
 };
 
 function getSwitchHref(pathname: string, otherLocaleLabel: string): string {
@@ -30,9 +32,9 @@ function getSwitchHref(pathname: string, otherLocaleLabel: string): string {
   return pathname.replace(/^\/en(?=\/|$)/, "") || "/";
 }
 
-export default function Navbar({ content: c }: Props) {
+export default function Navbar({ content: c, navOverride }: Props) {
   const pathname = usePathname() || "/";
-  const NAV_ITEMS = c.nav;
+  const NAV_ITEMS: NavItem[] = navOverride && navOverride.length > 0 ? navOverride : c.nav;
   const OTHER = c.otherLocale;
   const switchHref = getSwitchHref(pathname, OTHER.label);
 
@@ -87,6 +89,8 @@ export default function Navbar({ content: c }: Props) {
               href={item.href}
               label={item.label}
               isActive={isNavActive(pathname, item.href)}
+              external={item.external || /^https?:\/\//i.test(item.href)}
+              openInNewTab={item.openInNewTab}
             />
           ))}
         </nav>
@@ -198,23 +202,49 @@ export default function Navbar({ content: c }: Props) {
 /* ============================================================
    Egy nav-link a jazzdesign1 ::after animált aláhúzásával
    ============================================================ */
-function NavLink({ href, label, isActive }: { href: string; label: string; isActive: boolean }) {
-  return (
-    <Link
-      href={href}
+function NavLink({
+  href,
+  label,
+  isActive,
+  external,
+  openInNewTab,
+}: {
+  href: string;
+  label: string;
+  isActive: boolean;
+  external?: boolean;
+  openInNewTab?: boolean;
+}) {
+  const className = cn(
+    "group relative py-1.5 transition-colors hover:text-orange-300",
+    isActive && "text-orange-300",
+  );
+  const underline = (
+    <span
+      aria-hidden="true"
       className={cn(
-        "group relative py-1.5 transition-colors hover:text-orange-300",
-        isActive && "text-orange-300",
+        "absolute -bottom-0.5 left-0 right-0 h-[3px] rounded-sm bg-orange-500 transition-transform duration-[250ms]",
+        isActive ? "scale-x-100 opacity-100" : "origin-left scale-x-0 opacity-85 group-hover:scale-x-100",
       )}
-    >
+    />
+  );
+  if (external) {
+    return (
+      <a
+        href={href}
+        className={className}
+        target={openInNewTab !== false ? "_blank" : undefined}
+        rel={openInNewTab !== false ? "noopener noreferrer" : undefined}
+      >
+        <span>{label}</span>
+        {underline}
+      </a>
+    );
+  }
+  return (
+    <Link href={href} className={className} target={openInNewTab ? "_blank" : undefined}>
       <span>{label}</span>
-      <span
-        aria-hidden="true"
-        className={cn(
-          "absolute -bottom-0.5 left-0 right-0 h-[3px] rounded-sm bg-orange-500 transition-transform duration-[250ms]",
-          isActive ? "scale-x-100 opacity-100" : "origin-left scale-x-0 opacity-85 group-hover:scale-x-100",
-        )}
-      />
+      {underline}
     </Link>
   );
 }

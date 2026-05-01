@@ -34,8 +34,14 @@ async function run() {
     ...initialData.sponsorCategories,
     ...initialData.sponsors,
     ...initialData.tickets,
+    /* PerformerTags előbb, mint a performers — a performer.tags referenciák így találnak célpontot. */
+    ...initialData.performerTags,
     ...initialData.performers,
+    /* Stages elsőként a programItems előtt — a stageRef referenciák így találnak célpontot. */
+    ...initialData.stages,
+    /* Pages elsőként a navigationItems előtt — a navigation page-referenciák így találnak célpontot. */
     ...initialData.pages,
+    ...initialData.navigationItems,
     ...initialData.programItems,
     ...initialData.accommodationItems,
     ...initialData.transportItems,

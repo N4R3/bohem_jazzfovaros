@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { getContent, getLocale } from "@/lib/locale";
 import BeachPageShell from "@/components/layout/BeachPageShell";
-import { getAccommodationContent } from "@/sanity/lib/content";
+import PageBody from "@/components/layout/PageBody";
+import { getAccommodationContent, getPageContentBySlug } from "@/sanity/lib/content";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -42,13 +43,14 @@ export default async function AccommodationPage() {
   const c = await getContent();
   const locale = await getLocale();
   const accommodation = await getAccommodationContent(locale);
+  const page = await getPageContentBySlug("szallas", locale);
   const isEn = c.otherLocale.label === "HU";
 
   return (
     <BeachPageShell
       eyebrow="Domb Beach · Kecskemét"
-      title={accommodation.title}
-      subtitle={accommodation.subtitle}
+      title={page.heroTitle || accommodation.title}
+      subtitle={page.heroDescription || accommodation.subtitle}
       canonicalPath="/szallas/"
       locale={isEn ? "en" : "hu"}
     >
@@ -64,6 +66,8 @@ export default async function AccommodationPage() {
           {accommodation.note}
         </p>
       )}
+
+      {page.body && <PageBody text={page.body} />}
 
       <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
         {accommodation.hotels.map((hotel, i) => (
