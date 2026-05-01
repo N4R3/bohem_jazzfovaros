@@ -514,6 +514,8 @@ export const getPageContentBySlug = cache(
     heroTitle?: string;
     heroDescription?: string;
     body?: string;
+    showSecondBody?: boolean;
+    body2?: string;
     primaryButton?: { label: string; url: string };
     secondaryButton?: { label: string; url: string };
     seo?: SanityPage["seo"];
@@ -538,6 +540,8 @@ export const getPageContentBySlug = cache(
         heroDescription:
           localized(locale, page.heroDescriptionHu, page.heroDescriptionEn) || undefined,
         body: localized(locale, page.pageBodyHu, page.pageBodyEn).trim() || undefined,
+        showSecondBody: page.showSecondBody || false,
+        body2: localized(locale, page.pageBody2Hu, page.pageBody2En).trim() || undefined,
         primaryButton:
           primaryLabel && primaryUrl ? { label: primaryLabel, url: primaryUrl } : undefined,
         secondaryButton:

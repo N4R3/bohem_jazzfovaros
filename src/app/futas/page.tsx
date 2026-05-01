@@ -173,17 +173,7 @@ export default async function RunningPage() {
         </div>
 
         {/* Leírás */}
-        <div
-          className="mb-8 rounded-2xl p-6 shadow-xl sm:p-7"
-          style={{ background: "var(--color-cream-50)" }}
-        >
-          <p
-            className="text-sm leading-relaxed sm:text-base"
-            style={{ color: "rgba(10,58,54,0.78)" }}
-          >
-            {running.description}
-          </p>
-        </div>
+        {page.showSecondBody && page.body2 ? <PageBody text={page.body2} /> : <PageBody text={running.description} />}
 
         {/* Távok */}
         <div

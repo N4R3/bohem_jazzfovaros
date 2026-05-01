@@ -128,6 +128,9 @@ export type SanityPage = {
   heroDescriptionEn?: string;
   pageBodyHu?: string;
   pageBodyEn?: string;
+  showSecondBody?: boolean;
+  pageBody2Hu?: string;
+  pageBody2En?: string;
   programDisplayMode?: "structured" | "freeText" | "both";
   programBodyHu?: string;
   programBodyEn?: string;

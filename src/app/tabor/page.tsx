@@ -59,17 +59,8 @@ export default async function CampPage() {
           </div>
         )}
 
-        <div
-          className="mb-10 rounded-2xl p-6 shadow-xl sm:p-8"
-          style={{ background: "var(--color-cream-50)" }}
-        >
-          <p
-            className="text-base leading-relaxed"
-            style={{ color: "rgba(10,58,54,0.78)" }}
-          >
-            {camp.description}
-          </p>
-        </div>
+        {page.showSecondBody && page.body2 && <PageBody text={page.body2} />}
+        {!page.showSecondBody && <PageBody text={camp.description} />}
 
         {entryUrl && (
           <div className="mb-12 text-center">

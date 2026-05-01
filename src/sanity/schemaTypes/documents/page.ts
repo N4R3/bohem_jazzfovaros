@@ -107,6 +107,27 @@ export const pageType = defineType({
       type: "text",
       rows: 14,
     }),
+    /* ── Második szöveg doboz (Futás / Tábor oldalhoz) ─────────────────── */
+    defineField({
+      name: "showSecondBody",
+      title: "Második szöveg doboz megjelenítése",
+      type: "boolean",
+      initialValue: false,
+      description: "Ha be van kapcsolva, a második szöveg doboz megjelenik az oldalon (Futás / Tábor oldalakon).",
+    }),
+    defineField({
+      name: "pageBody2Hu",
+      title: "Második szöveg doboz – HU",
+      type: "text",
+      rows: 14,
+      description: "Második szöveges tartalom (pl. Futás / Tábor oldalakon). Csak akkor jelenik meg, ha a 'Második szöveg doboz megjelenítése' be van kapcsolva.",
+    }),
+    defineField({
+      name: "pageBody2En",
+      title: "Második szöveg doboz – EN",
+      type: "text",
+      rows: 14,
+    }),
     /* ── CTA gombok (Futás / Tábor oldalhoz ajánlott) ─────────────────── */
     defineField({
       name: "primaryButtonLabelHu",
