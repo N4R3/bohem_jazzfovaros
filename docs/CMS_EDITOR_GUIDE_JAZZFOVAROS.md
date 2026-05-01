@@ -1,22 +1,58 @@
 # CMS szerkesztői útmutató — Bohém Jazzfőváros / Jazz Capital
 
-Ez a dokumentum végigvezet a Sanity Studio fő funkcióin: oldalak szerkesztése, új oldal létrehozása, menü módosítása, program kezelése, fellépők és színpadok kezelése.
+Ez a dokumentum végigvezet a **Sanity Studio** használatán: oldalak, menü, program, fellépők és kapcsolódó tartalmak szerkesztése. A cél, hogy a honlap szövegeit és listáit biztonságosan, előnézet nélkül is következetesen lehessen karbantartani.
 
-**Studio elérése:** https://bohemjazz.netlify.app/studio
-**Élő oldal:** https://bohemjazz.netlify.app/
+| | |
+|---|---|
+| **Verzió** | 1.1 · 2026-05-01 |
+| **Célcsoport** | Tartalomszerkesztők, ügyfél-adminisztrátorok |
+| **Technikai háttér** | `docs/SANITY_CMS_SETUP.md`, fejlesztői részletek: `docs/SANITY_FIELD_BINDING_AUDIT.md` |
+
+**Studio:** https://bohemjazz.netlify.app/studio  
+**Élő honlap:** https://bohemjazz.netlify.app/
 
 ---
 
-## 1. A Studio felépítése
+## Tartalomjegyzék
+
+1. [Gyors összefoglaló](#1-gyors-összefoglaló)
+2. [A Studio felépítése](#2-a-studio-felépítése)
+3. [Oldalak (Pages)](#3-oldalak-pages)
+4. [Új információs oldal](#4-új-információs-oldal)
+5. [Menü (Navigáció)](#5-menü-navigáció)
+6. [Program](#6-program)
+7. [Fellépők](#7-fellépők)
+8. [Színpadok / helyszínek](#8-színpadok--helyszínek)
+9. [Mit ne módosíts?](#9-mit-ne-módosíts)
+10. [Felhasználók és jogok](#10-felhasználók-és-jogok)
+11. [Mentés, publikálás, megjelenés](#11-mentés-publikálás-megjelenés)
+12. [Seed import és tartalom-ellenőrzés (fejlesztő)](#12-seed-import-és-tartalom-ellenőrzés-fejlesztő)
+13. [Hibaelhárítás](#13-hibaelhárítás)
+
+---
+
+## 1. Gyors összefoglaló
+
+- **Publish kötelező:** amíg **Publish**-olsz, a látogatók **nem** látják a változást — csak a piszkozat létezik.
+- **Aktív dokumentum:** a Page dokumentumnál az **Aktív** kapcsolónak be kell lennie kapcsolva (`isActive`), különben az adott slug Sanity-tartalma **nem** töltődik be az új dinamikus oldalakra; fix útvonalak ettől még elérhetők lehetnek fallback tartalommal.
+- **HU és EN:** ahol külön mező van (HU / EN), mindkettőt érdemes kitölteni — az angol oldal (`/en/`…) az EN mezőket használja, hiány esetén visszaesik a HU szövegre (ahol a kód így van bekötve).
+- **„Honlap tele, Studio üres”:** sok lista és szöveg **fallback**: üres Sanity mező esetén a honlap a **forráskódban tárolt** magyar/angol szöveget mutatja. Ez nem összekötési hiba. Kitöltés + **Publish**, vagy egyszeri **seed import** (lásd §12).
+- **Gyors megnyitás tábor / futás:** bal menü → **⚡ Jazztábor — Page** vagy **⚡ Futás — Page** (szűrt lista, csak a megfelelő slug dokumentumai).
+
+---
+
+## 2. A Studio felépítése
 
 A bal oldali menüben fentről lefelé:
 
 1. **⚙️ Site settings** — globális beállítások (jegylink, social, házirend, kapcsolat)
 2. **🔔 Popup settings** — főoldali Széchenyi popup
 3. **🧭 Navigáció / Menü** — fejléc + footer menüpontok
-4. **📄 Oldalak (Pages)** — a 10 fix + tetszőleges új oldal tartalma
+4. **📄 Oldalak (Pages)** — a 10 fix + tetszőleges új oldal tartalma  
+   - **⚡ Jazztábor — Page (slug: tabor)** — csak `tabor` slugú Page dokumentumok listája  
+   - **⚡ Futás — Page (slug: futas)** — csak `futas` slugú Page dokumentumok listája
 5. **📅 Program tételek** — strukturált program lista
-6. **🎤 Színpadok / helyszínek** — Main Stage, Club Stage, Beach stb.
+6. **🎤 Színpadok / helyszínek** — Main Stage, Club Stage stb.
 7. **🎷 Fellépők** — performer adatok
 8. **🏷️ Fellépő címkék / műfajok** — műfaj-badge-ek
 9. **🎟️ Jegyek**
@@ -24,293 +60,232 @@ A bal oldali menüben fentről lefelé:
 
 ---
 
-## 2. Oldalak szerkesztése (Pages)
+## 3. Oldalak (Pages)
 
-**Hol:** Bal menü → 📄 **Oldalak (Pages)**
+**Hol:** Bal menü → 📄 **Oldalak (Pages)** (vagy a fenti ⚡ gyors linkek).
 
-A 10 fix oldal mindegyikéhez van egy Page dokumentum (slug = home, info, lineup, program, contact, szallas, terkep, futas, tabor, aszf). Nyisd meg azt, amelyiket szerkeszteni szeretnéd.
+A 10 fix oldal mindegyikéhez tartozik egy Page dokumentum (slug: `home`, `info`, `lineup`, `program`, `contact`, `szallas`, `terkep`, `futas`, `tabor`, `aszf`).
 
-### Slug-hoz igazodó mezők (fontos)
+### 3.1 Slug-hoz igazodó mezők
 
-A Studio **nem minden oldalon mutatja az összes mezőt**. A **Slug** mező értékétől függően csak azok a blokkok jelennek meg, amelyek az adott útvonalon ténylegesen megjelennek a honlapon (pl. program-mód csak `program` slug esetén; tábor-program blokkok csak `tabor` esetén).
+A Studio **nem minden oldalon mutatja az összes mezőt**. A **Slug** értékétől függ, mely blokkok látszanak (pl. program-mód csak `program` esetén; tábor-program blokkok csak `tabor` esetén).
 
-Ha egy mezőt nem látsz: ellenőrizd, hogy a dokumentum **slug** mezője pontosan a kívánt érték (pl. `tabor`, `futas`).
+Ha egy várt mező hiányzik: ellenőrizd, hogy a dokumentum **Slug** mezője pontosan a kívánt érték (`tabor`, `futas`, stb.).
 
-**„A honlap tele van, a Studio meg üres” — ez gyakran nem hiba:** sok mezőnél (pl. tábor programkártyák, futás táblázat) **üres Sanity = a honlap a kódban tárolt magyar/angol alapszöveget mutatja**. A Studio-ban akkor látod ugyanazt, ha kitöltöd a mezőket **és** rányomsz a **Publish**-ra, vagy egyszer lefuttatod a **`npm run sanity:seed`** importot (fejlesztői gépen, írási tokennel). Gyors megnyitás a Studioban: bal menü → **⚡ Jazztábor — Page** / **⚡ Futás — Page**.
+**„A honlap tele van, a Studio meg üres”** — gyakran **nem hiba:** listák és táblázatok esetén az **üres Sanity** azt jelenti, hogy az oldal a **kódbeli alapszöveget** mutatja. Ugyanaz a tartalom a Studioban akkor jelenik meg, ha kitöltöd és **Publish**-olsz, vagy lefut az inicializáló import (**§12**).
 
-### Közös mezők (több fix és új oldal esetén)
+### 3.2 Közös mezők
 
 | Mező | Hatás |
 |---|---|
-| **Cím (HU/EN)** | Belső lista + admin; **Program** oldalon a nagy fejléc szöveg innen jön (nem a „Hero cím” mezőből). |
-| **Slug (URL)** | **Ne módosítsd** a 10 fix oldalon — különben eltörhetnek a linkek. |
-| **Hero cím (HU/EN)** | Nagy cím a megfelelő aloldalon (kivéve: `home`, `program`, `lineup` — ott nem ez a mező vezérli a látható címet). |
+| **Cím (HU/EN)** | Belső lista + admin; a **Program** oldal nagy fejléce a **Cím (HU/EN)** mezőből jön (nem a „Hero cím” mezőből). |
+| **Slug (URL)** | A 10 fix oldalon **ne változtasd** — eltörhetnek a linkek. |
+| **Hero cím (HU/EN)** | Nagy cím (kivéve: `home`, `program`, `lineup` — ott más szabály vonatkozik a látható címre). |
 | **Hero leírás (HU/EN)** | Alcím / bevezető (kivéve: `home`, `lineup`). |
-| **Oldal tartalom – HU/EN** | Hero alatti első szabad szöveg (kivéve: `home`, `program`, `lineup`). Üres = ez a blokk nem renderelődik. |
+| **Oldal tartalom – HU/EN** | Hero alatti első szabad szöveg (kivéve: `home`, `program`, `lineup`). Üres = ez a blokk nem jelenik meg. |
 | **SEO beállítások** | Meta cím, leírás, OG kép. |
 
-**Program** oldal külön mezői (csak `program` slug mellett látszanak): **Program megjelenítési mód**, **Program – szabad szöveg (HU/EN)** — részletek: [§ Program kezelése](#5-program-kezelése).
+**Program** oldal további mezői (csak `program` slug mellett): **Program megjelenítési mód**, **Program – szabad szöveg (HU/EN)** — lásd [§ Program](#6-program).
 
-> **Tipp:** Az `Oldal tartalom` mezőben üres sor új bekezdést jelez. A `https://...` URL-ek automatikusan kattinthatóvá válnak.
+> **Tipp:** Üres sor új bekezdést jelez. A `https://…` URL-ek a honlapon kattinthatóvá válnak.
 
-### Jazztábor (`tabor`) — szerkeszthető részek
+### 3.3 Jazztábor (`tabor`)
 
-Ezek a mezők **csak** a slug `tabor` mellett jelennek meg. Ha kitöltöd őket, a honlap **Sanity-ből** veszi a tartalmat; ha egy lista üres marad, a rendszer a **kódbeli magyar/angol alapszöveget** (`hu.ts` / `en.ts`) mutatja helyette (**fallback**).
-
-| Mezőcsoport | Mit állítasz? |
-|---|---|
-| **Tábor — szürke sor felett (HU/EN)** | Az oldal legteteje feletti vékony „eyebrow” sor (pl. *Swing · Lindy Hop …*). Üres = fix alapértelmezés. |
-| **Tábor — szekció főcím (HU/EN)** | A programkártyák fölötti nagy cím (pl. *Tanárok és program (2026)*). Üres = fix `scheduleTitle`. |
-| **Tábor — program blokkok (kártyák)** | Lista: minden elem egy kártya **cím + bullet lista**. A listák **HU és EN** oszlopában soronként egy pont (Enter = új sor). Ide kerülnek például a tanárok névsora, kurzusdíjak, napi menetrend, záró nap programja. **Üres tömb** = a honlap a meglévő statikus menetrendet használja. |
-| **Tábor — támogatók blokk címe (HU/EN)** | A támogató linkek fölötti kis cím. Üres = „Támogatók” / „Supporters”. |
-| **Tábor — támogatók (linkek)** | Név + URL soronként. Ha van legalább egy elem, **felülírja** a statikus támogató listát. Üres = statikus lista marad. |
-| **Második szöveg doboz megjelenítése** + **Második szöveg doboz – HU/EN** | A videó alatti **hosszabb** szöveg: csak akkor cseréli le a kódbeli tábor-leírást, ha a kapcsoló **bekapcsolt** és van szöveg a második dobozban. Kikapcsolva mindig a statikus leírás megy ki. |
-| **Elsődleges / másodlagos gomb** | Felirat + URL (HU/EN). Üresen a honlap a régi nevezési/jelentkezési linket és feliratot használja. |
-
-**Megjelenési sorrend a `/tabor/` oldalon (fontosabb elemek):** Hero → opcionális **Oldal tartalom** → videó → (második doboz **vagy** statikus leírás) → narancs **Jelentkezés** gomb → program kártyák → támogatók.
-
-### Futás (`futas`) — szerkeszthető részek
-
-Csak `futas` slug mellett látszanak. Ugyanaz a **fallback** logika: üres Sanity mező → honlap a statikus `running` szöveget és táblázatot használja.
+Csak **slug = `tabor`** mellett látszanak ezek a mezők. Kitöltés → tartalom **Sanity-ből**; üres lista / üres mező → **fallback** a kódbeli magyar/angol szövegre.
 
 | Mezőcsoport | Mit állítasz? |
 |---|---|
-| **Futás — eyebrow sor (HU/EN)** | Fejléc feletti sor (pl. dátum · idő). Üres = statikus dátum + idő. |
-| **Futás — narancs szalag szöveg (HU/EN)** | Az „INGYENES belépő…” típusú kiemelt sáv. Üres = statikus szöveg. |
-| **Futás — kártya „Dátum” / „Időpont” / „Helyszín”** | A három középen lévő infókártya tartalma (`Időpont` egy mező, nyelvfüggetlen). Üres = statikus értékek. |
-| **Futás — táblázat fejléc (HU/EN)** | A távok táblázat narancs fejlécében lévő cím. Üres = „Távok & Díjak” / „Distances & fees”. |
-| **Futás — távok sorai** | Táblázat soronként: kategória, táv, díj (HU és EN oszlop). Van sor = **felülírja** a statikus táblázatot. |
-| **Futás — nevezési határidő / eredményhirdetés szöveg** | Az oldal alsóbb részén lévő szövegdobozok. Üres = statikus szöveg. |
-| **Második szöveg doboz – HU/EN** | A **hosszú** futás-leírás (nevezés, öltöző, póló stb.). Ha **van kitöltve**, ez mindig megjelenik a megfelelő helyen — **nem kell** hozzá külön a „Második szöveg doboz megjelenítése” kapcsoló (az elsősorban a tábor oldalhoz kell). Üres = statikus `running.description`. |
-| **Elsődleges / másodlagos gomb** | Online nevezés + opcionális második link (pl. nevezési lap). |
+| **Tábor — szürke sor felett (HU/EN)** | „Eyebrow” a legtetején (pl. *Swing · Lindy Hop …*). Üres = alapértelmezés. |
+| **Tábor — szekció főcím (HU/EN)** | Cím a programkártyák fölött (pl. *Tanárok és program (2026)*). Üres = kódbeli cím. |
+| **Tábor — program blokkok (kártyák)** | Minden elem egy kártya: **cím** + **lista** (HU és EN: soronként egy pont, Enter). Tanárok, díjak, napi menetrend, záró nap stb. **Üres tömb** = statikus menetrend marad. |
+| **Tábor — támogatók blokk címe (HU/EN)** | Kis cím a támogatók felett. Üres = „Támogatók” / „Supporters”. |
+| **Tábor — támogatók (linkek)** | Név + URL. Legalább egy elem → **felülírja** a statikus listát. Üres → statikus lista. |
+| **Második szöveg doboz megjelenítése** + **Második szöveg – HU/EN** | Videó alatti hosszú szöveg: csak akkor írja felül a kódbeli tábor-leírást, ha a kapcsoló **BE** van kapcsolva **és** van szöveg a második dobozban. |
+| **Elsődleges / másodlagos gomb** | Narancs CTA + opcionális második gomb (HU/EN felirat és URL). Üres → statikus jelentkezési link. |
 
-### Kezdő tartalom (seed) és üres Studio
+**Megjelenési sorrend a `/tabor/` oldalon:** Hero → opcionális **Oldal tartalom** → videó → **második doboz** vagy **statikus leírás** → **Jelentkezés** gomb → programkártyák → támogatók.
 
-A **`npm run sanity:seed`** (kezdeti import script) a **Page** dokumentumokhoz (köztük `tabor` és `futas`) betölti azokat a szövegeket és listákat, amelyek a honlapon eredetileg is szerepeltek (tanárok listája, kurzusdíjak, futás távok, ingyenes belépő szalag, stb.). Ha egy **új** Sanity projektben minden üres, először futtasd a projekt README / fejlesztői útmutató szerint az importot, majd a Studio-ban ellenőrizd a **Pages** dokumentumokat.
+### 3.4 Futás (`futas`)
 
-### Példa: Jazztábor oldal szerkesztése
+Csak **slug = `futas`** mellett látszanak. **Fallback** szabály ugyanúgy érvényes.
 
-1. Nyisd meg **Pages →** a **slug: tabor** dokumentumot (pl. „Jazztábor”).
-2. **Hero cím / Hero leírás**: a nagy cím és alcím (opcionálisan felülírja a statikus címeket).
-3. **Oldal tartalom**: ha kell, plusz bevezető a videó **felett**.
-4. **Tábor — program blokkok**: egy blokk = egy kártya; a lista sorait Enterrel válaszd (tanárok, díjak, napi menetrend külön blokkban).
-5. **Tábor — támogatók**: új sorban név + link; így teljesen CMS-ből vezérelhető a lábléc blokk.
-6. **Második szöveg doboz**: kapcsoló BE + szöveg, ha a videó alatti hosszú leírást innen akarod adni.
-7. **Publish** → ~30 mp ISR után frissül a `/tabor/` oldal.
+| Mezőcsoport | Mit állítasz? |
+|---|---|
+| **Futás — eyebrow (HU/EN)** | Fejléc feletti sor (pl. dátum · idő). Üres = statikus. |
+| **Futás — narancs szalag (HU/EN)** | Ingyenes belépő kiemelés. Üres = statikus. |
+| **Futás — kártyák (Dátum / Időpont / Helyszín)** | Három infókártya; az idő egy közös mező (nyelvfüggetlen). Üres = statikus. |
+| **Futás — táblázat fejléc (HU/EN)** | A távok táblázat címe. Üres = „Távok & Díjak” / „Distances & fees”. |
+| **Futás — távok sorai** | Soronként kategória, táv, díj (HU + EN). Van sor → **felülírja** a statikus táblázatot. |
+| **Futás — nevezési határidő / eredmény szöveg** | Alsó szövegdobozok. Üres = statikus. |
+| **Második szöveg doboz – HU/EN** | Hosszú futás-leírás. **Ha ki van töltve**, megjelenik (**nem** szükséges hozzá a „második doboz megjelenítése” kapcsoló — az elsősorban a táborhoz tartozik). Üres = statikus `running.description`. |
+| **Elsődleges / másodlagos gomb** | Nevezés + opcionális második link. |
+
+### 3.5 Példa: Jazztábor
+
+1. Nyisd meg a **slug: tabor** dokumentumot (**⚡ Jazztábor — Page** vagy Pages lista).
+2. **Hero cím / Hero leírás** — nagy cím és alcím.
+3. **Oldal tartalom** — opcionális szöveg a videó **felett**.
+4. **Tábor — program blokkok** — blokk = kártya; listák Enterrel soronként.
+5. **Tábor — támogatók** — név és link.
+6. **Második szöveg doboz** — kapcsoló BE + szöveg, ha a videó alatti leírást innen adnád.
+7. **Publish**.
+
+### 3.6 Példa: Futás
+
+1. Nyisd meg a **slug: futas** dokumentumot (**⚡ Futás — Page**).
+2. **Hero**, szükség szerint **Oldal tartalom** (rövid bevezető).
+3. **Narancs szalag**, **kártyák**, **távok sorai**, **határidő**, **eredmény** szövegek — igény szerint.
+4. **Második szöveg doboz** — hosszú leírás (nevezés, díjak, póló stb.).
+5. **Publish**.
 
 ---
 
-## 3. Új információs oldal létrehozása
+## 4. Új információs oldal
 
-**Hol:** Bal menü → 📄 **Oldalak (Pages)** → jobb felül „Create"
+**Hol:** 📄 **Oldalak (Pages)** → **Create**.
 
-### Lépések
-
-1. **Cím (HU)**: pl. „Sajtószoba"
-2. **Slug**: kisbetű+kötőjel — pl. `sajto`
-3. Töltsd ki a **Hero cím / leírás** mezőket
-4. Az **Oldal tartalom** mezőbe írd a fő szöveget
-5. **Aktív** legyen bekapcsolva
+1. **Cím (HU)** — pl. „Sajtószoba”
+2. **Slug** — kisbetű, kötőjel: pl. `sajto`
+3. **Hero cím / leírás**
+4. **Oldal tartalom (HU/EN)**
+5. **Aktív** bekapcsolva
 6. **Publish**
 
-Az új oldal automatikusan elérhető lesz: **https://oldal.hu/oldal/sajto/**
+Az új oldal útvonala: **`/oldal/<slug>/`** (pl. `/oldal/sajto/`), illetve angol nézetben az oldal nyelvi útvonal-prefixével.
 
-### Az új oldal megjelenítése a menüben
+### Menübe tétel
 
-→ Lásd a **Menü módosítása** szekciót.
+Lásd [§ Menü](#5-menü-navigáció).
 
-> **Megjegyzés:** A 10 fix slug saját oldalsablont használ. Az ezen kívüli új oldalak az egyszerű, általános `/oldal/[slug]` sablonon jelennek meg (Hero cím + leírás + szöveges body). Bonyolultabb dizájn (kártyák, táblázat) ezen a sablonon nem építhető — ha kell, fejlesztői támogatásra van szükség.
+> A 10 fix slug **saját React oldalt** kap. Az új slugok az **egyszerű** `/oldal/[slug]` sablont használják (Hero + szöveg). Összetettebb dobozok / táblázat ehhez a sablonhoz csak fejlesztéssel bővíthető.
 
 ---
 
-## 4. Menü módosítása
+## 5. Menü (Navigáció)
 
-**Hol:** Bal menü → 🧭 **Navigáció / Menü**
-
-A főmenü és a footer linkjei innen vezérelhetők.
-
-### Egy menüpont mezői
+**Hol:** 🧭 **Navigáció / Menü**.
 
 | Mező | Mire való |
 |---|---|
 | **Felirat (HU/EN)** | Amit a látogató lát |
-| **Belső oldal (Page)** | Ajánlott: a Pages alól választasz dokumentumot, a link ebből képződik |
-| **Saját URL** | Csak akkor töltsd ki, ha NEM Page-re mutat (pl. `/info/#gyik`) |
-| **Külső link** | Teljes URL-t ide tegyél (pl. https://jegyek.hu/...). Új ablakban nyílik. |
-| **Új ablakban nyíljon** | Belső linknél opcionális; külsőnél automatikus |
+| **Belső oldal (Page)** | Ajánlott: innen képződik az útvonal |
+| **Saját URL** | Ha nem Page-re mutat (pl. `/info/#gyik`) |
+| **Külső link** | Teljes `https://…` URL; új ablakban nyílik |
+| **Új ablakban nyíljon** | Belső linknél opcionális |
 | **Sorrend** | Kisebb szám = előrébb |
-| **Aktív** | Ha kikapcsolod, sehol nem jelenik meg |
-| **Megjelenik a fejlécben** | Header menübe kerül-e |
-| **Megjelenik a footerben** | Footer linklistába kerül-e |
+| **Aktív** | Kikapcsolva sehol sem látszik |
+| **Megjelenik a fejlécben / footerben** | Elhelyezkedés |
 
-### Tipikus feladatok
+**Új menüpont:** Create → felirat → Page kiválasztása → sorrend → header/footer → Publish.
 
-**Új menüpont felvétele:**
-1. „Create" gomb a Navigáció listában
-2. Felirat: pl. „Sajtó"
-3. Belső oldal: válaszd a `Sajtószoba` Page-et
-4. Sorrend: a kívánt pozíció
-5. Megjelenik a fejlécben: be / Footer: be (ha kell)
-6. Publish
-
-**Menüpont sorrend átrendezése:**
-A sorszám módosításával. Kisebb = előrébb.
-
-**Menüpont elrejtése:**
-Az **Aktív** kapcsolóval (vagy a header/footer kapcsolóval, ha csak az egyik felületről akarod elrejteni).
-
-**Menüpont átnevezése:**
-Felirat (HU/EN) módosítása.
-
-> **Fallback:** Ha minden menüpontot elrejtesz vagy törölsz, a frontend a kódba égetett alapértelmezett menüt mutatja, hogy az oldal sose maradjon menü nélkül.
+> **Fallback:** Ha minden menü el van rejtve, a honlap egy **kódbeli alapértelmezett** menüt mutat, hogy üres header ne maradjon.
 
 ---
 
-## 5. Program kezelése
+## 6. Program
 
-A program kétféle módon jeleníthető meg:
+### Strukturált lista
 
-### A) Strukturált (adatbázisos) lista
+**Hol:** 📅 **Program tételek**.
 
-**Hol:** Bal menü → 📅 **Program tételek**
+Mezők: cím vagy fellépő, dátum, kezdés, **Színpad (stageRef)**, opcionálisan vég, kategória, leírás, fellépők.
 
-Minden tételhez:
-- Cím vagy fellépő-referencia (egyik kell)
-- Dátum + Kezdés
-- **Színpad (stageRef)** — válassz a Stages alól
-- Opcionális: Vége, kategória, leírás, fellépők
+### Szabad szöveg
 
-Ez jelenik meg napokra bontva, kártyákkal.
+**Pages → Program (`program`):**
 
-### B) Szabad szöveges program
+- **Program – szabad szöveg (HU/EN)**
+- **Program megjelenítési mód:** adatbázis lista / csak szöveg / mindkettő
 
-Ha gyakran változik a program, vagy egyszerűbben akarod kezelni:
+### Egy fellépő több időponton
 
-1. **Pages → Program (slug: program)**
-2. **Program – szabad szöveg (HU/EN)** — írd ide az egész programot
-3. **Program megjelenítési mód** — válaszd:
-   - **Adatbázisos lista (alapértelmezett):** csak a Program tételek látszanak
-   - **Szabad szöveges program:** csak a programBody látszik (nem mutatja a tételeket)
-   - **Mindkettő:** előbb a szöveg, alatta a lista
-
-### Egy fellépő több időpontban
-
-Ha valaki több koncerten fellép:
-1. Hozz létre egy Program tételt minden időponthoz külön
-2. Mindegyikben válaszd ki ugyanazt a Performer dokumentumot a `Fellépők` listában
-
-A frontend mindegyik kártyán meg fogja mutatni a nevet.
+Külön Program tétel minden időpontra; mindegyikben ugyanaz a Performer hivatkozás.
 
 ---
 
-## 6. Fellépők (Performers)
+## 7. Fellépők
 
-**Hol:** Bal menü → 🎷 **Fellépők**
+**Hol:** 🎷 **Fellépők**.
 
 | Mező | Hatás |
 |---|---|
-| **Név** | A kártyán nagybetűs cím |
-| **Kép** | A kártya képe |
-| **Rövid leírás (HU/EN)** | A kártyán megjelenő szöveg. **NEM műfaj-címke!** |
-| **Címkék / műfajok (tags)** | A kártyán kis badge-ekként jelennek meg. Üres = nincs badge. |
-| **Bio (HU/EN)** | A részletes (modal) leírás |
-| **Linkek** | Web, YouTube, Facebook, Instagram, Spotify |
-| **Sorrend** | Kisebb szám = előrébb a lineupban |
+| **Név** | Kártyacím |
+| **Kép** | Kártyakép |
+| **Rövid leírás (HU/EN)** | Nem műfaj-címke |
+| **Címkék / műfajok** | Badge-ek (max. ~3 látható a kártyán) |
+| **Bio (HU/EN)** | Részletes szöveg |
+| **Linkek** | Web, közösségi |
+| **Sorrend** | Kisebb szám = előrébb |
 
-### Műfaj / címke kezelése
-
-**Új címke felvétele:**
-1. Bal menü → 🏷️ **Fellépő címkék / műfajok** → Create
-2. Név (HU): pl. „swing"
-3. Publish
-
-**Címke hozzárendelése fellépőhöz:**
-1. Nyisd meg a Performer dokumentumot
-2. **Címkék / műfajok** mezőben: Add → válaszd ki a tagot
-3. Publish
-
-> A fellépő-kártyán max. 3 tag jelenik meg vizuálisan; a többi a Studio-ban marad.
+**Új címke:** 🏷️ **Fellépő címkék** → Create → Publish → Performer dokumentumban hozzárendelés.
 
 ---
 
-## 7. Színpadok / helyszínek (Stages)
+## 8. Színpadok / helyszínek
 
-**Hol:** Bal menü → 🎤 **Színpadok / helyszínek**
+**Hol:** 🎤 **Színpadok / helyszínek**.
 
-Minden színpad:
-- **Név (HU/EN)** — ami megjelenik a frontenden, pl. „Nagysátor"
-- **Slug** — belső azonosító (auto-generálódik)
-- **Sorrend, Aktív**
-
-**Új színpad felvétele:**
-1. „Create" → Név megadása
-2. Publish
-3. Most a Program tételek `Színpad` legördülőjében választható
-
-> **Fontos:** A frontend **pontosan** azt a nevet jeleníti meg, amit ide beírsz — nincs hardcode-olt „Főszínpad" / „Nagysátor" átírás. A program és a fellépő-adatok így mindig egyezni fognak.
+A honlap **pontosan** azt a nevet jeleníti meg, amit ide írsz — Program tételeknél ez látszik a színpadnévként.
 
 ---
 
-## 8. Mit ne módosíts?
+## 9. Mit ne módosíts?
 
-| Mező | Miért? |
+| Elem | Miért? |
 |---|---|
-| **Slug a 10 fix oldalon** | Linkek törhetnek (home, info, lineup, program, contact, szallas, terkep, futas, tabor, aszf) |
-| **Performer `imagePath`** | Legacy / readonly; az új képeket az `image` mezőbe töltsd |
-| **Sponsor `logoPath`** | Ugyanaz; az új logókat az `logo` mezőbe töltsd |
-| **Page `bodyHu/bodyEn`** | Régi Portable Text mezők. Helyettük a `pageBodyHu/En` használandó (rejtett mezők) |
-| **siteSettings ID** | Ne klónozd, ne töröld |
+| **Slug a 10 fix oldalon** | Linkek törnek |
+| **Több Page ugyanazzal a sluggal** (pl. két `tabor`) | A frontend egyik dokumentumát választja — kerüld |
+| **Performer `imagePath`** | Legacy; új kép → **`image`** mező |
+| **Sponsor `logoPath`** | Legacy; új logó → **`logo`** |
+| **Page `bodyHu/bodyEn` (Portable Text)** | Nem használt a honlapon; helyette **`pageBodyHu/En`** |
+| **siteSettings dokumentum törlése / klónozása** | Globális törés |
 
 ---
 
-## 9. Olvasói (read-only) hozzáférés és felhasználói meghívás
+## 10. Felhasználók és jogok
 
-### Mit lát az olvasó?
+- **Viewer (read-only):** látható a Studio, **Publish / szerkesztés** nem.
+- **Editor / Admin:** meghívás a https://www.sanity.io/manage → **Members** → **Invite member**.
 
-- Olvasói (read-only) joggal **megnyithatod a Studio-t és látod a tartalmakat**, de **nem tudsz publikálni / módosítani**.
-- A „Save" / „Publish" gombok inaktívak / nem jelennek meg.
-
-### Hogyan kapsz szerkesztési jogot?
-
-1. A projekt tulajdonosa (Sanity-ben) meghív téged felhasználóként
-2. Megnyitod a meghívót e-mailben
-3. Bejelentkezel a Sanity-be (Google / GitHub / e-mail)
-4. Ezután a Studio-ban szerkesztőként látsz mindent
-
-### Felhasználó meghívása (admin oldal)
-
-1. https://www.sanity.io/manage → projekt kiválasztása
-2. **Members** → **Invite member**
-3. Email cím + szerepkör (Editor / Administrator / Viewer)
-4. Küldd el a meghívót
-
-> **Free csomagban a szerepkörök korlátozottabbak lehetnek.** A végleges átadás során a teljes szerkesztési jog rendezésre kerül.
-
-### Mit kapsz a végleges átadáskor?
-
-- **Tulajdonjog átadása** a Sanity projekten
-- **Netlify projekt** hozzáférés
-- **GitHub repository** csomag (forráskód)
-- **Domain átállítás** támogatása (`jazzfovaros.hu`, `jazzcapital.hu`)
-- **Részletes átadási dokumentáció**
+Átadáskor: Sanity tulajdonjog, Netlify, GitHub, domain dokumentáció — egyeztetés szerint.
 
 ---
 
-## 10. Mentés és publikálás
+## 11. Mentés, publikálás, megjelenés
 
-A Studio-ban minden módosítás **draft (piszkozat)** állapotban van, amíg nem nyomod meg a **Publish** gombot (jobb alsó sarok).
-
-A publikálás után **~30 másodpercen belül** megjelenik az élő oldalon (Netlify ISR).
-
-> Ha azonnal szeretnéd látni: a böngészőben Ctrl+F5 a hard-refresh.
+- **Save** = piszkozat gépen / Sanity-ban tárolva.
+- **Publish** = változás **élő API-n** — a honlap ezt olvassa be következő lekéréskor.
+- Tipikus késleltetés: **~30 másodperc** (Netlify ISR). Frissítés: **Ctrl+F5**.
 
 ---
 
-## 11. Hibajelentés / segítség
+## 12. Seed import és tartalom-ellenőrzés (fejlesztő)
 
-Ha valamit nem találsz vagy elakadsz:
-- Ellenőrizd, hogy a dokumentum **Aktív (isActive: true)** állapotban van-e
-- Ellenőrizd a **Publish** gomb állapotát (kék = van publikálatlan változás)
-- A `/studio` Vision panelből (felül) lekérdezhetsz GROQ-kal
+**Mikor kell:** új Sanity projekt, vagy amikor a Page dokumentumokban hiányoznak a tábor/futás listák, de a honlap fallback miatt „teljesnek” tűnik.
 
-Bármilyen technikai kérdés esetén keress bátran.
+**Parancs:** `npm run sanity:seed`
+
+**Környezet (`.env.local`):**
+
+- `NEXT_PUBLIC_SANITY_PROJECT_ID`
+- `NEXT_PUBLIC_SANITY_DATASET` (általában `production`)
+- `SANITY_API_WRITE_TOKEN` (írási jog)
+
+A script a seedben lévő dokumentumokat **`createOrReplace`**-tel írja — egyező `_id` esetén **felülírja** a tartalmat. Csak megbízható gépen, biztonságos tokennel futtasd.
+
+**Ellenőrzés:** `npm run sanity:check-content` — többek között jelzi, ha `tabor`/`futas` Page-en üres a programblokk vagy a futás táblázat (**Sanity üres, fallback megy**).
+
+---
+
+## 13. Hibaelhárítás
+
+| Jelenség | Mit nézz |
+|---|---|
+| Változás nem látszik a honlapon | **Publish** megtörtént-e; **~30 mp** várakozás; **Ctrl+F5** |
+| Studio üres, honlap nem | **Fallback** — töltsd ki a mezőket **vagy** futtasd **§12** seedet |
+| Hiányzó mező a szerkesztőben | **Slug** helyes-e (`tabor` / `futas`); nem más dokumentumtípus |
+| Angol oldal rossz szöveg | **EN mezők** kitöltése |
+| Menü nem mutat új oldalt | Navigációban **Page** hivatkozás, **Aktív**, **Publish** |
+| Vision / lekérdezés | Studio **Vision** (ha engedélyezett) — GROQ teszt |
+
+További technikai hiba: fejlesztő / `SANITY_FIELD_BINDING_AUDIT.md`.
