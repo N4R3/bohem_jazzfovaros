@@ -514,6 +514,8 @@ export const getPageContentBySlug = cache(
     heroTitle?: string;
     heroDescription?: string;
     body?: string;
+    primaryButton?: { label: string; url: string };
+    secondaryButton?: { label: string; url: string };
     seo?: SanityPage["seo"];
     found: boolean;
   }> => {
@@ -525,11 +527,21 @@ export const getPageContentBySlug = cache(
         SANITY_FETCH_NEXT,
       );
       if (!page) return { found: false };
+
+      const primaryLabel = localized(locale, page.primaryButtonLabelHu, page.primaryButtonLabelEn);
+      const primaryUrl = localized(locale, page.primaryButtonUrlHu, page.primaryButtonUrlEn);
+      const secondaryLabel = localized(locale, page.secondaryButtonLabelHu, page.secondaryButtonLabelEn);
+      const secondaryUrl = localized(locale, page.secondaryButtonUrlHu, page.secondaryButtonUrlEn);
+
       return {
         heroTitle: localized(locale, page.heroTitleHu, page.heroTitleEn) || undefined,
         heroDescription:
           localized(locale, page.heroDescriptionHu, page.heroDescriptionEn) || undefined,
         body: localized(locale, page.pageBodyHu, page.pageBodyEn).trim() || undefined,
+        primaryButton:
+          primaryLabel && primaryUrl ? { label: primaryLabel, url: primaryUrl } : undefined,
+        secondaryButton:
+          secondaryLabel && secondaryUrl ? { label: secondaryLabel, url: secondaryUrl } : undefined,
         seo: page.seo,
         found: true,
       };

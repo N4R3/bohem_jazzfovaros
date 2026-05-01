@@ -95,6 +95,14 @@ export const getActivePageBySlugQuery = `*[_type == "page" && slug.current == $s
   programDisplayMode,
   programBodyHu,
   programBodyEn,
+  primaryButtonLabelHu,
+  primaryButtonLabelEn,
+  primaryButtonUrlHu,
+  primaryButtonUrlEn,
+  secondaryButtonLabelHu,
+  secondaryButtonLabelEn,
+  secondaryButtonUrlHu,
+  secondaryButtonUrlEn,
   isActive,
   seo
 }`;

@@ -131,6 +131,14 @@ export type SanityPage = {
   programDisplayMode?: "structured" | "freeText" | "both";
   programBodyHu?: string;
   programBodyEn?: string;
+  primaryButtonLabelHu?: string;
+  primaryButtonLabelEn?: string;
+  primaryButtonUrlHu?: string;
+  primaryButtonUrlEn?: string;
+  secondaryButtonLabelHu?: string;
+  secondaryButtonLabelEn?: string;
+  secondaryButtonUrlHu?: string;
+  secondaryButtonUrlEn?: string;
   isActive?: boolean;
   seo?: SeoFields;
 };

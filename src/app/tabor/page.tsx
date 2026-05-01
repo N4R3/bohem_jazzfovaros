@@ -26,6 +26,9 @@ export default async function CampPage() {
   const isEn = c.otherLocale.label === "HU";
   const page = await getPageContentBySlug("tabor", locale);
 
+  const entryUrl = page.primaryButton?.url || camp.entryUrl;
+  const entryLabel = page.primaryButton?.label || camp.entryLabel;
+
   return (
     <BeachPageShell
       eyebrow="Swing · Lindy Hop · Jazz Improvizáció"
@@ -68,10 +71,10 @@ export default async function CampPage() {
           </p>
         </div>
 
-        {camp.entryUrl && (
+        {entryUrl && (
           <div className="mb-12 text-center">
             <a
-              href={camp.entryUrl}
+              href={entryUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-extrabold uppercase tracking-wider shadow-xl transition-transform hover:scale-[1.04]"
@@ -81,7 +84,7 @@ export default async function CampPage() {
                 boxShadow: "0 14px 32px rgba(212,98,26,0.45)",
               }}
             >
-              {camp.entryLabel}
+              {entryLabel}
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>

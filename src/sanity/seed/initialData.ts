@@ -546,14 +546,12 @@ Detailed directions (car, train, bus) are listed below.`,
     hu: `Bohém JAZZFŐVÁROS Futás — ${BASE.running.date.hu}, ${BASE.running.time}.
 Helyszín: ${BASE.running.location.hu}.
 
-Nevezés: ${BASE.running.entryUrl}
 Nevezési határidő: ${BASE.running.entryDeadline.hu}.
 
 Lebonyolító: Iustitia Egyesület. Kapcsolat: ${BASE.running.contactEmail}, ${BASE.running.contactPhone}.`,
     en: `Bohém JAZZ CAPITAL Run — ${BASE.running.date.en}, ${BASE.running.time}.
 Location: ${BASE.running.location.en}.
 
-Registration: ${BASE.running.entryUrl}
 Deadline: ${BASE.running.entryDeadline.en}.
 
 Organised by the Iustitia Association. Contact: ${BASE.running.contactEmail}, ${BASE.running.contactPhone}.`,
@@ -734,6 +732,10 @@ const pages: SeedDocument[] = [
     heroTitleEn: en.running.title,
     heroDescriptionHu: hu.running.subtitle,
     heroDescriptionEn: en.running.subtitle,
+    primaryButtonLabelHu: hu.running.entryLabel,
+    primaryButtonLabelEn: en.running.entryLabel,
+    primaryButtonUrlHu: BASE.running.entryUrl,
+    primaryButtonUrlEn: BASE.running.entryUrl,
     seo: {
       seoTitleHu: "Jazzfőváros Futás | Bohém Jazzfőváros 2026",
       seoTitleEn: "Jazz Capital Run | Bohém Jazz Capital 2026",
@@ -756,6 +758,10 @@ const pages: SeedDocument[] = [
     heroTitleEn: en.camp.title,
     heroDescriptionHu: hu.camp.subtitle,
     heroDescriptionEn: en.camp.subtitle,
+    primaryButtonLabelHu: hu.camp.entryLabel,
+    primaryButtonLabelEn: en.camp.entryLabel,
+    primaryButtonUrlHu: BASE.camp.entryUrl,
+    primaryButtonUrlEn: BASE.camp.entryUrl,
     seo: {
       seoTitleHu: "Jazztábor | Bohém Jazzfőváros",
       seoTitleEn: "Jazz Camp | Bohém Jazz Capital",

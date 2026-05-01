@@ -20,12 +20,63 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
+function RunningCTAButtons({ entryUrl, entryLabel, secondaryUrl, secondaryLabel }: {
+  entryUrl: string;
+  entryLabel: string;
+  secondaryUrl?: string;
+  secondaryLabel?: string;
+}) {
+  return (
+    <>
+      <a
+        href={entryUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-extrabold uppercase tracking-wider shadow-xl transition-transform hover:scale-[1.04]"
+        style={{
+          background: "var(--color-accent-500)",
+          color: "#fdf6e3",
+          boxShadow: "0 14px 32px rgba(212,98,26,0.45)",
+        }}
+      >
+        {entryLabel}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      </a>
+      {secondaryUrl && (
+        <a
+          href={secondaryUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-2 rounded-full border-2 px-6 py-3.5 text-sm font-extrabold uppercase tracking-wider transition-transform hover:scale-[1.04]"
+          style={{
+            borderColor: "var(--color-accent-500)",
+            color: "var(--color-accent-500)",
+          }}
+        >
+          {secondaryLabel}
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </a>
+      )}
+    </>
+  );
+}
+
 export default async function RunningPage() {
   const c = await getContent();
   const locale = await getLocale();
   const { running } = c;
   const isEn = c.otherLocale.label === "HU";
   const page = await getPageContentBySlug("futas", locale);
+
+  const entryUrl = page.primaryButton?.url || running.entryUrl;
+  const entryLabel = page.primaryButton?.label || running.entryLabel;
+  const secondaryUrl = page.secondaryButton?.url;
+  const secondaryLabel = page.secondaryButton?.label ||
+    (isEn ? "Download registration form" : "Nevezési lap letöltése");
 
   return (
     <BeachPageShell
@@ -36,6 +87,9 @@ export default async function RunningPage() {
       locale={isEn ? "en" : "hu"}
     >
       {page.body && <PageBody text={page.body} />}
+      <div className="mx-auto mb-8 max-w-4xl flex flex-wrap items-center justify-center gap-4">
+        <RunningCTAButtons entryUrl={entryUrl} entryLabel={entryLabel} secondaryUrl={secondaryUrl} secondaryLabel={secondaryLabel} />
+      </div>
       <div className="mx-auto max-w-4xl">
         {/* Futás hero kép */}
         <div
@@ -227,23 +281,8 @@ export default async function RunningPage() {
           {running.resultsNote}
         </p>
 
-        <div className="mb-10 text-center">
-          <a
-            href={running.entryUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-extrabold uppercase tracking-wider shadow-xl transition-transform hover:scale-[1.04]"
-            style={{
-              background: "var(--color-accent-500)",
-              color: "#fdf6e3",
-              boxShadow: "0 14px 32px rgba(212,98,26,0.45)",
-            }}
-          >
-            {running.entryLabel}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </a>
+        <div className="mb-10 flex flex-wrap items-center justify-center gap-4">
+          <RunningCTAButtons entryUrl={entryUrl} entryLabel={entryLabel} secondaryUrl={secondaryUrl} secondaryLabel={secondaryLabel} />
         </div>
 
         <div

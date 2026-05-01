@@ -107,6 +107,56 @@ export const pageType = defineType({
       type: "text",
       rows: 14,
     }),
+    /* ── CTA gombok (Futás / Tábor oldalhoz ajánlott) ─────────────────── */
+    defineField({
+      name: "primaryButtonLabelHu",
+      title: "Elsődleges gomb felirata (HU)",
+      type: "string",
+      description:
+        "Főleg Futás / Tábor oldalhoz. A fő, narancs CTA gomb felirata (pl. 'Online nevezés →', 'Jelentkezés a táborba →'). Ha üres, az oldal statikus fallback szöveget használ.",
+    }),
+    defineField({
+      name: "primaryButtonLabelEn",
+      title: "Elsődleges gomb felirata (EN)",
+      type: "string",
+    }),
+    defineField({
+      name: "primaryButtonUrlHu",
+      title: "Elsődleges gomb URL (HU)",
+      type: "url",
+      description:
+        "A fő gomb linkje (HU). Ha kitöltöd, ez jelenik meg a Futás / Tábor oldal elsődleges CTA gombjánál. Ha üres, az oldal statikus fallback URL-t használ.",
+    }),
+    defineField({
+      name: "primaryButtonUrlEn",
+      title: "Elsődleges gomb URL (EN)",
+      type: "url",
+      description: "A fő gomb linkje (EN). Ha üres, a HU URL-t használja fallbackként.",
+    }),
+    defineField({
+      name: "secondaryButtonLabelHu",
+      title: "Másodlagos gomb felirata (HU)",
+      type: "string",
+      description:
+        "Opcionális második gomb (pl. 'Nevezési lap letöltése', 'Kapcsolat'). Főleg Futás / Tábor oldalhoz.",
+    }),
+    defineField({
+      name: "secondaryButtonLabelEn",
+      title: "Másodlagos gomb felirata (EN)",
+      type: "string",
+    }),
+    defineField({
+      name: "secondaryButtonUrlHu",
+      title: "Másodlagos gomb URL (HU)",
+      type: "url",
+      description: "A másodlagos gomb linkje (HU). Ha üres, a másodlagos gomb nem jelenik meg.",
+    }),
+    defineField({
+      name: "secondaryButtonUrlEn",
+      title: "Másodlagos gomb URL (EN)",
+      type: "url",
+    }),
+    /* ─────────────────────────────────────────────────────────────────── */
     defineField({
       name: "bodyHu",
       title: "Body (HU) – LEGACY",

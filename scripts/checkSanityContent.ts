@@ -123,6 +123,7 @@ async function checkPages() {
       heroTitleHu, heroTitleEn,
       heroDescriptionHu, heroDescriptionEn,
       pageBodyHu, pageBodyEn,
+      primaryButtonUrlHu, primaryButtonUrlEn,
       isActive,
       seo
     }`,
@@ -148,6 +149,8 @@ async function checkPages() {
     heroDescriptionEn?: string;
     pageBodyHu?: string;
     pageBodyEn?: string;
+    primaryButtonUrlHu?: string;
+    primaryButtonUrlEn?: string;
     isActive?: boolean;
     seo?: Record<string, unknown>;
   };
@@ -163,6 +166,19 @@ async function checkPages() {
     if (!nonEmpty(page.heroDescriptionHu) && !nonEmpty(page.heroDescriptionEn)) {
       log("warning", `Page hero leírás (${slug})`, "heroDescriptionHu/En üres (SEO fallback-hez ajánlott)");
     }
+    /* Futás / Tábor: legyen legalább primaryButtonUrlHu (vagy En) a CTA gombhoz. */
+    if ((slug === "futas" || slug === "tabor") && page.isActive !== false) {
+      if (!nonEmpty(page.primaryButtonUrlHu) && !nonEmpty(page.primaryButtonUrlEn)) {
+        log(
+          "warning",
+          `Page CTA gomb URL (${slug})`,
+          "primaryButtonUrlHu/En üres — az oldal statikus fallback URL-t használ (ellenőrizd, hogy az helyes-e)",
+        );
+      } else {
+        log("ok", `Page CTA gomb URL (${slug})`, "primaryButtonUrlHu/En beállítva");
+      }
+    }
+
     /* Új info-oldal (nem fix slug): legyen pageBody, különben semmit nem mutat. */
     const isFixed = requiredSlugs.includes(slug);
     if (!isFixed && page.isActive !== false) {
