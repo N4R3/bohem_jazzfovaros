@@ -4,6 +4,7 @@ import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 import BeachPageShell from "@/components/layout/BeachPageShell";
 import PageBody from "@/components/layout/PageBody";
 import { getVisibleTicketsWithFallback, getTicketUrlWithFallback, getPageContentBySlug } from "@/sanity/lib/content";
+import { portableTextToPlain } from "@/sanity/lib/portableText";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -23,19 +24,20 @@ export default async function InfoPage() {
   const c = await getContent();
   const isEn = c.otherLocale.label === "HU";
   const locale = isEn ? "en" : "hu";
-  const [sanityTickets, ticketUrl, page] = await Promise.all([
+  const [sanityTickets, ticketUrl] = await Promise.all([
     getVisibleTicketsWithFallback(),
     getTicketUrlWithFallback(locale),
-    getPageContentBySlug("info", locale),
   ]);
+  const page = await getPageContentBySlug("info", locale);
   const { info } = c;
   const ticketTiers = sanityTickets.length ? sanityTickets : info.ticketTiers || [];
+  const subtitle = typeof page.heroDescription === "string" ? page.heroDescription : portableTextToPlain(page.heroDescription);
 
   return (
     <BeachPageShell
       eyebrow={`${c.meta.festivalDates}`}
       title={page.heroTitle || info.title}
-      subtitle={page.heroDescription || info.subtitle}
+      subtitle={subtitle || info.subtitle}
       canonicalPath="/info/"
       locale={isEn ? "en" : "hu"}
     >

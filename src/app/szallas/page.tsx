@@ -3,8 +3,10 @@ import Image from "next/image";
 import { getContent, getLocale } from "@/lib/locale";
 import BeachPageShell from "@/components/layout/BeachPageShell";
 import PageBody from "@/components/layout/PageBody";
+import RichText from "@/components/common/RichText";
 import { getAccommodationContent, getPageContentBySlug } from "@/sanity/lib/content";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
+import { portableTextToPlain } from "@/sanity/lib/portableText";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -45,17 +47,19 @@ export default async function AccommodationPage() {
   const accommodation = await getAccommodationContent(locale);
   const page = await getPageContentBySlug("szallas", locale);
   const isEn = c.otherLocale.label === "HU";
+  const subtitle = typeof page.heroDescription === "string" ? page.heroDescription : portableTextToPlain(page.heroDescription);
+  const introNoteContent = page.introNote;
 
   return (
     <BeachPageShell
       eyebrow="Domb Beach · Kecskemét"
       title={page.heroTitle || accommodation.title}
-      subtitle={page.heroDescription || accommodation.subtitle}
+      subtitle={subtitle || accommodation.subtitle}
       canonicalPath="/szallas/"
       locale={isEn ? "en" : "hu"}
     >
-      {accommodation.note && (
-        <p
+      {introNoteContent && (
+        <div
           className="mx-auto mb-10 max-w-3xl rounded-2xl px-6 py-4 text-center text-sm leading-relaxed shadow-lg"
           style={{
             background: "rgba(253,246,227,0.92)",
@@ -63,8 +67,12 @@ export default async function AccommodationPage() {
             borderLeft: "4px solid var(--color-accent-500)",
           }}
         >
-          {accommodation.note}
-        </p>
+          {typeof introNoteContent === "string" ? (
+            introNoteContent
+          ) : (
+            <RichText value={introNoteContent} />
+          )}
+        </div>
       )}
 
       {page.body && <PageBody text={page.body} />}

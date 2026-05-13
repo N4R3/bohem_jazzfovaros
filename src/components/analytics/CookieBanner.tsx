@@ -55,13 +55,7 @@ export default function CookieBanner() {
         <p className="text-sm leading-relaxed text-[var(--color-cream-200)]/70">
           We use cookies to analyse traffic and improve your experience.{" "}
           <a
-            href={
-              process.env.NEXT_PUBLIC_BUILD_LOCALE === "en"
-                ? "https://jazzcapital.hu/privacy"
-                : "https://jazzfovaros.hu/adatvedelem"
-            }
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/adatvedelem/"
             className="underline hover:text-[var(--color-gold-400)] transition-colors"
           >
             Privacy policy

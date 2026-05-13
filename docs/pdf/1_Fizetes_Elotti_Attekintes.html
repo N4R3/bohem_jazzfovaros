@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<title>Fizetés előtti áttekintési dokumentáció – Bohém Jazzfőváros</title>
+<link rel="stylesheet" href="_styles.css">
+</head>
+<body>
+<div class="page">
+
+<div class="print-hint">💡 Mentés PDF-be: <strong>Ctrl + P</strong> → Célhely: <strong>„Mentés PDF-ként"</strong> → háttérgrafika bekapcsolva</div>
+
+<div class="cover">
+  <div class="eyebrow">Fizetés előtti ellenőrzés</div>
+  <h1>Bohém Jazzfőváros<br><span style="color:var(--orange)">Jazz Capital</span> weboldal</h1>
+  <div class="meta">
+    <span><strong>Dokumentum</strong>Fizetés előtti áttekintési dokumentáció</span>
+    <span><strong>Dátum</strong>2026. április 28.</span>
+    <span><strong>Készítette</strong>Besenyei Zalán György e.v.</span>
+  </div>
+</div>
+
+<h2><span class="num">✎</span>Bevezető</h2>
+<p>Kedves Partnerünk!</p>
+<p>A Bohém Jazzfőváros / Jazz Capital fesztivál weboldala elkészült ellenőrzésre. Ez a dokumentum azt a célt szolgálja, hogy átláthatóan, nyugodtan át tudják nézni a munkát még a pénzügyi rendezés előtt, és jelezhessék az esetleges utolsó kisebb észrevételeket.</p>
+
+<div class="callout warning">
+  <strong>⚠ Fontos:</strong> Ez a dokumentum <strong>nem végleges átadás</strong>, hanem <strong>fizetés előtti ellenőrzési állapot</strong>. A végleges átadási dokumentáció, forráskód-átadás, számla és hozzáférések rendezése a pénzügyi rendezés után történik meg.
+</div>
+
+<h2><span class="num">🔗</span>Ellenőrzési linkek</h2>
+
+<div class="link-card">
+  <span class="label">Ideiglenes weboldal (staging)</span>
+  <span class="url">https://bohemjazz.netlify.app/</span>
+</div>
+<div class="link-card">
+  <span class="label">Tartalomkezelő (Sanity Studio)</span>
+  <span class="url">https://bohemjazz.netlify.app/studio</span>
+</div>
+
+<p style="font-size:10pt;color:var(--gray-500);margin-top:12px">A végleges domainek (<strong>jazzfovaros.hu</strong>, <strong>jazzcapital.hu</strong>) beállítása és átirányítása a pénzügyi rendezés után, közös egyeztetéssel történik.</p>
+
+<h2><span class="num">1</span>Mi készült el?</h2>
+
+<h3>Weboldal alapok</h3>
+<ul>
+  <li>Modern, reszponzív, mobilbarát weboldal</li>
+  <li>Kétnyelvű működés előkészítve (magyar és angol)</li>
+  <li>Gyors betöltés, optimalizált képek</li>
+  <li>SEO alapok: meta címek, leírások, sitemap.xml, robots.txt, strukturált adatok</li>
+</ul>
+
+<h3>Oldalak</h3>
+<table>
+  <thead><tr><th style="width:30%">Oldal</th><th>Leírás</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Főoldal</strong></td><td>Hero, videó, jegyek, fellépők kiemelés, statisztikák, CTA sáv</td></tr>
+    <tr><td><strong>Fellépők</strong></td><td>Teljes lineup oldal kártyákkal</td></tr>
+    <tr><td><strong>Program</strong></td><td>Napi bontású programtábla</td></tr>
+    <tr><td><strong>Infó</strong></td><td>GyIK, házirend, helyszín</td></tr>
+    <tr><td><strong>Jegyek</strong></td><td>Jegyek megjelenítése (rejtés / kiemelés szabályozható)</td></tr>
+    <tr><td><strong>Szállás</strong></td><td>Szálláshelyek képekkel, leírással, linkkel</td></tr>
+    <tr><td><strong>Térkép / Közlekedés</strong></td><td>Helyszín, GPS, megközelítés</td></tr>
+    <tr><td><strong>Futás</strong></td><td>Jazz Capital Run verseny oldala</td></tr>
+    <tr><td><strong>Tábor</strong></td><td>Jazztábor információk</td></tr>
+    <tr><td><strong>Kapcsolat</strong></td><td>Elérhetőségek, sajtó, önkéntes-jelentkezés</td></tr>
+    <tr><td><strong>ÁSZF</strong></td><td>Általános Szerződési Feltételek</td></tr>
+  </tbody>
+</table>
+
+<h3>Tartalomkezelő (Sanity CMS)</h3>
+<ul>
+  <li>Saját admin felület a <code>/studio</code> útvonalon</li>
+  <li>Módosítható: fellépők, program, jegyek, támogatók, szállások, közlekedés, helyszín, oldalak SEO adatai, popup, alapbeállítások</li>
+  <li>Mentés után 1–2 percen belül megjelenik az élő oldalon</li>
+</ul>
+
+<h3>Extra elemek</h3>
+<ul>
+  <li>Széchenyi Terv promóciós popup a főoldalon</li>
+  <li>Támogatói szekció kategóriákkal</li>
+  <li>Staging deploy Netlify platformon</li>
+</ul>
+
+<h2><span class="num">2</span>Mit tud most átnézni?</h2>
+<p>Kérjük, az alábbi pontokat nézzék végig nyugodtan:</p>
+<ul class="check-list">
+  <li>Főoldal megjelenése (dizájn, színek, elrendezés)</li>
+  <li>Főmenü menüpontjai és működése</li>
+  <li>Mobil nézet (telefonon is nyissák meg)</li>
+  <li>Fellépők oldal (nevek, képek, sorrend)</li>
+  <li>Program oldal (dátumok, időpontok, színpadok)</li>
+  <li>Jegyek (nevek, árak, elérhetőség, láthatóság)</li>
+  <li>Támogatók szekció (logók, linkek, kategóriák)</li>
+  <li>Kapcsolat oldal (e-mail, telefon, cím)</li>
+  <li>Szállás oldal (partnerek, képek, linkek)</li>
+  <li>Térkép / közlekedés oldal</li>
+  <li>Széchenyi popup megjelenése a főoldalon</li>
+  <li>Sanity CMS felületén szerkeszthető tartalmak</li>
+</ul>
+
+<h2><span class="num">3</span>Mire figyeljenek az átnézéskor?</h2>
+<table>
+  <thead><tr><th style="width:26%">Terület</th><th>Amire érdemes figyelni</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge orange">Szövegek</span></td><td>Helyesírás, pontos nevek, elírások</td></tr>
+    <tr><td><span class="badge orange">Képek / logók</span></td><td>Megfelelő minőség, pontos támogatói logók</td></tr>
+    <tr><td><span class="badge orange">Linkek</span></td><td>Jegyvásárlás, közösségi média, külső linkek működése</td></tr>
+    <tr><td><span class="badge orange">Jegyek</span></td><td>Jegyárak, jegytípusok, mit lássanak a látogatók</td></tr>
+    <tr><td><span class="badge orange">Program</span></td><td>Időpontok, színpad-hozzárendelések</td></tr>
+    <tr><td><span class="badge orange">Támogatók</span></td><td>Teljes lista, kategóriák, sorrend</td></tr>
+    <tr><td><span class="badge orange">Nyelvi tartalom</span></td><td>Magyar és angol szövegek egyezése</td></tr>
+    <tr><td><span class="badge orange">Mobil</span></td><td>Olvashatóság telefonon, gombok elérhetősége</td></tr>
+  </tbody>
+</table>
+<p style="font-size:10pt;color:var(--gray-700);margin-top:10px">💡 Minden észrevételt egyben is elküldhetnek – így egyszerre tudom átvezetni őket.</p>
+
+<h2><span class="num">4</span>Mi történik a pénzügyi rendezés után?</h2>
+<ol class="steps">
+  <li><strong>Végleges átadási dokumentáció</strong> – részletes, PDF formátumban</li>
+  <li><strong>Hozzáférések rendezése</strong> – Sanity CMS tulajdonjog, Netlify projekt, egyéb platformok</li>
+  <li><strong>Forráskód átadása</strong> – GitHub repository vagy Google Drive csomag</li>
+  <li><strong>Számla</strong> – hivatalos számla külön küldve</li>
+  <li><strong>Végleges domain beállítás támogatása</strong> – jazzfovaros.hu és jazzcapital.hu átirányítás / kapcsolás</li>
+  <li><strong>Támogatási időszak</strong> – kisebb korrekciók / észrevételek egyeztetése külön megbeszélés alapján</li>
+  <li><strong>Opcionális karbantartási lehetőség</strong> – közösen kialakítható folyamatos karbantartási konstrukció</li>
+</ol>
+
+<h2><span class="num">5</span>Mi NEM része ennek az ellenőrzési dokumentumnak?</h2>
+<div class="callout danger">
+  <ul style="margin:0">
+    <li>Ez <strong>nem</strong> végleges szerződéses dokumentum</li>
+    <li>Ez <strong>nem</strong> számla</li>
+    <li>A teljes forráskód átadása <strong>még nem</strong> történt meg</li>
+    <li>Ez <strong>nem</strong> a fizetés utáni végleges átadás (handover)</li>
+    <li>A végleges domain átállítása <strong>még nem</strong> történt meg</li>
+  </ul>
+  <p style="margin:10px 0 0 0">Ezek mind a pénzügyi rendezés után, közös egyeztetéssel zajlanak.</p>
+</div>
+
+<h2><span class="num">☎</span>Kapcsolat</h2>
+<div class="signature-block">
+  <strong>Besenyei Zalán György</strong> – egyéni vállalkozó<br>
+  1133 Budapest, Visegrádi utca 105. 1. em. 17. ajtó<br>
+  Adószám: <strong>91998925-1-41</strong> · Nyilvántartási szám: <strong>62223777</strong><br>
+  <span style="color:var(--gray-500)">besenyeizalan@gmail.com</span>
+</div>
+
+<p style="text-align:center;font-style:italic;color:var(--blue);margin-top:24px">Köszönöm a bizalmat és a közös munkát – várom az észrevételeket! 🎷</p>
+
+<div class="footer">
+  Bohém Jazzfőváros / Jazz Capital weboldal · Fizetés előtti áttekintési dokumentáció · 2026. április 28.
+</div>
+
+</div>
+</body>
+</html>

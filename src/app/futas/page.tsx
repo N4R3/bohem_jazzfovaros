@@ -3,8 +3,10 @@ import Image from "next/image";
 import { getContent, getLocale } from "@/lib/locale";
 import BeachPageShell from "@/components/layout/BeachPageShell";
 import PageBody from "@/components/layout/PageBody";
+import RichText from "@/components/common/RichText";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 import { getPageContentBySlug } from "@/sanity/lib/content";
+import { portableTextToPlain } from "@/sanity/lib/portableText";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -71,6 +73,7 @@ export default async function RunningPage() {
   const { running } = c;
   const isEn = c.otherLocale.label === "HU";
   const page = await getPageContentBySlug("futas", locale);
+  const subtitle = typeof page.heroDescription === "string" ? page.heroDescription : portableTextToPlain(page.heroDescription);
 
   const entryUrl = page.primaryButton?.url || running.entryUrl;
   const entryLabel = page.primaryButton?.label || running.entryLabel;
@@ -95,8 +98,7 @@ export default async function RunningPage() {
     }));
   const entryDeadline = rc?.entryDeadline ?? running.entryDeadline;
   const resultsNote = rc?.resultsNote ?? running.resultsNote;
-  const mainBody =
-    page.body2 && page.body2.trim().length > 0 ? page.body2 : running.description;
+  const mainBody = page.body2 && page.body2.length > 0 ? page.body2 : running.description;
 
   const ui =
     locale === "en"
@@ -125,7 +127,7 @@ export default async function RunningPage() {
     <BeachPageShell
       eyebrow={eyebrow}
       title={page.heroTitle || running.title}
-      subtitle={page.heroDescription || running.subtitle}
+      subtitle={subtitle || running.subtitle}
       canonicalPath="/futas/"
       locale={isEn ? "en" : "hu"}
     >
@@ -170,12 +172,18 @@ export default async function RunningPage() {
             style={{
               background: "var(--color-accent-500)",
               color: "#fdf6e3",
-              boxShadow: "0 10px 26px rgba(212,98,26,0.4)",
+              boxShadow: "0 18px 40px rgba(212,98,26,0.25)",
             }}
           >
-            <p className="text-sm font-black uppercase tracking-wider sm:text-base">
-              {freeEntryBanner}
-            </p>
+            {typeof freeEntryBanner === "string" ? (
+              <p className="text-sm font-black uppercase tracking-wider sm:text-base">
+                {freeEntryBanner}
+              </p>
+            ) : (
+              <div className="text-sm font-black uppercase tracking-wider sm:text-base">
+                <RichText value={freeEntryBanner} />
+              </div>
+            )}
           </div>
         )}
 
@@ -209,7 +217,7 @@ export default async function RunningPage() {
                 className={`mt-2 font-display font-black leading-tight ${card.big ? "text-3xl" : "text-base"}`}
                 style={{ color: "var(--color-teal-900)" }}
               >
-                {card.value}
+                {typeof card.value === "string" ? card.value : portableTextToPlain(card.value)}
               </p>
             </div>
           ))}
@@ -303,16 +311,25 @@ export default async function RunningPage() {
             <strong className="font-black uppercase tracking-wider">
               {ui.deadlineLead}
             </strong>{" "}
-            {entryDeadline}
+            {typeof entryDeadline === "string" ? entryDeadline : portableTextToPlain(entryDeadline)}
           </p>
         </div>
 
-        <p
-          className="mb-8 text-sm leading-relaxed"
-          style={{ color: "rgba(253,246,227,0.88)" }}
-        >
-          {resultsNote}
-        </p>
+        {typeof resultsNote === "string" ? (
+          <p
+            className="mb-8 text-sm leading-relaxed"
+            style={{ color: "rgba(253,246,227,0.88)" }}
+          >
+            {resultsNote}
+          </p>
+        ) : (
+          <div
+            className="mb-8 text-sm leading-relaxed"
+            style={{ color: "rgba(253,246,227,0.88)" }}
+          >
+            <RichText value={resultsNote} />
+          </div>
+        )}
 
         <div className="mb-10 flex flex-wrap items-center justify-center gap-4">
           <RunningCTAButtons entryUrl={entryUrl} entryLabel={entryLabel} secondaryUrl={secondaryUrl} secondaryLabel={secondaryLabel} />

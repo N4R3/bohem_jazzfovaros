@@ -3,8 +3,10 @@ import Image from "next/image";
 import { getContent, getLocale } from "@/lib/locale";
 import BeachPageShell from "@/components/layout/BeachPageShell";
 import PageBody from "@/components/layout/PageBody";
+import RichText from "@/components/common/RichText";
 import { getTransportContent, getVenueContent, getPageContentBySlug } from "@/sanity/lib/content";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
+import { portableTextToPlain } from "@/sanity/lib/portableText";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -35,16 +37,35 @@ export default async function MapPage() {
     getPageContentBySlug("terkep", locale),
   ]);
   const isEn = c.otherLocale.label === "HU";
-  const mapsUrl = venueContent.mapEmbedUrl;
+  const subtitle = typeof page.heroDescription === "string" ? page.heroDescription : portableTextToPlain(page.heroDescription);
+  const introNoteContent = page.introNote;
+  const mapsUrl = venueContent.mapEmbedUrl || venueContent.googleMapsUrl;
 
   return (
     <BeachPageShell
       eyebrow={venueContent.eyebrow}
       title={page.heroTitle || venueContent.title}
-      subtitle={page.heroDescription || venueContent.subtitle}
+      subtitle={subtitle || venueContent.subtitle}
       canonicalPath="/terkep/"
       locale={isEn ? "en" : "hu"}
     >
+      {introNoteContent && (
+        <div
+          className="mx-auto mb-10 max-w-3xl rounded-2xl px-6 py-4 text-center text-sm leading-relaxed shadow-lg"
+          style={{
+            background: "rgba(253,246,227,0.92)",
+            color: "var(--color-teal-900)",
+            borderLeft: "4px solid var(--color-accent-500)",
+          }}
+        >
+          {typeof introNoteContent === "string" ? (
+            introNoteContent
+          ) : (
+            <RichText value={introNoteContent} />
+          )}
+        </div>
+      )}
+
       {page.body && <PageBody text={page.body} />}
       {/* Google Maps */}
       <div
@@ -184,7 +205,7 @@ export default async function MapPage() {
           textShadow: "0 2px 10px rgba(0,0,0,0.3)",
         }}
       >
-        Hogyan juss el?
+        {venueContent.directionsHeading}
       </h2>
 
       <div className="grid gap-5 sm:grid-cols-2">

@@ -1,3 +1,5 @@
+import type { PortableTextBlock } from "@portabletext/react";
+
 export type SanityImageRef = {
   _type: "image";
   asset?: {
@@ -69,10 +71,10 @@ export type SanityPerformerTag = {
 export type SanityPerformer = {
   _id: string;
   name: string;
-  shortDescriptionHu?: string;
-  shortDescriptionEn?: string;
-  bioHu?: string;
-  bioEn?: string;
+  shortDescriptionRichHu?: PortableTextBlock[];
+  shortDescriptionRichEn?: PortableTextBlock[];
+  bioRichHu?: PortableTextBlock[];
+  bioRichEn?: PortableTextBlock[];
   websiteUrl?: string;
   facebookUrl?: string;
   instagramUrl?: string;
@@ -80,10 +82,24 @@ export type SanityPerformer = {
   spotifyUrl?: string;
   image?: SanityImageRef;
   imagePath?: string;
+  imageDisplayMode?: "cover" | "contain" | "landscape" | "portrait";
   order?: number;
   isFeatured?: boolean;
   isActive?: boolean;
   tags?: SanityPerformerTag[];
+  members?: Array<{
+    nameHu?: string;
+    nameEn?: string;
+    roleHu?: string;
+    roleEn?: string;
+    instrumentHu?: string;
+    instrumentEn?: string;
+    countryCode?: string;
+    countryNameHu?: string;
+    countryNameEn?: string;
+    showAsStandalonePerformer?: boolean;
+    order?: number;
+  }>;
   seo?: SeoFields;
 };
 
@@ -124,16 +140,18 @@ export type SanityPage = {
   slug?: { current?: string };
   heroTitleHu?: string;
   heroTitleEn?: string;
-  heroDescriptionHu?: string;
-  heroDescriptionEn?: string;
-  pageBodyHu?: string;
-  pageBodyEn?: string;
+  heroDescriptionRichHu?: PortableTextBlock[];
+  heroDescriptionRichEn?: PortableTextBlock[];
+  introNoteRichHu?: PortableTextBlock[];
+  introNoteRichEn?: PortableTextBlock[];
+  pageBodyRichHu?: PortableTextBlock[];
+  pageBodyRichEn?: PortableTextBlock[];
+  pageBody2RichHu?: PortableTextBlock[];
+  pageBody2RichEn?: PortableTextBlock[];
   showSecondBody?: boolean;
-  pageBody2Hu?: string;
-  pageBody2En?: string;
   programDisplayMode?: "structured" | "freeText" | "both";
-  programBodyHu?: string;
-  programBodyEn?: string;
+  programBodyRichHu?: PortableTextBlock[];
+  programBodyRichEn?: PortableTextBlock[];
   primaryButtonLabelHu?: string;
   primaryButtonLabelEn?: string;
   primaryButtonUrlHu?: string;
@@ -149,8 +167,9 @@ export type SanityPage = {
   campScheduleBlocks?: Array<{
     titleHu?: string;
     titleEn?: string;
-    bulletsHu?: string;
-    bulletsEn?: string;
+    displayMode?: "list" | "paragraphs";
+    bulletsRichHu?: PortableTextBlock[];
+    bulletsRichEn?: PortableTextBlock[];
   }>;
   campSupportersSectionTitleHu?: string;
   campSupportersSectionTitleEn?: string;
@@ -161,13 +180,13 @@ export type SanityPage = {
   }>;
   runningEyebrowHu?: string;
   runningEyebrowEn?: string;
-  runningFreeEntryBannerHu?: string;
-  runningFreeEntryBannerEn?: string;
+  runningFreeEntryBannerRichHu?: PortableTextBlock[];
+  runningFreeEntryBannerRichEn?: PortableTextBlock[];
   runningCardDateHu?: string;
   runningCardDateEn?: string;
   runningCardTime?: string;
-  runningCardLocationHu?: string;
-  runningCardLocationEn?: string;
+  runningCardLocationRichHu?: PortableTextBlock[];
+  runningCardLocationRichEn?: PortableTextBlock[];
   runningDistancesSectionTitleHu?: string;
   runningDistancesSectionTitleEn?: string;
   runningDistanceRows?: Array<{
@@ -178,10 +197,10 @@ export type SanityPage = {
     feeHu?: string;
     feeEn?: string;
   }>;
-  runningEntryDeadlineHu?: string;
-  runningEntryDeadlineEn?: string;
-  runningResultsNoteHu?: string;
-  runningResultsNoteEn?: string;
+  runningEntryDeadlineRichHu?: PortableTextBlock[];
+  runningEntryDeadlineRichEn?: PortableTextBlock[];
+  runningResultsNoteRichHu?: PortableTextBlock[];
+  runningResultsNoteRichEn?: PortableTextBlock[];
   isActive?: boolean;
   seo?: SeoFields;
 };
@@ -239,13 +258,18 @@ export type SanityProgramItem = {
 
 export type SanityAccommodation = {
   _id: string;
-  name?: string;
+  name: string;
   descriptionHu?: string;
   descriptionEn?: string;
+  priceHu?: string;
+  priceEn?: string;
+  stars?: number;
   image?: SanityImageRef;
   imagePath?: string;
   websiteUrl?: string;
   bookingUrl?: string;
+  bookingLabelHu?: string;
+  bookingLabelEn?: string;
   distanceHu?: string;
   distanceEn?: string;
   order?: number;
@@ -270,10 +294,20 @@ export type SanityVenue = {
   nameEn?: string;
   addressHu?: string;
   addressEn?: string;
+  titleHu?: string;
+  titleEn?: string;
+  subtitleHu?: string;
+  subtitleEn?: string;
   mapEmbedUrl?: string;
   googleMapsUrl?: string;
   latitude?: number;
   longitude?: number;
   descriptionHu?: string;
   descriptionEn?: string;
+  mapImage?: {
+    asset?: { _ref: string; _type: "reference" };
+    url?: string;
+  };
+  directionsHeadingHu?: string;
+  directionsHeadingEn?: string;
 };

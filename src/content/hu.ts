@@ -121,7 +121,7 @@ export const hu: SiteContent = {
       { name: "Gyárfás István", genre: "Jazz gitár", bio: "", day: "friday", stage: "main", time: "23:30", origin: "Magyarország" },
       { name: "Hungarian Jazz Embassy", genre: "Klasszikus Jazz", bio: "", day: "sunday", stage: "main", time: "14:30", origin: "Magyarország" },
       { name: "Hunter Burgamy", genre: "Banjo / Gitár", bio: "", day: "saturday", stage: "club", time: "16:30", origin: "USA" },
-      { name: "Jazz Camp All Stars", genre: "Klasszikus Jazz", bio: "", day: "thursday", stage: "main", time: "19:30", origin: "Magyarország" },
+      { name: "Jazz Camp All Stars", genre: "Klasszikus Jazz", bio: "", day: "friday", stage: "main", time: "19:30", origin: "Magyarország" },
       { name: "Ken Aoki", genre: "Banjo", bio: "", day: "friday", stage: "club", time: "18:00", origin: "Japán" },
       { name: "Korb Attila", genre: "Harsona / Trombita / Zongora / Ének", bio: "", day: "saturday", stage: "main", time: "23:30", origin: "Magyarország" },
       { name: "Lukács Eszter", genre: "Jazz ének", bio: "", day: "saturday", stage: "club", time: "16:00", origin: "Magyarország" },
@@ -478,8 +478,6 @@ A JAZZFŐVÁROS fesztiválon részt vevő személyek beleegyeznek abba, hogy a r
     navLabel: "Navigáció",
     legalLinks: [
       { label: "Adatvédelem", href: "/adatvedelem/" },
-      { label: "Jogi nyilatkozat", href: "/jogi-nyilatkozat/" },
-      { label: "Impresszum", href: "/impresszum/" },
       { label: "ÁSZF", href: "/aszf/" },
     ],
     paymentNote: "Fizetési lehetőségek",

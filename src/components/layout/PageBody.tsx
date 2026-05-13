@@ -1,8 +1,10 @@
 import Link from "next/link";
+import RichText from "../common/RichText";
+import type { PortableTextBlock } from "@portabletext/react";
 
 /**
  * PageBody — egyszerű, dizájn-illesztett szövegblokk a Sanity-ből szerkeszthető
- * `pageBody` mezőhöz. Soremelés = új sor; üres sor = új bekezdés. URL-ek auto-linkelődnek.
+ * `pageBody` mezőhöz. Támogatja mind sima szöveget, mind Rich Text (Portable Text) formátumot.
  *
  * Használat (fix oldalakon, a Hero alatt és a kártyás tartalom FÖLÖTT):
  *   const page = await getPageContentBySlug("tabor", locale);
@@ -12,16 +14,11 @@ export default function PageBody({
   text,
   variant = "card",
 }: {
-  text: string;
+  text: string | PortableTextBlock[] | null | undefined;
   /** "card": cream háttér + árnyék (alapértelmezett), "plain": csak szöveg */
   variant?: "card" | "plain";
 }) {
-  const paragraphs = text
-    .split(/\n{2,}/)
-    .map((p) => p.trim())
-    .filter(Boolean);
-
-  if (paragraphs.length === 0) return null;
+  if (!text) return null;
 
   const wrapperClass =
     variant === "card"
@@ -31,6 +28,23 @@ export default function PageBody({
     variant === "card"
       ? { background: "var(--color-cream-50)", color: "var(--color-teal-900)" }
       : { color: "var(--color-teal-900)" };
+
+  // If text is Portable Text array, use RichText component
+  if (Array.isArray(text)) {
+    return (
+      <section className={wrapperClass} style={wrapperStyle}>
+        <RichText value={text} />
+      </section>
+    );
+  }
+
+  // Otherwise treat as plain string (legacy behavior)
+  const paragraphs = text
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+
+  if (paragraphs.length === 0) return null;
 
   return (
     <section className={wrapperClass} style={wrapperStyle}>

@@ -3,6 +3,8 @@ import { getContent, getLocale } from "@/lib/locale";
 import BeachPageShell from "@/components/layout/BeachPageShell";
 import { getProgramContent } from "@/sanity/lib/content";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
+import RichText from "@/components/common/RichText";
+import type { PortableTextBlock } from "@portabletext/react";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -31,7 +33,20 @@ function isMainStage(stage: string) {
   return v.includes("main") || v.includes("nagys") || v.includes("fő") || v.includes("fo");
 }
 
-function FreeTextProgram({ text }: { text: string }) {
+function FreeTextProgram({ text }: { text: string | PortableTextBlock[] }) {
+  // If text is Portable Text array, use RichText component
+  if (Array.isArray(text)) {
+    return (
+      <article
+        className="mx-auto max-w-3xl rounded-2xl px-6 py-8 shadow-xl sm:px-10 sm:py-12"
+        style={{ background: "var(--color-cream-50)", color: "var(--color-teal-900)" }}
+      >
+        <RichText value={text} />
+      </article>
+    );
+  }
+
+  // Otherwise treat as plain string (legacy behavior)
   const paragraphs = text
     .split(/\n{2,}/)
     .map((p) => p.trim())

@@ -1,11 +1,15 @@
+import type { PortableTextBlock } from "@portabletext/react";
+
 export type Locale = "hu" | "en";
 
 export interface Artist {
   name: string;
   genre: string;
-  bio: string;
+  shortDescription?: string | PortableTextBlock[];
+  bio?: string | PortableTextBlock[];
   image?: string;
-  day: "thursday" | "friday" | "saturday" | "sunday";
+  imageDisplayMode?: "cover" | "contain" | "landscape" | "portrait";
+  day: "friday" | "saturday" | "sunday" | "monday";
   /** Helyszín / színpad megnevezése. Sanity programItem.stage értéke közvetlenül; szabad szöveg. */
   stage: string;
   time: string;
@@ -17,6 +21,15 @@ export interface Artist {
   spotifyUrl?: string;
   /** Sanity-ből származó címkék (műfaj, jelleg). Üres tömb / undefined = nincs badge. */
   tags?: string[];
+  /** Zenekari tagok listája a Sanity members mezőből. */
+  lineup?: string[];
+  /** Kapcsolódó programok dátum, idő és helyszín információkkal. */
+  programs?: Array<{
+    date: string;
+    time: string;
+    stage: string;
+    title?: string;
+  }>;
 }
 
 export interface ScheduleSlot {
@@ -119,6 +132,18 @@ export interface RunningDistance {
 export interface CampScheduleItem {
   day: string;
   items: string[];
+}
+
+export interface CampPageCmsOverlay {
+  eyebrow?: string;
+  scheduleSectionTitle?: string;
+  scheduleBlocks?: Array<{
+    title: string;
+    items: string[] | PortableTextBlock[];
+    displayMode: "list" | "paragraphs";
+  }>;
+  supportersSectionTitle?: string;
+  supporters?: Array<{ name: string; url: string }>;
 }
 
 export interface SiteContent {

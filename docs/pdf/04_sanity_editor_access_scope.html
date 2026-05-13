@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sanity Studio – Szerkesztőfelület Tájékoztató – JAZZFŐVÁROS Kft.</title>
+  <style>
+    /* ============================================================
+       bzalan.hu — Document Design System v2.0
+       Screen + A4 PDF | Premium professional documents
+       2026-05-01 | Besenyei Zalán György egyéni vállalkozó
+       ============================================================ */
+
+    @page { size: A4; margin: 16mm 16mm 18mm 16mm; }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 13.5px; line-height: 1.7; color: #1e293b;
+      background: #fff; max-width: 740px; margin: 0 auto; padding: 0 44px 64px;
+    }
+
+    /* ── Masthead ──────────────────────────────────────── */
+    .doc-masthead {
+      height: 3px; background: #0f172a;
+      margin-left: -44px; margin-right: -44px; margin-bottom: 28px;
+    }
+
+    /* ── Document header ───────────────────────────────── */
+    .doc-meta { padding-bottom: 16px; border-bottom: 1.5px solid #0f172a; margin-bottom: 20px; }
+    .doc-meta-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #94a3b8; margin-bottom: 5px; }
+    .doc-meta-title { font-size: 19px; font-weight: 700; color: #0f172a; margin-bottom: 3px; line-height: 1.25; }
+    .doc-meta-sub   { font-size: 12.5px; color: #64748b; }
+
+    /* ── Badges ────────────────────────────────────────── */
+    .badge { display: inline-block; padding: 2px 9px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing: 0.025em; margin-bottom: 16px; }
+    .badge-pre    { background: #dbeafe; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .badge-sanity { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+
+    /* ── Typography ────────────────────────────────────── */
+    h2 { font-size: 14px; font-weight: 700; color: #0f172a; margin: 28px 0 10px; padding-bottom: 5px; border-bottom: 1px solid #e2e8f0; letter-spacing: 0.01em; }
+    h3 { font-size: 13px; font-weight: 600; color: #334155; margin: 16px 0 7px; }
+    p  { margin-bottom: 11px; }
+    strong { font-weight: 600; color: #0f172a; }
+    hr { border: none; border-top: 1px solid #e2e8f0; margin: 22px 0; }
+
+    /* ── Tables ────────────────────────────────────────── */
+    table { width: 100%; border-collapse: collapse; margin: 13px 0; font-size: 12.5px; }
+    th { background: #f8fafc; font-weight: 600; text-align: left; padding: 7px 11px; border: 1px solid #e2e8f0; color: #334155; font-size: 12px; }
+    td { padding: 7px 11px; border: 1px solid #e2e8f0; vertical-align: top; color: #1e293b; }
+    tr:nth-child(even) td { background: #f8fafc; }
+
+    /* ── Lists ─────────────────────────────────────────── */
+    ul { padding-left: 20px; margin-bottom: 11px; }
+    li { margin-bottom: 4px; line-height: 1.65; }
+
+    /* ── Callouts ──────────────────────────────────────── */
+    .callout { padding: 11px 15px; border-radius: 5px; margin: 14px 0; border-left: 3px solid; font-size: 13px; line-height: 1.65; }
+    .callout strong { display: block; margin-bottom: 4px; font-weight: 700; }
+    .callout p { margin-bottom: 5px; }
+    .callout p:last-child { margin-bottom: 0; }
+    .callout ul { margin: 5px 0 0; }
+    .callout-warning { background: #fff7ed; border-left-color: #ea580c; color: #7c2d12; }
+    .callout-warning strong { color: #9a3412; }
+    .callout-info    { background: #eff6ff; border-left-color: #2563eb; color: #1e3a5f; }
+    .callout-info    strong { color: #1e40af; }
+    .callout-check   { background: #fff7ed; border: 1px solid #fde68a; border-left: 3px solid #d97706; color: #7c2d12; }
+    .callout-check   strong { color: #92400e; }
+
+    /* ── Editable card grid ────────────────────────────── */
+    .editable-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 13px 0;
+    }
+    .editable-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 5px;
+      padding: 9px 13px;
+      background: #f8fafc;
+    }
+    .editable-card-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+    .editable-card ul { font-size: 12px; color: #475569; margin: 0; }
+    .editable-card li { margin-bottom: 2px; }
+
+    /* ── Checklist ─────────────────────────────────────── */
+    .checklist { list-style: none; padding-left: 0; }
+    .checklist li { padding-left: 24px; position: relative; margin-bottom: 6px; font-size: 13px; }
+    .checklist li::before { content: "☐"; position: absolute; left: 0; color: #94a3b8; font-size: 14px; line-height: 1.35; }
+
+    /* ── Footer ────────────────────────────────────────── */
+    .doc-footer { margin-top: 44px; padding-top: 14px; border-top: 1px solid #e2e8f0; font-size: 11.5px; color: #94a3b8; text-align: center; }
+
+    /* ── Print ─────────────────────────────────────────── */
+    @media print {
+      html, body { width: auto; height: auto; overflow: visible; }
+      body { padding: 0; max-width: none; margin: 0; font-size: 12.5px; color: #000; line-height: 1.55; }
+      h2 { font-size: 13px; margin-top: 20px; }
+      h3 { font-size: 12px; }
+      .doc-masthead { margin-left: 0; margin-right: 0; margin-bottom: 22px; width: 100%; }
+      .badge, .callout, .editable-card { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .callout, .editable-card, .editable-grid, table { page-break-inside: avoid; break-inside: avoid; }
+      .signature-area { page-break-inside: avoid; break-inside: avoid; }
+      h2, h3 { page-break-after: avoid; break-after: avoid; }
+      p { orphans: 3; widows: 3; }
+      a { color: inherit; text-decoration: none; }
+      a[href]::after { content: none; }
+      .doc-footer { position: static; margin-top: 28px; padding-top: 10px; border-top: 1px solid #e5e7eb; page-break-inside: avoid; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="doc-masthead"></div>
+
+<div class="doc-meta">
+  <div class="doc-meta-label">Kliensnek küldhető – Előleg fizetéshez / után</div>
+  <div class="doc-meta-title">Sanity Studio – Szerkesztőfelület Tájékoztató</div>
+  <div class="doc-meta-sub">JAZZFŐVÁROS Kft. · Weboldal redesign · 2026</div>
+</div>
+
+<span class="badge badge-sanity">Sanity szerkesztői hozzáférés tájékoztató</span>
+
+<h2>Mi a Sanity Studio?</h2>
+
+<p>A Sanity Studio egy strukturált tartalomkezelő felület (CMS), amely lehetővé teszi a weboldal meghatározott tartalmi elemeinek szerkesztését – például fellépők, programok, szponzorok, jegyek, helyszín adatok – anélkül, hogy fejlesztői beavatkozásra lenne szükség.</p>
+
+<p><strong>Célja:</strong> Kényelmes, önálló tartalomkezelés a fesztivál kulcstartalmaihoz. Az előleg megfizetése után biztosított hozzáférés segítségével Tamás megismerheti a felületet, feltárhatja az esetleges gyakorlati hiányosságokat, és szükség esetén frissítheti a tartalmakat a végleges live launch előtt.</p>
+
+<h2>Mi NEM a Sanity Studio?</h2>
+
+<div class="callout callout-warning">
+  <strong>⚠️ Fontos megértés – Sanity korlát</strong>
+  <p>A Sanity Studio <strong>nem</strong> teljes vizuális weboldalépítő.</p>
+  <p><strong>Nem</strong> drag-and-drop szerkesztő.</p>
+  <p><strong>Nem</strong> teljes grafikus szerkesztő minden vizuális elemhez.</p>
+  <p>Nem tesz szerkeszthetővé minden oldalelrendezést, komponenst, animációt, route-ot, design-elemet vagy fejlesztői beállítást. Nem váltja ki automatikusan a fejlesztői munkát.</p>
+  <p>Teljes vizuális oldalszerkesztés más architektúrát és a projekt elejétől kezdve lényegesen nagyobb scope-ot és költségvetést igényelne.</p>
+</div>
+
+<h2>Mit lehet szerkeszteni?</h2>
+
+<div class="editable-grid">
+  <div class="editable-card">
+    <div class="editable-card-title">⚙️ Weboldal beállítások</div>
+    <ul>
+      <li>Fesztivál dátuma</li>
+      <li>Jegyek hivatkozásai</li>
+      <li>Social media linkek</li>
+      <li>Házirend PDF hivatkozás</li>
+      <li>Popup beállítások</li>
+      <li>Kapcsolati adatok (ahol konfigurálva)</li>
+    </ul>
+  </div>
+  <div class="editable-card">
+    <div class="editable-card-title">📍 Helyszín (Venue)</div>
+    <ul>
+      <li>Helyszín neve, cím, leírás</li>
+      <li>Térkép koordináták</li>
+    </ul>
+  </div>
+  <div class="editable-card">
+    <div class="editable-card-title">🏢 Szponzorok</div>
+    <ul>
+      <li>Szponzor kategóriák (név, sorrend)</li>
+      <li>Szponzorok (név, logó, kategória, weboldal)</li>
+    </ul>
+  </div>
+  <div class="editable-card">
+    <div class="editable-card-title">🎫 Jegyek (Tickets)</div>
+    <ul>
+      <li>Jegy típus neve, ára, leírása</li>
+      <li>Elérhetőség</li>
+    </ul>
+  </div>
+  <div class="editable-card">
+    <div class="editable-card-title">🎤 Fellépők (Performers)</div>
+    <ul>
+      <li>Fellépő neve, képe, leírása</li>
+      <li>Fellépő típusa</li>
+      <li>Performer Tags (címkék)</li>
+    </ul>
+  </div>
+  <div class="editable-card">
+    <div class="editable-card-title">🎭 Színpadok (Stages)</div>
+    <ul>
+      <li>Színpad neve, leírása</li>
+    </ul>
+  </div>
+  <div class="editable-card">
+    <div class="editable-card-title">📅 Program elemek</div>
+    <ul>
+      <li>Program cím, dátum, időpont</li>
+      <li>Fellépő, színpad, leírás</li>
+    </ul>
+  </div>
+  <div class="editable-card">
+    <div class="editable-card-title">📄 Oldalak / Infó oldalak</div>
+    <ul>
+      <li>Oldal cím, tartalom</li>
+      <li>Slug (URL), közzétételi állapot</li>
+    </ul>
+  </div>
+  <div class="editable-card">
+    <div class="editable-card-title">🧭 Navigáció</div>
+    <ul>
+      <li>Navigációs elem neve</li>
+      <li>Hivatkozás, sorrend</li>
+    </ul>
+  </div>
+  <div class="editable-card">
+    <div class="editable-card-title">🏨 Szállás &amp; Transport</div>
+    <ul>
+      <li>Szállás neve, cím, leírás, ártartomány</li>
+      <li>Transport típus neve, leírás, ár</li>
+    </ul>
+  </div>
+</div>
+
+<h2>Jazztábor és Futás oldalak – fontos megjegyzés</h2>
+
+<div class="callout callout-check">
+  <strong>⚠️ Fontos megjegyzés – Jazztábor (/tabor) és Futás (/futas)</strong>
+  <p>A Jazztábor (/tabor) és Futás (/futas) oldalak Sanity Studio-ban történő szerkeszthetősége az adott oldalon beállított tartalmi blokkokra terjed ki. Amennyiben egyes elemek fejlesztői / kódszintű módosítást igényelnek, azok külön technikai feladatnak minősülnek.</p>
+</div>
+
+<h2>URL-útvonal eltérések (pl. /jazztabor vs /tabor)</h2>
+
+<div class="callout callout-info">
+  <strong>ℹ️ Route/redirect kérdés – nem Sanity tartalomszerkesztési feladat</strong>
+  <p>A korábban vagy külső felületeken kommunikált linkek (pl. /jazztabor) és a jelenlegi oldal URL-ek (pl. /tabor) közötti átirányítás külön technikai egyeztetés alapján történik, és csak az írásban rögzített útvonalakra terjed ki.</p>
+</div>
+
+<h2>Live domain csatlakoztatás</h2>
+
+<div class="callout callout-info">
+  <strong>ℹ️ Domain csatlakoztatás – a végső átadás eleme</strong>
+  <p>A jazzfovaros.hu és jazzcapital.hu domaineken való megjelenítés (DNS beállítás, Netlify domain hozzárendelés) a <strong>végső átadás</strong> részeként valósul meg, a teljes 100 000 Ft vállalkozói díj megfizetése után. Ez nem a Sanity editor hozzáférés része, és nem az előleg megfizetéséhez kötött.</p>
+</div>
+
+<h2>Mit NEM lehet szerkeszteni Sanity-ben?</h2>
+
+<table>
+  <tr><th>Elem</th><th>Szerkeszthetőség</th></tr>
+  <tr><td>Globális design színek</td><td>❌ Fejlesztői munka</td></tr>
+  <tr><td>Betűtípusok, layout struktúrák</td><td>❌ Fejlesztői munka</td></tr>
+  <tr><td>Animációk, komponens stílusok</td><td>❌ Fejlesztői munka</td></tr>
+  <tr><td>Routing (URL-útvonalak, átirányítások)</td><td>❌ Fejlesztői munka</td></tr>
+  <tr><td>Analytics / GTM integráció</td><td>❌ Külön megállapodás</td></tr>
+  <tr><td>Backend / API logika</td><td>❌ Fejlesztői munka</td></tr>
+  <tr><td>Képek a /images/ útvonalon (nem Sanity asset)</td><td>⚠️ Külön migráció szükséges</td></tr>
+  <tr><td>Volunteer adatok</td><td>⚠️ Sanity-ben van, de frontenden nem jelenik meg</td></tr>
+</table>
+
+<h2>Biztonságos használati útmutató</h2>
+
+<h3>Mielőtt szerkesztenél – ellenőrző lista</h3>
+
+<ul class="checklist">
+  <li>Csak ismert, azonosított mezőket szerkessz</li>
+  <li>Ne töröl hivatkozott elemeket (pl. fellépőt, aki programhoz van rendelve)</li>
+  <li>Ne változtasd a slug-ot (URL-t) egyeztetés nélkül – broken linkeket okozhat</li>
+  <li>A „Draft" és „Published" állapot közötti különbséget értsd: csak a Published jelenik meg a weboldalon</li>
+  <li>A „Publish" gombot csak akkor nyomd meg, ha a módosítás kész</li>
+  <li>Teszteld a változtatást a demo URL-en mielőtt a live oldalon közzéteszed</li>
+  <li>Strukturális változtatás előtt kérdezz rá</li>
+  <li>Ha nem vagy biztos valamiben, kérdezz rá mielőtt mentesz</li>
+</ul>
+
+<h3>Biztonsági alapszabályok</h3>
+
+<ul>
+  <li>Jelszavakat nem tárolunk dokumentumokban – a hozzáférési adatok külön, biztonságos csatornán érkeznek</li>
+  <li>Első bejelentkezés után jelszócsere ajánlott</li>
+  <li>Ha elérhető, engedélyezd a kétfaktoros hitelesítést (2FA)</li>
+  <li>A hozzáférési adatokat ne oszd meg harmadik féllel</li>
+</ul>
+
+<h2>Ha vizuális módosításra van igény</h2>
+
+<p>Ha layout-változtatásra, új komponensre, design-módosításra, animációra vagy route-beállításra van szükség, az:</p>
+<ul>
+  <li><strong>nem</strong> Sanity Studio szerkesztési feladat</li>
+  <li>fejlesztői munkát igényel</li>
+  <li>külön egyeztetést és díjazást igényelhet</li>
+</ul>
+
+<div class="doc-footer">
+  Besenyei Zalán György egyéni vállalkozó · bzalan.hu · besenyeizalan@gmail.com · +36 70 544 2472
+</div>
+
+</body>
+</html>

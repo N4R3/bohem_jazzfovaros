@@ -1,3 +1,4 @@
+import type { PortableTextBlock } from "@portabletext/react";
 import { cache } from "react";
 import { getContent, getLocale } from "@/lib/locale";
 import type { Artist, Hotel, ScheduleDay, TicketTier } from "@/lib/types";
@@ -17,6 +18,7 @@ import {
   getVisibleTicketsQuery,
 } from "./queries";
 import { urlFor } from "./image";
+import { portableTextToPlain } from "./portableText";
 import type {
   PopupSettings,
   SanityAccommodation,
@@ -179,40 +181,29 @@ function trimOrUndef(s?: string | null): string | undefined {
   return t || undefined;
 }
 
-function splitBulletLines(raw?: string | null): string[] {
-  if (!raw?.trim()) return [];
-  return raw
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter(Boolean);
-}
 
-/** Támogató link: # és üres megmarad, egyébként protocol pótlás. */
-function supporterHref(raw?: string | null): string {
-  const t = typeof raw === "string" ? raw.trim() : "";
-  if (!t || t === "#") return "#";
-  if (/^https?:\/\//i.test(t)) return t;
-  return `https://${t}`;
-}
-
-export type CampPageCmsOverlay = {
+export interface CampPageCmsOverlay {
   eyebrow?: string;
   scheduleSectionTitle?: string;
-  scheduleBlocks?: Array<{ title: string; items: string[] }>;
+  scheduleBlocks?: Array<{
+    title: string;
+    items: PortableTextBlock[];
+    displayMode: "list" | "paragraphs";
+  }>;
   supportersSectionTitle?: string;
   supporters?: Array<{ name: string; url: string }>;
 };
 
 export type RunningPageCmsOverlay = {
   eyebrow?: string;
-  freeEntryBanner?: string;
+  freeEntryBanner?: PortableTextBlock[];
   cardDate?: string;
   cardTime?: string;
-  cardLocation?: string;
+  cardLocation?: PortableTextBlock[];
   distancesSectionTitle?: string;
   distanceRows?: Array<{ category: string; distance: string; fee: string }>;
-  entryDeadline?: string;
-  resultsNote?: string;
+  entryDeadline?: PortableTextBlock[];
+  resultsNote?: PortableTextBlock[];
 };
 
 function buildCampOverlay(page: SanityPage, locale: "hu" | "en"): CampPageCmsOverlay {
@@ -222,34 +213,26 @@ function buildCampOverlay(page: SanityPage, locale: "hu" | "en"): CampPageCmsOve
     const mapped = blocksRaw
       .map((b) => {
         const title = localized(locale, b.titleHu, b.titleEn).trim();
-        const items = splitBulletLines(localized(locale, b.bulletsHu, b.bulletsEn));
-        return title ? { title, items } : null;
+        const bulletsRich = locale === "hu" ? b.bulletsRichHu : b.bulletsRichEn;
+        const displayMode = b.displayMode || "list";
+        const items: PortableTextBlock[] | undefined =
+          bulletsRich && bulletsRich.length > 0 ? bulletsRich : undefined;
+        return title && items ? { title, items, displayMode } : null;
       })
-      .filter((x): x is { title: string; items: string[] } => x !== null);
-    scheduleBlocks = mapped.length > 0 ? mapped : undefined;
+      .filter((x): x is NonNullable<typeof x> => x !== null);
+    scheduleBlocks = mapped.length ? mapped : undefined;
   }
 
-  let supporters: CampPageCmsOverlay["supporters"];
-  const supportersRaw = page.campSupporters;
-  if (supportersRaw?.length) {
-    const mapped = supportersRaw
-      .map((s) => {
-        const name = localized(locale, s.nameHu, s.nameEn).trim();
-        return name ? { name, url: supporterHref(s.url) } : null;
-      })
-      .filter((x): x is { name: string; url: string } => x !== null);
-    supporters = mapped.length > 0 ? mapped : undefined;
-  }
+  const supporters = (page.campSupporters || []).map((s) => ({
+    name: localized(locale, s.nameHu, s.nameEn) || "",
+    url: s.url || "",
+  }));
 
   return {
-    eyebrow: trimOrUndef(localized(locale, page.campEyebrowHu, page.campEyebrowEn)),
-    scheduleSectionTitle: trimOrUndef(
-      localized(locale, page.campScheduleSectionTitleHu, page.campScheduleSectionTitleEn),
-    ),
+    eyebrow: localized(locale, page.campEyebrowHu, page.campEyebrowEn),
+    scheduleSectionTitle: localized(locale, page.campScheduleSectionTitleHu, page.campScheduleSectionTitleEn),
     scheduleBlocks,
-    supportersSectionTitle: trimOrUndef(
-      localized(locale, page.campSupportersSectionTitleHu, page.campSupportersSectionTitleEn),
-    ),
+    supportersSectionTitle: localized(locale, page.campSupportersSectionTitleHu, page.campSupportersSectionTitleEn),
     supporters,
   };
 }
@@ -266,24 +249,23 @@ function buildRunningOverlay(page: SanityPage, locale: "hu" | "en"): RunningPage
     distanceRows = mapped.some((r) => r.category || r.distance || r.fee) ? mapped : undefined;
   }
 
+  const pickRich = (hu?: PortableTextBlock[], en?: PortableTextBlock[]): PortableTextBlock[] | undefined => {
+    const value = locale === "hu" ? hu : en;
+    return value && value.length > 0 ? value : undefined;
+  };
+
   return {
     eyebrow: trimOrUndef(localized(locale, page.runningEyebrowHu, page.runningEyebrowEn)),
-    freeEntryBanner: trimOrUndef(
-      localized(locale, page.runningFreeEntryBannerHu, page.runningFreeEntryBannerEn),
-    ),
+    freeEntryBanner: pickRich(page.runningFreeEntryBannerRichHu, page.runningFreeEntryBannerRichEn),
     cardDate: trimOrUndef(localized(locale, page.runningCardDateHu, page.runningCardDateEn)),
     cardTime: trimOrUndef(page.runningCardTime),
-    cardLocation: trimOrUndef(
-      localized(locale, page.runningCardLocationHu, page.runningCardLocationEn),
-    ),
+    cardLocation: pickRich(page.runningCardLocationRichHu, page.runningCardLocationRichEn),
     distancesSectionTitle: trimOrUndef(
       localized(locale, page.runningDistancesSectionTitleHu, page.runningDistancesSectionTitleEn),
     ),
     distanceRows,
-    entryDeadline: trimOrUndef(
-      localized(locale, page.runningEntryDeadlineHu, page.runningEntryDeadlineEn),
-    ),
-    resultsNote: trimOrUndef(localized(locale, page.runningResultsNoteHu, page.runningResultsNoteEn)),
+    entryDeadline: pickRich(page.runningEntryDeadlineRichHu, page.runningEntryDeadlineRichEn),
+    resultsNote: pickRich(page.runningResultsNoteRichHu, page.runningResultsNoteRichEn),
   };
 }
 
@@ -301,26 +283,76 @@ export const getPerformersWithFallback = cache(async (): Promise<Artist[]> => {
   if (!isSanityConfigured()) return c.lineup.artists;
 
   try {
-    const performers = await sanityClient.fetch<SanityPerformer[]>(getPerformersQuery, {}, SANITY_FETCH_NEXT);
+    const [performers, programItems] = await Promise.all([
+      sanityClient.fetch<SanityPerformer[]>(getPerformersQuery, {}, SANITY_FETCH_NEXT),
+      sanityClient.fetch<SanityProgramItem[]>(getProgramItemsQuery, {}, SANITY_FETCH_NEXT),
+    ]);
+    
     if (!performers?.length) return c.lineup.artists;
+
+    // Create a map of performer IDs to their programs
+    const performerPrograms = new Map<string, Array<{ date: string; time: string; stage: string; title?: string }>>();
+    if (programItems?.length) {
+      for (const item of programItems) {
+        if (item.performers?.length) {
+          for (const perfRef of item.performers) {
+            if (perfRef._id) {
+              if (!performerPrograms.has(perfRef._id)) {
+                performerPrograms.set(perfRef._id, []);
+              }
+              const stageLabel = item.stageRef
+                ? localized(locale, item.stageRef.nameHu, item.stageRef.nameEn)
+                : (item.stage || "");
+              performerPrograms.get(perfRef._id)!.push({
+                date: item.date || "",
+                time: item.startTime || "",
+                stage: stageLabel,
+                title: localized(locale, item.titleHu, item.titleEn) || undefined,
+              });
+            }
+          }
+        }
+      }
+    }
 
     return performers.map((performer) => {
       const tags = (performer.tags || [])
         .filter((tag) => tag?.isActive !== false)
         .map((tag) => localized(locale, tag.titleHu, tag.titleEn))
         .filter((s) => s.length > 0);
+
+      const bioRich = locale === "hu" ? performer.bioRichHu : performer.bioRichEn;
+      const bio = bioRich && bioRich.length > 0 ? bioRich : undefined;
+
+      const shortDescriptionRich = locale === "hu" ? performer.shortDescriptionRichHu : performer.shortDescriptionRichEn;
+      const shortDescription = shortDescriptionRich && shortDescriptionRich.length > 0 ? shortDescriptionRich : undefined;
+
+      // Convert CMS members to lineup format for display
+      const members = (performer.members || [])
+        .filter((m) => m?.nameHu)
+        .sort((a, b) => (a.order || 0) - (b.order || 0))
+        .map((m) => {
+          const parts: string[] = [];
+          if (locale === "hu") {
+            parts.push(m.nameHu || "");
+          } else {
+            parts.push(m.nameEn || m.nameHu || "");
+          }
+          if (m.instrumentHu && locale === "hu") parts.push(`(${m.instrumentHu})`);
+          if (m.instrumentEn && locale === "en") parts.push(`(${m.instrumentEn})`);
+          return parts.join(" ");
+        });
+
       return {
         name: performer.name,
-        genre: performer.shortDescriptionHu || performer.shortDescriptionEn || "",
-        bio:
-          (locale === "en" ? performer.bioEn : performer.bioHu) ||
-          performer.bioHu ||
-          performer.bioEn ||
-          "",
+        genre: "", // Genre is separate, not populated from shortDescription
+        shortDescription,
+        bio,
         image:
           (performer.image ? urlFor(performer.image)?.width(800).height(800).url() : null) ||
           performer.imagePath ||
           undefined,
+        imageDisplayMode: performer.imageDisplayMode || "cover",
         day: "friday" as const,
         stage: "",
         time: "",
@@ -331,6 +363,8 @@ export const getPerformersWithFallback = cache(async (): Promise<Artist[]> => {
         instagramUrl: externalLink(performer.instagramUrl),
         spotifyUrl: externalLink(performer.spotifyUrl),
         tags: tags.length ? tags : undefined,
+        lineup: members.length ? members : undefined,
+        programs: performerPrograms.get(performer._id),
       };
     });
   } catch {
@@ -388,11 +422,8 @@ export const getProgramContent = cache(async (locale: "hu" | "en") => {
     ]);
 
     /* Szabad szöveges program-leírás + megjelenítési mód a Page (slug=program) dokumentumból. */
-    const freeText = localized(
-      locale,
-      programPage?.programBodyHu,
-      programPage?.programBodyEn,
-    ).trim();
+    const programBodyRich = locale === "hu" ? programPage?.programBodyRichHu : programPage?.programBodyRichEn;
+    const freeText = programBodyRich && programBodyRich.length > 0 ? programBodyRich : undefined;
     const rawMode = programPage?.programDisplayMode;
     const displayMode: "structured" | "freeText" | "both" =
       rawMode === "freeText" || rawMode === "both" ? rawMode : "structured";
@@ -449,10 +480,8 @@ export const getProgramContent = cache(async (locale: "hu" | "en") => {
     return {
       title: localized(locale, programPage?.titleHu, programPage?.titleEn) || c.program.title,
       subtitle:
-        localized(
-          locale,
-          programPage?.heroDescriptionHu,
-          programPage?.heroDescriptionEn,
+        portableTextToPlain(
+          locale === "hu" ? programPage?.heroDescriptionRichHu : programPage?.heroDescriptionRichEn,
         ) || c.program.subtitle,
       stageMain: c.program.stageMain,
       stageClub: c.program.stageClub,
@@ -479,16 +508,16 @@ export const getAccommodationContent = cache(async (locale: "hu" | "en") => {
       .map((item) => ({
         name: item.name || "",
         description: localized(locale, item.descriptionHu, item.descriptionEn),
-        price: "",
+        price: localized(locale, item.priceHu, item.priceEn) || "",
         distance: localized(locale, item.distanceHu, item.distanceEn),
         bookingUrl: item.bookingUrl || item.websiteUrl || "#",
-        bookingLabel: locale === "en" ? "Book now →" : "Foglalás →",
+        bookingLabel: localized(locale, item.bookingLabelHu, item.bookingLabelEn) || (locale === "en" ? "Book →" : "Foglalás →"),
         images: item.image
           ? [urlFor(item.image)?.width(1400).url() || ""]
           : item.imagePath
             ? [item.imagePath]
             : [],
-        stars: undefined,
+        stars: item.stars,
       }))
       .map((hotel) => ({
         ...hotel,
@@ -518,6 +547,7 @@ export const getVenueContent = cache(async (locale: "hu" | "en") => {
       mapImage: c.map.mapImage,
       title: c.map.title,
       subtitle: c.map.subtitle,
+      directionsHeading: locale === "hu" ? "Hogyan juss el?" : "How to get there?",
     };
   }
 
@@ -529,6 +559,7 @@ export const getVenueContent = cache(async (locale: "hu" | "en") => {
         ? `${venue.latitude}, ${venue.longitude}`
         : c.map.gps;
     const compactGps = gps.replace(/\s/g, "");
+    const mapImageUrl = venue.mapImage ? (urlFor(venue.mapImage)?.url() ?? c.map.mapImage) : c.map.mapImage;
 
     return {
       eyebrow: localized(locale, venue.nameHu, venue.nameEn) || BASE.venue.hu,
@@ -537,9 +568,12 @@ export const getVenueContent = cache(async (locale: "hu" | "en") => {
       directionsUrl: `https://www.google.com/maps/dir/?api=1&destination=${compactGps}`,
       gps,
       description: localized(locale, venue.descriptionHu, venue.descriptionEn) || c.map.mapNote,
-      mapImage: c.map.mapImage,
-      title: c.map.title,
-      subtitle: c.map.subtitle,
+      mapImage: mapImageUrl,
+      title: localized(locale, venue.titleHu, venue.titleEn) || c.map.title,
+      subtitle: localized(locale, venue.subtitleHu, venue.subtitleEn) || c.map.subtitle,
+      directionsHeading:
+        localized(locale, venue.directionsHeadingHu, venue.directionsHeadingEn) ||
+        (locale === "hu" ? "Hogyan juss el?" : "How to get there?"),
     };
   } catch {
     return {
@@ -552,6 +586,7 @@ export const getVenueContent = cache(async (locale: "hu" | "en") => {
       mapImage: c.map.mapImage,
       title: c.map.title,
       subtitle: c.map.subtitle,
+      directionsHeading: locale === "hu" ? "Hogyan juss el?" : "How to get there?",
     };
   }
 });
@@ -620,10 +655,11 @@ export const getPageContentBySlug = cache(
     locale: "hu" | "en",
   ): Promise<{
     heroTitle?: string;
-    heroDescription?: string;
-    body?: string;
+    heroDescription?: PortableTextBlock[];
+    introNote?: PortableTextBlock[];
+    body?: PortableTextBlock[];
     showSecondBody?: boolean;
-    body2?: string;
+    body2?: PortableTextBlock[];
     primaryButton?: { label: string; url: string };
     secondaryButton?: { label: string; url: string };
     campCms?: CampPageCmsOverlay;
@@ -645,13 +681,25 @@ export const getPageContentBySlug = cache(
       const secondaryLabel = localized(locale, page.secondaryButtonLabelHu, page.secondaryButtonLabelEn);
       const secondaryUrl = localized(locale, page.secondaryButtonUrlHu, page.secondaryButtonUrlEn);
 
+      const bodyRich = locale === "hu" ? page.pageBodyRichHu : page.pageBodyRichEn;
+      const body = bodyRich && bodyRich.length > 0 ? bodyRich : undefined;
+
+      const body2Rich = locale === "hu" ? page.pageBody2RichHu : page.pageBody2RichEn;
+      const body2 = body2Rich && body2Rich.length > 0 ? body2Rich : undefined;
+
+      const heroDescriptionRich = locale === "hu" ? page.heroDescriptionRichHu : page.heroDescriptionRichEn;
+      const heroDescription = heroDescriptionRich && heroDescriptionRich.length > 0 ? heroDescriptionRich : undefined;
+
+      const introNoteRich = locale === "hu" ? page.introNoteRichHu : page.introNoteRichEn;
+      const introNote = introNoteRich && introNoteRich.length > 0 ? introNoteRich : undefined;
+
       return {
         heroTitle: localized(locale, page.heroTitleHu, page.heroTitleEn) || undefined,
-        heroDescription:
-          localized(locale, page.heroDescriptionHu, page.heroDescriptionEn) || undefined,
-        body: localized(locale, page.pageBodyHu, page.pageBodyEn).trim() || undefined,
+        heroDescription,
+        introNote,
+        body,
         showSecondBody: page.showSecondBody || false,
-        body2: localized(locale, page.pageBody2Hu, page.pageBody2En).trim() || undefined,
+        body2,
         primaryButton:
           primaryLabel && primaryUrl ? { label: primaryLabel, url: primaryUrl } : undefined,
         secondaryButton:

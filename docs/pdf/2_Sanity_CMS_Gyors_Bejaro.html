@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<title>Sanity CMS gyors bejáró – Bohém Jazzfőváros</title>
+<link rel="stylesheet" href="_styles.css">
+</head>
+<body>
+<div class="page">
+
+<div class="print-hint">💡 Mentés PDF-be: <strong>Ctrl + P</strong> → Célhely: <strong>„Mentés PDF-ként"</strong> → háttérgrafika bekapcsolva</div>
+
+<div class="cover">
+  <div class="eyebrow">Tartalomkezelő útmutató</div>
+  <h1>Sanity CMS<br><span style="color:var(--orange)">gyors bejáró</span></h1>
+  <div class="meta">
+    <span><strong>Projekt</strong>Bohém Jazzfőváros / Jazz Capital</span>
+    <span><strong>CMS link</strong>bohemjazz.netlify.app/studio</span>
+    <span><strong>Dátum</strong>2026. április 28.</span>
+  </div>
+</div>
+
+<h2><span class="num">✎</span>Bevezető</h2>
+<p>Ez egy rövid, praktikus útmutató, hogy a fizetés előtt is nyugodtan körülnézhessen a tartalomkezelő felületen. A Sanity CMS egy modern, felhasználóbarát admin felület, amelyen keresztül a weboldal szinte teljes tartalma szerkeszthető – <strong>programozói tudás nélkül</strong>.</p>
+
+<h2><span class="num">1</span>Bejelentkezés</h2>
+<ol class="steps">
+  <li>Nyissa meg: <strong>https://bohemjazz.netlify.app/studio</strong></li>
+  <li>Válassza ki a bejelentkezési módot (Google / GitHub / e-mail)</li>
+  <li>Első belépéskor a meghívott e-mail címet használja (amit külön egyeztetünk)</li>
+  <li>A sikeres belépés után a bal oldali menüben látja az elérhető tartalomtípusokat</li>
+</ol>
+
+<h2><span class="num">2</span>Mit lát a bal oldali menüben?</h2>
+<p>A bal oldali menü tartalomtípusok szerint csoportosítva listázza a szerkeszthető elemeket.</p>
+
+<h3>🏠 Site settings – Alapbeállítások</h3>
+<p>Globális beállítások az egész weboldalhoz.</p>
+<table>
+  <thead><tr><th style="width:35%">Mező</th><th>Mire való</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Fesztivál dátumok</strong></td><td>Kezdő- és zárónap</td></tr>
+    <tr><td><strong>Jegyvásárlási link</strong></td><td>HU és EN külön</td></tr>
+    <tr><td><strong>Közösségi média linkek</strong></td><td>Facebook, Instagram, YouTube</td></tr>
+    <tr><td><strong>Házirend PDF</strong></td><td>Letölthető dokumentum</td></tr>
+    <tr><td><strong>Kapcsolati adatok</strong></td><td>E-mail, telefon</td></tr>
+  </tbody>
+</table>
+
+<h3>🔔 Popup settings</h3>
+<ul>
+  <li>Kép (asset feltöltés) vagy kép útvonal</li>
+  <li>Szövegek (HU / EN)</li>
+  <li>Csak főoldalon megjelenés opció</li>
+  <li>Be- / kikapcsolható</li>
+</ul>
+
+<h3>📄 Pages – Oldalak</h3>
+<ul>
+  <li>SEO cím (HU / EN)</li>
+  <li>SEO leírás (HU / EN)</li>
+  <li>Page-szintű hero / tartalom mezők, ahol használatban van</li>
+</ul>
+
+<h3>🎷 Performers – Fellépők</h3>
+<table>
+  <thead><tr><th style="width:28%">Mező</th><th>Leírás</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Név</strong></td><td>Fellépő / zenekar neve</td></tr>
+    <tr><td><strong>Kép</strong></td><td>Fellépő fotó</td></tr>
+    <tr><td><strong>Rövid leírás</strong></td><td>HU / EN (teaserhez)</td></tr>
+    <tr><td><strong>Hosszú leírás</strong></td><td>HU / EN (lineup oldalra)</td></tr>
+    <tr><td><strong>Sorrend</strong></td><td>Kisebb szám = előrébb</td></tr>
+    <tr><td><strong>Aktív</strong></td><td>Megjelenjen-e az oldalon</td></tr>
+  </tbody>
+</table>
+
+<h3>📅 Program – Programpontok</h3>
+<table>
+  <thead><tr><th style="width:28%">Mező</th><th>Leírás</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Cím</strong></td><td>HU / EN</td></tr>
+    <tr><td><strong>Dátum</strong></td><td>Év-hó-nap</td></tr>
+    <tr><td><strong>Kezdési idő</strong></td><td>HH:MM</td></tr>
+    <tr><td><strong>Színpad</strong></td><td>Pl. Main, Club, Beach</td></tr>
+    <tr><td><strong>Sorrend</strong></td><td>Azonos időponton belül</td></tr>
+    <tr><td><strong>Aktív</strong></td><td>Megjelenjen-e</td></tr>
+  </tbody>
+</table>
+
+<h3>🎟️ Tickets – Jegyek</h3>
+<table>
+  <thead><tr><th style="width:28%">Mező</th><th>Leírás</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Név</strong></td><td>HU / EN</td></tr>
+    <tr><td><strong>Ár</strong></td><td>Szöveges mező (pl. „19 900 Ft")</td></tr>
+    <tr><td><strong>Elérhető</strong></td><td>Vásárolható-e</td></tr>
+    <tr><td><strong>Elrejtve</strong></td><td>Rejtett a weboldalon (pl. Early Bird lejárt)</td></tr>
+    <tr><td><strong>Sorrend</strong></td><td>Megjelenési sorrend</td></tr>
+  </tbody>
+</table>
+
+<h3>🤝 Sponsors – Támogatók</h3>
+<table>
+  <thead><tr><th style="width:28%">Mező</th><th>Leírás</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Név</strong></td><td>Támogató neve</td></tr>
+    <tr><td><strong>Logó</strong></td><td>Kép (asset)</td></tr>
+    <tr><td><strong>Link</strong></td><td>Weboldal URL</td></tr>
+    <tr><td><strong>Kategória</strong></td><td>Főtámogató / támogató / partner</td></tr>
+    <tr><td><strong>Sorrend</strong></td><td>Kategórián belül</td></tr>
+  </tbody>
+</table>
+
+<h3>🗂️ Sponsor categories – Támogatói kategóriák</h3>
+<ul><li>Cím (HU / EN)</li><li>Sorrend</li></ul>
+
+<h3>🏨 Accommodation – Szállások</h3>
+<ul>
+  <li>Név</li>
+  <li>Leírás (HU / EN)</li>
+  <li>Kép</li>
+  <li>Booking / website link</li>
+  <li>Távolság a fesztiváltól (HU / EN)</li>
+</ul>
+
+<h3>🚗 Transport – Közlekedés</h3>
+<ul>
+  <li>Cím (HU / EN)</li>
+  <li>Leírás (HU / EN)</li>
+  <li>Ikon</li>
+  <li>Link (opcionális)</li>
+</ul>
+
+<h3>📍 Venue – Helyszín</h3>
+<ul>
+  <li>Név (HU / EN)</li>
+  <li>Cím (HU / EN)</li>
+  <li>Térkép embed URL / Google Maps link</li>
+  <li>GPS koordináták (lat / lng)</li>
+</ul>
+
+<h2><span class="num">⚠</span>Mit NE módosítsanak egyelőre?</h2>
+<div class="callout danger">
+  Ezek technikai / rendszerbeállítások, amelyekhez kérem, ne nyúljanak az egyeztetés előtt:
+  <ul style="margin:8px 0 0 0">
+    <li><strong>Technikai azonosítók</strong> (<code>_id</code>, <code>_ref</code>, <code>_type</code>)</li>
+    <li><strong>Slugok</strong> (oldalak webcímei) – változtatásuk linkeket törhet</li>
+    <li><strong>noIndex</strong> kapcsoló – keresőmotor-indexelést érinti</li>
+    <li><strong>Legacy mezők:</strong> <code>imagePath</code>, <code>logoPath</code> – fallback adatok</li>
+    <li><strong>Sanity rendszerbeállítások</strong> (Project / Dataset / API)</li>
+    <li><strong>CORS / API tokenek</strong> – biztonsági beállítások</li>
+  </ul>
+  <p style="margin:10px 0 0 0">Ha ezek valamelyikét módosítani kellene, szóljanak – közösen megoldjuk.</p>
+</div>
+
+<h2><span class="num">✓</span>Hogyan teszteljék biztonságosan?</h2>
+<ol class="steps">
+  <li><strong>Válasszanak ki egy nem kritikus szöveget</strong> – pl. egy fellépő rövid leírása</li>
+  <li><strong>Módosítsák</strong> a szerkesztőben</li>
+  <li><strong>Kattintsanak a „Publish" gombra</strong> (jobb alsó sarok)</li>
+  <li><strong>Várjanak 1–2 percet</strong>, majd nézzék meg a weboldalon</li>
+  <li><strong>Ha nem biztosak valamiben</strong>, inkább jelezzék – szívesen segítek</li>
+</ol>
+
+<h2><span class="num">📋</span>Javasolt átnézési sorrend</h2>
+<table>
+  <thead><tr><th style="width:8%">#</th><th style="width:30%">Rész</th><th>Miért érdemes elsőként?</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge blue">1</span></td><td><strong>Site settings</strong></td><td>Globális adatok, mindenre hatással</td></tr>
+    <tr><td><span class="badge blue">2</span></td><td><strong>Pages</strong></td><td>SEO címek, leírások, fontos az első találatok miatt</td></tr>
+    <tr><td><span class="badge blue">3</span></td><td><strong>Tickets</strong></td><td>Jegyárak pontossága mindenkinek számít</td></tr>
+    <tr><td><span class="badge blue">4</span></td><td><strong>Program</strong></td><td>Időpontok, színpadok</td></tr>
+    <tr><td><span class="badge blue">5</span></td><td><strong>Performers</strong></td><td>Fellépők listája, képek</td></tr>
+    <tr><td><span class="badge blue">6</span></td><td><strong>Sponsors</strong></td><td>Támogatók teljes listája</td></tr>
+    <tr><td><span class="badge blue">7</span></td><td><strong>Accommodation</strong></td><td>Szállás partnerek</td></tr>
+    <tr><td><span class="badge blue">8</span></td><td><strong>Transport / Venue</strong></td><td>Közlekedés és helyszín</td></tr>
+    <tr><td><span class="badge orange">9</span></td><td><strong>Frontend ellenőrzés mobilon</strong></td><td>Végső élmény teszt</td></tr>
+  </tbody>
+</table>
+
+<h2><span class="num">☎</span>Kérdés esetén</h2>
+<div class="signature-block">
+  Ha bármi nem világos a Sanity felületen, ne habozzon szólni – örömmel átveszem személyesen, telefonon vagy képernyőmegosztáson keresztül.<br><br>
+  <strong>Besenyei Zalán György</strong> – egyéni vállalkozó<br>
+  <span style="color:var(--gray-500)">besenyeizalan@gmail.com</span>
+</div>
+
+<div class="footer">
+  Bohém Jazzfőváros / Jazz Capital · Sanity CMS gyors bejáró · 2026. április 28.
+</div>
+
+</div>
+</body>
+</html>

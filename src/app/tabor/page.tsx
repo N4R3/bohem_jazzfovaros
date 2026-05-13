@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import { getContent, getLocale } from "@/lib/locale";
 import BeachPageShell from "@/components/layout/BeachPageShell";
 import PageBody from "@/components/layout/PageBody";
+import RichText from "@/components/common/RichText";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 import { getPageContentBySlug } from "@/sanity/lib/content";
+import { portableTextToPlain } from "@/sanity/lib/portableText";
+import type { PortableTextBlock } from "@portabletext/react";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -19,6 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
+
 export default async function CampPage() {
   const c = await getContent();
   const locale = await getLocale();
@@ -26,17 +30,20 @@ export default async function CampPage() {
   const isEn = c.otherLocale.label === "HU";
   const page = await getPageContentBySlug("tabor", locale);
 
-  const entryUrl = page.primaryButton?.url || camp.entryUrl;
-  const entryLabel = page.primaryButton?.label || camp.entryLabel;
-
   const campCms = page.campCms;
   const eyebrow =
     campCms?.eyebrow ||
     (locale === "en" ? "Swing · Lindy Hop · Jazz improvisation" : "Swing · Lindy Hop · Jazz Improvizáció");
+  const entryUrl = page.primaryButton?.url || camp.entryUrl;
+  const entryLabel = page.primaryButton?.label || camp.entryLabel;
+  const subtitle = typeof page.heroDescription === "string"
+    ? page.heroDescription
+    : (portableTextToPlain(page.heroDescription) || camp.subtitle);
+
   const scheduleTitle = campCms?.scheduleSectionTitle ?? camp.scheduleTitle;
-  const scheduleBlocks =
+  const scheduleBlocks: Array<{ title: string; items: string[] | PortableTextBlock[]; displayMode?: "list" | "paragraphs" }> =
     campCms?.scheduleBlocks ??
-    camp.schedule.map((b) => ({ title: b.day, items: b.items }));
+    camp.schedule.map((b) => ({ title: b.day, items: b.items, displayMode: "list" }));
   const supportersTitle =
     campCms?.supportersSectionTitle ?? (locale === "en" ? "Supporters" : "Támogatók");
   const supportersList = campCms?.supporters ?? camp.supporters.map((s) => ({ name: s.name, url: s.url }));
@@ -45,7 +52,7 @@ export default async function CampPage() {
     <BeachPageShell
       eyebrow={eyebrow}
       title={page.heroTitle || camp.title}
-      subtitle={page.heroDescription || camp.subtitle}
+      subtitle={subtitle}
       canonicalPath="/tabor/"
       locale={isEn ? "en" : "hu"}
     >
@@ -129,21 +136,37 @@ export default async function CampPage() {
               >
                 {block.title}
               </h3>
-              <ul className="flex flex-col gap-2">
-                {block.items.map((item, k) => (
-                  <li
-                    key={k}
-                    className="flex items-start gap-3 text-sm leading-relaxed"
-                    style={{ color: "rgba(10,58,54,0.78)" }}
-                  >
-                    <span
-                      className="mt-1.5 h-2 w-2 shrink-0 rounded-full"
-                      style={{ background: "var(--color-accent-500)" }}
-                    />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              {block.displayMode === "paragraphs" ? (
+                <div className="space-y-2 text-sm leading-relaxed" style={{ color: "rgba(10,58,54,0.78)" }}>
+                  {Array.isArray(block.items) && block.items.length > 0 && typeof block.items[0] === 'object' ? (
+                    <RichText value={block.items as PortableTextBlock[]} />
+                  ) : (
+                    block.items.map((item, k) => <p key={k}>{String(item)}</p>)
+                  )}
+                </div>
+              ) : (
+                <ul className="flex flex-col gap-2">
+                  {block.items.map((item, k) => (
+                    <li
+                      key={k}
+                      className="flex items-start gap-3 text-sm leading-relaxed"
+                      style={{ color: "rgba(10,58,54,0.78)" }}
+                    >
+                      <span
+                        className="mt-1.5 h-2 w-2 shrink-0 rounded-full"
+                        style={{ background: "var(--color-accent-500)" }}
+                      />
+                      <span className="flex-1">
+                        {typeof item === 'object' ? (
+                          <RichText value={[item] as PortableTextBlock[]} />
+                        ) : (
+                          String(item)
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </article>
           ))}
         </div>

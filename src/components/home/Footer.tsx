@@ -10,6 +10,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getContent } from "@/lib/locale";
+import CookieSettingsLink from "@/components/analytics/CookieSettingsLink";
 import {
   getFooterSponsorsWithFallback,
   getContactContent,
@@ -53,7 +54,6 @@ export default async function Footer() {
       className="relative z-[2] px-5 pb-6 pt-8 text-black sm:px-8"
       style={{
         background: "#ffffff",
-        marginTop: 40,
       }}
     >
       {/* ===== Támogatók / Szponzorok logói — LEGFELÜL ===== */}
@@ -298,7 +298,7 @@ export default async function Footer() {
       <div className="mx-auto mt-8 flex max-w-[1160px] flex-wrap justify-between gap-2 border-t border-white/15 pt-5 text-[12px] opacity-70">
         <span>{c.footer.copyright}</span>
         <span>
-          {c.footer.legalLinks.slice(0, 2).map((item, index) => (
+          {c.footer.legalLinks.map((item, index) => (
             <span key={item.href + item.label}>
               {index > 0 ? " · " : ""}
               {item.href.toLowerCase().endsWith(".pdf") ? (
@@ -318,9 +318,9 @@ export default async function Footer() {
             </span>
           ))}
           {" · "}
-          <a href="#" className="hover:text-sun-400">
+          <CookieSettingsLink className="hover:text-sun-400">
             {isEn ? "Cookie settings" : "Süti beállítások"}
-          </a>
+          </CookieSettingsLink>
         </span>
       </div>
     </footer>

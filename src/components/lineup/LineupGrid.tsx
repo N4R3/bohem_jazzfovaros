@@ -5,14 +5,23 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { createPortal } from "react-dom";
 import type { Artist } from "@/lib/types";
+import RichText from "../common/RichText";
+import type { PortableTextBlock } from "@portabletext/react";
 
 export type LineupArtist = Artist & {
   image?: string;
-  details?: string;
+  details?: string | PortableTextBlock[];
   lineup?: string[];
   /** Oldalszinten összefésült (Sanity + statikus fallback) */
   website?: string;
   youtube?: string;
+  /** Related program items for this performer */
+  programs?: Array<{
+    date: string;
+    time: string;
+    stage: string;
+    title?: string;
+  }>;
 };
 
 function lineupWeb(a: LineupArtist) {
@@ -114,7 +123,7 @@ export default function LineupGrid({
               }}
             >
               <div
-                className="relative aspect-[4/3] overflow-hidden"
+                className="relative overflow-hidden aspect-[4/3]"
                 style={{
                   background:
                     "linear-gradient(135deg, #87c9e6 0%, #5fb6e0 40%, #3e89a3 100%)",
@@ -126,7 +135,11 @@ export default function LineupGrid({
                     alt={artist.name}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                    className={`transition-transform duration-500 group-hover:scale-[1.04] ${
+                      artist.imageDisplayMode === "contain" ? "object-contain" : "object-cover"
+                    }`}
+                    style={{ objectPosition: "top center" }}
+                    priority={false}
                   />
                 ) : (
                   <ArtistPlaceholder />
@@ -158,9 +171,15 @@ export default function LineupGrid({
                   {artist.origin}
                 </p>
 
-                <p className="mt-3 line-clamp-3 text-sm leading-relaxed" style={{ color: "rgba(10,58,54,0.72)" }}>
-                  {artist.details || artist.bio || "Koppints a részletes fellépő-adatokhoz."}
-                </p>
+                <div className="mt-3 line-clamp-3 text-sm leading-relaxed" style={{ color: "rgba(10,58,54,0.72)" }}>
+                  {Array.isArray(artist.details) ? (
+                    <RichText value={artist.details as PortableTextBlock[]} />
+                  ) : Array.isArray(artist.bio) ? (
+                    <RichText value={artist.bio as PortableTextBlock[]} />
+                  ) : (
+                    artist.details || artist.bio || "Koppints a részletes fellépő-adatokhoz."
+                  )}
+                </div>
 
                 {hasLineupLinks(artist) && (
                   <div className="mt-4 flex flex-wrap gap-2">
@@ -273,15 +292,21 @@ export default function LineupGrid({
                   transition={{ duration: 0.24 }}
                   onClick={(event) => event.stopPropagation()}
                 >
-                  <div className="grid gap-0 md:grid-cols-[1.05fr_1.4fr]">
-                    <div className="relative min-h-[260px] md:min-h-full">
+                  <div className="grid gap-0 md:grid-cols-[1.2fr_1.4fr]">
+                    <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[400px]">
                       {activeArtist.image ? (
                         <Image
                           src={activeArtist.image}
                           alt={activeArtist.name}
                           fill
-                          sizes="(max-width: 768px) 100vw, 40vw"
-                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, 45vw"
+                          className={`${
+                            activeArtist.imageDisplayMode === "contain"
+                              ? "object-contain"
+                              : "object-cover"
+                          }`}
+                          style={{ objectPosition: "top center" }}
+                          priority={false}
                         />
                       ) : (
                         <ArtistPlaceholder />
@@ -309,9 +334,15 @@ export default function LineupGrid({
                       {/* A modálban sem jelenítünk meg színpad-címkét, mivel a fellépőhöz
                           nem kötődik megbízható stage-érték. */}
 
-                      <p className="mt-3 text-sm leading-7" style={{ color: "rgba(10,58,54,0.9)" }}>
-                        {activeArtist.details || activeArtist.bio || "A részletes fellépő-leírás hamarosan frissül."}
-                      </p>
+                      <div className="mt-3 text-sm leading-7" style={{ color: "rgba(10,58,54,0.9)" }}>
+                        {Array.isArray(activeArtist.bio) ? (
+                          <RichText value={activeArtist.bio as PortableTextBlock[]} />
+                        ) : Array.isArray(activeArtist.details) ? (
+                          <RichText value={activeArtist.details as PortableTextBlock[]} />
+                        ) : (
+                          <p>{activeArtist.bio || activeArtist.details || "A részletes fellépő-leírás hamarosan frissül."}</p>
+                        )}
+                      </div>
 
                       {activeArtist.lineup && activeArtist.lineup.length > 0 && (
                         <div className="mt-4 border-t pt-4" style={{ borderColor: "rgba(10,58,54,0.16)" }}>
@@ -322,6 +353,22 @@ export default function LineupGrid({
                             {activeArtist.lineup.map((member) => (
                               <li key={member} className="text-sm" style={{ color: "rgba(10,58,54,0.88)" }}>
                                 {member}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {activeArtist.programs && activeArtist.programs.length > 0 && (
+                        <div className="mt-4 border-t pt-4" style={{ borderColor: "rgba(10,58,54,0.16)" }}>
+                          <p className="text-sm font-black uppercase tracking-wide" style={{ color: "#145e56" }}>
+                            Program / Fellépések
+                          </p>
+                          <ul className="mt-2 space-y-1">
+                            {activeArtist.programs.map((program, idx) => (
+                              <li key={idx} className="text-sm" style={{ color: "rgba(10,58,54,0.88)" }}>
+                                {program.date} · {program.time}
+                                {program.stage && ` · ${program.stage}`}
                               </li>
                             ))}
                           </ul>

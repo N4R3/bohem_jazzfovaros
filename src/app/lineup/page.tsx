@@ -235,15 +235,25 @@ export default async function LineupPage() {
 
   const artists: LineupArtist[] = lineupArtists.map((artist) => {
     const baseArtist = baseArtistByName.get(artist.name);
-    const details = performerDetailsHu[artist.name];
+    const details = baseArtist ? performerDetailsHu[artist.name] : null;
+    // Prefer CMS shortDescription, then bio, then hardcoded details, then clean fallback
+    const fallbackDetails = artist.origin
+      ? `${artist.name} a JAZZFŐVÁROS 2026 fellépői között szerepel (${artist.origin}).`
+      : `${artist.name} a JAZZFŐVÁROS 2026 fellépői között szerepel.`;
+    
+    // Static description from performerDetailsHu (full description)
+    const staticDescription = details?.details || fallbackDetails;
+
     return {
       ...artist,
       image: baseArtist?.image ?? artist.image,
+      // For card view: prefer CMS shortDescription (brief), then static description
       details:
-        artist.bio ||
-        details?.details ||
-        `${artist.name} a JAZZFŐVÁROS 2026 fellépői között szerepel (${artist.origin}).`,
-      lineup: details?.lineup,
+        artist.shortDescription ||
+        staticDescription,
+      // For modal view: prefer CMS bio (long), then static description, then shortDescription
+      bio: artist.bio || staticDescription || artist.shortDescription,
+      lineup: artist.lineup || details?.lineup, // Prefer CMS members, fallback to static
       website: artist.websiteUrl || details?.website,
       youtube: artist.youtubeUrl || details?.youtube,
     };

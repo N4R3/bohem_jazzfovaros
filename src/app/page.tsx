@@ -77,7 +77,8 @@ export default async function HomePage() {
   const imageByName = new Map(BASE.artists.map((artist) => [artist.name, artist.image]));
   const lineupTeaserArtists = performers.map((artist, index) => ({
     name: artist.name,
-    genre: artist.genre,
+    // Prefer first Sanity tag (Címkék / műfajok) over static genre
+    genre: artist.tags?.[0] || artist.genre,
     color: teaserPalette[index % teaserPalette.length],
     image: artist.image || imageByName.get(artist.name),
   }));

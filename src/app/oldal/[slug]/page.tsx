@@ -7,6 +7,7 @@ import { getPageContentBySlug } from "@/sanity/lib/content";
 import { sanityClient, isSanityConfigured } from "@/sanity/lib/client";
 import { getAllActivePageSlugsQuery } from "@/sanity/lib/queries";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
+import { portableTextToPlain } from "@/sanity/lib/portableText";
 
 /**
  * Dinamikus oldal — új információs oldalak létrehozható a Sanity Pages alól.
@@ -55,12 +56,15 @@ export async function generateMetadata({
   const locale = await getLocale();
   const c = await getContent();
   const page = await getPageContentBySlug(slug, locale);
+  const fallbackDescription = typeof page.heroDescription === "string"
+    ? page.heroDescription
+    : (portableTextToPlain(page.heroDescription) || c.meta.siteDescription);
   return buildPageMetadataWithSanity({
     slug,
     path: `/oldal/${slug}/`,
     locale,
     fallbackTitle: page.heroTitle || c.meta.siteTitle,
-    fallbackDescription: page.heroDescription || c.meta.siteDescription,
+    fallbackDescription: fallbackDescription,
     fallbackOgImage: "/images/og-image.jpg",
     siteTitle: c.meta.siteTitle,
   });
@@ -83,12 +87,13 @@ export default async function DynamicPage({
     notFound();
   }
   const isEn = c.otherLocale.label === "HU";
+  const subtitle = typeof page.heroDescription === "string" ? page.heroDescription : portableTextToPlain(page.heroDescription);
 
   return (
     <BeachPageShell
       eyebrow={c.meta.festivalDates}
       title={page.heroTitle || ""}
-      subtitle={page.heroDescription || ""}
+      subtitle={subtitle || ""}
       canonicalPath={`/oldal/${slug}/`}
       locale={isEn ? "en" : "hu"}
     >

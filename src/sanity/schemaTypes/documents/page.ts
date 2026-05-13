@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { richText } from "../objects/richText";
 
 /** Slug a dokumentumból – a Studio `hidden` feltételekhez. */
 function slugCurrent(doc: unknown): string | undefined {
@@ -13,6 +14,8 @@ const SLUG_PROGRAM = "program";
 const SLUG_HOME = "home";
 /** Fellépők oldal jelenleg nem hívja a getPageContentBySlug-ot – csak SEO + admin cím. */
 const SLUG_LINEUP = "lineup";
+const SLUG_SZALLAS = "szallas";
+const SLUG_TERKEP = "terkep";
 const SLUG_FUTAS = "futas";
 const SLUG_TABOR = "tabor";
 
@@ -79,44 +82,60 @@ export const pageType = defineType({
       },
     }),
     defineField({
-      name: "heroDescriptionHu",
+      name: "heroDescriptionRichHu",
       title: "Hero leírás (HU)",
-      type: "text",
-      rows: 3,
+      ...richText,
       description:
-        "Rövid bevezető az oldal tetején. Program oldalon ez az alcím; SEO meta leíráshoz is fallback. (Főoldal és Lineup szöveges része nem innen jön.)",
+        "Rövid bevezető az oldal tetején. Program oldalon ez az alcím; SEO meta leíráshoz is fallback. Támogatja: félkövér, dőlt, link, h2, h3, lista, blockquote.",
       hidden: ({ document }) => {
         const s = slugCurrent(document);
         return s === SLUG_HOME || s === SLUG_LINEUP;
       },
     }),
     defineField({
-      name: "heroDescriptionEn",
+      name: "heroDescriptionRichEn",
       title: "Hero leírás (EN)",
-      type: "text",
-      rows: 3,
+      ...richText,
       hidden: ({ document }) => {
         const s = slugCurrent(document);
         return s === SLUG_HOME || s === SLUG_LINEUP;
       },
     }),
     defineField({
-      name: "pageBodyHu",
-      title: "Oldal tartalom – HU (szabad szöveg)",
-      type: "text",
-      rows: 14,
+      name: "introNoteRichHu",
+      title: "Kiemelt megjegyzés – HU",
+      ...richText,
       description:
-        "Fix aloldalakon és új /oldal/[slug] oldalakon jelenik meg (Hero alatt). A Program oldal szabad szövegét a „Program – szabad szöveg” mezők adják — ez a mező ott nem használatos.",
+        "Kiemelt szöveges blokk az oldal tetején (pl. szállási információk). Csak a szallas és terkep slug-ú dokumentumoknál jelenik meg. Ha üres, a blokk nem renderelődik.",
+      hidden: ({ document }) => {
+        const s = slugCurrent(document);
+        return s !== SLUG_SZALLAS && s !== SLUG_TERKEP;
+      },
+    }),
+    defineField({
+      name: "introNoteRichEn",
+      title: "Kiemelt megjegyzés – EN",
+      ...richText,
+      hidden: ({ document }) => {
+        const s = slugCurrent(document);
+        return s !== SLUG_SZALLAS && s !== SLUG_TERKEP;
+      },
+    }),
+    defineField({
+      name: "pageBodyRichHu",
+      title: "Oldal tartalom – HU",
+      ...richText,
+      description:
+        "Fix aloldalakon és új /oldal/[slug] oldalakon jelenik meg (Hero alatt). A Program oldal szabad szövegét a „Program – szabad szöveg” mezők adják — ez a mező ott nem használatos. Támogatja: félkövér, dőlt, link, h2, h3, lista, blockquote.",
       hidden: ({ document }) => {
         const s = slugCurrent(document);
         return s === SLUG_HOME || s === SLUG_PROGRAM || s === SLUG_LINEUP;
       },
     }),
     defineField({
-      name: "pageBodyEn",
+      name: "pageBodyRichEn",
       title: "Oldal tartalom – EN",
-      type: "text",
-      rows: 14,
+      ...richText,
       hidden: ({ document }) => {
         const s = slugCurrent(document);
         return s === SLUG_HOME || s === SLUG_PROGRAM || s === SLUG_LINEUP;
@@ -140,19 +159,17 @@ export const pageType = defineType({
       initialValue: "structured",
     }),
     defineField({
-      name: "programBodyHu",
+      name: "programBodyRichHu",
       title: "Program – szabad szöveg (HU)",
-      type: "text",
-      rows: 14,
+      ...richText,
       description:
-        "Csak „program” slug esetén. Akkor látszik az oldalon, ha a megjelenítési mód „Szabad szöveg” vagy „Mindkettő”.",
+        "Csak „program” slug esetén. Akkor látszik az oldalon, ha a megjelenítési mód „Szabad szöveg” vagy „Mindkettő”. Támogatja: félkövér, dőlt, link, h2, h3, lista, blockquote.",
       hidden: ({ document }) => slugCurrent(document) !== SLUG_PROGRAM,
     }),
     defineField({
-      name: "programBodyEn",
+      name: "programBodyRichEn",
       title: "Program – szabad szöveg (EN)",
-      type: "text",
-      rows: 14,
+      ...richText,
       hidden: ({ document }) => slugCurrent(document) !== SLUG_PROGRAM,
     }),
     /* ── Második szöveg doboz (Futás / Tábor oldalhoz) ─────────────────── */
@@ -169,10 +186,9 @@ export const pageType = defineType({
       },
     }),
     defineField({
-      name: "pageBody2Hu",
+      name: "pageBody2RichHu",
       title: "Második szöveg doboz – HU",
-      type: "text",
-      rows: 14,
+      ...richText,
       description:
         "Tábor: csak ha a kapcsoló be van kapcsolva, cseréli le az alap leírást. Futás: ha ki van töltve, mindig ez a hosszú szöveg jelenik meg a kártyák feletti rész után (kapcsoló nem szükséges).",
       hidden: ({ document }) => {
@@ -181,10 +197,9 @@ export const pageType = defineType({
       },
     }),
     defineField({
-      name: "pageBody2En",
+      name: "pageBody2RichEn",
       title: "Második szöveg doboz – EN",
-      type: "text",
-      rows: 14,
+      ...richText,
       hidden: ({ document }) => {
         const s = slugCurrent(document);
         return s !== SLUG_FUTAS && s !== SLUG_TABOR;
@@ -237,16 +252,30 @@ export const pageType = defineType({
             }),
             defineField({ name: "titleEn", title: "Kártya címe (EN)", type: "string" }),
             defineField({
-              name: "bulletsHu",
-              title: "Lista (HU) — soronként egy pont",
-              type: "text",
-              rows: 10,
+              name: "displayMode",
+              title: "Megjelenítés módja",
+              type: "string",
+              initialValue: "list",
+              options: {
+                list: [
+                  { title: "Felsorolás (bullets)", value: "list" },
+                  { title: "Bekezdések (no bullets)", value: "paragraphs" },
+                ],
+              },
+              description:
+                "List = narancs golyócskák (pl. tanárok). Paragraphs = sorkizárt szöveg bekezdések (pl. részvételi díj, program leírás).",
             }),
             defineField({
-              name: "bulletsEn",
-              title: "Lista (EN) — soronként egy pont",
-              type: "text",
-              rows: 10,
+              name: "bulletsRichHu",
+              title: "Tartalom (HU)",
+              ...richText,
+              description:
+                "List módban: minden bekezdés egy golyócska. Paragraphs módban: bekezdések. Bullet list-et a Rich Text editor toolbar-on találod.",
+            }),
+            defineField({
+              name: "bulletsRichEn",
+              title: "Tartalom (EN)",
+              ...richText,
             }),
           ],
           preview: {
@@ -315,17 +344,15 @@ export const pageType = defineType({
       hidden: ({ document }) => slugCurrent(document) !== SLUG_FUTAS,
     }),
     defineField({
-      name: "runningFreeEntryBannerHu",
+      name: "runningFreeEntryBannerRichHu",
       title: "Futás — narancs szalag szöveg (HU)",
-      type: "text",
-      rows: 3,
+      ...richText,
       hidden: ({ document }) => slugCurrent(document) !== SLUG_FUTAS,
     }),
     defineField({
-      name: "runningFreeEntryBannerEn",
+      name: "runningFreeEntryBannerRichEn",
       title: "Futás — narancs szalag szöveg (EN)",
-      type: "text",
-      rows: 3,
+      ...richText,
       hidden: ({ document }) => slugCurrent(document) !== SLUG_FUTAS,
     }),
     defineField({
@@ -348,17 +375,15 @@ export const pageType = defineType({
       hidden: ({ document }) => slugCurrent(document) !== SLUG_FUTAS,
     }),
     defineField({
-      name: "runningCardLocationHu",
-      title: "Futás — kártya „Helyszín” (HU)",
-      type: "text",
-      rows: 2,
+      name: "runningCardLocationRichHu",
+      title: "Futás — kártya \"Helyszín\" (HU)",
+      ...richText,
       hidden: ({ document }) => slugCurrent(document) !== SLUG_FUTAS,
     }),
     defineField({
-      name: "runningCardLocationEn",
-      title: "Futás — kártya „Helyszín” (EN)",
-      type: "text",
-      rows: 2,
+      name: "runningCardLocationRichEn",
+      title: "Futás — kártya \"Helyszín\" (EN)",
+      ...richText,
       hidden: ({ document }) => slugCurrent(document) !== SLUG_FUTAS,
     }),
     defineField({
@@ -408,31 +433,27 @@ export const pageType = defineType({
       ],
     }),
     defineField({
-      name: "runningEntryDeadlineHu",
+      name: "runningEntryDeadlineRichHu",
       title: "Futás — nevezési határidő szöveg (HU)",
-      type: "text",
-      rows: 3,
+      ...richText,
       hidden: ({ document }) => slugCurrent(document) !== SLUG_FUTAS,
     }),
     defineField({
-      name: "runningEntryDeadlineEn",
+      name: "runningEntryDeadlineRichEn",
       title: "Futás — nevezési határidő szöveg (EN)",
-      type: "text",
-      rows: 3,
+      ...richText,
       hidden: ({ document }) => slugCurrent(document) !== SLUG_FUTAS,
     }),
     defineField({
-      name: "runningResultsNoteHu",
+      name: "runningResultsNoteRichHu",
       title: "Futás — eredményhirdetés / díjak szöveg (HU)",
-      type: "text",
-      rows: 5,
+      ...richText,
       hidden: ({ document }) => slugCurrent(document) !== SLUG_FUTAS,
     }),
     defineField({
-      name: "runningResultsNoteEn",
+      name: "runningResultsNoteRichEn",
       title: "Futás — eredményhirdetés / díjak szöveg (EN)",
-      type: "text",
-      rows: 5,
+      ...richText,
       hidden: ({ document }) => slugCurrent(document) !== SLUG_FUTAS,
     }),
     /* ── CTA gombok (Futás / Tábor oldalhoz ajánlott) ─────────────────── */
@@ -515,21 +536,6 @@ export const pageType = defineType({
       },
     }),
     /* ─────────────────────────────────────────────────────────────────── */
-    defineField({
-      name: "bodyHu",
-      title: "Body (HU) – LEGACY",
-      type: "array",
-      of: [{ type: "block" }],
-      description: "Régi Portable Text mező. Helyette a `pageBodyHu`-t használjuk.",
-      hidden: true,
-    }),
-    defineField({
-      name: "bodyEn",
-      title: "Body (EN) – LEGACY",
-      type: "array",
-      of: [{ type: "block" }],
-      hidden: true,
-    }),
     defineField({
       name: "seo",
       title: "SEO beállítások",

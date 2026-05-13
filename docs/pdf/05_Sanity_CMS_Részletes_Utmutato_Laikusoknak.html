@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sanity CMS – Részletes Szerkesztői Útmutató</title>
+  <style>
+    /* ============================================================
+       bzalan.hu — Document Design System v2.0
+       Screen + A4 PDF | Premium professional documents
+       ============================================================ */
+
+    @page { size: A4; margin: 16mm 16mm 18mm 16mm; }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 13px; line-height: 1.7; color: #1e293b;
+      background: #fff; max-width: 740px; margin: 0 auto; padding: 0 44px 64px;
+    }
+
+    /* ── Masthead ──────────────────────────────────────── */
+    .doc-masthead {
+      height: 3px; background: #0f172a;
+      margin-left: -44px; margin-right: -44px; margin-bottom: 28px;
+    }
+
+    /* ── Document header ───────────────────────────────── */
+    .doc-meta { padding-bottom: 16px; border-bottom: 1.5px solid #0f172a; margin-bottom: 20px; }
+    .doc-meta-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #94a3b8; margin-bottom: 5px; }
+    .doc-meta-title { font-size: 19px; font-weight: 700; color: #0f172a; margin-bottom: 3px; line-height: 1.25; }
+    .doc-meta-sub   { font-size: 12.5px; color: #64748b; }
+
+    /* ── Badges ────────────────────────────────────────── */
+    .badge { display: inline-block; padding: 2px 9px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing: 0.025em; margin-bottom: 16px; }
+    .badge-pre    { background: #dbeafe; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .badge-sanity { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+    .badge-warning { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .badge-danger  { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+    /* ── Typography ────────────────────────────────────── */
+    h2 { font-size: 14px; font-weight: 700; color: #0f172a; margin: 28px 0 10px; padding-bottom: 5px; border-bottom: 1px solid #e2e8f0; letter-spacing: 0.01em; }
+    h3 { font-size: 13px; font-weight: 600; color: #334155; margin: 16px 0 7px; }
+    h4 { font-size: 12px; font-weight: 600; color: #475569; margin: 12px 0 5px; }
+    p  { margin-bottom: 11px; }
+    strong { font-weight: 600; color: #0f172a; }
+    hr { border: none; border-top: 1px solid #e2e8f0; margin: 22px 0; }
+    code { font-family: 'Consolas', 'Monaco', monospace; font-size: 11px; background: #f1f5f9; padding: 2px 5px; border-radius: 3px; color: #dc2626; }
+    .highlight { background: #fef9c3; padding: 1px 3px; border-radius: 2px; }
+
+    /* ── Tables ────────────────────────────────────────── */
+    table { width: 100%; border-collapse: collapse; margin: 13px 0; font-size: 12px; }
+    th { background: #f8fafc; font-weight: 600; text-align: left; padding: 7px 11px; border: 1px solid #e2e8f0; color: #334155; font-size: 11.5px; }
+    td { padding: 7px 11px; border: 1px solid #e2e8f0; vertical-align: top; color: #1e293b; }
+    tr:nth-child(even) td { background: #f8fafc; }
+
+    /* ── Lists ─────────────────────────────────────────── */
+    ul { padding-left: 20px; margin-bottom: 11px; }
+    li { margin-bottom: 4px; line-height: 1.65; }
+    ol { padding-left: 20px; margin-bottom: 11px; }
+    ol li { margin-bottom: 5px; }
+
+    /* ── Callouts ──────────────────────────────────────── */
+    .callout { padding: 11px 15px; border-radius: 5px; margin: 14px 0; border-left: 3px solid; font-size: 13px; line-height: 1.65; }
+    .callout strong { display: block; margin-bottom: 4px; font-weight: 700; }
+    .callout p { margin-bottom: 5px; }
+    .callout p:last-child { margin-bottom: 0; }
+    .callout ul { margin: 5px 0 0; }
+    .callout-warning { background: #fff7ed; border-left-color: #ea580c; color: #7c2d12; }
+    .callout-warning strong { color: #9a3412; }
+    .callout-info    { background: #eff6ff; border-left-color: #2563eb; color: #1e3a5f; }
+    .callout-info    strong { color: #1e40af; }
+    .callout-success { background: #f0fdf4; border-left-color: #16a34a; color: #166534; }
+    .callout-success strong { color: #15803d; }
+    .callout-danger  { background: #fef2f2; border-left-color: #dc2626; color: #991b1b; }
+    .callout-danger  strong { color: #b91c1c; }
+
+    /* ── Editable card grid ────────────────────────────── */
+    .editable-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 13px 0;
+    }
+    .editable-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 5px;
+      padding: 9px 13px;
+      background: #f8fafc;
+    }
+    .editable-card-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+    .editable-card ul { font-size: 12px; color: #475569; margin: 0; }
+    .editable-card li { margin-bottom: 2px; }
+
+    /* ── Checklist ─────────────────────────────────────── */
+    .checklist { list-style: none; padding-left: 0; }
+    .checklist li { padding-left: 24px; position: relative; margin-bottom: 6px; font-size: 13px; }
+    .checklist li::before { content: "☐"; position: absolute; left: 0; color: #94a3b8; font-size: 14px; line-height: 1.35; }
+    .checklist li.done::before { content: "☑"; color: #16a34a; }
+
+    /* ── Steps ─────────────────────────────────────────── */
+    .steps { padding-left: 20px; }
+    .steps li { margin-bottom: 8px; padding-left: 5px; }
+    .steps li::marker { font-weight: 700; color: #0f172a; }
+
+    /* ── Footer ────────────────────────────────────────── */
+    .doc-footer { margin-top: 44px; padding-top: 14px; border-top: 1px solid #e2e8f0; font-size: 11.5px; color: #94a3b8; text-align: center; }
+
+    /* ── Print ─────────────────────────────────────────── */
+    @media print {
+      html, body { width: auto; height: auto; overflow: visible; }
+      body { padding: 0; max-width: none; margin: 0; font-size: 12px; color: #000; line-height: 1.55; }
+      h2 { font-size: 13px; margin-top: 20px; }
+      h3 { font-size: 12px; }
+      .doc-masthead { margin-left: 0; margin-right: 0; margin-bottom: 22px; width: 100%; }
+      .badge, .callout, .editable-card { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .callout, .editable-card, .editable-grid, table { page-break-inside: avoid; break-inside: avoid; }
+      h2, h3 { page-break-after: avoid; break-after: avoid; }
+      p { orphans: 3; widows: 3; }
+      a { color: inherit; text-decoration: none; }
+      a[href]::after { content: none; }
+      .doc-footer { position: static; margin-top: 28px; padding-top: 10px; border-top: 1px solid #e5e7eb; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="doc-masthead"></div>
+
+<div class="doc-meta">
+  <div class="doc-meta-label">Kliensnek küldhető – Részletes útmutató</div>
+  <div class="doc-meta-title">CMS szerkesztői útmutató — Bohém Jazzfőváros / Jazz Capital</div>
+  <div class="doc-meta-sub">Verzió 1.1 · 2026-05-01 · JAZZFŐVÁROS Kft.</div>
+</div>
+
+<span class="badge badge-sanity">Sanity szerkesztői útmutató – lépésről lépésre</span>
+
+<h1>CMS szerkesztői útmutató — Bohém Jazzfőváros / Jazz Capital</h1>
+
+<p class="meta-sub">Verzió 1.1 · 2026-05-01</p>
+
+<h2>Bevezető – Mi ez a Sanity Studio?</h2>
+
+<p>Képzelje el, hogy a weboldal olyan, mint egy újság. A Sanity Studio az az <strong>adminisztrációs felület</strong>, ahol Ön vagy munkatársai szerkeszthetik az újság cikkeit, képeit és egyéb tartalmait – <strong>programozói tudás nélkül</strong>.</p>
+
+<p>Egyszerűen fogalmazva:</p>
+
+<ul>
+  <li>A Sanity Studio egy weboldal, ahogy be kell lépnie (mint a Gmail-be vagy Facebook-ba)</li>
+  <li>Itt van egy bal oldali menü, amiben különböző "tartalomtípusok" vannak (pl. Fellépők, Jegyek, Szponzorok)</li>
+  <li>Minden tartalomtípuson belül vannak űrlapok, ahol szövegeket, képeket, linkeket szerkeszthet</li>
+  <li>Amikor a "Publish" (Közzététel) gombra kattint, a módosítás azonnal megjelenik a weboldalon</li>
+</ul>
+
+<h3>Fontos megértés</h3>
+
+<p>A Sanity Studio <strong>nem</strong> egy vizuális „drag-and-drop" weboldalépítő, mint a Wix vagy a Squarespace. Nem tudja például a menük helyét változtatni, vagy a színeket átírni. Ez egy <strong>tartalomkezelő</strong> (Content Management System), ami a weboldal szöveges és képi tartalmát kezeli, de a design-t és a működést nem.</p>
+
+<h3>További korlátok, amit érdemes előre tudni</h3>
+
+<ul>
+  <li><strong>Nem teljes grafikus szerkesztő</strong> minden vizuális elemhez – csak azokhoz a tartalmakhoz és mezőkhöz, amelyeket a fejlesztés során szándékosan CMS-hez kötöttünk.</li>
+  <li><strong>Nem tesz szerkeszthetővé mindent:</strong> nem minden oldal elrendezés, komponens, animáció, útvonal (route), design-elem és fejlesztői beállítás kerül a Studio-ba. A Sanity <strong>nem váltja ki automatikusan</strong> a fejlesztői munkát: új megjelenés, új blokk vagy új viselkedés továbbra is fejlesztést igényel.</li>
+  <li><strong>Teljes vizuális oldalszerkesztés</strong> (minden blokk szabad elhelyezése, teljes „építőkockás" oldalterv a böngészőben) más architektúrát és <strong>a projekt elejétől kezdve lényegesen nagyobb hatókört és költségvetést</strong> igényelne, mint ami ennél a weboldalnál cél volt.</li>
+  <li><strong>Nem minden szöveg és elem lesz szerkeszthető</strong> – csak azok, amelyekhez külön mező vagy dokumentum tartozik a sémában. A fix szövegek, gombok feliratai vagy rejtett részletek sokszor a kódban maradnak.</li>
+</ul>
+
+<h2>Hogyan lépjen be a Sanity Studio-ba?</h2>
+
+<ol>
+  <li>Nyissa meg a böngészőjében: <strong>https://bohemjazz.netlify.app/studio</strong></li>
+  <li>Válasszon ki egy bejelentkezési módot (Google, GitHub vagy e-mail)</li>
+  <li>Első belépéskor a meghívott e-mail címet használja (amit külön egyeztettünk)</li>
+  <li>A sikeres belépés után a bal oldalon látja a menüt a szerkeszthető tartalomtípusokkal</li>
+</ol>
+
+<h2>Gyors összefoglaló</h2>
+
+<ul>
+  <li><strong>Publish kötelező:</strong> csak a Publish után jelenik meg a tartalom a weboldalon</li>
+  <li><strong>Aktív dokumentum:</strong> ha egy dokumentum <code>isActive: false</code>, a Studio-ban látható, de a weboldalon nem</li>
+  <li><strong>HU/EN párok:</strong> minden szöveges mező van magyar és angol változatban — mindkettőt töltsd ki</li>
+  <li><strong>Fallback:</strong> ha a Studio-ban egy mező üres, a honlap gyakran egy kódbeli alapszöveget mutat</li>
+  <li><strong>Gyors megnyitás:</strong> Studio → bal oldali menü → tartalomtípus → dokumentum</li>
+</ul>
+
+<h2>Studio felépítése</h2>
+
+<p>A Studio bal oldali menüjében a következő tartalomtípusok vannak:</p>
+
+<ul>
+  <li>🏠 Site settings</li>
+  <li>🔔 Popup settings</li>
+  <li>📍 Venue</li>
+  <li>🎟️ Tickets</li>
+  <li>🎫 Sponsor categories</li>
+  <li>🤝 Sponsors</li>
+  <li>🎷 Performers</li>
+  <li>🏷️ Performer tags</li>
+  <li>🎭 Stages</li>
+  <li>📅 Program items</li>
+  <li>📄 Pages</li>
+  <li>🧭 Navigation</li>
+  <li>🏨 Accommodation</li>
+  <li>🚗 Transport</li>
+</ul>
+
+<h2>A bal oldali menü – Mit jelent minden?</h2>
+
+<p>A bal oldali menüben a következő tartalomtípusokat látja. Minden tartalomtípus egy "doboz", amiben különböző mezők vannak. Például a "Fellépők" dobozban van név, kép, leírás, stb.</p>
+
+<h2>3. Oldalak (Pages)</h2>
+
+<p><strong>Hol:</strong> Bal menü → 📄 <strong>Oldalak (Pages)</strong> (vagy a fenti ⚡ gyors linkek).</p>
+
+<p>A 10 fix oldal mindegyikéhez tartozik egy Page dokumentum (slug: <code>home</code>, <code>info</code>, <code>lineup</code>, <code>program</code>, <code>contact</code>, <code>szallas</code>, <code>terkep</code>, <code>futas</code>, <code>tabor</code>, <code>aszf</code>).</p>
+
+<h3>3.1 Slug-hoz igazodó mezők</h3>
+
+<p>A Studio <strong>nem minden oldalon mutatja az összes mezőt</strong>. A <strong>Slug</strong> értékétől függ, mely blokkok látszanak (pl. program-mód csak <code>program</code> esetén; tábor-program blokkok csak <code>tabor</code> esetén).</p>
+
+<p>Ha egy várt mező hiányzik: ellenőrizd, hogy a dokumentum <strong>Slug</strong> mezője pontosan a kívánt érték (<code>tabor</code>, <code>futas</code>, stb.).</p>
+
+<div class="callout callout-info">
+  <strong>💡 „A honlap tele van, a Studio meg üres”</strong> — gyakran <strong>nem hiba:</strong> listák és táblázatok esetén az <strong>üres Sanity</strong> azt jelenti, hogy az oldal a <strong>kódbeli alapszöveget</strong> mutatja. Ugyanaz a tartalom a Studioban akkor jelenik meg, ha kitöltöd és <strong>Publish</strong>-olsz, vagy lefut az inicializáló import (lásd §12).</div>
+
+<h3>3.2 Közös mezők</h3>
+
+<table>
+  <thead><tr><th style="width:35%">Mező</th><th>Hatás</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Cím (HU/EN)</strong></td><td>Belső lista + admin; a <strong>Program</strong> oldal nagy fejléce a <strong>Cím (HU/EN)</strong> mezőből jön (nem a „Hero cím” mezőből).</td></tr>
+    <tr><td><strong>Slug (URL)</strong></td><td>A 10 fix oldalon <strong>ne változtasd</strong> — eltörhetnek a linkek.</td></tr>
+    <tr><td><strong>Hero cím (HU/EN)</strong></td><td>Nagy cím (kivéve: <code>home</code>, <code>program</code>, <code>lineup</code> — ott más szabály vonatkozik a látható címre).</td></tr>
+    <tr><td><strong>Hero leírás (HU/EN)</strong></td><td>Alcím / bevezető (kivéve: <code>home</code>, <code>lineup</code>).</td></tr>
+    <tr><td><strong>Oldal tartalom – HU/EN</strong></td><td>Hero alatti első szabad szöveg (kivéve: <code>home</code>, <code>program</code>, <code>lineup</code>). Üres = ez a blokk nem jelenik meg.</td></tr>
+    <tr><td><strong>SEO beállítások</strong></td><td>Meta cím, leírás, OG kép.</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Program</strong> oldal további mezői (csak <code>program</code> slug mellett): <strong>Program megjelenítési mód</strong>, <strong>Program – szabad szöveg (HU/EN)</strong> — lásd §6 Program.</p>
+
+<div class="callout callout-info">
+  <strong>💡 Tipp:</strong> Üres sor új bekezdést jelez. A <code>https://…</code> URL-ek a honlapon kattinthatóvá válnak.
+</div>
+
+<h3>3.3 Jazztábor (<code>tabor</code>)</h3>
+
+<p>Csak <strong>slug = <code>tabor</code></strong> mellett látszanak ezek a mezők. Kitöltés → tartalom <strong>Sanity-ből</strong>; üres lista / üres mező → <strong>fallback</strong> a kódbeli magyar/angol szövegre.</p>
+
+<table>
+  <thead><tr><th style="width:35%">Mezőcsoport</th><th>Mit állítasz?</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Tábor — szürke sor felett (HU/EN)</strong></td><td>„Eyebrow" a legtetején (pl. <em>Swing · Lindy Hop …</em>). Üres = alapértelmezés.</td></tr>
+    <tr><td><strong>Tábor — szekció főcím (HU/EN)</strong></td><td>Cím a programkártyák fölött (pl. <em>Tanárok és program (2026)</em>). Üres = kódbeli cím.</td></tr>
+    <tr><td><strong>Tábor — program blokkok (kártyák)</strong></td><td>Minden elem egy kártya: <strong>cím</strong> + <strong>lista</strong> (HU és EN: soronként egy pont, Enter). Tanárok, díjak, napi menetrend, záró nap stb. <strong>Üres tömb</strong> = statikus menetrend marad.</td></tr>
+    <tr><td><strong>Tábor — támogatók blokk címe (HU/EN)</strong></td><td>Kis cím a támogatók felett. Üres = „Támogatók" / „Supporters".</td></tr>
+    <tr><td><strong>Tábor — támogatók (linkek)</strong></td><td>Név + URL. Legalább egy elem → <strong>felülírja</strong> a statikus listát. Üres → statikus lista.</td></tr>
+    <tr><td><strong>Második szöveg doboz megjelenítése</strong> + <strong>Második szöveg – HU/EN</strong></td><td>Videó alatti hosszú szöveg: csak akkor írja felül a kódbeli tábor-leírást, ha a kapcsoló <strong>BE</strong> van kapcsolva <strong>és</strong> van szöveg a második dobozban.</td></tr>
+    <tr><td><strong>Elsődleges / másodlagos gomb</strong></td><td>Narancs CTA + opcionális második gomb (HU/EN felirat és URL). Üres → statikus jelentkezési link.</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Megjelenési sorrend a <code>/tabor/</code> oldalon:</strong> Hero → opcionális <strong>Oldal tartalom</strong> → videó → <strong>második doboz</strong> vagy <strong>statikus leírás</strong> → <strong>Jelentkezés</strong> gomb → programkártyák → támogatók.</p>
+
+<h3>3.4 Futás (<code>futas</code>)</h3>
+
+<p>Csak <strong>slug = <code>futas</code></strong> mellett látszanak. <strong>Fallback</strong> szabály ugyanúgy érvényes.</p>
+
+<table>
+  <thead><tr><th style="width:35%">Mezőcsoport</th><th>Mit állítasz?</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Futás — eyebrow (HU/EN)</strong></td><td>Fejléc feletti sor (pl. dátum · idő). Üres = statikus.</td></tr>
+    <tr><td><strong>Futás — narancs szalag (HU/EN)</strong></td><td>Ingyenes belépő kiemelés. Üres = statikus.</td></tr>
+    <tr><td><strong>Futás — kártyák (Dátum / Időpont / Helyszín)</strong></td><td>Három infókártya; az idő egy közös mező (nyelvfüggetlen). Üres = statikus.</td></tr>
+    <tr><td><strong>Futás — táblázat fejléc (HU/EN)</strong></td><td>A távok táblázat címe. Üres = „Távok & Díjak" / „Distances & fees".</td></tr>
+    <tr><td><strong>Futás — távok sorai</strong></td><td>Soronként kategória, táv, díj (HU + EN). Van sor → <strong>felülírja</strong> a statikus táblázatot.</td></tr>
+    <tr><td><strong>Futás — nevezési határidő / eredmény szöveg</strong></td><td>Alsó szövegdobozok. Üres = statikus.</td></tr>
+    <tr><td><strong>Második szöveg doboz – HU/EN</strong></td><td>Hosszú futás-leírás. <strong>Ha ki van töltve</strong>, megjelenik (<strong>nem</strong> szükséges hozzá a „második doboz megjelenítése" kapcsoló — az elsősorban a táborhoz tartozik). Üres = statikus <code>running.description</code>.</td></tr>
+    <tr><td><strong>Elsődleges / másodlagos gomb</strong></td><td>Nevezés + opcionális második link.</td></tr>
+  </tbody>
+</table>
+
+<h3>3.5 Példa: Jazztábor</h3>
+
+<ol class="steps">
+  <li>Nyisd meg a <strong>slug: tabor</strong> dokumentumot (<strong>⚡ Jazztábor — Page</strong> vagy Pages lista).</li>
+  <li><strong>Hero cím / Hero leírás</strong> — nagy cím és alcím.</li>
+  <li><strong>Oldal tartalom</strong> — opcionális szöveg a videó <strong>felett</strong>.</li>
+  <li><strong>Tábor — program blokkok</strong> — blokk = kártya; listák Enterrel soronként.</li>
+  <li><strong>Tábor — támogatók</strong> — név és link.</li>
+  <li><strong>Második szöveg doboz</strong> — kapcsoló BE + szöveg, ha a videó alatti leírást innen adnád.</li>
+  <li><strong>Publish</strong>.</li>
+</ol>
+
+<h3>3.6 Példa: Futás</h3>
+
+<ol class="steps">
+  <li>Nyisd meg a <strong>slug: futas</strong> dokumentumot (<strong>⚡ Futás — Page</strong>).</li>
+  <li><strong>Hero</strong>, szükség szerint <strong>Oldal tartalom</strong> (rövid bevezető).</li>
+  <li><strong>Narancs szalag</strong>, <strong>kártyák</strong>, <strong>távok sorai</strong>, <strong>határidő</strong>, <strong>eredmény</strong> szövegek — igény szerint.</li>
+  <li><strong>Második szöveg doboz</strong> — hosszú leírás (nevezés, díjak, póló stb.).</li>
+  <li><strong>Publish</strong>.</li>
+</ol>
+
+<h2>4. Új információs oldal</h2>
+
+<p><strong>Hol:</strong> 📄 <strong>Oldalak (Pages)</strong> → <strong>Create</strong>.</p>
+
+<ol class="steps">
+  <li><strong>Cím (HU)</strong> — pl. „Sajtószoba"</li>
+  <li><strong>Slug</strong> — kisbetű, kötőjel: pl. <code>sajto</code></li>
+  <li><strong>Hero cím / leírás</strong></li>
+  <li><strong>Oldal tartalom (HU/EN)</strong></li>
+  <li><strong>Aktív</strong> bekapcsolva</li>
+  <li><strong>Publish</strong></li>
+</ol>
+
+<p>Az új oldal útvonala: <strong><code>/oldal/&lt;slug&gt;/</code></strong> (pl. <code>/oldal/sajto/</code>), illetve angol nézetben az oldal nyelvi útvonal-prefixével.</p>
+
+<h3>Menübe tétel</h3>
+
+<p>Lásd §5 Menü.</p>
+
+<div class="callout callout-info">
+  <strong>💡 Fontos:</strong> A 10 fix slug <strong>saját React oldalt</strong> kap. Az új slugok az <strong>egyszerű</strong> <code>/oldal/[slug]</code> sablont használják (Hero + szöveg). Összetettebb dobozok / táblázat ehhez a sablonhoz csak fejlesztéssel bővíthető.
+</div>
+
+<h3>🏠 Site settings – Alapbeállítások</h3>
+
+<p>Ez a weboldal globális beállításai. <strong>EGY példány</strong> van belőle, tehát csak egyet kell szerkeszteni. Itt vannak azok az információk, amelyek az egész weboldalra vonatkoznak:</p>
+
+<table>
+  <thead><tr><th style="width:35%">Mező neve</th><th>Mire való és hogyan szerkessze</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Site cím (HU/EN)</strong></td><td>A weboldal címe. Ez jelenik meg a böngésző fülön és a keresőkben. Pl. "Bohém Jazzfőváros"</td></tr>
+    <tr><td><strong>Site leírás (HU/EN)</strong></td><td>Rövid leírás a fesztiválról (2-3 mondat). Ez jelenik meg a keresőkben, amikor valaki rákeres a weboldalra.</td></tr>
+    <tr><td><strong>Fesztivál kezdete / vége</strong></td><td>Dátum mezők. Kattintson a mezőre, és a naptárból válassza ki a dátumot. Pl. 2026-07-15</td></tr>
+    <tr><td><strong>Helyszín neve (HU/EN)</strong></td><td>A fesztivál helyszínének neve. Pl. "Domb Beach, Kecskemét"</td></tr>
+    <tr><td><strong>Jegyvásárlás link (HU/EN)</strong></td><td>A jegyvásárlási oldal URL-je. Másolja be a teljes linket, pl. https://jegy.hu/bohem-jazz</td></tr>
+    <tr><td><strong>Facebook / Instagram / YouTube URL</strong></td><td>A közösségi média oldalak linkjei. Másolja be a teljes URL-t, pl. https://facebook.com/bohemjazz</td></tr>
+    <tr><td><strong>Kapcsolat e-mail</strong></td><td>A kapcsolati e-mail cím. Pl. info@bohemjazzfovaros.hu</td></tr>
+    <tr><td><strong>Kapcsolat telefon</strong></td><td>A kapcsolati telefonszám. Pl. +36 76 123 456</td></tr>
+    <tr><td><strong>Házirend PDF útvonal</strong></td><td>A házirend fájl URL-je. Pl. /docs/hazirend.pdf. Ez a fájl a szerveren van, nem a Sanity-ben.</td></tr>
+    <tr><td><strong>Szervező neve / URL</strong></td><td>A szervező cég neve és weboldala. Pl. "JAZZFŐVÁROS Kft."</td></tr>
+    <tr><td><strong>Önkéntes szekció</strong></td><td>Önkéntesekkel kapcsolatos információk (szöveges mezők). Szabadon szerkeszthető.</td></tr>
+    <tr><td><strong>Globális SEO</strong></td><td>Keresőoptimalizálási beállítások (fallback). Ha egy oldalnak nincs saját SEO beállítása, ezt használja a rendszer.</td></tr>
+  </tbody>
+</table>
+
+<h3>🔔 Popup settings – Felugró ablak beállításai</h3>
+
+<p>A főoldalon megjelenő felugró ablak beállításai (pl. Széchenyi Terv támogatási kép). <strong>EGY példány</strong> van belőle.</p>
+
+<table>
+  <thead><tr><th style="width:35%">Mező neve</th><th>Mire való és hogyan szerkessze</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Popup aktív?</strong></td><td>Kapcsoló (true/false). Ha be van kapcsolva, a popup megjelenik a weboldalon. Ha ki van kapcsolva, nem jelenik meg.</td></tr>
+    <tr><td><strong>Popup kép</strong></td><td>Kép feltöltése. Kattintson a "Upload" gombra, és válasszon ki egy képet a számítógépéről. Ez a javasolt mód.</td></tr>
+    <tr><td><strong>Legacy kép útvonal</strong></td><td><span class="highlight">Csak olvasható</span>. Ez a régi rendszerben használt kép útvonal. Ne módosítsa.</td></tr>
+    <tr><td><strong>Alt szöveg (HU/EN)</strong></td><td>A kép alternatív szövege (kép leírása). Ez fontos a látássérülteknek és a keresőknek.</td></tr>
+    <tr><td><strong>Session storage kulcs</strong></td><td><span class="highlight">Csak olvasható</span>. Technikai mező. Ne módosítsa.</td></tr>
+    <tr><td><strong>Csak a Főoldalon jelenjen meg?</strong></td><td>Kapcsoló. Ha be van kapcsolva, a popup csak a főoldalon jelenik meg. Ha ki van kapcsolva, minden oldalon megjelenik.</td></tr>
+  </tbody>
+</table>
+
+<h3>📍 Venue – Helyszín</h3>
+
+<p>A fesztivál helyszínének adatai (Domb Beach). <strong>EGY példány</strong> van belőle.</p>
+
+<table>
+  <thead><tr><th style="width:35%">Mező neve</th><th>Mire való és hogyan szerkessze</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Helyszín neve (HU/EN)</strong></td><td>A helyszín neve. Pl. "Domb Beach"</td></tr>
+    <tr><td><strong>Cím (HU/EN)</strong></td><td>A helyszín címe. Pl. "6000 Kecskemét, Domb utca 1."</td></tr>
+    <tr><td><strong>Google Maps embed URL</strong></td><td>A térkép beágyazási URL-je. Ezt a Google Maps-ből kell kimásolni (a "Share" → "Embed a map" funkcióból).</td></tr>
+    <tr><td><strong>Google Maps link</strong></td><td>A Google Maps teljes URL-je, amire rá lehet kattintani. Pl. https://maps.google.com/...</td></tr>
+    <tr><td><strong>Szélesség (lat) / Hosszúság (lon)</strong></td><td>GPS koordináták. Ezeket a Google Maps-ből lehet kimásolni (kattintson jobb gombbal a helyszínre → "Még több" → "Koordináták").</td></tr>
+    <tr><td><strong>Leírás (HU/EN)</strong></td><td>Rövid leírás a helyszínről.</td></tr>
+  </tbody>
+</table>
+
+<h3>🎟️ Tickets – Jegyek</h3>
+
+<p>A jegykategóriák listája. Minden jegy egy külön dokumentum. Több jegy is lehet (pl. Early Bird, Normál, VIP).</p>
+
+<table>
+  <thead><tr><th style="width:35%">Mező neve</th><th>Mire való és hogyan szerkessze</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Név (HU/EN)</strong></td><td>A jegy neve. Pl. "Early Bird jegy" / "Early Bird ticket"</td></tr>
+    <tr><td><strong>Leírás (HU/EN)</strong></td><td>A jegy leírása. Szabadon szerkeszthető szöveges mező.</td></tr>
+    <tr><td><strong>Ár (szöveg)</strong></td><td>A jegy ára szöveges formában. Pl. "19 900 Ft" vagy "24 900 HUF". Ne használjon számot, hanem szöveget.</td></tr>
+    <tr><td><strong>Pénznem</strong></td><td>A pénznem kódja. Alapértelmezett: "HUF". Ne módosítsa, ha nem biztos benne.</td></tr>
+    <tr><td><strong>Jegy link (HU/EN)</strong></td><td>A jegyvásárlási oldal URL-je. Minden jegytípushoz más link lehet.</td></tr>
+    <tr><td><strong>Kiemelő badge (HU/EN)</strong></td><td>Opcionális kiemelő szöveg. Pl. "HOT", "Korlátozott", "Last chance". Ha üresen hagyja, nem jelenik meg kiemelés.</td></tr>
+    <tr><td><strong>Elérhető (isAvailable)</strong></td><td>Kapcsoló. Ha be van kapcsolva, a jegy vásárolható. Ha ki van kapcsolva, a "Elfogyott" felirat jelenik meg.</td></tr>
+    <tr><td><strong>Elrejtve (isHidden)</strong></td><td>Kapcsoló. Ha be van kapcsolva, a jegy nem jelenik meg az oldalon (pl. ha lejárt az Early Bird).</td></tr>
+    <tr><td><strong>Sorrend (order)</strong></td><td>Szám. A kisebb szám = előrébb jelenik meg a listában. Pl. 0, 1, 2, 3...</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-info">
+  <strong>💡 Tipp:</strong> Ha egy jegy elfogyott, kapcsolja ki az "Elérhető" kapcsolót, de ne törölje a jegyet. Így a látogatók látni fogják, hogy volt ilyen jegy, de már elfogyott.
+</div>
+
+<h3>🎫 Sponsor categories – Támogatói kategóriák</h3>
+
+<p>A szponzorok kategóriái. Ezek határozzák meg, hogy a szponzor hol jelenik meg (Főtámogatók, Szponzorok, Partnerek).</p>
+
+<table>
+  <thead><tr><th style="width:35%">Mező neve</th><th>Mire való és hogyan szerkessze</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Cím (HU/EN)</strong></td><td>A kategória neve. Pl. "Főtámogatók" / "Main Supporters"</td></tr>
+    <tr><td><strong>Sorrend (order)</strong></td><td>Szám. A kisebb szám = előrébb jelenik meg a listában.</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-warning">
+  <strong>⚠️ Fontos:</strong> Minden szponzornak <strong>kell</strong> kategória, különben nem jelenik meg az oldalon. Ha töröl egy kategóriát, minden hozzá tartozó szponzor eltűnik.
+</div>
+
+<h3>🤝 Sponsors – Támogatók / Szponzorok / Partnerek</h3>
+
+<p>A szponzorok listája. Minden szponzor egy külön dokumentum.</p>
+
+<table>
+  <thead><tr><th style="width:35%">Mező neve</th><th>Mire való és hogyan szerkessze</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Név</strong></td><td>A szponzor neve. Pl. "OTP Bank"</td></tr>
+    <tr><td><strong>Logó</strong></td><td>A szponzor logója. Kattintson a "Upload" gombra, és válasszon ki egy képet. Ez a javasolt mód.</td></tr>
+    <tr><td><strong>Legacy logó útvonal</strong></td><td><span class="highlight">Csak olvasható</span>. Ez a régi rendszerben használt logó útvonal. Ne módosítsa.</td></tr>
+    <tr><td><strong>Weboldal URL</strong></td><td>A szponzor weboldalának URL-je. Pl. https://otp.hu</td></tr>
+    <tr><td><strong>Kategória</strong></td><td><strong>Kötelező mező!</strong> Válasszon ki egy kategóriát a Sponsor categories listából. Ha nem választ kategóriát, a szponzor nem jelenik meg.</td></tr>
+    <tr><td><strong>Sorrend (order)</strong></td><td>Szám. A kategórián belüli sorrend. Kisebb szám = előrébb.</td></tr>
+    <tr><td><strong>Aktív (isActive)</strong></td><td>Kapcsoló. Ha be van kapcsolva, a szponzor megjelenik. Ha ki van kapcsolva, nem jelenik meg.</td></tr>
+  </tbody>
+</table>
+
+<h3>🎷 Performers – Fellépők</h3>
+
+<p>A fellépők listája. Minden fellépő egy külön dokumentum.</p>
+
+<table>
+  <thead><tr><th style="width:35%">Mező neve</th><th>Mire való és hogyan szerkessze</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Név</strong></td><td>A fellépő neve. Pl. "Bohém Ragtime Jazz Band"</td></tr>
+    <tr><td><strong>Slug</strong></td><td><span class="highlight">Automatikusan generálódik</span> a névből. Ez a weboldali URL. Ne módosítsa, ha nem biztos benne.</td></tr>
+    <tr><td><strong>Fellépő képe</strong></td><td>A fellépő fotója. Kattintson a "Upload" gombra. Ez a javasolt mód.</td></tr>
+    <tr><td><strong>Legacy képútvonal</strong></td><td><span class="highlight">Csak olvasható</span>. Ez a régi rendszerben használt kép útvonal. Ne módosítsa.</td></tr>
+    <tr><td><strong>Rövid leírás (HU/EN)</strong></td><td>Rövid mondat a fellépőről (2-3 sor). Ez jelenik meg a fellépő kártyán. <span class="highlight">NEM műfaj-címke!</span></td></tr>
+    <tr><td><strong>Hosszú leírás (HU/EN)</strong></td><td>Részletes leírás a fellépőről (több bekezdés). Ez jelenik meg a Lineup oldalon, ha a fellépőre rákattintanak.</td></tr>
+    <tr><td><strong>Címkék / műfajok (tags)</strong></td><td>Válasszon ki címkéket a Performer tags listából. Pl. "swing", "blues", "ragtime". Egy fellépőhöz több címke is rendelhető. Ha nem választ címkét, nem jelenik meg műfaj-badge a kártyán.</td></tr>
+    <tr><td><strong>Weboldal URL</strong></td><td>A fellépő weboldalának URL-je (ha van).</td></tr>
+    <tr><td><strong>Facebook / Instagram / YouTube / Spotify URL</strong></td><td>A fellépő közösségi média oldalainak URL-jei (ha vannak).</td></tr>
+    <tr><td><strong>Sorrend (order)</strong></td><td>Szám. A kisebb szám = előrébb a lineupban. Pl. 0, 1, 2, 3...</td></tr>
+    <tr><td><strong>Kiemelt (isFeatured)</strong></td><td>Kapcsoló. Ha be van kapcsolva, a fellépő kiemelt helyen szerepel (pl. a főoldalon).</td></tr>
+    <tr><td><strong>Aktív (isActive)</strong></td><td>Kapcsoló. Ha be van kapcsolva, a fellépő megjelenik. Ha ki van kapcsolva, nem jelenik meg.</td></tr>
+    <tr><td><strong>SEO</strong></td><td>Keresőoptimalizálási beállítások (cím, leírás, OG kép).</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-info">
+  <strong>💡 Tipp:</strong> A "Rövid leírás" nem műfaj-címke! A műfajokat a "Címkék / műfajok" mezőben kell megadni. A rövid leírás egy normál mondat, pl. "A legismertebb magyar ragtime együttes."
+</div>
+
+<h3>🏷️ Performer tags – Fellépő címkék / műfajok</h3>
+
+<p>A fellépőkhöz rendelt műfaj-címkék. Ezek jelennek meg a fellépő kártyákon kis badge-ként.</p>
+
+<table>
+  <thead><tr><th style="width:35%">Mező neve</th><th>Mire való és hogyan szerkessze</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Név (HU/EN)</strong></td><td>A címke neve. Pl. "swing" / "swing", "blues" / "blues"</td></tr>
+    <tr><td><strong>Slug</strong></td><td><span class="highlight">Automatikusan generálódik</span> a névből. Ne módosítsa.</td></tr>
+    <tr><td><strong>Sorrend (order)</strong></td><td>Szám. A kisebb szám = előrébb a listában.</td></tr>
+    <tr><td><strong>Aktív (isActive)</strong></td><td>Kapcsoló. Ha be van kapcsolva, a címke használható. Ha ki van kapcsolva, nem jelenik meg.</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-warning">
+  <strong>⚠️ Fontos:</strong> Ha töröl egy címkét, minden hozzá tartozó fellépőről eltűnik a badge. Ha átnevez egy címkét, az minden fellépőnél megváltozik.
+</div>
+
+<h3>🎭 Stages – Színpadok / Helyszínek</h3>
+
+<p>A fesztivál színpadai és helyszínei. Ezeket a program tételeknél lehet választani.</p>
+
+<table>
+  <thead><tr><th style="width:35%">Mező neve</th><th>Mire való és hogyan szerkessze</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Név (HU/EN)</strong></td><td>A színpad neve. Pl. "Nagysátor" / "Main Stage", "Klub" / "Club"</td></tr>
+    <tr><td><strong>Slug</strong></td><td><span class="highlight">Automatikusan generálódik</span> a névből. Ne módosítsa.</td></tr>
+    <tr><td><strong>Leírás (HU/EN)</strong></td><td>Opcionális rövid bemutatkozás a színpadról. Szabadon szerkeszthető.</td></tr>
+    <tr><td><strong>Sorrend (order)</strong></td><td>Szám. A kisebb szám = előrébb a Studio listában.</td></tr>
+    <tr><td><strong>Aktív (isActive)</strong></td><td>Kapcsoló. Ha ki van kapcsolva, a Studio listájában elérhető marad, de új Program tételhez ne válassza ki.</td></tr>
+  </tbody>
+</table>
+
+<h3>📅 Program – Programpontok (Program items)</h3>
+
+<p>A programpontok listája. Minden programpont egy külön dokumentum (időpont + színpad + fellépők).</p>
+
+<table>
+  <thead><tr><th style="width:35%">Mező neve</th><th>Mire való és hogyan szerkessze</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Cím (HU/EN)</strong></td><td>A programpont címe. Pl. "Nyitó koncert". Ha vannak fellépők hozzárendelve, ők jelennek meg a kártyán; a cím ekkor opcionális kísérőszöveg.</td></tr>
+    <tr><td><strong>Leírás (HU/EN)</strong></td><td>A programpont leírása (opcionális).</td></tr>
+    <tr><td><strong>Dátum</strong></td><td><strong>Kötelező mező!</strong> Kattintson a mezőre, és a naptárból válassza ki a dátumot. Pl. 2026-07-15</td></tr>
+    <tr><td><strong>Kezdés (HH:MM)</strong></td><td><strong>Kötelező mező!</strong> A kezdési időpont. Pl. "18:00" vagy "20:30". Pontos formátum: óra:perc.</td></tr>
+    <tr><td><strong>Vége (opcionális)</strong></td><td>A befejezési időpont. Pl. "20:00". Opcionális.</td></tr>
+    <tr><td><strong>Színpad / helyszín — ajánlott (stageRef)</strong></td><td>Válasszon ki egy színpadot a Stages listából. Ez a javasolt mód. A frontend ezt a nevet jeleníti meg.</td></tr>
+    <tr><td><strong>Színpad – legacy szöveg (stage)</strong></td><td><span class="highlight">LEGACY / fallback</span>. Ha a stageRef ki van töltve, ez nem jelenik meg. Ne használja, ha van stageRef.</td></tr>
+    <tr><td><strong>Kategória</strong></td><td>Opcionális szöveges címke. Pl. "workshop", "koncert".</td></tr>
+    <tr><td><strong>Fellépők (performers)</strong></td><td>Válasszon ki fellépőket a Performers listából. Egy programItemhez több fellépő is rendelhető. Egy fellépő több programItemhez is rendelhető (több időpont) – ugyanazt a fellépőt többször is felveheti.</td></tr>
+    <tr><td><strong>Sorrend (order)</strong></td><td>Szám. Programon belüli sorrend (azonos időponton belül).</td></tr>
+    <tr><td><strong>Aktív (isActive)</strong></td><td>Kapcsoló. Ha be van kapcsolva, a programpont megjelenik. Ha ki van kapcsolva, nem jelenik meg.</td></tr>
+    <tr><td><strong>SEO</strong></td><td>Keresőoptimalizálási beállítások.</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-info">
+  <strong>💡 Tipp:</strong> Egy fellépő többször is felléphet (pl. másnap is). Nem kell új fellépőt létrehoznia, csak ugyanazt a fellépőt hozzáadhatja egy másik programItem-hez.
+</div>
+
+<h3>📄 Pages – Oldalak</h3>
+
+<p>A weboldal oldalai. 10 fix oldal van (home, info, lineup, program, contact, szallas, terkep, futas, tabor, aszf), és létrehozhat új információs oldalakat is.</p>
+
+<table>
+  <thead><tr><th style="width:35%">Mező neve</th><th>Mire való és hogyan szerkessze</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Cím (HU/EN)</strong></td><td>A oldal címe. Ez jelenik meg a Studio listájában és a belső adminban.</td></tr>
+    <tr><td><strong>Slug (URL)</strong></td><td><strong>Kötelező mező!</strong> A weboldali URL. FIX OLDALAKNÁL ne módosítsa: home, info, lineup, program, contact, szallas, terkep, futas, tabor, aszf. ÚJ információs oldalnál tetszőleges, kisbetű+kötőjel formátumban (pl. <code>gyik</code>, <code>sajto</code>); az új oldal a /oldal/[slug] URL-en lesz elérhető.</td></tr>
+    <tr><td><strong>Hero cím (HU/EN)</strong></td><td>A oldal tetején nagybetűs címként jelenik meg.</td></tr>
+    <tr><td><strong>Hero leírás (HU/EN)</strong></td><td>Rövid bevezető (1-3 sor) az oldal tetején. SEO leíráshoz fallback-ként is használjuk.</td></tr>
+    <tr><td><strong>Oldal tartalom – HU/EN (pageBody)</strong></td><td>A oldal fő szöveges tartalma. Megjelenik a fix oldalak tetején (a Hero alatt, a kártyás tartalom fölött), illetve teljes oldalként az új /oldal/[slug] útvonalon. Soremelés = új sor; üres sor = új bekezdés. URL-ek automatikusan kattinthatók.</td></tr>
+    <tr><td><strong>Második szöveg doboz megjelenítése</strong></td><td>Kapcsoló (true/false). Ha be van kapcsolva, a második szöveg doboz megjelenik az oldalon (Futás / Tábor oldalakon).</td></tr>
+    <tr><td><strong>Második szöveg doboz – HU/EN</strong></td><td>Második szöveges tartalom (pl. Futás / Tábor oldalakon). Csak akkor jelenik meg, ha a "Második szöveg doboz megjelenítése" be van kapcsolva.</td></tr>
+    <tr><td><strong>Program megjelenítési mód</strong></td><td><span class="highlight">CSAK a "program" slug-ú oldalon érvényes.</span> Eldönti, hogyan jelenjen meg a Program oldal. Három opció: "Adatbázisos programlista" (alapértelmezett), "Szabad szöveges program", "Mindkettő".</td></tr>
+    <tr><td><strong>Program – szabad szöveg (HU/EN)</strong></td><td><span class="highlight">CSAK a "program" slug-ú oldalon.</span> Akkor érvényesül, ha a Program megjelenítési mód "freeText" vagy "both".</td></tr>
+    <tr><td><strong>Elsődleges gomb felirata (HU/EN)</strong></td><td>Főleg Futás / Tábor oldalhoz. A fő, narancs CTA gomb felirata (pl. 'Online nevezés →'). Ha üres, az oldal statikus fallback szöveget használ.</td></tr>
+    <tr><td><strong>Elsődleges gomb URL (HU/EN)</strong></td><td>A fő gomb linkje (HU/EN). Ha kitölti, ez jelenik meg a Futás / Tábor oldal elsődleges CTA gombjánál. Ha üres, az oldal statikus fallback URL-t használ.</td></tr>
+    <tr><td><strong>Másodlagos gomb felirata (HU/EN)</strong></td><td>Opcionális második gomb (pl. 'Nevezési lap letöltése'). Főleg Futás / Tábor oldalhoz.</td></tr>
+    <tr><td><strong>Másodlagos gomb URL (HU/EN)</strong></td><td>A másodlagos gomb linkje (HU/EN). Ha üres, a másodlagos gomb nem jelenik meg.</td></tr>
+    <tr><td><strong>SEO beállítások</strong></td><td>Cím / leírás / OG kép a keresőkhöz és közösségi megosztáshoz.</td></tr>
+    <tr><td><strong>Sorrend (order)</strong></td><td>Szám. Csak a Studio listához. A menü sorrendje a Navigation menüpontból jön.</td></tr>
+    <tr><td><strong>Aktív (isActive)</strong></td><td>Kapcsoló. Ha kikapcsolja: az új információs oldal /oldal/[slug] 404-et ad. A fix oldalak megmaradnak, de a Sanity tartalom nem érvényesül.</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-info">
+  <strong>💡 Slug-hoz igazodó mezők:</strong> A Studio <strong>nem minden oldalon mutatja az összes mezőt</strong>. A <strong>Slug</strong> értékétől függ, mely blokkok látszanak (pl. program-mód csak <code>program</code> esetén; tábor-program blokkok csak <code>tabor</code> esetén). Ha egy várt mező hiányzik: ellenőrizd, hogy a dokumentum <strong>Slug</strong> mezője pontosan a kívánt érték (<code>tabor</code>, <code>futas</code>, stb.).
+</div>
+
+<div class="callout callout-info">
+  <strong>💡 „A honlap tele van, a Studio meg üres"</strong> — gyakran <strong>nem hiba:</strong> listák és táblázatok esetén az <strong>üres Sanity</strong> azt jelenti, hogy az oldal a <strong>kódbeli alapszöveget</strong> mutatja. Ugyanaz a tartalom a Studioban akkor jelenik meg, ha kitöltöd és <strong>Publish</strong>-olsz, vagy lefut az inicializáló import (lásd Seed import szakasz).
+</div>
+
+<div class="callout callout-info">
+  <strong>💡 Tábor (<code>tabor</code>) specifikus mezők:</strong> Csak slug = <code>tabor</code> mellett látszanak. Kitöltés → tartalom <strong>Sanity-ből</strong>; üres lista / üres mező → <strong>fallback</strong> a kódbeli magyar/angol szövegre. Mezők: Tábor — szürke sor felett (HU/EN), Tábor — szekció főcím (HU/EN), Tábor — program blokkok (kártyák), Tábor — támogatók blokk címe (HU/EN), Tábor — támogatók (linkek).
+</div>
+
+<div class="callout callout-info">
+  <strong>💡 Futás (<code>futas</code>) specifikus mezők:</strong> Csak slug = <code>futas</code> mellett látszanak. <strong>Fallback</strong> szabály ugyanúgy érvényes. Mezők: Futás — eyebrow (HU/EN), Futás — narancs szalag (HU/EN), Futás — kártyák (Dátum / Időpont / Helyszín), Futás — táblázat fejléc (HU/EN), Futás — távok sorai, Futás — nevezési határidő / eredmény szöveg.
+</div>
+
+<div class="callout callout-warning">
+  <strong>⚠️ Fontos:</strong> FIX OLDALAKNÁL (home, info, lineup, program, contact, szallas, terkep, futas, tabor, aszf) ne módosítsa a slug-ot! Ez linkeket törhet. ÚJ információs oldal létrehozásakor adjon meg egyedi slug-ot.
+</div>
+
+<h3>🧭 Navigation – Menüpontok</h3>
+
+<p>A fejléc és footer menüpontjai. Itt lehet állítani a menü sorrendjét és a linkeket.</p>
+
+<table>
+  <thead><tr><th style="width:35%">Mező neve</th><th>Mire való és hogyan szerkessze</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Felirat (HU/EN)</strong></td><td>A menüpont szövege. Pl. "Lineup" / "Lineup"</td></tr>
+    <tr><td><strong>Belső oldal (Page) — ajánlott</strong></td><td>Válasszon ki egy oldalt a Pages listából. A link automatikusan annak slugjára mutat (pl. tabor → /tabor/, vagy új információs oldal → /oldal/[slug]).</td></tr>
+    <tr><td><strong>Saját URL (opcionális)</strong></td><td>Ha NEM Page referenciából szeretné a linket képezni: ide írhat egy belső útvonalat, pl. <code>/lineup/</code>. Hagyja üresen, ha Page-et választott.</td></tr>
+    <tr><td><strong>Külső link (opcionális)</strong></td><td>Külső weboldal teljes URL-je (https://...). Ha kitölti, a link új ablakban nyílik.</td></tr>
+    <tr><td><strong>Új ablakban nyíljon (openInNewTab)</strong></td><td>Kapcsoló. Külső linknél automatikusan igaz; belső linkekhez opcionális.</td></tr>
+    <tr><td><strong>Sorrend (order)</strong></td><td>Szám. A kisebb szám = előrébb a menüben. Pl. 0, 1, 2, 3...</td></tr>
+    <tr><td><strong>Aktív (isActive)</strong></td><td>Kapcsoló. Ha kikapcsolja, sehol nem jelenik meg.</td></tr>
+    <tr><td><strong>Megjelenik a fejlécben (showInHeader)</strong></td><td>Kapcsoló. Ha be van kapcsolva, a menüpont megjelenik a fejléc menüjében.</td></tr>
+    <tr><td><strong>Megjelenik a footerben (showInFooter)</strong></td><td>Kapcsoló. Ha be van kapcsolva, a menüpont megjelenik a footerben.</td></tr>
+    <tr><td><strong>Szülő menüpont (parent)</strong></td><td>Opcionális. Ha a frontend támogatja az almenüt, ide hivatkozhat másik menüpontra. <span class="highlight">Jelenleg lapos szerkezet jelenik meg.</span></td></tr>
+    <tr><td><strong>Belső megjegyzés (description)</strong></td><td>Csak a Studio-ban látszik. A frontenden nem jelenik meg. Használhatja jegyzetelésre.</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-info">
+  <strong>💡 Tipp:</strong> Ha egy oldalt el akar távolítani a menüből, kapcsolja ki a "Megjelenik a fejlécben" és "Megjelenik a footerben" kapcsolókat. Ne törölje a NavigationItem-et, mert később újra szükség lehet rá.
+</div>
+
+<h3>🏨 Accommodation – Szállások</h3>
+
+<p>A szállások listája (szállodák, kempingek).</p>
+
+<table>
+  <thead><tr><th style="width:35%">Mező neve</th><th>Mire való és hogyan szerkessze</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Szállás neve</strong></td><td>A szállás neve. Pl. "Hotel Arany"</td></tr>
+    <tr><td><strong>Leírás (HU/EN)</strong></td><td>A szállás leírása.</td></tr>
+    <tr><td><strong>Kép</strong></td><td>A szállás képe. Kattintson a "Upload" gombra. Ez a javasolt mód.</td></tr>
+    <tr><td><strong>Legacy kép útvonal</strong></td><td><span class="highlight">Csak olvasható</span>. Ez a régi rendszerben használt kép útvonal. Ne módosítsa.</td></tr>
+    <tr><td><strong>Hivatalos weboldal</strong></td><td>A szállás weboldalának URL-je.</td></tr>
+    <tr><td><strong>Foglalási link</strong></td><td>A foglalási oldal URL-je (ha van).</td></tr>
+    <tr><td><strong>Távolság (HU/EN)</strong></td><td>A távolság a fesztiváltól. Pl. "5 perc sétára a fesztiváltól"</td></tr>
+    <tr><td><strong>Sorrend (order)</strong></td><td>Szám. A kisebb szám = előrébb a listában.</td></tr>
+    <tr><td><strong>Aktív (isActive)</strong></td><td>Kapcsoló. Ha be van kapcsolva, a szállás megjelenik. Ha ki van kapcsolva, nem jelenik meg.</td></tr>
+  </tbody>
+</table>
+
+<h3>🚗 Transport – Közlekedés</h3>
+
+<p>A közlekedési lehetőségek listája (autó, vonat, busz).</p>
+
+<table>
+  <thead><tr><th style="width:35%">Mező neve</th><th>Mire való és hogyan szerkessze</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Cím (HU/EN)</strong></td><td>A közlekedési mód címe. Pl. "Autóval" / "By car"</td></tr>
+    <tr><td><strong>Leírás (HU/EN)</strong></td><td>A közlekedési mód leírása.</td></tr>
+    <tr><td><strong>Ikon</strong></td><td>Közlekedési mód ikonja: car, train, bus. Válasszon a listából.</td></tr>
+    <tr><td><strong>Kapcsolódó URL (opcionális)</strong></td><td>Kapcsolódó weboldal URL-je (ha van).</td></tr>
+    <tr><td><strong>Sorrend (order)</strong></td><td>Szám. A kisebb szám = előrébb a listában.</td></tr>
+    <tr><td><strong>Aktív (isActive)</strong></td><td>Kapcsoló. Ha be van kapcsolva, a közlekedési mód megjelenik. Ha ki van kapcsolva, nem jelenik meg.</td></tr>
+  </tbody>
+</table>
+
+<h2>Mit NEM lehet szerkeszteni a Sanity Studio-ban?</h2>
+
+<div class="callout callout-danger">
+  <strong>🚫 Fontos – Ezekhez fejlesztői munka kell!</strong>
+  <p>A következő dolgokat <strong>nem</strong> lehet a Sanity Studio-ban módosítani. Ezekhez programozói beavatkozás szükséges:</p>
+  <ul>
+    <li><strong>Globális design színek</strong> – A weboldal színvilágának megváltoztatása</li>
+    <li><strong>Betűtípusok</strong> – A betűk típusának, méretének megváltoztatása</li>
+    <li><strong>Layout struktúrák</strong> – Az oldalak elrendezésének megváltoztatása</li>
+    <li><strong>Animációk</strong> – Animációk hozzáadása vagy módosítása</li>
+    <li><strong>Komponens stílusok</strong> – A gombok, kártyák, formák stílusának megváltoztatása</li>
+    <li><strong>Routing (URL-útvonalak)</strong> – Új URL-ek létrehozása vagy átirányítások beállítása</li>
+    <li><strong>Analytics / GTM integráció</strong> – Google Analytics, Google Tag Manager beállítása</li>
+    <li><strong>Backend / API logika</strong> – A weboldal működésének módosítása</li>
+    <li><strong>Képek a /images/ útvonalon</strong> – Ezek a régi rendszer képei, nem Sanity asset-ek. Ha ezeket módosítani kell, külön migráció szükséges.</li>
+    <li><strong>Technikai azonosítók</strong> – <code>_id</code>, <code>_ref</code>, <code>_type</code> – Ezeket soha ne módosítsa</li>
+    <li><strong>Sanity rendszerbeállítások</strong> – Project / Dataset / API beállítások</li>
+    <li><strong>CORS / API tokenek</strong> – Biztonsági beállítások</li>
+  </ul>
+</div>
+
+<h2>Hogyan szerkesszen biztonságosan – Lépésről lépésre</h2>
+
+<h3>1. Válasszon ki egy nem kritikus elemet</h3>
+
+<p>Kezdjen valami egyszerűvel, például egy fellépő rövid leírásával vagy egy szponzor nevével. Ne kezdjen a globális beállításokkal vagy a slug-okkal.</p>
+
+<h3>2. Nyissa meg a dokumentumot</h3>
+
+<p>Kattintson a bal oldali menüben a megfelelő tartalomtípusra (pl. "Performers"), majd válassza ki a szerkeszteni kívánt elemet a listából.</p>
+
+<h3>3. Szerkessze a mezőket</h3>
+
+<p>Kattintson a mezőre, és írja be vagy módosítsa a tartalmat. A szöveges mezőknél Enter-rel új sort kezdhet. A kapcsolóknál (true/false) kattintással kapcsolhat át.</p>
+
+<h3>4. Mentse el a változtatást</h3>
+
+<p>A jobb alsó sarokban kattintson a "Publish" (Közzététel) gombra. Ez azonnal elmenti a változtatást és megjeleníti a weboldalon.</p>
+
+<h3>5. Ellenőrizze a weboldalon</h3>
+
+<p>Várjon 1-2 percet, majd nyissa meg a weboldalt a böngészőjében, és ellenőrizze, hogy a változtatás megjelent-e.</p>
+
+<h3>6. Ha hibát követett el</h3>
+
+<p>Ha valami nem jó, visszavonhatja a változtatást. Nyissa meg újra a dokumentumot, módosítsa vissza a tartalmat, és kattintson újra a "Publish" gombra.</p>
+
+<h2>Biztonságos használati útmutató – Ellenőrző lista</h2>
+
+<p>Mielőtt szerkesztené, ellenőrizze a következőket:</p>
+
+<ul class="checklist">
+  <li class="done">Csak ismert, azonosított mezőket szerkeszek</li>
+  <li class="done">Nem törlök hivatkozott elemeket (pl. fellépőt, aki programhoz van rendelve)</li>
+  <li class="done">Nem változtatom a slug-ot (URL-t) egyeztetés nélkül – ez linkeket törhet</li>
+  <li class="done">Értem a "Draft" (vázlat) és "Published" (közzétett) állapot közötti különbséget: csak a Published jelenik meg a weboldalon</li>
+  <li class="done">A "Publish" gombot csak akkor nyomom meg, ha a módosítás kész</li>
+  <li class="done">Tesztelek a változtatást a demo URL-en mielőtt a live oldalon közzéteszem</li>
+  <li class="done">Strukturális változtatás előtt rákérdezek</li>
+  <li class="done">Ha nem vagyok biztos valamiben, rákérdezek mielőtt mentek</li>
+</ul>
+
+<h2>Gyakori hibák és hogyan kerülje el őket</h2>
+
+<div class="callout callout-warning">
+  <strong>⚠️ Gyakori hiba: Slug módosítása</strong>
+  <p><strong>Probléma:</strong> Módosítja egy oldal slug-ját (pl. "tabor" → "jazztabor"), de a Navigation menüben a régi slug marad.</p>
+  <p><strong>Következmény:</strong> A menüből rákattintva a látogató 404-es hibát kap.</p>
+  <p><strong>Megoldás:</strong> FIX OLDALAKNÁL (home, info, lineup, program, contact, szallas, terkep, futas, tabor, aszf) soha ne módosítsa a slug-ot egyeztetés nélkül. ÚJ információs oldalnál adjon meg egyedi slug-ot.</p>
+</div>
+
+<div class="callout callout-warning">
+  <strong>⚠️ Gyakori hiba: Kategória nélküli szponzor</strong>
+  <p><strong>Probléma:</strong> Létrehoz egy új szponzort, de nem választ ki kategóriát.</p>
+  <p><strong>Következmény:</strong> A szponzor nem jelenik meg az oldalon.</p>
+  <p><strong>Megoldás:</strong> Minden szponzornál válasszon ki kategóriát (Főtámogató, Szponzor vagy Partner).</p>
+</div>
+
+<div class="callout callout-warning">
+  <strong>⚠️ Gyakori hiba: Címke nélküli fellépő</strong>
+  <p><strong>Probléma:</strong> Létrehoz egy fellépőt, de nem választ ki címkéket (tags).</p>
+  <p><strong>Következmény:</strong> A fellépő kártyán nem jelenik meg műfaj-badge.</p>
+  <p><strong>Megoldás:</strong> Minden fellépőnél válasszon ki legalább egy címkét a Performer tags listából.</p>
+</div>
+
+<div class="callout callout-warning">
+  <strong>⚠️ Gyakori hiba: Hivatkozott elem törlése</strong>
+  <p><strong>Probléma:</strong> Töröl egy fellépőt, akihez programok vannak rendelve.</p>
+  <p><strong>Következmény:</strong> A programoknál a fellépő neve eltűnik, és hibaüzenet jelenhet meg.</p>
+  <p><strong>Megoldás:</strong> Ne töröljön olyan elemet, amihez más dokumentumok hivatkoznak. Először távolítsa el a hivatkozást a programokból, majd törölje a fellépőt.</p>
+</div>
+
+<div class="callout callout-warning">
+  <strong>⚠️ Gyakori hiba: Rövid leírás vs Címke</strong>
+  <p><strong>Probléma:</strong> A fellépő rövid leírásába írja a műfajt (pl. "swing"), de nem választ ki címkét.</p>
+  <p><strong>Következmény:</strong> A műfaj nem jelenik meg badge-ként a kártyán.</p>
+  <p><strong>Megoldás:</strong> A rövid leírás egy normál mondat (pl. "A legismertebb magyar swing együttes"). A műfajokat a "Címkék / műfajok" mezőben kell megadni.</p>
+</div>
+
+<h2>5. Menü (Navigáció)</h2>
+
+<p><strong>Hol:</strong> 🧭 <strong>Navigáció / Menü</strong>.</p>
+
+<table>
+  <thead><tr><th style="width:35%">Mező</th><th>Mire való</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Felirat (HU/EN)</strong></td><td>Amit a látogató lát</td></tr>
+    <tr><td><strong>Belső oldal (Page)</strong></td><td>Ajánlott: innen képződik az útvonal</td></tr>
+    <tr><td><strong>Saját URL</strong></td><td>Ha nem Page-re mutat (pl. <code>/info/#gyik</code>)</td></tr>
+    <tr><td><strong>Külső link</strong></td><td>Teljes <code>https://…</code> URL; új ablakban nyílik</td></tr>
+    <tr><td><strong>Új ablakban nyíljon</strong></td><td>Belső linknél opcionális</td></tr>
+    <tr><td><strong>Sorrend</strong></td><td>Kisebb szám = előrébb</td></tr>
+    <tr><td><strong>Aktív</strong></td><td>Kikapcsolva sehol sem látszik</td></tr>
+    <tr><td><strong>Megjelenik a fejlécben / footerben</strong></td><td>Elhelyezkedés</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Új menüpont:</strong> Create → felirat → Page kiválasztása → sorrend → header/footer → Publish.</p>
+
+<div class="callout callout-info">
+  <strong>💡 Fallback:</strong> Ha minden menü el van rejtve, a honlap egy <strong>kódbeli alapértelmezett</strong> menüt mutat, hogy üres header ne maradjon.
+</div>
+
+<h2>6. Program</h2>
+
+<h3>Strukturált lista</h3>
+
+<p><strong>Hol:</strong> 📅 <strong>Program tételek</strong>.</p>
+
+<p>Mezők: cím vagy fellépő, dátum, kezdés, <strong>Színpad (stageRef)</strong>, opcionálisan vég, kategória, leírás, fellépők.</p>
+
+<h3>Szabad szöveg</h3>
+
+<p><strong>Pages → Program (<code>program</code>):</strong></p>
+
+<ul>
+  <li><strong>Program – szabad szöveg (HU/EN)</strong></li>
+  <li><strong>Program megjelenítési mód:</strong> adatbázis lista / csak szöveg / mindkettő</li>
+</ul>
+
+<h3>Egy fellépő több időponton</h3>
+
+<p>Külön Program tétel minden időpontra; mindegyikben ugyanaz a Performer hivatkozás.</p>
+
+<h2>7. Fellépők</h2>
+
+<p><strong>Hol:</strong> 🎷 <strong>Fellépők</strong>.</p>
+
+<table>
+  <thead><tr><th style="width:35%">Mező</th><th>Hatás</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Név</strong></td><td>Kártyacím</td></tr>
+    <tr><td><strong>Kép</strong></td><td>Kártyakép</td></tr>
+    <tr><td><strong>Rövid leírás (HU/EN)</strong></td><td>Nem műfaj-címke</td></tr>
+    <tr><td><strong>Címkék / műfajok</strong></td><td>Badge-ek (max. ~3 látható a kártyán)</td></tr>
+    <tr><td><strong>Bio (HU/EN)</strong></td><td>Részletes szöveg</td></tr>
+    <tr><td><strong>Linkek</strong></td><td>Web, közösségi</td></tr>
+    <tr><td><strong>Sorrend</strong></td><td>Kisebb szám = előrébb</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Új címke:</strong> 🏷️ <strong>Fellépő címkék</strong> → Create → Publish → Performer dokumentumban hozzárendelés.</p>
+
+<h2>8. Színpadok / helyszínek</h2>
+
+<p><strong>Hol:</strong> 🎤 <strong>Színpadok / helyszínek</strong>.</p>
+
+<p>A honlap <strong>pontosan</strong> azt a nevet jeleníti meg, amit ide írsz — Program tételeknél ez látszik a színpadnévként.</p>
+
+<h2>9. Mit ne módosíts?</h2>
+
+<table>
+  <thead><tr><th style="width:35%">Elem</th><th>Miért?</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Slug a 10 fix oldalon</strong></td><td>Linkek törnek</td></tr>
+    <tr><td><strong>Több Page ugyanazzal a sluggal</strong> (pl. két <code>tabor</code>)</td><td>A frontend egyik dokumentumát választja — kerüld</td></tr>
+    <tr><td><strong>Performer <code>imagePath</code></strong></td><td>Legacy; új kép → <strong><code>image</code></strong> mező</td></tr>
+    <tr><td><strong>Sponsor <code>logoPath</code></strong></td><td>Legacy; új logó → <strong><code>logo</code></strong></td></tr>
+    <tr><td><strong>Page <code>bodyHu/bodyEn</code> (Portable Text)</strong></td><td>Nem használt a honlapon; helyette <strong><code>pageBodyHu/En</code></strong></td></tr>
+    <tr><td><strong>siteSettings dokumentum törlése / klónozása</strong></td><td>Globális törés</td></tr>
+  </tbody>
+</table>
+
+<h2>10. Felhasználók és jogok</h2>
+
+<ul>
+  <li><strong>Viewer (read-only):</strong> látható a Studio, <strong>Publish / szerkesztés</strong> nem.</li>
+  <li><strong>Editor / Admin:</strong> meghívás a https://www.sanity.io/manage → <strong>Members</strong> → <strong>Invite member</strong>.</li>
+</ul>
+
+<p>Átadáskor: Sanity tulajdonjog, Netlify, GitHub, domain dokumentáció — egyeztetés szerint.</p>
+
+<h2>11. Mentés, publikálás, megjelenés</h2>
+
+<ul>
+  <li><strong>Save</strong> = piszkozat gépen / Sanity-ban tárolva.</li>
+  <li><strong>Publish</strong> = változás <strong>élő API-n</strong> — a honlap ezt olvassa be következő lekéréskor.</li>
+  <li>Tipikus késleltetés: <strong>~30 másodperc</strong> (Netlify ISR). Frissítés: <strong>Ctrl+F5</strong>.</li>
+</ul>
+
+<h2>12. Seed import és tartalom-ellenőrzés (fejlesztő)</h2>
+
+<p><strong>Mikor kell:</strong> új Sanity projekt, vagy amikor a Page dokumentumokban hiányoznak a tábor/futás listák, de a honlap fallback miatt „teljesnek" tűnik.</p>
+
+<p><strong>Parancs:</strong> <code>npm run sanity:seed</code></p>
+
+<p><strong>Környezet (<code>.env.local</code>):</strong></p>
+
+<ul>
+  <li><code>NEXT_PUBLIC_SANITY_PROJECT_ID</code></li>
+  <li><code>NEXT_PUBLIC_SANITY_DATASET</code> (általában <code>production</code>)</li>
+  <li><code>SANITY_API_WRITE_TOKEN</code> (írási jog)</li>
+</ul>
+
+<p>A script a seedben lévő dokumentumokat <strong><code>createOrReplace</code></code>-tel írja — egyező <code>_id</code> esetén <strong>felülírja</strong> a tartalmat. Csak megbízható gépen, biztonságos tokennel futtasd.</p>
+
+<p><strong>Ellenőrzés:</strong> <code>npm run sanity:check-content</code> — többek között jelzi, ha <code>tabor</code>/<code>futas</code> Page-en üres a programblokk vagy a futás táblázat (<strong>Sanity üres, fallback megy</strong>).</p>
+
+<h2>13. Hibaelhárítás</h2>
+
+<table>
+  <thead><tr><th style="width:35%">Jelenség</th><th>Mit nézz</th></tr></thead>
+  <tbody>
+    <tr><td>Változás nem látszik a honlapon</td><td><strong>Publish</strong> megtörtént-e; <strong>~30 mp</strong> várakozás; <strong>Ctrl+F5</strong></td></tr>
+    <tr><td>Studio üres, honlap nem</td><td><strong>Fallback</strong> — töltsd ki a mezőket <strong>vagy</strong> futtasd <strong>§12</strong> seedet</td></tr>
+    <tr><td>Hiányzó mező a szerkesztőben</td><td><strong>Slug</strong> helyes-e (<code>tabor</code> / <code>futas</code>); nem más dokumentumtípus</td></tr>
+    <tr><td>Angol oldal rossz szöveg</td><td><strong>EN mezők</strong> kitöltése</td></tr>
+    <tr><td>Menü nem mutat új oldalt</td><td>Navigációban <strong>Page</strong> hivatkozás, <strong>Aktív</strong>, <strong>Publish</strong></td></tr>
+    <tr><td>Vision / lekérdezés</td><td>Studio <strong>Vision</strong> (ha engedélyezett) — GROQ teszt</td></tr>
+  </tbody>
+</table>
+
+<p>További technikai hiba: fejlesztő / <code>SANITY_FIELD_BINDING_AUDIT.md</code>.</p>
+
+<h2>Javasolt átnézési sorrend</h2>
+
+<table>
+  <thead><tr><th style="width:8%">#</th><th style="width:30%">Rész</th><th>Miért érdemes elsőként?</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge badge-pre">1</span></td><td><strong>Site settings</strong></td><td>Globális adatok, mindenre hatással. Ellenőrizze a dátumokat, linkeket.</td></tr>
+    <tr><td><span class="badge badge-pre">2</span></td><td><strong>Pages</strong></td><td>SEO címek, leírások, fontos az első találatok miatt. Ellenőrizze a hero szövegeket.</td></tr>
+    <tr><td><span class="badge badge-pre">3</span></td><td><strong>Tickets</strong></td><td>Jegyárak pontossága mindenkinek számít. Ellenőrizze az árakat és a linkeket.</td></tr>
+    <tr><td><span class="badge badge-pre">4</span></td><td><strong>Program</strong></td><td>Időpontok, színpadok, fellépők. Ellenőrizze, hogy minden program jó helyen van.</td></tr>
+    <tr><td><span class="badge badge-pre">5</span></td><td><strong>Performers</strong></td><td>Fellépők listája, képek, leírások, címkék. Ellenőrizze, hogy minden fellépőnek van képe és legalább egy címkéje.</td></tr>
+    <tr><td><span class="badge badge-pre">6</span></td><td><strong>Sponsors</strong></td><td>Támogatók teljes listája, kategóriák. Ellenőrizze, hogy minden szponzornak van kategóriája.</td></tr>
+    <tr><td><span class="badge badge-pre">7</span></td><td><strong>Accommodation</strong></td><td>Szállás partnerek, képek, leírások.</td></tr>
+    <tr><td><span class="badge badge-pre">8</span></td><td><strong>Transport / Venue</strong></td><td>Közlekedés és helyszín adatok.</td></tr>
+    <tr><td><span class="badge badge-warning">9</span></td><td><strong>Navigation</strong></td><td>Menüpontok, sorrend, linkek. Ellenőrizze, hogy minden menüpont működik.</td></tr>
+  </tbody>
+</table>
+
+<h2>Biztonsági alapszabályok</h2>
+
+<ul>
+  <li><strong>Jelszavakat nem tárolunk dokumentumokban</strong> – a hozzáférési adatok külön, biztonságos csatornán érkeznek</li>
+  <li><strong>Első bejelentkezés után jelszócsere ajánlott</strong> – ha a platform támogatja</li>
+  <li><strong>Ha elérhető, engedélyezze a kétfaktoros hitelesítést (2FA)</strong> – ez extra védelmet nyújt</li>
+  <li><strong>A hozzáférési adatokat ne ossza meg harmadik féllel</strong> – csak megbízható munkatársaknak</li>
+  <li><strong>Ha gyanús tevékenységet észlel, azonnal jelezze</strong> – értesítse a rendszergazdát</li>
+</ul>
+
+<h2>Ha vizuális módosításra van igény</h2>
+
+<p>Ha layout-változtatásra, új komponensre, design-módosításra, animációra vagy route-beállításra van szükség, az:</p>
+<ul>
+  <li><strong>nem</strong> Sanity Studio szerkesztési feladat</li>
+  <li>fejlesztői munkát igényel</li>
+  <li>külön egyeztetést és díjazást igényelhet</li>
+</ul>
+
+<p>Ilyen esetben kérjük, vegye fel a kapcsolatot a fejlesztővel, és egyeztessen a részletekről.</p>
+
+<h2>Kérdés esetén</h2>
+
+<p>Ha bármi nem világos a Sanity felületen, ne habozzon szólni – örömmel átveszem személyesen, telefonon vagy képernyőmegosztáson keresztül.</p>
+
+<div class="doc-footer">
+  Besenyei Zalán György egyéni vállalkozó · bzalan.hu · besenyeizalan@gmail.com · +36 70 544 2472
+</div>
+
+</body>
+</html>

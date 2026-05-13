@@ -1,4 +1,5 @@
-import { defineField, defineType } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
+import { richText } from "../objects/richText";
 
 export const performerType = defineType({
   name: "performer",
@@ -15,6 +16,22 @@ export const performerType = defineType({
         "Sanity asset (ajánlott). Ha üres, az alábbi legacy útvonal érvényesül. A frontenden mindig egy kép jelenik meg.",
     }),
     defineField({
+      name: "imageDisplayMode",
+      title: "Kép megjelenítési módja",
+      type: "string",
+      initialValue: "cover",
+      options: {
+        list: [
+          { title: "Kitöltés (cover)", value: "cover" },
+          { title: "Teljes kép (contain)", value: "contain" },
+          { title: "Fekvő (landscape)", value: "landscape" },
+          { title: "Álló (portrait)", value: "portrait" },
+        ],
+      },
+      description:
+        "cover = kitölti a keretet (alapértelmezett). contain = teljes kép látható. landscape = fekvő mód (csoportképekhez). portrait = álló mód (szólóképekhez).",
+    }),
+    defineField({
       name: "imagePath",
       title: "Legacy képútvonal",
       type: "string",
@@ -23,18 +40,16 @@ export const performerType = defineType({
       readOnly: true,
     }),
     defineField({
-      name: "shortDescriptionHu",
+      name: "shortDescriptionRichHu",
       title: "Rövid leírás (HU)",
-      type: "text",
-      rows: 2,
+      ...richText,
       description:
         "Rövid mondat a fellépőről. A kártyán szöveges leírásként jelenik meg. NEM műfaj-címke!",
     }),
     defineField({
-      name: "shortDescriptionEn",
+      name: "shortDescriptionRichEn",
       title: "Rövid leírás (EN)",
-      type: "text",
-      rows: 2,
+      ...richText,
     }),
     defineField({
       name: "tags",
@@ -44,8 +59,90 @@ export const performerType = defineType({
       description:
         "Egy fellépőhöz több címke is rendelhető (pl. swing, blues, vendég). Ha üres, semmilyen műfaj-badge nem jelenik meg a kártyán.",
     }),
-    defineField({ name: "bioHu", type: "text", rows: 5 }),
-    defineField({ name: "bioEn", type: "text", rows: 5 }),
+    defineField({
+      name: "members",
+      title: "Zenekari tagok / Közreműködők",
+      type: "array",
+      description:
+        "Zenekari tagok listája. Ha üres, nem jelenik meg a „Közreműködők” szekció. A tagok nem automatikusan önálló fellépőként jelennek meg.",
+      of: [
+        defineArrayMember({
+          type: "object",
+          name: "member",
+          fields: [
+            defineField({
+              name: "nameHu",
+              title: "Név (HU)",
+              type: "string",
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: "nameEn",
+              title: "Név (EN)",
+              type: "string",
+            }),
+            defineField({
+              name: "roleHu",
+              title: "Szerep (HU)",
+              type: "string",
+              description: "Pl. énekes, zenekarvezető, vendégművész",
+            }),
+            defineField({ name: "roleEn", title: "Szerep (EN)", type: "string" }),
+            defineField({
+              name: "instrumentHu",
+              title: "Hangszer (HU)",
+              type: "string",
+              description: "Pl. zongora, trombita, ének",
+            }),
+            defineField({ name: "instrumentEn", title: "Hangszer (EN)", type: "string" }),
+            defineField({
+              name: "countryCode",
+              title: "Országkód",
+              type: "string",
+              description: "Pl. H, USA, S, I. Kétbetűs országkód.",
+            }),
+            defineField({ name: "countryNameHu", title: "Ország neve (HU)", type: "string" }),
+            defineField({ name: "countryNameEn", title: "Ország neve (EN)", type: "string" }),
+            defineField({
+              name: "showAsStandalonePerformer",
+              title: "Megjelenik önálló fellépőként?",
+              type: "boolean",
+              initialValue: false,
+              description:
+                "Ha be van kapcsolva, ez a tag megjelenik a fellépők listáján is külön fellépőként. Alapértelmezetten kikapcsolva.",
+            }),
+            defineField({
+              name: "order",
+              title: "Sorrend",
+              type: "number",
+              initialValue: 0,
+              description: "Kisebb szám = előrébb a listában.",
+            }),
+          ],
+          preview: {
+            select: { name: "nameHu", role: "roleHu", instrument: "instrumentHu" },
+            prepare({ name, role, instrument }: { name?: string; role?: string; instrument?: string }) {
+              return {
+                title: name || "(névtelen)",
+                subtitle: [role, instrument].filter(Boolean).join(" · "),
+              };
+            },
+          },
+        }),
+      ],
+    }),
+    defineField({
+      name: "bioRichHu",
+      title: "Hosszú leírás (HU)",
+      ...richText,
+      description:
+        "A fellépő részletes leírása, a modálban jelenik meg. Támogatja: félkövér, dőlt, link, h2, h3, lista, blockquote.",
+    }),
+    defineField({
+      name: "bioRichEn",
+      title: "Hosszú leírás (EN)",
+      ...richText,
+    }),
     defineField({ name: "websiteUrl", type: "url" }),
     defineField({ name: "facebookUrl", type: "url" }),
     defineField({ name: "instagramUrl", type: "url" }),

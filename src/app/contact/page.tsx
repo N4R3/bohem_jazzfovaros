@@ -4,6 +4,7 @@ import BeachPageShell from "@/components/layout/BeachPageShell";
 import PageBody from "@/components/layout/PageBody";
 import { getContactContent, getPageContentBySlug } from "@/sanity/lib/content";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
+import { portableTextToPlain } from "@/sanity/lib/portableText";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -25,12 +26,13 @@ export default async function ContactPage() {
   const contact = await getContactContent(locale);
   const page = await getPageContentBySlug("contact", locale);
   const isEn = c.otherLocale.label === "HU";
+  const subtitle = typeof page.heroDescription === "string" ? page.heroDescription : portableTextToPlain(page.heroDescription);
 
   return (
     <BeachPageShell
       eyebrow="JAZZFŐVÁROS KFT."
       title={page.heroTitle || contact.title}
-      subtitle={page.heroDescription || contact.subtitle}
+      subtitle={subtitle || contact.subtitle}
       canonicalPath="/contact/"
       locale={isEn ? "en" : "hu"}
     >
