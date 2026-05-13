@@ -143,7 +143,7 @@ Portable Text Migration Script
 Mode: DRY RUN (no changes will be made)
 
 Configuration:
-  Project ID: ajkz39i8
+  Project ID: your_project_id
   Dataset: production
   API Version: 2024-01-01
   Migration Token: ✓ Present
