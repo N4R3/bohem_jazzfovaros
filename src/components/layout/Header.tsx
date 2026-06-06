@@ -16,7 +16,7 @@ interface Props {
  * Vékony, sötét-teal navigációs szalag. A mockup szerint a header
  * minimál — logo nincs benne, csak nav-pontok + nyelvváltó.
  */
-export default function Header({ nav, otherLocale }: Props) {
+export default function Header({ nav }: Props) {
   return (
     <header
       className="sticky top-0 z-40 w-full"
@@ -56,8 +56,6 @@ export default function Header({ nav, otherLocale }: Props) {
 
         <div className="hidden shrink-0 md:block">
           <LocaleSwitchAnchor
-            fallbackHref={otherLocale.domain}
-            label={otherLocale.label}
             className="whitespace-nowrap rounded-sm border px-2 py-0.5 text-[10px] font-bold tracking-wider transition-colors hover:bg-[var(--color-accent-500)]/20"
             style={{
               borderColor: "rgba(249,160,63,0.55)",
@@ -66,11 +64,7 @@ export default function Header({ nav, otherLocale }: Props) {
           />
         </div>
 
-        <MobileMenu
-          nav={nav}
-          otherLocaleLabel={otherLocale.label}
-          otherLocaleDomain={otherLocale.domain}
-        />
+        <MobileMenu nav={nav} />
       </div>
     </header>
   );

@@ -22,8 +22,8 @@ export default function PageBody({
 
   const wrapperClass =
     variant === "card"
-      ? "mx-auto mb-10 max-w-4xl rounded-2xl px-6 py-7 shadow-xl sm:px-9 sm:py-9"
-      : "mx-auto mb-10 max-w-4xl";
+      ? "mx-auto mb-10 max-w-3xl rounded-2xl px-6 py-8 shadow-xl sm:px-9 sm:py-9 border border-[#e8d8b8]"
+      : "mx-auto mb-10 max-w-3xl";
   const wrapperStyle =
     variant === "card"
       ? { background: "var(--color-cream-50)", color: "var(--color-teal-900)" }

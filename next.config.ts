@@ -9,7 +9,10 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   trailingSlash: true,
   images: {
-    unoptimized: true,
+    formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      { protocol: "https", hostname: "cdn.sanity.io", pathname: "/images/**" },
+    ],
   },
   /** Windows-on a webpack pack cache néha ENOENT / hiányzó chunk hibát okoz dev módban */
   webpack: (config, { dev }) => {

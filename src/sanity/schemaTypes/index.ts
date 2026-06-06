@@ -13,6 +13,16 @@ import { transportItemType } from "./documents/transportItem";
 import { popupSettingsType } from "./documents/popupSettings";
 import { venueType } from "./documents/venue";
 import { navigationItemType } from "./documents/navigationItem";
+import { videoType } from "./documents/video";
+import { sectionRichTextType } from "./objects/sectionRichText";
+import { sectionTextBoxType } from "./objects/sectionTextBox";
+import { sectionVideoType } from "./objects/sectionVideo";
+import { sectionButtonType } from "./objects/sectionButton";
+import { sectionImageType } from "./objects/sectionImage";
+import { sectionGalleryType } from "./objects/sectionGallery";
+import { sectionSpacerType } from "./objects/sectionSpacer";
+import { infoFaqItemType } from "./objects/infoFaqItem";
+import { homeStatItemType } from "./objects/homeStatItem";
 
 export const schemaTypes = [
   siteSettingsType,
@@ -29,5 +39,15 @@ export const schemaTypes = [
   accommodationType,
   transportItemType,
   venueType,
+  videoType,
   seoType,
+  sectionRichTextType,
+  sectionTextBoxType,
+  sectionVideoType,
+  sectionButtonType,
+  sectionImageType,
+  sectionGalleryType,
+  sectionSpacerType,
+  infoFaqItemType,
+  homeStatItemType,
 ];

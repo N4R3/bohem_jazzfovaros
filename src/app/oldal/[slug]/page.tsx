@@ -3,19 +3,21 @@ import { notFound } from "next/navigation";
 import { getContent, getLocale } from "@/lib/locale";
 import BeachPageShell from "@/components/layout/BeachPageShell";
 import PageBody from "@/components/layout/PageBody";
+import FlexibleSections from "@/components/layout/FlexibleSections";
 import { getPageContentBySlug } from "@/sanity/lib/content";
 import { sanityClient, isSanityConfigured } from "@/sanity/lib/client";
-import { getAllActivePageSlugsQuery } from "@/sanity/lib/queries";
+import { getAllActivePageSlugsWithLocaleQuery } from "@/sanity/lib/queries";
+import { getBuildLocale } from "@/lib/buildLocale";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 import { portableTextToPlain } from "@/sanity/lib/portableText";
 
 /**
- * Dinamikus oldal — új információs oldalak létrehozható a Sanity Pages alól.
- * A 10 fix slug saját route-on van, így ezeket KIZÁRJUK ide:
- *  home, info, lineup, program, contact, szallas, terkep, futas, tabor, aszf
+ * Legacy /oldal/[slug] route (R1: kompatibilitási réteg).
  *
- * Bármilyen más slug (pl. `gyik`, `sajto`) automatikusan elérhető lesz a
- * /oldal/[slug] URL-en, ha a Page dokumentum aktív.
+ * A kanonikus URL most a root-level /<slug>. A middleware a /oldal/<slug> kéréseket
+ * 308-cal a /<slug>-re irányítja, így ez a komponens normál esetben nem renderel.
+ * Megtartjuk biztonsági hálóként (ha a middleware-t megkerülnék): ugyanazokat a
+ * renderelési + locale szabályokat alkalmazza, mint a root route.
  */
 
 const FIX_SLUGS = new Set([
@@ -28,20 +30,37 @@ const FIX_SLUGS = new Set([
   "terkep",
   "futas",
   "tabor",
+  "jazztabor",
   "aszf",
+  "adatvedelem",
 ]);
 
 export const revalidate = 30;
+/** Active pages always render even if hidden from nav. noIndex only suppresses indexing, never rendering. */
+export const dynamicParams = true;
+
+type PageLocaleInfo = { slug: string; hasHu: boolean; hasEn: boolean };
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   if (!isSanityConfigured()) return [];
   try {
-    const slugs = await sanityClient.fetch<string[]>(getAllActivePageSlugsQuery, {}, {
-      next: { revalidate: 30 },
-    });
-    return (slugs || [])
-      .filter((s) => typeof s === "string" && s.length > 0 && !FIX_SLUGS.has(s))
-      .map((slug) => ({ slug }));
+    const buildLocale = getBuildLocale();
+    const pages = await sanityClient.fetch<PageLocaleInfo[]>(
+      getAllActivePageSlugsWithLocaleQuery,
+      {},
+      { next: { revalidate: 30 } },
+    );
+    return (pages || [])
+      .filter((p) => {
+        if (!p.slug || typeof p.slug !== "string" || p.slug.length === 0) return false;
+        if (FIX_SLUGS.has(p.slug)) return false;
+        // Only pre-generate pages that have content for the current build locale.
+        // Pages without current-locale content remain accessible via ISR on direct URL.
+        if (buildLocale === "en" && !p.hasEn) return false;
+        if (buildLocale === "hu" && !p.hasHu) return false;
+        return true;
+      })
+      .map((p) => ({ slug: p.slug }));
   } catch {
     return [];
   }
@@ -86,6 +105,10 @@ export default async function DynamicPage({
   if (!page.found) {
     notFound();
   }
+  /* Strict locale parity with the root /<slug> route. */
+  if (page.availableInLocale === false) {
+    notFound();
+  }
   const isEn = c.otherLocale.label === "HU";
   const subtitle = typeof page.heroDescription === "string" ? page.heroDescription : portableTextToPlain(page.heroDescription);
 
@@ -106,6 +129,7 @@ export default async function DynamicPage({
             : "Ennek az oldalnak még nincs tartalma. Szerkesztő: töltsd ki a Page body mezőt a Sanityben."}
         </p>
       )}
+      <FlexibleSections locale={locale} sections={page.sections} />
     </BeachPageShell>
   );
 }

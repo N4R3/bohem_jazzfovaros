@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getBuildLocale } from "@/lib/buildLocale";
+import { siteUrlForLocale } from "@/lib/seo";
+import {
+  isEnPathname,
+  SITE_LOCALE_COOKIE,
+  SITE_LOCALE_HEADER,
+  shouldUsePathPrefixLocale,
+  stripEnPathPrefix,
+} from "@/lib/localeMode";
 
-const LOCALE_COOKIE = "NEXT_LOCALE";
-
-function getLocaleFromHost(host: string): "hu" | "en" {
-  if (host.includes("jazzcapital.hu")) return "en";
-  return "hu";
-}
+const BUILD_LOCALE = getBuildLocale();
 
 function isBypassedPath(pathname: string): boolean {
   return (
@@ -17,36 +21,70 @@ function isBypassedPath(pathname: string): boolean {
   );
 }
 
+function setLocaleCookie(response: NextResponse, locale: "hu" | "en") {
+  response.cookies.set(SITE_LOCALE_COOKIE, locale, {
+    path: "/",
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24 * 365,
+  });
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const host = request.headers.get("host") ?? "";
-  const hostLocale = getLocaleFromHost(host);
+  const hostname = request.nextUrl.hostname;
 
   if (isBypassedPath(pathname)) {
     return NextResponse.next();
   }
 
-  if (pathname === "/en" || pathname.startsWith("/en/")) {
-    const nextUrl = request.nextUrl.clone();
-    const stripped = pathname.replace(/^\/en(?=\/|$)/, "");
-    nextUrl.pathname = stripped || "/";
+  if (isEnPathname(pathname)) {
+    const targetPath = stripEnPathPrefix(pathname);
 
-    const response = NextResponse.rewrite(nextUrl);
-    response.cookies.set(LOCALE_COOKIE, "en", {
-      path: "/",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 365,
+    if (BUILD_LOCALE === "en") {
+      const nextUrl = request.nextUrl.clone();
+      nextUrl.pathname = targetPath;
+      return NextResponse.redirect(nextUrl, 308);
+    }
+
+    if (!shouldUsePathPrefixLocale(hostname)) {
+      const enSite = siteUrlForLocale("en");
+      const redirectUrl = new URL(targetPath, enSite);
+      return NextResponse.redirect(redirectUrl, 308);
+    }
+
+    const rewriteUrl = request.nextUrl.clone();
+    rewriteUrl.pathname = targetPath;
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set(SITE_LOCALE_HEADER, "en");
+    const response = NextResponse.rewrite(rewriteUrl, {
+      request: { headers: requestHeaders },
     });
+    setLocaleCookie(response, "en");
     return response;
   }
 
-  const response = NextResponse.next();
-  response.cookies.set(LOCALE_COOKIE, hostLocale, {
-    path: "/",
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 365,
-  });
-  return response;
+  if (pathname === "/tabor" || pathname === "/tabor/") {
+    const nextUrl = request.nextUrl.clone();
+    nextUrl.pathname = "/jazztabor";
+    return NextResponse.redirect(nextUrl, 308);
+  }
+
+  if (pathname === "/oldal" || pathname === "/oldal/" || pathname.startsWith("/oldal/")) {
+    const stripped = pathname.replace(/^\/oldal/, "") || "/";
+    const nextUrl = request.nextUrl.clone();
+    nextUrl.pathname = stripped === "" ? "/" : stripped;
+    return NextResponse.redirect(nextUrl, 308);
+  }
+
+  if (shouldUsePathPrefixLocale(hostname)) {
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set(SITE_LOCALE_HEADER, "hu");
+    const response = NextResponse.next({ request: { headers: requestHeaders } });
+    setLocaleCookie(response, "hu");
+    return response;
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {

@@ -39,3 +39,36 @@ export function isPortableTextEmpty(
   if (!Array.isArray(value) || value.length === 0) return true;
   return portableTextToPlain(value).trim().length === 0;
 }
+
+/** Egy bekezdésű Portable Text blokk sima szövegből (legacy text mezőkhöz). */
+export function plainTextToPortableBlocks(text: string): PortableTextBlock[] {
+  const trimmed = text.trim();
+  if (!trimmed) return [];
+  return [
+    {
+      _type: "block",
+      _key: "plain",
+      style: "normal",
+      markDefs: [],
+      children: [{ _type: "span", _key: "plain-span", text: trimmed, marks: [] }],
+    },
+  ];
+}
+
+/**
+ * Rich Text elsőbbség, majd legacy sima szöveg (egy blokkban).
+ * Szerkeszthető linkekkel a CMS-ben; a régi text mezők továbbra is működnek.
+ */
+export function resolveLocalizedRichOrPlain(
+  locale: "hu" | "en",
+  richHu?: PortableTextBlock[],
+  richEn?: PortableTextBlock[],
+  plainHu?: string,
+  plainEn?: string,
+): PortableTextBlock[] | undefined {
+  const rich = locale === "en" ? richEn || richHu : richHu || richEn;
+  if (rich && !isPortableTextEmpty(rich)) return rich;
+  const plain = (locale === "en" ? plainEn || plainHu : plainHu || plainEn)?.trim();
+  if (!plain) return undefined;
+  return plainTextToPortableBlocks(plain);
+}

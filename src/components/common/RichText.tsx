@@ -34,7 +34,7 @@ export default function RichText({ value, className = "" }: RichTextProps) {
         <h4 className="mb-4 mt-6 text-lg font-semibold tracking-tight">{children}</h4>
       ),
       blockquote: ({ children }) => (
-        <blockquote className="mb-4 border-l-4 border-teal-600 pl-4 italic text-gray-700">
+        <blockquote className="mb-6 border-l-4 border-[var(--color-teal-500)] pl-4 italic text-[var(--color-teal-900)]/80">
           {children}
         </blockquote>
       ),
@@ -58,13 +58,13 @@ export default function RichText({ value, className = "" }: RichTextProps) {
         </code>
       ),
       link: ({ value, children }) => {
-        const isExternal = value.href?.startsWith("http");
+        const isExternal = value?.href?.startsWith("http");
         return (
           <a
-            href={value.href}
+            href={value?.href}
             target={isExternal ? "_blank" : undefined}
             rel={isExternal ? "noopener noreferrer" : undefined}
-            className="text-blue-600 underline underline-offset-2 hover:text-blue-800"
+            className="text-[var(--color-accent-600)] font-semibold underline underline-offset-2 hover:text-[var(--color-accent-700)] transition-colors"
           >
             {children}
           </a>

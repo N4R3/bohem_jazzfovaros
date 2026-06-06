@@ -42,6 +42,10 @@ interface BeachPageShellProps {
    * Nyelv a breadcrumb schema URL-ekhez.
    */
   locale?: Locale;
+  /**
+   * Széles tartalom: minimális oldalsó padding (~10px), nincs max-width korlát.
+   */
+  fullWidthContent?: boolean;
 }
 
 export default function BeachPageShell({
@@ -53,6 +57,7 @@ export default function BeachPageShell({
   compact = false,
   canonicalPath,
   locale = "hu",
+  fullWidthContent = false,
 }: BeachPageShellProps) {
   const breadcrumbJsonLd =
     canonicalPath
@@ -93,7 +98,11 @@ export default function BeachPageShell({
             {title}
           </h1>
           {subtitle && (
-            <p className={`mx-auto max-w-2xl text-sm font-semibold text-cream-50/90 sm:text-base ${compact ? "mt-2" : "mt-4"}`}>
+            <p
+              className={`mx-auto text-sm font-semibold text-cream-50/90 sm:text-base ${
+                fullWidthContent ? "max-w-none px-[10px]" : "max-w-2xl"
+              } ${compact ? "mt-2" : "mt-4"}`}
+            >
               {subtitle}
             </p>
           )}
@@ -105,7 +114,13 @@ export default function BeachPageShell({
           Content szekció — átlátszó háttér, a body óceán gradient látszik
           ============================================================ */}
       <section className={`${tight ? "py-6 sm:py-10" : compact ? "py-4 sm:py-6" : "py-10 sm:py-14"} relative z-10`}>
-        <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-10">
+        <div
+          className={
+            fullWidthContent
+              ? "mx-auto w-full max-w-none px-[10px]"
+              : "mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-10"
+          }
+        >
           <div>{children}</div>
         </div>
       </section>

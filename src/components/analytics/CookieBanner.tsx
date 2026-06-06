@@ -11,6 +11,7 @@
  */
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const STORAGE_KEY = "cookie_consent";
 
@@ -54,12 +55,12 @@ export default function CookieBanner() {
       <div className="mx-auto flex max-w-6xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <p className="text-sm leading-relaxed text-[var(--color-cream-200)]/70">
           We use cookies to analyse traffic and improve your experience.{" "}
-          <a
+          <Link
             href="/adatvedelem/"
             className="underline hover:text-[var(--color-gold-400)] transition-colors"
           >
             Privacy policy
-          </a>
+          </Link>
         </p>
         <div className="flex shrink-0 gap-3">
           <button

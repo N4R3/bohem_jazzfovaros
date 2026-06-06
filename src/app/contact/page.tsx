@@ -151,75 +151,41 @@ export default async function ContactPage() {
           </div>
         </section>
 
-        {/* Jobb: Sajtó + támogatók */}
-        <section className="flex flex-col gap-6">
+        {/* Jobb: Sajtó / Akkreditáció */}
+        <section
+          className="relative overflow-hidden rounded-2xl p-6 shadow-xl sm:p-8"
+          style={{
+            background: "var(--color-accent-500)",
+            color: "#fdf6e3",
+          }}
+        >
           <div
-            className="relative overflow-hidden rounded-2xl p-6 shadow-xl sm:p-8"
+            className="absolute inset-x-0 top-0 h-1.5"
+            style={{ background: "var(--color-accent-700)" }}
+          />
+          <h3 className="font-display text-xl font-black uppercase sm:text-2xl">
+            {contact.pressTitle}
+          </h3>
+          <p
+            className="mt-3 text-sm leading-relaxed"
+            style={{ color: "rgba(253,246,227,0.92)" }}
+          >
+            {contact.pressText}
+          </p>
+          <a
+            href={`mailto:${contact.pressEmail}`}
+            className="mt-5 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-extrabold uppercase tracking-wider transition-transform hover:scale-[1.04]"
             style={{
-              background: "var(--color-accent-500)",
+              background: "var(--color-accent-700)",
               color: "#fdf6e3",
             }}
           >
-            <h3 className="font-display text-xl font-black uppercase sm:text-2xl">
-              {contact.pressTitle}
-            </h3>
-            <p
-              className="mt-3 text-sm leading-relaxed"
-              style={{ color: "rgba(253,246,227,0.92)" }}
-            >
-              {contact.pressText}
-            </p>
-            <a
-              href={`mailto:${contact.pressEmail}`}
-              className="mt-5 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-extrabold uppercase tracking-wider transition-transform hover:scale-[1.04]"
-              style={{
-                background: "var(--color-accent-700)",
-                color: "#fdf6e3",
-              }}
-            >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                <path d="M22 6l-10 7L2 6" />
-              </svg>
-              {contact.pressEmail}
-            </a>
-          </div>
-
-          {[
-            { tier: c.sponsors.main, label: "Főtámogatók" },
-            { tier: c.sponsors.sponsors, label: "Szponzorok" },
-            { tier: c.sponsors.partners, label: "Partnerek" },
-          ]
-            .filter(({ tier }) => tier.length > 0)
-            .map(({ tier, label }) => (
-              <div
-                key={label}
-                className="rounded-2xl p-6 shadow-lg"
-                style={{ background: "var(--color-cream-50)" }}
-              >
-                <h3
-                  className="mb-3 font-display text-sm font-black uppercase tracking-[0.22em]"
-                  style={{ color: "var(--color-accent-600)" }}
-                >
-                  {label}
-                </h3>
-                <ul className="flex flex-wrap gap-x-4 gap-y-1.5">
-                  {tier.map((sponsor) => (
-                    <li key={sponsor.name}>
-                      <a
-                        href={sponsor.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs font-bold uppercase tracking-wider transition-colors hover:opacity-75"
-                        style={{ color: "var(--color-teal-800)" }}
-                      >
-                        {sponsor.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+              <path d="M22 6l-10 7L2 6" />
+            </svg>
+            {contact.pressEmail}
+          </a>
         </section>
       </div>
     </BeachPageShell>

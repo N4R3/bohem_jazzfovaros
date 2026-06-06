@@ -1,0 +1,206 @@
+import type { Metadata } from "next";
+import { getContent, getLocale } from "@/lib/locale";
+import BeachPageShell from "@/components/layout/BeachPageShell";
+import PageBody from "@/components/layout/PageBody";
+import RichText from "@/components/common/RichText";
+import VideoLiteEmbed from "@/components/common/VideoLiteEmbed";
+import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
+import { getPageContentBySlug } from "@/sanity/lib/content";
+import { portableTextToPlain } from "@/sanity/lib/portableText";
+import type { PortableTextBlock } from "@portabletext/react";
+
+async function getCampPageContent(locale: "hu" | "en") {
+  const byNewSlug = await getPageContentBySlug("jazztabor", locale);
+  if (byNewSlug.found) return byNewSlug;
+  return getPageContentBySlug("tabor", locale);
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const c = await getContent();
+  return buildPageMetadataWithSanity({
+    slug: "jazztabor",
+    path: "/jazztabor/",
+    locale,
+    fallbackTitle: c.camp.title,
+    fallbackDescription: c.camp.subtitle,
+    fallbackOgImage: "/images/og-image.jpg",
+    siteTitle: c.meta.siteTitle,
+  });
+}
+
+export default async function CampPage() {
+  const c = await getContent();
+  const locale = await getLocale();
+  const { camp } = c;
+  const isEn = c.otherLocale.label === "HU";
+  const page = await getCampPageContent(locale);
+
+  const campCms = page.campCms;
+  const eyebrow =
+    campCms?.eyebrow ||
+    (locale === "en" ? "Swing · Lindy Hop · Jazz improvisation" : "Swing · Lindy Hop · Jazz Improvizáció");
+  const entryUrl = page.primaryButton?.url || camp.entryUrl;
+  const entryLabel = page.primaryButton?.label || camp.entryLabel;
+  const subtitle =
+    typeof page.heroDescription === "string"
+      ? page.heroDescription
+      : (portableTextToPlain(page.heroDescription) || camp.subtitle);
+
+  /* R2: a tábor videó elsődlegesen a Sanity Page-ből (videoUrl), fallback a kódbeli camp.videoUrl. */
+  const campVideoUrl = page.videoUrl || camp.videoUrl;
+  const campVideoTitle = page.videoTitle || camp.title;
+
+  const scheduleTitle = campCms?.scheduleSectionTitle ?? camp.scheduleTitle;
+  const scheduleBlocks: Array<{ title: string; items: string[] | PortableTextBlock[]; displayMode?: "list" | "paragraphs" }> =
+    campCms?.scheduleBlocks ??
+    camp.schedule.map((b) => ({ title: b.day, items: b.items, displayMode: "list" }));
+  const supportersTitle =
+    campCms?.supportersSectionTitle ?? (locale === "en" ? "Supporters" : "Támogatók");
+  const supportersList = campCms?.supporters ?? camp.supporters.map((s) => ({ name: s.name, url: s.url }));
+
+  return (
+    <BeachPageShell
+      eyebrow={eyebrow}
+      title={page.heroTitle || camp.title}
+      subtitle={subtitle}
+      canonicalPath="/jazztabor/"
+      locale={isEn ? "en" : "hu"}
+    >
+      {page.body && <PageBody text={page.body} />}
+      <div className="mx-auto max-w-4xl">
+        {campVideoUrl && (
+          <div className="mb-10">
+            <VideoLiteEmbed
+              title={campVideoTitle}
+              videoUrl={campVideoUrl}
+              size="large"
+            />
+          </div>
+        )}
+
+        {page.showSecondBody && page.body2 && <PageBody text={page.body2} />}
+        {!page.showSecondBody && <PageBody text={camp.description} />}
+
+        {entryUrl && (
+          <div className="mb-12 text-center">
+            <a
+              href={entryUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-extrabold uppercase tracking-wider shadow-xl transition-transform hover:scale-[1.04]"
+              style={{
+                background: "var(--color-accent-500)",
+                color: "#fdf6e3",
+                boxShadow: "0 14px 32px rgba(212,98,26,0.45)",
+              }}
+            >
+              {entryLabel}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+        )}
+
+        <h2
+          className="mb-6 text-center font-display font-black uppercase"
+          style={{
+            fontSize: "clamp(1.75rem, 4vw, 2.5rem)",
+            color: "var(--color-accent-500)",
+            letterSpacing: "0.04em",
+            textShadow: "0 2px 10px rgba(0,0,0,0.3)",
+          }}
+        >
+          {scheduleTitle}
+        </h2>
+
+        <div className="flex flex-col gap-5">
+          {scheduleBlocks.map((block, i) => (
+            <article
+              key={`${block.title}-${i}`}
+              className="relative overflow-hidden rounded-2xl p-6 shadow-xl sm:p-7"
+              style={{
+                background: "var(--color-cream-50)",
+                animation: "card-fade-in 0.55s ease-out backwards",
+                animationDelay: `${i * 80}ms`,
+              }}
+            >
+              <div
+                className="absolute inset-x-0 top-0 h-1.5"
+                style={{ background: "var(--color-accent-500)" }}
+                aria-hidden="true"
+              />
+              <h3
+                className="mb-4 font-display text-lg font-black uppercase leading-tight"
+                style={{ color: "var(--color-teal-900)" }}
+              >
+                {block.title}
+              </h3>
+              {block.displayMode === "paragraphs" ? (
+                <div className="space-y-2 text-sm leading-relaxed" style={{ color: "rgba(10,58,54,0.78)" }}>
+                  {Array.isArray(block.items) && block.items.length > 0 && typeof block.items[0] === "object" ? (
+                    <RichText value={block.items as PortableTextBlock[]} />
+                  ) : (
+                    block.items.map((item, k) => <p key={k}>{String(item)}</p>)
+                  )}
+                </div>
+              ) : (
+                <ul className="flex flex-col gap-2">
+                  {block.items.map((item, k) => (
+                    <li
+                      key={k}
+                      className="flex items-start gap-3 text-sm leading-relaxed"
+                      style={{ color: "rgba(10,58,54,0.78)" }}
+                    >
+                      <span
+                        className="mt-1.5 h-2 w-2 shrink-0 rounded-full"
+                        style={{ background: "var(--color-accent-500)" }}
+                      />
+                      <span className="flex-1">
+                        {typeof item === "object" ? (
+                          <RichText value={[item] as PortableTextBlock[]} />
+                        ) : (
+                          String(item)
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </article>
+          ))}
+        </div>
+
+        {supportersList.length > 0 && (
+          <div className="mt-12">
+            <p
+              className="mb-4 text-center text-xs font-black uppercase tracking-[0.22em]"
+              style={{ color: "var(--color-accent-500)" }}
+            >
+              {supportersTitle}
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              {supportersList.map((s) => (
+                <a
+                  key={s.name}
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all hover:scale-[1.04]"
+                  style={{
+                    background: "rgba(253,246,227,0.95)",
+                    color: "var(--color-teal-900)",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+                  }}
+                >
+                  {s.name}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </BeachPageShell>
+  );
+}

@@ -32,9 +32,11 @@ export const seoType = defineType({
     }),
     defineField({
       name: "noIndex",
-      title: "Noindex",
+      title: "Ne indexelje a Google (noindex)",
       type: "boolean",
       initialValue: false,
+      description:
+        "Bekapcsolva: az oldal kiesik a sitemapből és a robots meta noindex-et ad. Használd draft, teszt vagy belső oldalakhoz — ne az élő főoldalakhoz.",
     }),
   ],
 });

@@ -22,6 +22,8 @@ export type LineupArtist = Artist & {
     stage: string;
     title?: string;
   }>;
+  ticketUrl?: string;
+  cardBackgroundVariant?: "navbar" | "default" | "accent";
 };
 
 function lineupWeb(a: LineupArtist) {
@@ -37,6 +39,57 @@ function hasLineupLinks(a: LineupArtist) {
       a.facebookUrl ||
       a.instagramUrl ||
       a.spotifyUrl
+  );
+}
+
+function cardFallbackBackground(variant?: LineupArtist["cardBackgroundVariant"]) {
+  if (variant === "accent") return "linear-gradient(135deg, var(--color-orange-400) 0%, var(--color-orange-600) 100%)";
+  if (variant === "default") return "linear-gradient(135deg, var(--color-teal-400) 0%, var(--color-teal-600) 100%)";
+  return "linear-gradient(135deg, var(--color-sky-100) 0%, var(--color-sky-200) 50%, var(--color-ocean-300) 100%)";
+}
+
+const CARD_BODY_BACKGROUND = "var(--color-cream-50)";
+
+function PerformerCardImage({
+  image,
+  name,
+  imageDisplayMode,
+  cardBackgroundVariant,
+}: {
+  image?: string;
+  name: string;
+  imageDisplayMode?: "cover" | "contain" | "landscape" | "portrait";
+  cardBackgroundVariant?: "navbar" | "default" | "accent";
+}) {
+  const [hasError, setHasError] = useState(false);
+  const showImage = Boolean(image && !hasError);
+
+  return (
+    <div
+      className="relative overflow-hidden aspect-[4/3] w-full"
+      style={{
+        background: showImage
+          ? CARD_BODY_BACKGROUND
+          : cardFallbackBackground(cardBackgroundVariant),
+      }}
+    >
+      {image && !hasError ? (
+        <Image
+          src={image}
+          alt={name}
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          className={`transition-transform duration-500 group-hover:scale-[1.04] ${
+            imageDisplayMode === "contain" ? "object-contain" : "object-cover"
+          }`}
+          style={{ objectPosition: "top center" }}
+          priority={false}
+          onError={() => setHasError(true)}
+        />
+      ) : (
+        <ArtistPlaceholder />
+      )}
+    </div>
   );
 }
 
@@ -122,33 +175,18 @@ export default function LineupGrid({
                 color: "var(--color-teal-900)",
               }}
             >
-              <div
-                className="relative overflow-hidden aspect-[4/3]"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #87c9e6 0%, #5fb6e0 40%, #3e89a3 100%)",
-                }}
-              >
-                {artist.image ? (
-                  <Image
-                    src={artist.image}
-                    alt={artist.name}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    className={`transition-transform duration-500 group-hover:scale-[1.04] ${
-                      artist.imageDisplayMode === "contain" ? "object-contain" : "object-cover"
-                    }`}
-                    style={{ objectPosition: "top center" }}
-                    priority={false}
-                  />
-                ) : (
-                  <ArtistPlaceholder />
-                )}
+              <div className="relative aspect-[4/3] w-full">
+                <PerformerCardImage
+                  image={artist.image}
+                  name={artist.name}
+                  imageDisplayMode={artist.imageDisplayMode}
+                  cardBackgroundVariant={artist.cardBackgroundVariant}
+                />
 
                 {/* Sanity-ből származó címkék (performer.tags). Ha nincs tag, semmi
                     nem jelenik meg — sosem mutatunk shortDescription-t tag-ként. */}
                 {artist.tags && artist.tags.length > 0 && (
-                  <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+                  <div className="absolute left-3 top-3 z-10 flex flex-wrap gap-1.5">
                     {artist.tags.slice(0, 3).map((tag) => (
                       <span
                         key={tag}
@@ -163,6 +201,7 @@ export default function LineupGrid({
               </div>
 
               <div className="flex flex-1 flex-col p-5">
+                {/* Content — name, origin, description */}
                 <h3 className="font-display text-xl font-black leading-tight">{artist.name}</h3>
                 <p
                   className="mt-0.5 text-xs font-semibold uppercase tracking-wider"
@@ -170,7 +209,6 @@ export default function LineupGrid({
                 >
                   {artist.origin}
                 </p>
-
                 <div className="mt-3 line-clamp-3 text-sm leading-relaxed" style={{ color: "rgba(10,58,54,0.72)" }}>
                   {Array.isArray(artist.details) ? (
                     <RichText value={artist.details as PortableTextBlock[]} />
@@ -181,91 +219,90 @@ export default function LineupGrid({
                   )}
                 </div>
 
-                {hasLineupLinks(artist) && (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {lineupWeb(artist) && (
-                      <a
-                        href={lineupWeb(artist)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(event) => event.stopPropagation()}
-                        className="inline-flex items-center rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider"
-                        style={{ background: "#0d5f56", color: "#fff" }}
-                      >
-                        Weboldal
-                      </a>
-                    )}
-                    {lineupYoutube(artist) && (
-                      <a
-                        href={lineupYoutube(artist)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(event) => event.stopPropagation()}
-                        className="inline-flex items-center rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider"
-                        style={{ background: "#b12020", color: "#fff" }}
-                      >
-                        YouTube
-                      </a>
-                    )}
-                    {artist.facebookUrl && (
-                      <a
-                        href={artist.facebookUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(event) => event.stopPropagation()}
-                        className="inline-flex items-center rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider"
-                        style={{ background: "#1877f2", color: "#fff" }}
-                      >
-                        Facebook
-                      </a>
-                    )}
-                    {artist.instagramUrl && (
-                      <a
-                        href={artist.instagramUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(event) => event.stopPropagation()}
-                        className="inline-flex items-center rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider"
-                        style={{ background: "#e4405f", color: "#fff" }}
-                      >
-                        Instagram
-                      </a>
-                    )}
-                    {artist.spotifyUrl && (
-                      <a
-                        href={artist.spotifyUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(event) => event.stopPropagation()}
-                        className="inline-flex items-center rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider"
-                        style={{ background: "#1db954", color: "#fff" }}
-                      >
-                        Spotify
-                      </a>
-                    )}
-                  </div>
-                )}
-
-                <div
-                  className="mt-4 flex items-center justify-end gap-3 border-t pt-3"
-                  style={{ borderColor: "rgba(10,58,54,0.12)" }}
-                >
-                  {/* A színpad-címke eltávolítva: a fellépőhöz Sanity-ben nincs valós stage-érték,
-                      a hardcode-olt „main" csak megtévesztő volt. A program-oldali színpad
-                      megjelenítés a programItem.stage mezőből származik. */}
-                  <span
-                    className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-wider"
-                    style={{
-                      background: "var(--color-accent-500)",
-                      color: "#fdf6e3",
-                      boxShadow: "0 4px 12px rgba(212,98,26,0.35)",
-                    }}
+                {/* Actions — always pinned to card bottom via mt-auto */}
+                <div className="mt-auto">
+                  {hasLineupLinks(artist) && (
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {lineupWeb(artist) && (
+                        <a
+                          href={lineupWeb(artist)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(event) => event.stopPropagation()}
+                          className="inline-flex items-center rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider"
+                          style={{ background: "#0d5f56", color: "#fff" }}
+                        >
+                          Weboldal
+                        </a>
+                      )}
+                      {lineupYoutube(artist) && (
+                        <a
+                          href={lineupYoutube(artist)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(event) => event.stopPropagation()}
+                          className="inline-flex items-center rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider"
+                          style={{ background: "#b12020", color: "#fff" }}
+                        >
+                          YouTube
+                        </a>
+                      )}
+                      {artist.facebookUrl && (
+                        <a
+                          href={artist.facebookUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(event) => event.stopPropagation()}
+                          className="inline-flex items-center rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider"
+                          style={{ background: "#1877f2", color: "#fff" }}
+                        >
+                          Facebook
+                        </a>
+                      )}
+                      {artist.instagramUrl && (
+                        <a
+                          href={artist.instagramUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(event) => event.stopPropagation()}
+                          className="inline-flex items-center rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider"
+                          style={{ background: "#e4405f", color: "#fff" }}
+                        >
+                          Instagram
+                        </a>
+                      )}
+                      {artist.spotifyUrl && (
+                        <a
+                          href={artist.spotifyUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(event) => event.stopPropagation()}
+                          className="inline-flex items-center rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider"
+                          style={{ background: "#1db954", color: "#fff" }}
+                        >
+                          Spotify
+                        </a>
+                      )}
+                    </div>
+                  )}
+                  <div
+                    className="mt-4 flex items-center justify-end gap-3 border-t pt-3"
+                    style={{ borderColor: "rgba(10,58,54,0.12)" }}
                   >
-                    Részletek
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8">
-                      <path d="M5 12h14M13 5l7 7-7 7" />
-                    </svg>
-                  </span>
+                    <span
+                      className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-wider"
+                      style={{
+                        background: "var(--color-accent-500)",
+                        color: "#fdf6e3",
+                        boxShadow: "0 4px 12px rgba(212,98,26,0.35)",
+                      }}
+                    >
+                      Részletek
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8">
+                        <path d="M5 12h14M13 5l7 7-7 7" />
+                      </svg>
+                    </span>
+                  </div>
                 </div>
               </div>
             </motion.button>
@@ -293,19 +330,15 @@ export default function LineupGrid({
                   onClick={(event) => event.stopPropagation()}
                 >
                   <div className="grid gap-0 md:grid-cols-[1.2fr_1.4fr]">
-                    <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[400px]">
+                    <div className="flex items-center justify-center overflow-hidden rounded-t-3xl md:rounded-tl-3xl md:rounded-tr-none md:rounded-bl-3xl">
                       {activeArtist.image ? (
                         <Image
                           src={activeArtist.image}
                           alt={activeArtist.name}
-                          fill
+                          width={0}
+                          height={0}
                           sizes="(max-width: 768px) 100vw, 45vw"
-                          className={`${
-                            activeArtist.imageDisplayMode === "contain"
-                              ? "object-contain"
-                              : "object-cover"
-                          }`}
-                          style={{ objectPosition: "top center" }}
+                          style={{ width: "100%", height: "auto" }}
                           priority={false}
                         />
                       ) : (
@@ -432,7 +465,7 @@ export default function LineupGrid({
                           </a>
                         )}
                         <a
-                          href={ticketUrl}
+                          href={activeArtist.ticketUrl || ticketUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider"
@@ -455,23 +488,15 @@ export default function LineupGrid({
 
 function ArtistPlaceholder() {
   return (
-    <div className="absolute inset-0 flex items-center justify-center">
-      <svg viewBox="0 0 200 150" className="h-full w-full" aria-hidden="true">
-        <path
-          d="M0 120 Q25 110 50 120 T100 120 T150 120 T200 120 L200 150 L0 150 Z"
-          fill="rgba(255,255,255,0.2)"
-        />
-        <path
-          d="M0 130 Q25 122 50 130 T100 130 T150 130 T200 130 L200 150 L0 150 Z"
-          fill="rgba(255,255,255,0.3)"
-        />
-        <g transform="translate(85 40)">
-          <rect x="8" y="0" width="14" height="26" rx="7" fill="#fdf6e3" stroke="#0a3a36" strokeWidth="1.5" />
-          <path d="M4 22 A11 11 0 0 0 26 22" fill="none" stroke="#fdf6e3" strokeWidth="2.5" />
-          <line x1="15" y1="33" x2="15" y2="46" stroke="#fdf6e3" strokeWidth="2.5" />
-          <line x1="9" y1="46" x2="21" y2="46" stroke="#fdf6e3" strokeWidth="2.5" strokeLinecap="round" />
-        </g>
-      </svg>
+    <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
+      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm border border-white/20 shadow-inner mb-2 animate-pulse">
+        <svg viewBox="0 0 24 24" className="h-7 w-7 text-white/95" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 18V5l12-2v13" />
+          <circle cx="6" cy="18" r="3" />
+          <circle cx="18" cy="16" r="3" />
+        </svg>
+      </div>
+      <span className="text-[10px] font-bold uppercase tracking-wider text-white/80 select-none">Bohém Jazz</span>
     </div>
   );
 }

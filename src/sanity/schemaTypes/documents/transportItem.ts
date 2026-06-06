@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { richText } from "../objects/richText";
 
 export const transportItemType = defineType({
   name: "transportItem",
@@ -10,8 +11,20 @@ export const transportItemType = defineType({
   fields: [
     defineField({ name: "titleHu", type: "string", title: "Cím (HU)" }),
     defineField({ name: "titleEn", type: "string", title: "Cím (EN)" }),
-    defineField({ name: "descriptionHu", type: "text", rows: 3, title: "Leírás (HU)" }),
-    defineField({ name: "descriptionEn", type: "text", rows: 3, title: "Leírás (EN)" }),
+    defineField({ name: "descriptionRichHu", title: "Leírás (HU) — Rich Text", ...richText }),
+    defineField({ name: "descriptionRichEn", title: "Leírás (EN) — Rich Text", ...richText }),
+    defineField({
+      name: "descriptionHu",
+      type: "text",
+      rows: 3,
+      title: "Leírás (HU) — régi sima szöveg",
+    }),
+    defineField({
+      name: "descriptionEn",
+      type: "text",
+      rows: 3,
+      title: "Leírás (EN) — régi sima szöveg",
+    }),
     defineField({
       name: "icon",
       type: "string",

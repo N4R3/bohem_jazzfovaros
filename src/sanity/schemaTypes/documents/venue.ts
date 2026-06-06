@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { richText } from "../objects/richText";
 
 export const venueType = defineType({
   name: "venue",
@@ -43,8 +44,20 @@ export const venueType = defineType({
     defineField({ name: "googleMapsUrl", title: "Google Maps link", type: "url" }),
     defineField({ name: "latitude", title: "Szélesség (lat)", type: "number" }),
     defineField({ name: "longitude", title: "Hosszúság (lon)", type: "number" }),
-    defineField({ name: "descriptionHu", title: "Leírás (HU)", type: "text", rows: 3 }),
-    defineField({ name: "descriptionEn", title: "Leírás (EN)", type: "text", rows: 3 }),
+    defineField({ name: "descriptionRichHu", title: "Leírás (HU) — Rich Text", ...richText }),
+    defineField({ name: "descriptionRichEn", title: "Leírás (EN) — Rich Text", ...richText }),
+    defineField({
+      name: "descriptionHu",
+      title: "Leírás (HU) — régi sima szöveg",
+      type: "text",
+      rows: 3,
+    }),
+    defineField({
+      name: "descriptionEn",
+      title: "Leírás (EN) — régi sima szöveg",
+      type: "text",
+      rows: 3,
+    }),
     defineField({
       name: "mapImage",
       title: "Fesztiváltérkép kép",

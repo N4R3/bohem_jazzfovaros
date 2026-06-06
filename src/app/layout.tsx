@@ -22,10 +22,11 @@ const bebasNeue = Bebas_Neue({
 });
 
 const poppins = Poppins({
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["400", "600", "700", "800"],
   subsets: ["latin", "latin-ext"],
   variable: "--font-poppins",
   display: "swap",
+  adjustFontFallback: true,
 });
 
 const pacifico = Pacifico({
@@ -91,12 +92,12 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const locale = await getLocale();
+  const [locale, c, headerNav] = await Promise.all([
+    getLocale(),
+    getContent(),
+    getNavigationWithFallback("header"),
+  ]);
   const isEn = locale === "en";
-  const c = await getContent();
-  /* Sanity-ből érkező header navigáció — fallback a c.nav-ra. Az ISR (~30s)
-     a content.ts-ben van beállítva, így a layout statikus marad. */
-  const headerNav = await getNavigationWithFallback("header");
 
   return (
     <html

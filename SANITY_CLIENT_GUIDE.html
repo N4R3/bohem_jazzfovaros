@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jazzfőváros — Sanity szerkesztési útmutató</title>
+<style>
+  :root {
+    --bg: #faf6ee;
+    --card: #ffffff;
+    --cream: #fdf9f0;
+    --ink: #1f2933;
+    --ink-soft: #4a5560;
+    --line: #e7ddc9;
+    --green: #2f8f5b;
+    --green-bg: #e8f6ee;
+    --blue: #2f6fed;
+    --blue-bg: #e7eefe;
+    --yellow: #c8930a;
+    --yellow-bg: #fbf3da;
+    --orange: #d9690f;
+    --orange-bg: #fcecdc;
+    --red: #d23b3b;
+    --red-bg: #fbe6e6;
+    --teal: #0a3a36;
+    --accent: #ef7a1f;
+    --shadow: 0 6px 20px rgba(20, 40, 38, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.65;
+    font-size: 16px;
+  }
+
+  .layout {
+    display: flex;
+    max-width: 1280px;
+    margin: 0 auto;
+    gap: 32px;
+    padding: 0 20px;
+    align-items: flex-start;
+  }
+
+  /* ---------- Table of contents ---------- */
+  nav.toc {
+    position: sticky;
+    top: 0;
+    width: 260px;
+    flex-shrink: 0;
+    max-height: 100vh;
+    overflow-y: auto;
+    padding: 24px 8px 24px 0;
+    font-size: 13.5px;
+  }
+  nav.toc h2 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    margin: 0 0 12px 4px;
+  }
+  nav.toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: toc;
+  }
+  nav.toc li { margin: 1px 0; }
+  nav.toc a {
+    display: block;
+    padding: 6px 10px;
+    border-radius: 8px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: background 0.15s, color 0.15s;
+  }
+  nav.toc a:hover {
+    background: var(--cream);
+    color: var(--teal);
+    border-left-color: var(--accent);
+  }
+
+  main {
+    flex: 1;
+    min-width: 0;
+    padding: 24px 0 80px;
+  }
+
+  /* ---------- Cover ---------- */
+  .cover {
+    background: linear-gradient(135deg, #0a3a36 0%, #14524c 60%, #1f7e73 100%);
+    color: #fdf6e3;
+    border-radius: 22px;
+    padding: 48px 44px;
+    box-shadow: var(--shadow);
+    margin-bottom: 36px;
+  }
+  .cover .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffd9a8;
+    margin-bottom: 14px;
+  }
+  .cover h1 {
+    font-size: 38px;
+    line-height: 1.1;
+    margin: 0 0 12px;
+    font-weight: 800;
+  }
+  .cover .subtitle {
+    font-size: 18px;
+    color: #d7efe9;
+    margin: 0 0 24px;
+    max-width: 640px;
+  }
+  .cover .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    font-size: 13.5px;
+    color: #bfe3dc;
+    margin-bottom: 22px;
+  }
+  .cover .meta strong { color: #fff; }
+  .cover .note {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 15px;
+    max-width: 680px;
+  }
+
+  /* ---------- Sections ---------- */
+  section {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 28px 30px;
+    margin-bottom: 26px;
+    box-shadow: var(--shadow);
+    scroll-margin-top: 16px;
+  }
+  section > h2 {
+    font-size: 24px;
+    margin: 0 0 6px;
+    color: var(--teal);
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  section > h2 .num {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--accent);
+    border-radius: 8px;
+    padding: 2px 10px;
+    flex-shrink: 0;
+  }
+  section > .lead {
+    color: var(--ink-soft);
+    margin: 0 0 20px;
+    font-size: 15.5px;
+  }
+  h3 {
+    font-size: 18px;
+    color: var(--teal);
+    margin: 26px 0 10px;
+  }
+  h4 {
+    font-size: 15.5px;
+    margin: 18px 0 8px;
+    color: var(--ink);
+  }
+
+  p { margin: 0 0 12px; }
+
+  /* ---------- Quick-start cards grid ---------- */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin: 18px 0;
+  }
+  .qcard {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 18px;
+    background: var(--cream);
+    border-left: 4px solid var(--green);
+  }
+  .qcard h4 {
+    margin: 0 0 8px;
+    font-size: 15px;
+    color: var(--teal);
+  }
+  .qcard .path {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--green);
+    background: var(--green-bg);
+    border-radius: 6px;
+    padding: 4px 8px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+  .qcard p { font-size: 14px; margin: 0 0 6px; color: var(--ink-soft); }
+  .qcard.warn { border-left-color: var(--orange); }
+  .qcard.risky { border-left-color: var(--red); }
+
+  /* ---------- Badges ---------- */
+  .badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+    line-height: 1.5;
+  }
+  .b-green  { background: var(--green-bg);  color: var(--green); }
+  .b-blue   { background: var(--blue-bg);   color: var(--blue); }
+  .b-yellow { background: var(--yellow-bg); color: var(--yellow); }
+  .b-orange { background: var(--orange-bg); color: var(--orange); }
+  .b-red    { background: var(--red-bg);    color: var(--red); }
+  .b-gray   { background: #eceff2;          color: #5a6570; }
+
+  /* ---------- Legend ---------- */
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 10px;
+  }
+  .legend .row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--cream);
+  }
+  .legend .sym { font-size: 18px; flex-shrink: 0; width: 22px; text-align: center; }
+  .legend .txt { font-size: 14px; }
+  .legend .txt strong { display: block; color: var(--teal); }
+
+  /* ---------- Tables ---------- */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    -webkit-overflow-scrolling: touch;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    min-width: 560px;
+  }
+  thead th {
+    background: var(--teal);
+    color: #fdf6e3;
+    text-align: left;
+    padding: 11px 14px;
+    font-weight: 600;
+    font-size: 13px;
+    position: sticky;
+    top: 0;
+  }
+  tbody td {
+    padding: 10px 14px;
+    border-top: 1px solid var(--line);
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) { background: var(--cream); }
+  tbody tr:hover { background: #f4ede0; }
+  td code, p code, li code {
+    background: #eef1f2;
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-size: 13px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    color: #b8430f;
+  }
+
+  /* ---------- Boxes ---------- */
+  .box {
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 14.5px;
+    border-left: 4px solid;
+  }
+  .box .box-title { font-weight: 700; margin-bottom: 4px; display: block; }
+  .box.warn   { background: var(--orange-bg); border-color: var(--orange); }
+  .box.warn .box-title { color: var(--orange); }
+  .box.danger { background: var(--red-bg); border-color: var(--red); }
+  .box.danger .box-title { color: var(--red); }
+  .box.info   { background: var(--blue-bg); border-color: var(--blue); }
+  .box.info .box-title { color: var(--blue); }
+  .box.ok     { background: var(--green-bg); border-color: var(--green); }
+  .box.ok .box-title { color: var(--green); }
+
+  /* ---------- Decision tree ---------- */
+  .tree {
+    background: var(--teal);
+    color: #e6f3f0;
+    border-radius: 12px;
+    padding: 20px 24px;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 14px;
+    line-height: 1.8;
+    margin: 16px 0;
+    overflow-x: auto;
+  }
+  .tree .q { color: #ffd9a8; font-weight: 700; }
+  .tree .a { color: #9fe6d6; }
+
+  /* ---------- Checklist ---------- */
+  ul.check {
+    list-style: none;
+    padding: 0;
+    margin: 14px 0;
+  }
+  ul.check li {
+    padding: 8px 8px 8px 38px;
+    position: relative;
+    border-bottom: 1px dashed var(--line);
+    font-size: 15px;
+  }
+  ul.check li:before {
+    content: "☐";
+    position: absolute;
+    left: 10px;
+    top: 7px;
+    font-size: 18px;
+    color: var(--green);
+  }
+
+  /* ---------- Page editor card ---------- */
+  .pagecard {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    margin: 14px 0;
+    overflow: hidden;
+  }
+  .pagecard .head {
+    background: var(--cream);
+    padding: 12px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .pagecard .head h4 { margin: 0; font-size: 16px; color: var(--teal); }
+  .pagecard .head .url {
+    font-size: 13px;
+    font-family: monospace;
+    background: #eef1f2;
+    padding: 2px 8px;
+    border-radius: 6px;
+    color: #b8430f;
+  }
+  .pagecard .body { padding: 14px 18px; }
+  .pagecard .body dl { margin: 0; display: grid; grid-template-columns: 160px 1fr; gap: 6px 14px; font-size: 14px; }
+  .pagecard .body dt { font-weight: 700; color: var(--ink-soft); }
+  .pagecard .body dd { margin: 0; }
+
+  .toplink {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .toplink:hover { text-decoration: underline; }
+
+  .summary-final {
+    background: linear-gradient(135deg, #14524c, #1f7e73);
+    color: #fdf6e3;
+    border: none;
+  }
+  .summary-final h2 { color: #fff; }
+  .summary-final .lead { color: #cdeae3; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px) {
+    nav.toc { display: none; }
+    .layout { padding: 0 14px; }
+    main { padding: 16px 0 60px; }
+    .cover { padding: 32px 24px; }
+    .cover h1 { font-size: 28px; }
+    section { padding: 22px 18px; }
+  }
+
+  /* ---------- Print ---------- */
+  @media print {
+    nav.toc { display: none; }
+    body { background: #fff; font-size: 12px; }
+    section, .cover { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+    .cover { background: #14524c !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    thead th { background: #14524c !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .toplink { display: none; }
+    a { color: var(--ink); text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ============ TABLE OF CONTENTS ============ -->
+  <nav class="toc">
+    <h2>Tartalom</h2>
+    <ol>
+      <li><a href="#s2">1 · Gyors kezdés</a></li>
+      <li><a href="#s3">2 · Jelmagyarázat</a></li>
+      <li><a href="#s4">3 · Sanity oldalsáv</a></li>
+      <li><a href="#s5">4 · Mit hol szerkesszek?</a></li>
+      <li><a href="#s6">5 · Főoldal</a></li>
+      <li><a href="#s7">6 · Program</a></li>
+      <li><a href="#s8">7 · Jegyek</a></li>
+      <li><a href="#s9">8 · Fellépők</a></li>
+      <li><a href="#s10">9 · Szállás</a></li>
+      <li><a href="#s11">10 · Kapcsolat / alapadatok</a></li>
+      <li><a href="#s12">11 · Jogi és általános oldalak</a></li>
+      <li><a href="#s13">12 · Rugalmas szekciók</a></li>
+      <li><a href="#s14">13 · Videók</a></li>
+      <li><a href="#s15">14 · Navigáció és nyelvek</a></li>
+      <li><a href="#s16">15 · SEO és noIndex</a></li>
+      <li><a href="#s17">16 · Gyakori hibák</a></li>
+      <li><a href="#s18">17 · Ellenőrzőlista</a></li>
+      <li><a href="#s19">18 · Technikai megjegyzések</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <!-- ============ COVER ============ -->
+    <header class="cover" id="top">
+      <div class="eyebrow">Jazzfőváros · Kecskemét</div>
+      <h1>Sanity szerkesztési útmutató</h1>
+      <p class="subtitle">Egyszerű útmutató a weboldal tartalmainak szerkesztéséhez</p>
+      <div class="meta">
+        <span><strong>Dátum:</strong> 2026. június 5.</span>
+        <span><strong>Verzió:</strong> 1.0</span>
+        <span><strong>Készült:</strong> nem technikai szerkesztők számára</span>
+      </div>
+      <div class="note">
+        Ez az útmutató azt mutatja meg, hogy <strong>mit hol kell szerkeszteni</strong> a Sanity-ben.
+        Nem kell hozzá programozói tudás — végigvezet a leggyakoribb feladatokon, lépésről lépésre.
+      </div>
+    </header>
+
+    <!-- ============ 1. GYORS KEZDÉS ============ -->
+    <section id="s2">
+      <h2><span class="num">1</span> Gyors kezdés — „Ha csak ezt keresed…"</h2>
+      <p class="lead">A leggyakoribb szerkesztési feladatok és a pontos helyük a Sanity Studio menüjében.</p>
+
+      <div class="cards">
+        <div class="qcard">
+          <h4>Főoldal szövegeit hol szerkesztem?</h4>
+          <span class="path">Főoldal szerkesztés</span>
+          <p>Hero cím, alcím, dátum badge, statisztikák, CTA gomb és CTA banner — mind itt.</p>
+        </div>
+
+        <div class="qcard">
+          <h4>Főoldal videóját hol cserélem?</h4>
+          <span class="path">Főoldal szerkesztés → Videó URL</span>
+          <p>Csak másold be az új YouTube/Vimeo linket a <code>Videó URL</code> mezőbe.</p>
+        </div>
+
+        <div class="qcard warn">
+          <h4>Jegy árát / linkjét hol módosítom?</h4>
+          <span class="path">Jegyek → adott jegy</span>
+          <p>Az ár és a link itt frissül — és automatikusan minden helyen frissül, ahol a jegy megjelenik.</p>
+        </div>
+
+        <div class="qcard">
+          <h4>Programot hol szerkesztem?</h4>
+          <span class="path">Program tételek</span>
+          <p>Az egyes események (dátum, idő, fellépő, helyszín). Az oldal kerete: <code>Oldalak → Program</code>.</p>
+        </div>
+
+        <div class="qcard">
+          <h4>Fellépőt hol szerkesztem?</h4>
+          <span class="path">Fellépők → adott fellépő</span>
+          <p>Név, kép, leírás, social linkek, sorrend, kiemelés.</p>
+        </div>
+
+        <div class="qcard">
+          <h4>Szállást hol szerkesztem?</h4>
+          <span class="path">Szállás → adott szálláshely</span>
+          <p>Név, kép, ár, leírás, foglalási link, távolság.</p>
+        </div>
+
+        <div class="qcard">
+          <h4>Kapcsolat adatokat hol szerkesztem?</h4>
+          <span class="path">Site settings / alapadatok</span>
+          <p>Email, telefon, social linkek, globális jegy URL, önkéntes gomb.</p>
+        </div>
+
+        <div class="qcard warn">
+          <h4>Új rejtett / link-only oldalt hogyan hozok létre?</h4>
+          <span class="path">Oldalak → + Új dokumentum</span>
+          <p>Hozd létre, <strong>ne</strong> add a navigációhoz, és állítsd be a <code>noIndex</code>-et. Csak a közvetlen linkkel lesz elérhető.</p>
+        </div>
+      </div>
+      <a class="toplink" href="#top">↑ Vissza a tetejére</a>
+    </section>
+
+    <!-- ============ 2. JELMAGYARÁZAT ============ -->
+    <section id="s3">
+      <h2><span class="num">2</span> Jelmagyarázat</h2>
+      <p class="lead">Ezeket a jelöléseket használjuk az útmutató során. Érdemes egyszer átfutni.</p>
+
+      <div class="legend">
+        <div class="row"><span class="sym">🟢</span><span class="txt"><strong>Primary editor</strong>Normál, mindennapi szerkesztés. Bátran használhatod.</span></div>
+        <div class="row"><span class="sym">🔵</span><span class="txt"><strong>Global collection</strong>Egyszer szerkeszted, de több helyen jelenik meg (pl. jegyek, fellépők).</span></div>
+        <div class="row"><span class="sym">🟡</span><span class="txt"><strong>Advanced / ritka</strong>Ritkán kell hozzányúlni — csak ha tudod, mit csinálsz.</span></div>
+        <div class="row"><span class="sym">🟠</span><span class="txt"><strong>Másodlagos / deprecated</strong>Általában ne használd; van egyszerűbb, jobb hely ugyanerre.</span></div>
+        <div class="row"><span class="sym">🔴</span><span class="txt"><strong>Kockázatos</strong>Megváltoztatása linket vagy megjelenést törhet. Óvatosan!</span></div>
+        <div class="row"><span class="sym">✅</span><span class="txt"><strong>Sanity-ből jön</strong>Szabadon szerkeszthető a Studio felületén.</span></div>
+        <div class="row"><span class="sym">⚠️</span><span class="txt"><strong>Sanity + statikus tartalék</strong>Ha üresen hagyod, a rendszer beépített szöveget mutat helyette.</span></div>
+        <div class="row"><span class="sym">❌</span><span class="txt"><strong>Hardcoded</strong>Csak fejlesztő tudja megváltoztatni (kódban van).</span></div>
+        <div class="row"><span class="sym">🔒</span><span class="txt"><strong>Read-only / régi mező</strong>Ne szerkeszd — automatikus vagy elavult mező.</span></div>
+      </div>
+
+      <div class="box info">
+        <span class="box-title">Mi az a „statikus tartalék" (fallback)?</span>
+        Sok mezőnél, ha üresen hagyod, a weboldal nem marad üres — egy beépített alapszöveget mutat.
+        Ha a saját szövegedet akarod látni, <strong>töltsd ki a Sanity mezőt</strong>. Ha kitöltötted és mégis a régi látszik,
+        valószínűleg nem publikáltad, vagy üres maradt a mező.
+      </div>
+      <a class="toplink" href="#top">↑ Vissza a tetejére</a>
+    </section>
+
+    <!-- ============ 3. SANITY OLDALSÁV ============ -->
+    <section id="s4">
+      <h2><span class="num">3</span> A Sanity oldalsáv magyarázata</h2>
+      <p class="lead">A bal oldali menü minden pontja röviden, érthetően. A színes badge mutatja, melyik kategóriába tartozik.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Menüpont</th>
+              <th>Mire való?</th>
+              <th>Hol jelenik meg?</th>
+              <th>Típus</th>
+              <th>Mire figyelj?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Főoldal szerkesztés</strong></td>
+              <td>Főoldal hero szövege, statisztikák, CTA gomb és banner, főoldali videó.</td>
+              <td>Főoldal (<code>/</code>)</td>
+              <td><span class="badge b-green">🟢 Primary</span></td>
+              <td>A főoldalt itt szerkeszd — ne az „Oldalak" listán keresztül.</td>
+            </tr>
+            <tr>
+              <td><strong>Jegyek</strong> (Főoldal alatt)</td>
+              <td>Jegytípusok listája — ugyanaz, mint a külön „Jegyek" menü.</td>
+              <td>Főoldali jegyboxok + <code>/info/</code></td>
+              <td><span class="badge b-blue">🔵 Global</span></td>
+              <td>Egy jegy itt szerkesztve több helyen is megjelenhet.</td>
+            </tr>
+            <tr>
+              <td><strong>Site settings / alapadatok</strong></td>
+              <td>Globális jegy URL, kapcsolat adatok, social linkek, dátumok.</td>
+              <td>Több oldal (kapcsolat, footer, jegy fallback)</td>
+              <td><span class="badge b-yellow">🟡 Advanced</span></td>
+              <td>Csak egy ilyen dokumentum van. Hatása az egész oldalra kiterjed.</td>
+            </tr>
+            <tr>
+              <td><strong>Pop up settings</strong></td>
+              <td>A főoldali felugró ablak képe, szövege, be/ki kapcsolója.</td>
+              <td>Főoldali popup</td>
+              <td><span class="badge b-yellow">🟡 Advanced</span></td>
+              <td><code>isEnabled=false</code> teljesen kikapcsolja a popupot.</td>
+            </tr>
+            <tr>
+              <td><strong>Navigáció / Menü</strong></td>
+              <td>A fejléc menü pontjai: felirat, sorrend, célpont, láthatóság.</td>
+              <td>Fejléc + footer</td>
+              <td><span class="badge b-red">🔴 Kockázatos</span></td>
+              <td>Üres <code>labelEn</code> → nem jelenik meg az EN menüben. A sorrendet az <code>order</code> szabja meg.</td>
+            </tr>
+            <tr>
+              <td><strong>Oldalak (Pages)</strong></td>
+              <td>Minden szerkeszthető oldal: program, lineup, info, szállás, térkép, kapcsolat, jogi oldalak, saját oldalak.</td>
+              <td>Minden <code>/slug</code> útvonal</td>
+              <td><span class="badge b-green">🟢 Primary</span></td>
+              <td>A főoldalt <strong>ne</strong> itt szerkeszd — arra a „Főoldal szerkesztés" van.</td>
+            </tr>
+            <tr>
+              <td><strong>Jazztábor — Page</strong></td>
+              <td>A jazztábor oldal: program blokkok, szervezők, gombok, szöveg.</td>
+              <td><code>/jazztabor/</code></td>
+              <td><span class="badge b-green">🟢 Primary</span></td>
+              <td>Ugyanaz a dokumentum, mint az „Oldalak" listában — csak gyorslink.</td>
+            </tr>
+            <tr>
+              <td><strong>Futás — Page</strong></td>
+              <td>A futás oldal: dátum, helyszín, távolságok, nevezési határidő, gombok.</td>
+              <td><code>/futas/</code></td>
+              <td><span class="badge b-green">🟢 Primary</span></td>
+              <td>Ugyanaz a dokumentum, mint az „Oldalak" listában — csak gyorslink.</td>
+            </tr>
+            <tr>
+              <td><strong>Program tételek</strong></td>
+              <td>Az egyes programesemények: dátum, idő, színpad, fellépők, leírás.</td>
+              <td><code>/program/</code> táblázat</td>
+              <td><span class="badge b-green">🟢 Primary</span></td>
+              <td>Dátum + kezdési idő kötelező. Színpadhoz előbb a „Színpadok" menü kell.</td>
+            </tr>
+            <tr>
+              <td><strong>Színpadok / helyszínek</strong></td>
+              <td>A színpadok/helyszínek nevei (pl. „Nagyszínpad").</td>
+              <td>Program tételek + táblázat</td>
+              <td><span class="badge b-blue">🔵 Global</span></td>
+              <td>A programtételek ezeket hivatkozzák. Törléskor a hivatkozás megszakad.</td>
+            </tr>
+            <tr>
+              <td><strong>Fellépők</strong></td>
+              <td>Összes fellépő: név, kép, leírás, linkek, sorrend, kiemelés.</td>
+              <td><code>/lineup/</code> + program nevek</td>
+              <td><span class="badge b-green">🟢 Primary</span></td>
+              <td><code>isActive=false</code> → eltűnik. <code>isFeatured=true</code> → kiemelt helyre kerül.</td>
+            </tr>
+            <tr>
+              <td><strong>Fellépő címkék / műfajok</strong></td>
+              <td>Műfaj badge-ek (pl. „Swing", „Blues").</td>
+              <td>Lineup kártyák</td>
+              <td><span class="badge b-blue">🔵 Global</span></td>
+              <td>A fellépők hivatkozzák ezeket. Sorrendjük az <code>order</code> mezőn múlik.</td>
+            </tr>
+            <tr>
+              <td><strong>Videók (másodlagos…)</strong></td>
+              <td>Újrafelhasználható videó blokkok rugalmas szekciókhoz.</td>
+              <td>Csak <code>sectionVideo</code> szekciókban</td>
+              <td><span class="badge b-orange">🟠 Másodlagos</span></td>
+              <td><strong>Normál esetben ne itt cseréld az oldal videóját!</strong> Arra a Page <code>Videó URL</code> mezője van.</td>
+            </tr>
+            <tr>
+              <td><strong>Szállás</strong></td>
+              <td>Szálláshelyek: név, kép, ár, leírás, foglalás, távolság.</td>
+              <td><code>/szallas/</code></td>
+              <td><span class="badge b-green">🟢 Primary</span></td>
+              <td><code>isActive=false</code> → nem jelenik meg. Sorrend: <code>order</code>.</td>
+            </tr>
+            <tr>
+              <td><strong>Közlekedés</strong></td>
+              <td>Közlekedési módok (vonat, autó, busz) leírása és linkje.</td>
+              <td><code>/terkep/</code></td>
+              <td><span class="badge b-green">🟢 Primary</span></td>
+              <td><code>isActive=false</code> → nem jelenik meg.</td>
+            </tr>
+            <tr>
+              <td><strong>Támogatók</strong></td>
+              <td>Szponzorok logói, linkjei, kategória-besorolása.</td>
+              <td>Footer szponzor sáv</td>
+              <td><span class="badge b-blue">🔵 Global</span></td>
+              <td>A kategória szabja meg a csoportosítást és a sorrendet.</td>
+            </tr>
+            <tr>
+              <td><strong>Támogatói kategóriák</strong></td>
+              <td>Szponzor szekciók nevei (pl. „Főtámogatók").</td>
+              <td>Footer szponzor fejléc</td>
+              <td><span class="badge b-yellow">🟡 Advanced</span></td>
+              <td>Törléskor a hozzá tartozó szponzorok elveszítik a kategóriát.</td>
+            </tr>
+            <tr>
+              <td><strong>Helyszín (Venue)</strong></td>
+              <td>A fesztiválhelyszín neve, címe, GPS, térkép embed, leírás.</td>
+              <td><code>/terkep/</code></td>
+              <td><span class="badge b-yellow">🟡 Advanced</span></td>
+              <td>Csak egy ilyen dokumentum van (singleton).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <a class="toplink" href="#top">↑ Vissza a tetejére</a>
+    </section>
+
+    <!-- ============ 4. MIT HOL SZERKESSZEK ============ -->
+    <section id="s5">
+      <h2><span class="num">4</span> Mit hol szerkesszek? — oldalanként</h2>
+      <p class="lead">Oldalról oldalra: hol szerkeszted, mit szerkeszthetsz, és mire vigyázz.</p>
+
+      <div class="pagecard">
+        <div class="head"><h4>Főoldal</h4><span class="url">/</span></div>
+        <div class="body"><dl>
+          <dt>Szerkesztés helye</dt><dd>Főoldal szerkesztés</dd>
+          <dt>Mit szerkesztesz</dt><dd>Hero szövegek, statisztikák, CTA gomb és banner, videó URL</dd>
+          <dt>Kapcsolt elemek</dt><dd>Fellépők (teaser), Jegyek (<code>showOnHome</code>), Popup</dd>
+          <dt>Gyakori hiba</dt><dd>A főoldali jegyeket a <strong>Jegyek</strong> menüben kell beállítani, nem itt.</dd>
+        </dl></div>
+      </div>
+
+      <div class="pagecard">
+        <div class="head"><h4>Program</h4><span class="url">/program/</span></div>
+        <div class="body"><dl>
+          <dt>Szerkesztés helye</dt><dd>Oldalak → Program (keret) + Program tételek (események)</dd>
+          <dt>Mit szerkesztesz</dt><dd>Cím, programszöveg, táblázat/szöveg láthatóság — és külön az események</dd>
+          <dt>Kapcsolt elemek</dt><dd>Program tételek, Színpadok, Fellépők</dd>
+          <dt>Gyakori hiba</dt><dd>Üres a táblázat? Nézd meg, van-e aktív programtétel, és nem <code>freeText</code>-re van-e állítva a megjelenítés.</dd>
+        </dl></div>
+      </div>
+
+      <div class="pagecard">
+        <div class="head"><h4>Fellépők / Lineup</h4><span class="url">/lineup/</span></div>
+        <div class="body"><dl>
+          <dt>Szerkesztés helye</dt><dd>Fellépők</dd>
+          <dt>Mit szerkesztesz</dt><dd>Név, kép, leírás, linkek, jegy URL, tagok, műfaj, sorrend, kiemelés</dd>
+          <dt>Kapcsolt elemek</dt><dd>Fellépő címkék (műfaj badge-ek)</dd>
+          <dt>Gyakori hiba</dt><dd>Nem látszik a fellépő? Ellenőrizd az <code>isActive</code> jelzőt.</dd>
+        </dl></div>
+      </div>
+
+      <div class="pagecard">
+        <div class="head"><h4>Jegyek &amp; Info</h4><span class="url">/info/</span></div>
+        <div class="body"><dl>
+          <dt>Szerkesztés helye</dt><dd>Jegyek (jegyek) + Oldalak → Info (FAQ, szöveg)</dd>
+          <dt>Mit szerkesztesz</dt><dd>Jegytípusok + GYIK kérdések + intro szöveg</dd>
+          <dt>Kapcsolt elemek</dt><dd>Jegyek gyűjtemény</dd>
+          <dt>Gyakori hiba</dt><dd>A jegyeket nem az info oldalon, hanem a <strong>Jegyek</strong> menüben szerkeszted.</dd>
+        </dl></div>
+      </div>
+
+      <div class="pagecard">
+        <div class="head"><h4>Szállás</h4><span class="url">/szallas/</span></div>
+        <div class="body"><dl>
+          <dt>Szerkesztés helye</dt><dd>Szállás (szálláshelyek) + Oldalak → Szállás (hero szöveg)</dd>
+          <dt>Mit szerkesztesz</dt><dd>Szálláshelyek + oldal fejléc szövege</dd>
+          <dt>Kapcsolt elemek</dt><dd>Szállás gyűjtemény</dd>
+          <dt>Gyakori hiba</dt><dd>Két helyen van: a kártyák a „Szállás" menüben, a fejléc az „Oldalak"-ban.</dd>
+        </dl></div>
+      </div>
+
+      <div class="pagecard">
+        <div class="head"><h4>Térkép / Közlekedés</h4><span class="url">/terkep/</span></div>
+        <div class="body"><dl>
+          <dt>Szerkesztés helye</dt><dd>Helyszín (térkép) + Közlekedés (módok) + Oldalak → Térkép</dd>
+          <dt>Mit szerkesztesz</dt><dd>Térkép adat, közlekedési módok, oldal szöveg</dd>
+          <dt>Kapcsolt elemek</dt><dd>Venue, TransportItem</dd>
+          <dt>Gyakori hiba</dt><dd>Három külön hely — ne keresd mindet egy dokumentumban.</dd>
+        </dl></div>
+      </div>
+
+      <div class="pagecard">
+        <div class="head"><h4>Jazztábor</h4><span class="url">/jazztabor/</span></div>
+        <div class="body"><dl>
+          <dt>Szerkesztés helye</dt><dd>Jazztábor — Page</dd>
+          <dt>Mit szerkesztesz</dt><dd>Eyebrow, program blokkok, szervezők, gombok, szöveg</dd>
+          <dt>Kapcsolt elemek</dt><dd>—</dd>
+          <dt>Gyakori hiba</dt><dd>Megtalálható az „Oldalak" listában is — ugyanaz a dokumentum.</dd>
+        </dl></div>
+      </div>
+
+      <div class="pagecard">
+        <div class="head"><h4>Futás</h4><span class="url">/futas/</span></div>
+        <div class="body"><dl>
+          <dt>Szerkesztés helye</dt><dd>Futás — Page</dd>
+          <dt>Mit szerkesztesz</dt><dd>Eyebrow, kártya dátum/idő/helyszín, távolságok, határidő, gombok</dd>
+          <dt>Kapcsolt elemek</dt><dd>—</dd>
+          <dt>Gyakori hiba</dt><dd>Megtalálható az „Oldalak" listában is — ugyanaz a dokumentum.</dd>
+        </dl></div>
+      </div>
+
+      <div class="pagecard">
+        <div class="head"><h4>Kapcsolat</h4><span class="url">/contact/</span></div>
+        <div class="body"><dl>
+          <dt>Szerkesztés helye</dt><dd>Site settings / alapadatok</dd>
+          <dt>Mit szerkesztesz</dt><dd>Email, telefon, social linkek, önkéntes gomb URL</dd>
+          <dt>Kapcsolt elemek</dt><dd>Site settings</dd>
+          <dt>Gyakori hiba</dt><dd>A valódi kontaktadatok a Site settings-ben vannak, nem az „Oldalak"-ban.</dd>
+        </dl></div>
+      </div>
+
+      <div class="pagecard">
+        <div class="head"><h4>ÁSZF / Adatvédelem</h4><span class="url">/aszf/ · /adatvedelem/</span></div>
+        <div class="body"><dl>
+          <dt>Szerkesztés helye</dt><dd>Oldalak → ÁSZF / Adatvédelem</dd>
+          <dt>Mit szerkesztesz</dt><dd>Cím, fő szöveg (rich text), rugalmas szekciók</dd>
+          <dt>Kapcsolt elemek</dt><dd>—</dd>
+          <dt>Gyakori hiba</dt><dd>A jogi szöveg rich text-ben szerkeszthető (formázható).</dd>
+        </dl></div>
+      </div>
+
+      <div class="pagecard">
+        <div class="head"><h4>Saját / link-only oldal</h4><span class="url">/slug</span></div>
+        <div class="body"><dl>
+          <dt>Szerkesztés helye</dt><dd>Oldalak → + Új dokumentum</dd>
+          <dt>Mit szerkesztesz</dt><dd>Cím, slug, szöveg, szekciók, SEO, noIndex, isActive</dd>
+          <dt>Kapcsolt elemek</dt><dd>—</dd>
+          <dt>Gyakori hiba</dt><dd>Ha nincs a navigációban, csak közvetlen linkkel érhető el. Ez gyakran szándékos.</dd>
+        </dl></div>
+      </div>
+
+      <div class="pagecard">
+        <div class="head"><h4>Footer</h4><span class="url">(minden oldal alján)</span></div>
+        <div class="body"><dl>
+          <dt>Szerkesztés helye</dt><dd>Navigáció (<code>showInFooter</code>) + Támogatók + Site settings</dd>
+          <dt>Mit szerkesztesz</dt><dd>Footer linkek, szponzor logók, kontakt adatok</dd>
+          <dt>Kapcsolt elemek</dt><dd>NavigationItem, Sponsor, SiteSettings</dd>
+          <dt>Gyakori hiba</dt><dd>A footer menü külön <code>showInFooter=true</code> jelzős navigációs elemekből áll.</dd>
+        </dl></div>
+      </div>
+      <a class="toplink" href="#top">↑ Vissza a tetejére</a>
+    </section>
+
+    <!-- ============ 5. FŐOLDAL ============ -->
+    <section id="s6">
+      <h2><span class="num">5</span> Főoldal szerkesztése</h2>
+      <p class="lead">A főoldal összes szövege és videója egy helyen: <strong>Főoldal szerkesztés</strong>. A jegyboxok kivételével (azok a Jegyek menüből jönnek).</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Mező</th><th>Mit befolyásol?</th><th>HU/EN?</th><th>Megjegyzés</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Hero főcím</strong></td><td>A nagy fehér főcím a hero sávban</td><td>✓</td><td>Soremelés: <code>\n</code> vagy <code>|</code> karakterrel</td></tr>
+            <tr><td><strong>Hero alcím / helyszín</strong></td><td>Narancs badge (helyszín)</td><td>✓</td><td>—</td></tr>
+            <tr><td><strong>Hero dátum</strong></td><td>Kék badge (dátum)</td><td>✓</td><td>—</td></tr>
+            <tr><td><strong>Elsődleges CTA szöveg</strong></td><td>A hero gomb felirata</td><td>✓</td><td>Üres → alapfelirat</td></tr>
+            <tr><td><strong>Elsődleges CTA URL</strong></td><td>A hero gomb linkje</td><td>—</td><td>Üres → globális jegy URL (Site settings)</td></tr>
+            <tr><td><strong>Statisztikák</strong></td><td>A hero alatti számsor (pl. „4 Nap")</td><td>✓</td><td>Min. 2 elem ajánlott, különben az alapértelmezett jelenik meg</td></tr>
+            <tr><td><strong>CTA banner főcím</strong></td><td>A narancs banner nagy szövege</td><td>✓</td><td>—</td></tr>
+            <tr><td><strong>CTA banner szöveg</strong></td><td>A banner alcíme</td><td>✓</td><td>—</td></tr>
+            <tr><td><strong>CTA banner gomb</strong></td><td>A banner gombjának szövege és linkje</td><td>✓</td><td>URL üres → globális jegy URL</td></tr>
+            <tr><td><strong>Videó URL</strong></td><td>A beágyazott videó (YouTube/Vimeo)</td><td>—</td><td>Üres → alap videó töltődik be</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box info">
+        <span class="box-title">A főoldali jegyboxok külön helyen vannak!</span>
+        A főoldal alján megjelenő narancs jegydobozok a <strong>Jegyek</strong> menüből jönnek.
+        Egy jegy akkor jelenik meg a főoldalon, ha bekapcsolod nála a <code>showOnHome</code> jelzőt.
+        A sorrendet a <code>homeOrder</code> szám szabja meg.
+      </div>
+
+      <h4>Mini ellenőrzőlista — főoldal szerkesztése után</h4>
+      <ul class="check">
+        <li>Publikáltad a változást? (jobb felül, „Publish" gomb)</li>
+        <li>Megnézted a főoldalt böngészőben?</li>
+        <li>Megnézted mobil nézetben is?</li>
+        <li>Ha az angol szöveget is módosítottad: ellenőrizted az EN oldalt?</li>
+      </ul>
+      <a class="toplink" href="#top">↑ Vissza a tetejére</a>
+    </section>
+
+    <!-- ============ 6. PROGRAM ============ -->
+    <section id="s7">
+      <h2><span class="num">6</span> Program szerkesztése</h2>
+      <p class="lead">A program <strong>két részből</strong> áll: az oldal keretéből és a tényleges eseményekből. Ezeket külön szerkeszted.</p>
+
+      <h3>A) Program oldal beállításai</h3>
+      <p>Hely: <span class="badge b-green">Oldalak → Program</span></p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Mező</th><th>Mit csinál?</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Főcím / alcím</strong></td><td>A program oldal fejléce</td></tr>
+            <tr><td><strong>Programszöveg</strong></td><td>Szabad szöveges leírás (ha a megjelenítési mód tartalmaz szöveget)</td></tr>
+            <tr><td><strong>Megjelenítési mód</strong></td><td><code>táblázat</code> / <code>szöveg</code> / <code>mindkettő</code></td></tr>
+            <tr><td><strong>Táblázat — desktop</strong></td><td>Be/ki kapcsoló a táblázathoz nagy képernyőn</td></tr>
+            <tr><td><strong>Táblázat — mobil</strong></td><td>Be/ki kapcsoló a táblázathoz telefonon</td></tr>
+            <tr><td><strong>Szöveg — desktop</strong></td><td>Be/ki kapcsoló a szöveghez nagy képernyőn</td></tr>
+            <tr><td><strong>Szöveg — mobil</strong></td><td>Be/ki kapcsoló a szöveghez telefonon</td></tr>
+            <tr><td><strong>Desktop sorrend</strong></td><td>Desktopon: táblázat vagy szöveg legyen fent?</td></tr>
+            <tr><td><strong>Mobil sorrend</strong></td><td>Mobilon: táblázat vagy szöveg legyen fent?</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>B) Program tételek (események)</h3>
+      <p>Hely: <span class="badge b-green">Program tételek</span></p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Mező</th><th>Mit csinál?</th><th>Kötelező?</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Esemény cím</strong></td><td>A program sorban megjelenő név</td><td>—</td></tr>
+            <tr><td><strong>Dátum</strong></td><td>Melyik napra kerül (ÉÉÉÉ-HH-NN)</td><td>✓</td></tr>
+            <tr><td><strong>Kezdési időpont</strong></td><td>ÓÓ:PP</td><td>✓</td></tr>
+            <tr><td><strong>Befejezési időpont</strong></td><td>ÓÓ:PP — üres marad, ha nincs</td><td>—</td></tr>
+            <tr><td><strong>Színpad / helyszín</strong></td><td>Legördülő a Színpadok listából</td><td>—</td></tr>
+            <tr><td><strong>Fellépők</strong></td><td>Melyik fellépők lépnek fel (hivatkozás)</td><td>—</td></tr>
+            <tr><td><strong>Részletek</strong></td><td>Hosszabb leírás (kibontható)</td><td>—</td></tr>
+            <tr><td><strong>Jegy URL</strong></td><td>Eseményspecifikus jegylink</td><td>—</td></tr>
+            <tr><td><strong>Aktív</strong></td><td><code>false</code> → nem jelenik meg</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box ok">
+        <span class="box-title">Időpont formátum</span>
+        Ha csak kezdési idő van: <strong>16:30</strong>. Ha kezdés + vég is: <strong>16:30–17:45</strong>.
+        A két időpont a táblázatban egymás alatt jelenik meg.
+      </div>
+
+      <div class="box warn">
+        <span class="box-title">Ha a program táblázat üres</span>
+        Ellenőrizd <strong>mindkettőt</strong>:
+        <br>1. Van-e legalább egy <strong>aktív</strong> programtétel a „Program tételek" menüben?
+        <br>2. A Program oldal megjelenítési módja nem <code>csak szöveg</code>-re van-e állítva (ami elrejti a táblázatot)?
+      </div>
+      <a class="toplink" href="#top">↑ Vissza a tetejére</a>
+    </section>
+
+    <!-- ============ 7. JEGYEK ============ -->
+    <section id="s8">
+      <h2><span class="num">7</span> Jegyek szerkesztése</h2>
+      <p class="lead">Hely: <span class="badge b-blue">🔵 Jegyek</span>. Egy jegy egyszerre több helyen jelenhet meg — ha módosítod, mindenhol frissül.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Mező</th><th>Mit csinál?</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Jegy neve</strong></td><td>A kártyán megjelenő név (HU/EN; EN üres → HU)</td></tr>
+            <tr><td><strong>Ár</strong></td><td>Pl. „24 900" (pénznem külön mező)</td></tr>
+            <tr><td><strong>Leírás</strong></td><td>Részletes szöveg az /info/ oldalon</td></tr>
+            <tr><td><strong>CTA URL</strong></td><td>Vásárlás gomb linkje</td></tr>
+            <tr><td><strong>CTA szöveg</strong></td><td>Gomb felirata (üres → alapfelirat)</td></tr>
+            <tr><td><strong>Elérhető</strong> (<code>isAvailable</code>)</td><td><code>false</code> → „nem elérhető" jelölés</td></tr>
+            <tr><td><strong>Rejtett</strong> (<code>isHidden</code>)</td><td><code>true</code> → sehol nem jelenik meg</td></tr>
+            <tr><td><strong>Főoldalon</strong> (<code>showOnHome</code>)</td><td><code>true</code> → megjelenik a főoldali jegyboxokban</td></tr>
+            <tr><td><strong>Főoldali sorrend</strong> (<code>homeOrder</code>)</td><td>A főoldalon hányadik helyen áll</td></tr>
+            <tr><td><strong>Info sorrend</strong> (<code>order</code>)</td><td>Az /info/ oldalon a sorrend</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box info">
+        <span class="box-title">Hol jelenik meg egy jegy?</span>
+        <strong>/info/ oldal:</strong> az összes látható jegy (az <code>order</code> szerint rendezve).<br>
+        <strong>Főoldal:</strong> csak a <code>showOnHome=true</code> jegyek (a <code>homeOrder</code> szerint rendezve).<br>
+        Ha módosítod az árat, az <strong>mindkét helyen</strong> automatikusan frissül.
+      </div>
+
+      <h4>Gyakori hibák</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tünet</th><th>Valószínű ok</th></tr></thead>
+          <tbody>
+            <tr><td>„Nem jelenik meg a főoldalon"</td><td><code>showOnHome</code> nincs bekapcsolva</td></tr>
+            <tr><td>„Nem jelenik meg sehol"</td><td><code>isHidden=true</code> vagy <code>isAvailable=false</code></td></tr>
+            <tr><td>„Rossz a sorrend"</td><td><code>order</code> (info) vagy <code>homeOrder</code> (főoldal) beállítása</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <a class="toplink" href="#top">↑ Vissza a tetejére</a>
+    </section>
+
+    <!-- ============ 8. FELLÉPŐK ============ -->
+    <section id="s9">
+      <h2><span class="num">8</span> Fellépők szerkesztése</h2>
+      <p class="lead">Hely: <span class="badge b-green">🟢 Fellépők</span>. Itt szerkeszted a lineup oldalon megjelenő zenészeket.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Mező</th><th>Mit csinál?</th><th>Megjegyzés</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Név</strong></td><td>Fellépő/zenekar neve</td><td>Kötelező; nincs külön HU/EN</td></tr>
+            <tr><td><strong>Kép</strong></td><td>A lineup kártya képe</td><td>Üres → tartalék háttérszín</td></tr>
+            <tr><td><strong>Rövid leírás</strong></td><td>Kártya alcím szöveg</td><td>HU/EN, formázható</td></tr>
+            <tr><td><strong>Bio</strong></td><td>Részletes bemutató (kibontva)</td><td>HU/EN, formázható</td></tr>
+            <tr><td><strong>Tagok</strong></td><td>Zenekari tagok neve, szerepe, hangszere</td><td>HU/EN</td></tr>
+            <tr><td><strong>Műfaj / stílus</strong></td><td>Badge-ek a kártyán (Fellépő címkék)</td><td>Hivatkozás</td></tr>
+            <tr><td><strong>Social linkek</strong></td><td>Website, Facebook, Instagram, YouTube, Spotify</td><td>Ikonok a kártyán</td></tr>
+            <tr><td><strong>Egyedi jegy URL</strong></td><td>Fellépő-specifikus jegylink</td><td>Üres → globális jegy URL</td></tr>
+            <tr><td><strong>Kártya háttér variáns</strong></td><td>Ha nincs kép: milyen szín legyen</td><td><code>navbar</code> / <code>default</code> / <code>accent</code></td></tr>
+            <tr><td><strong>Sorrend</strong></td><td>Lineup megjelenési sorrend</td><td>Kisebb szám = előrébb</td></tr>
+            <tr><td><strong>Kiemelt</strong> (<code>isFeatured</code>)</td><td>Kiemelt helyre kerül</td><td>—</td></tr>
+            <tr><td><strong>Aktív</strong> (<code>isActive</code>)</td><td><code>false</code> → nem jelenik meg</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box ok">
+        <span class="box-title">Automatikus tartalékok</span>
+        Ha egy fellépőnél <strong>nincs egyedi jegy URL</strong> → a globális jegy URL-t használja.<br>
+        Ha <strong>nincs kép</strong> → a beállított háttérszín jelenik meg helyette (nem törik el a kártya).
+      </div>
+      <a class="toplink" href="#top">↑ Vissza a tetejére</a>
+    </section>
+
+    <!-- ============ 9. SZÁLLÁS ============ -->
+    <section id="s10">
+      <h2><span class="num">9</span> Szállás szerkesztése</h2>
+      <p class="lead">Hely: <span class="badge b-green">🟢 Szállás</span>. Minden szálláshely egy külön kártyaként jelenik meg a /szallas/ oldalon.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Mező</th><th>Mit csinál?</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Név</strong></td><td>Szálláshely neve</td></tr>
+            <tr><td><strong>Kép</strong></td><td>A kártya képe (üres → tartalék)</td></tr>
+            <tr><td><strong>Ár</strong></td><td>Pl. „19 950 Ft/fő/éjtől"</td></tr>
+            <tr><td><strong>Rövid leírás</strong></td><td>Kártya szöveg (formázható)</td></tr>
+            <tr><td><strong>Részletes leírás</strong></td><td>Hosszabb szöveg</td></tr>
+            <tr><td><strong>Foglalás URL</strong></td><td>Foglalási link</td></tr>
+            <tr><td><strong>Foglalás gomb szöveg</strong></td><td>Alapérték: „Foglalás" / „Book"</td></tr>
+            <tr><td><strong>Távolság</strong></td><td>Pl. „5 perc sétára"</td></tr>
+            <tr><td><strong>Sorrend</strong></td><td>Megjelenési sorrend</td></tr>
+            <tr><td><strong>Aktív</strong></td><td><code>false</code> → nem jelenik meg</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box info">
+        <span class="box-title">Jó tudni</span>
+        Az „ártól / from" feliratot nem kell beleírnod az ár mezőbe — az árat úgy add meg, ahogy meg kell jelennie.<br>
+        A foglalás gomb <strong>csak akkor jelenik meg</strong>, ha megadtál hozzá URL-t.
+      </div>
+      <a class="toplink" href="#top">↑ Vissza a tetejére</a>
+    </section>
+
+    <!-- ============ 10. KAPCSOLAT ============ -->
+    <section id="s11">
+      <h2><span class="num">10</span> Kapcsolat / alapadatok</h2>
+      <p class="lead">A fő kapcsolati adatok egy helyen vannak: <span class="badge b-yellow">🟡 Site settings / alapadatok</span>. Ezeket több oldal is használja.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Mező</th><th>Hol jelenik meg?</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Szervező neve</strong></td><td>Kapcsolat oldal, footer</td></tr>
+            <tr><td><strong>Email</strong></td><td>Kapcsolat oldal</td></tr>
+            <tr><td><strong>Telefon</strong></td><td>Kapcsolat oldal</td></tr>
+            <tr><td><strong>Social linkek</strong></td><td>Kapcsolat oldal, social ikonok</td></tr>
+            <tr><td><strong>Önkéntes gomb szöveg + URL</strong></td><td>Kapcsolat oldal gombja</td></tr>
+            <tr><td><strong>Házirend PDF link</strong></td><td>Kapcsolat oldal link</td></tr>
+            <tr><td><strong>Globális jegy URL</strong></td><td>Minden jegyvásárlás gomb, ha nincs saját URL</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box info">
+        <span class="box-title">Miért fontos a globális jegy URL?</span>
+        Ha egy gomb, jegy vagy fellépő nem ad meg saját jegylinket, akkor ezt használja a rendszer.
+        Egy helyen átállítva minden „árva" jegylink frissül.
+      </div>
+      <a class="toplink" href="#top">↑ Vissza a tetejére</a>
+    </section>
+
+    <!-- ============ 11. JOGI ÉS ÁLTALÁNOS OLDALAK ============ -->
+    <section id="s12">
+      <h2><span class="num">11</span> Jogi és általános oldalak</h2>
+      <p class="lead">Az ÁSZF, az Adatvédelem és a saját oldalak mind ugyanazt a szerkesztőt használják: <span class="badge b-green">Oldalak</span>.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Mező</th><th>Mit csinál?</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Cím (HU/EN)</strong></td><td>Az oldal fejléce</td></tr>
+            <tr><td><strong>Slug</strong></td><td>Az URL útvonal neve — <span class="badge b-red">🔴 óvatosan!</span></td></tr>
+            <tr><td><strong>Fő szöveg</strong></td><td>Az oldal tartalma (formázható rich text)</td></tr>
+            <tr><td><strong>Videó URL</strong></td><td>Opcionális beágyazott videó</td></tr>
+            <tr><td><strong>Rugalmas szekciók</strong></td><td>Tetszőleges tartalomblokkok (lásd köv. szekció)</td></tr>
+            <tr><td><strong>SEO</strong></td><td>Cím, leírás, OG kép a keresőknek</td></tr>
+            <tr><td><strong>noIndex</strong></td><td>Kizárja a Google-ból (de a link működik)</td></tr>
+            <tr><td><strong>Aktív</strong> (<code>isActive</code>)</td><td><code>false</code> → 404 (nem elérhető)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Mit jelentenek a láthatósági állapotok?</h4>
+      <div class="cards">
+        <div class="qcard">
+          <h4>Aktív, de nincs a menüben</h4>
+          <p>Az oldal elérhető, de csak a <strong>közvetlen linkkel</strong>. Tökéletes privát / link-only oldalakhoz.</p>
+        </div>
+        <div class="qcard warn">
+          <h4>noIndex bekapcsolva</h4>
+          <p>Az oldal <strong>látható a linkkel</strong>, de a Google nem mutatja a találatok között.</p>
+        </div>
+        <div class="qcard risky">
+          <h4>isActive = false</h4>
+          <p>Az oldal <strong>404-et</strong> ad — senki nem éri el, még linkkel sem.</p>
+        </div>
+      </div>
+
+      <div class="box warn">
+        <span class="box-title">A slug megváltoztatása linket törhet</span>
+        A <code>program</code>, <code>lineup</code>, <code>info</code>, <code>szallas</code>, <code>terkep</code>, <code>contact</code>,
+        <code>futas</code>, <code>jazztabor</code>, <code>aszf</code>, <code>adatvedelem</code> slugokat <strong>ne módosítsd</strong> —
+        ezek fix útvonalak, átnevezésük hibát okoz.
+      </div>
+      <a class="toplink" href="#top">↑ Vissza a tetejére</a>
+    </section>
+
+    <!-- ============ 12. RUGALMAS SZEKCIÓK ============ -->
+    <section id="s13">
+      <h2><span class="num">12</span> Rugalmas szekciók</h2>
+      <p class="lead">Bármely oldalhoz hozzáadhatsz tartalomblokkokat (szekciókat). Ezek az oldal fő szövege után jelennek meg, tetszőleges sorrendben.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Szekció típus</th><th>Mit ad hozzá?</th><th>Fő mezők</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Szöveges szekció</strong></td><td>Szabad szöveg cím + tartalom</td><td>Cím, szövegtörzs (HU/EN)</td></tr>
+            <tr><td><strong>Szövegdoboz</strong></td><td>Kiemelt, stilizált szövegdoboz</td><td>Cím, szöveg, variáns (alap/kiemelt/halvány)</td></tr>
+            <tr><td><strong>Videó</strong></td><td>Beágyazott videó</td><td>Videó hivatkozás (a Videók menüből)</td></tr>
+            <tr><td><strong>Gomb</strong></td><td>Önálló CTA gomb</td><td>Felirat, URL, stílus</td></tr>
+            <tr><td><strong>Kép</strong></td><td>Egyetlen kép képaláírással</td><td>Kép, cím, képaláírás</td></tr>
+            <tr><td><strong>Galéria</strong></td><td>Több képes galéria</td><td>Képek (min. 1, alt szöveggel)</td></tr>
+            <tr><td><strong>Spacer / elválasztó</strong></td><td>Üres térköz vagy vonal</td><td>Méret, elválasztó vonal be/ki</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box info">
+        <span class="box-title">Hasznos tudnivalók</span>
+        • <code>enabled=false</code> → a szekció <strong>elrejtve</strong>, de az adat megmarad (később visszakapcsolható).<br>
+        • Üres szekció nem jelenik meg.<br>
+        • A <strong>Videó szekció</strong> a másodlagos „Videók" gyűjteményből választ videót — ehhez előbb ott kell létrehozni.
+      </div>
+      <a class="toplink" href="#top">↑ Vissza a tetejére</a>
+    </section>
+
+    <!-- ============ 13. VIDEÓK ============ -->
+    <section id="s14">
+      <h2><span class="num">13</span> Videók — fontos!</h2>
+      <p class="lead">Ez a rész gyakran okoz zavart. A lényeg: az oldalak videóit <strong>az oldal saját „Videó URL" mezőjében</strong> cseréld.</p>
+
+      <div class="box ok">
+        <span class="box-title">Normál eset — az oldal saját videója</span>
+        Minden oldalnak van <strong>„Videó URL"</strong> mezője. Ide kerül a YouTube/Vimeo link. Ez az egyszerű, ajánlott módszer.
+        <br><br>
+        • <strong>Főoldal videója</strong> → Főoldal szerkesztés → Videó URL<br>
+        • <strong>Jazztábor videója</strong> → Jazztábor — Page → Videó URL<br>
+        • <strong>Bármely más oldal videója</strong> → Oldalak → az oldal → Videó URL
+      </div>
+
+      <div class="box warn">
+        <span class="box-title">Másodlagos eset — „Videók (másodlagos…)" menü</span>
+        Ez a menü <strong>csak</strong> a rugalmas szekciók videó-blokkjaihoz kell (amikor egy oldal közepébe szúrsz be egy plusz videót).
+        Normál oldal-videó cseréhez <strong>ne ide menj.</strong>
+      </div>
+
+      <div class="tree">
+        <span class="q">„Egy oldal fő videóját akarom kicserélni?"</span><br>
+        <span class="a">→ Menj az adott oldal szerkesztőjébe, és írd át a „Videó URL" mezőt. KÉSZ.</span><br><br>
+        <span class="q">„Egy plusz videóblokkot akarok az oldal közepére?"</span><br>
+        <span class="a">→ 1. Videók menü → új videó (URL + beállítások) → Publikálás</span><br>
+        <span class="a">→ 2. Oldalak → az oldal → Szekciók → Videó szekció → hivatkozd be. KÉSZ.</span>
+      </div>
+      <a class="toplink" href="#top">↑ Vissza a tetejére</a>
+    </section>
+
+    <!-- ============ 14. NAVIGÁCIÓ ÉS NYELVEK ============ -->
+    <section id="s15">
+      <h2><span class="num">14</span> Navigáció és nyelvi szabályok</h2>
+      <p class="lead">A menü és az oldaltartalom <strong>két különböző hely</strong>. A nyelvek viselkedése pedig szigorú: ha valami nincs lefordítva, az nem jelenik meg azon a nyelven.</p>
+
+      <h4>Navigáció vs. oldaltartalom</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Mit akarsz módosítani?</th><th>Hol?</th></tr></thead>
+          <tbody>
+            <tr><td>Egy oldal tartalmát (szöveg, kép)</td><td>Oldalak / Page</td></tr>
+            <tr><td>Egy menüpont feliratát vagy sorrendjét</td><td>Navigáció / Menü</td></tr>
+            <tr><td>Egy oldalt eltüntetni a menüből (de elérhető maradjon)</td><td>Navigáció → menüpont → <code>isActive=false</code> vagy törlés</td></tr>
+            <tr><td>Egy oldalt teljesen letiltani</td><td>Oldalak → oldal → <code>isActive=false</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Nyelvi szabályok (HU / EN)</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Helyzet</th><th>Eredmény</th></tr></thead>
+          <tbody>
+            <tr><td>Egy menüpont <code>labelEn</code> mezője üres</td><td>Nem jelenik meg az angol menüben</td></tr>
+            <tr><td>Egy oldal csak HU mezőkkel</td><td>Csak a magyar oldalon jelenik meg (EN-en 404)</td></tr>
+            <tr><td>Egy oldal csak EN mezőkkel</td><td>Csak az angol oldalon jelenik meg (HU-n 404)</td></tr>
+            <tr><td>Egy oldal HU + EN mezőkkel</td><td>Mindkét nyelven megjelenik ✅</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box info">
+        <span class="box-title">Nyelvváltó gomb röviden</span>
+        Tesztelés / staging közben a nyelvváltó <code>/en</code> útvonalat használhat ugyanazon a címen.
+        Éles üzemben két külön domain működik (magyar és angol), amint a megfelelő beállítások aktívak.
+        Ez technikai részlet — a szerkesztés szempontjából csak a HU/EN mezők kitöltése számít.
+      </div>
+      <a class="toplink" href="#top">↑ Vissza a tetejére</a>
+    </section>
+
+    <!-- ============ 15. SEO ÉS NOINDEX ============ -->
+    <section id="s16">
+      <h2><span class="num">15</span> SEO és noIndex</h2>
+      <p class="lead">Minden oldalnak van SEO szekciója — ez vezérli, hogyan jelenik meg az oldal a Google-ban és közösségi megosztáskor.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Mező</th><th>Mit csinál?</th></tr></thead>
+          <tbody>
+            <tr><td><strong>SEO cím</strong></td><td>A Google találatban megjelenő cím</td></tr>
+            <tr><td><strong>SEO leírás</strong></td><td>A találat alatti rövid leírás</td></tr>
+            <tr><td><strong>OG kép</strong></td><td>A megosztáskor megjelenő kép (pl. Facebook)</td></tr>
+            <tr><td><strong>noIndex</strong></td><td>Kéri a Google-t, hogy ne mutassa az oldalt</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box info">
+        <span class="box-title">Mit jelent a noIndex egyszerűen?</span>
+        „A Google ne mutassa ezt az oldalt — de aki ismeri a linket, az nyugodtan megnyithatja."<br><br>
+        • Hasznos privát / link-only oldalakhoz.<br>
+        • A noIndex <strong>nem törlés</strong> — az oldal továbbra is létezik és elérhető.<br>
+        • Ha egy oldalt teljesen le akarsz tiltani, az <code>isActive=false</code> a megfelelő (az ad 404-et).
+      </div>
+      <a class="toplink" href="#top">↑ Vissza a tetejére</a>
+    </section>
+
+    <!-- ============ 16. GYAKORI HIBÁK ============ -->
+    <section id="s17">
+      <h2><span class="num">16</span> Gyakori hibák és megoldások</h2>
+      <p class="lead">Ha valami nem úgy néz ki, ahogy várnád, valószínűleg ezek egyike a magyarázat.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Probléma</th><th>Valószínű ok</th><th>Hol javítsd?</th></tr></thead>
+          <tbody>
+            <tr><td>„Megváltoztattam, de nem látszik"</td><td>Nem publikáltad / üres mező → tartalék szöveg / rossz szerkesztő</td><td>Publish gomb; töltsd ki a mezőt; ellenőrizd a helyes menüt</td></tr>
+            <tr><td>„Nem jelenik meg a főoldali jegy"</td><td><code>showOnHome</code> nincs bekapcsolva</td><td>Jegyek → jegy → <code>showOnHome=true</code></td></tr>
+            <tr><td>„Angol oldalon 404"</td><td>Az EN mezők üresek</td><td>Töltsd ki az angol mezőket is</td></tr>
+            <tr><td>„Nem látom a menüben"</td><td>Hiányzó vagy inaktív navigációs elem</td><td>Navigáció → adj hozzá / <code>isActive=true</code></td></tr>
+            <tr><td>„Program táblázat üres"</td><td>Nincs aktív programtétel, vagy a megjelenítés elrejti a táblát</td><td>Program tételek + Oldalak → Program megjelenítési mód</td></tr>
+            <tr><td>„Videót nem találom"</td><td>A másodlagos Videók menüben keresed</td><td>Használd az oldal saját „Videó URL" mezőjét</td></tr>
+            <tr><td>„Oldal 404"</td><td><code>isActive=false</code> vagy hiányzó nyelvi tartalom</td><td>Oldalak → <code>isActive=true</code>; töltsd ki az adott nyelvet</td></tr>
+            <tr><td>„Nem akarom a menübe, de linkkel kell"</td><td>Ez szándékos — link-only oldal</td><td>Hozd létre, ne add a navigációhoz, állítsd be a <code>noIndex</code>-et</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <a class="toplink" href="#top">↑ Vissza a tetejére</a>
+    </section>
+
+    <!-- ============ 17. ELLENŐRZŐLISTA ============ -->
+    <section id="s18">
+      <h2><span class="num">17</span> Publikálás előtti ellenőrzőlista</h2>
+      <p class="lead">Mielőtt befejeznéd, fusd át ezt a listát. Pár másodperc, de sok hibát megelőz.</p>
+
+      <ul class="check">
+        <li>A módosított mezőket <strong>publikáltad</strong>? (Publish gomb)</li>
+        <li>A HU és EN mezők ki vannak töltve, ahol szükséges?</li>
+        <li>Az <code>isActive</code> / <code>enabled</code> jelzők helyesek?</li>
+        <li>A <code>noIndex</code> a megfelelő állásban van? (privát oldalnál be, nyilvánosnál ki)</li>
+        <li>A slug helyes, és nem ütközik fix útvonallal?</li>
+        <li>A navigációs felirat és sorrend rendben van?</li>
+        <li>A linkeket kipróbáltad? (jegy, foglalás, social)</li>
+        <li>Megnézted mobil nézetben is?</li>
+        <li>Ha videót cseréltél: lejátszódik?</li>
+        <li>A jegylinkek a megfelelő helyre visznek?</li>
+      </ul>
+      <a class="toplink" href="#top">↑ Vissza a tetejére</a>
+    </section>
+
+    <!-- ============ 18. TECHNIKAI MEGJEGYZÉSEK ============ -->
+    <section id="s19">
+      <h2><span class="num">18</span> Technikai megjegyzések (függelék)</h2>
+      <p class="lead">Rövid háttér, ami segít megérteni, miért viselkedik így az oldal.</p>
+
+      <div class="box info">
+        <span class="box-title">Statikus tartalék (fallback)</span>
+        Néhány tartalomnak van beépített alapszövege a kódban. Ha a Sanity mezőt üresen hagyod,
+        ez az alapszöveg jelenik meg — így az oldal <strong>soha nem marad üres vagy törött</strong>.
+        <br><br>
+        Ha a saját szövegedet akarod látni a beépített helyett, egyszerűen <strong>töltsd ki a Sanity mezőt</strong> és publikáld.
+        Ezért fordulhat elő, hogy „látsz valamilyen szöveget az oldalon, de a Sanity-ben üresnek tűnik a mező" — ilyenkor a tartalék szöveg látszik.
+      </div>
+
+      <div class="box ok">
+        <span class="box-title">Amit nyugodtan csinálhatsz</span>
+        Szöveg, ár, kép, link, sorrend módosítása; új fellépő / jegy / szállás / programtétel hozzáadása;
+        szekciók be- és kikapcsolása az <code>enabled</code> jelzővel.
+      </div>
+
+      <div class="box danger">
+        <span class="box-title">Amihez kérj segítséget</span>
+        Fix oldalak slugjának átírása; a megjelenés/elrendezés (színek, layout) módosítása;
+        bármi, ami a kódban van (❌ hardcoded jelzésű elemek).
+      </div>
+
+      <h4>Forrás</h4>
+      <p>Ez az útmutató a <code>SANITY_EDITABILITY_AUDIT.md</code> auditból készült, amely a valódi repo kódját elemezte.
+      A részletes mezőlistákat és technikai hivatkozásokat ott találod.</p>
+      <a class="toplink" href="#top">↑ Vissza a tetejére</a>
+    </section>
+
+    <!-- ============ FINAL SUMMARY ============ -->
+    <section class="summary-final">
+      <h2>Összefoglalás</h2>
+      <p class="lead" style="font-size:17px;">
+        <strong>Ha bizonytalan vagy, először ne törölj semmit.</strong> Kapcsold ki az adott elemet az
+        <code style="background:rgba(255,255,255,0.15);color:#fff;">aktív</code> /
+        <code style="background:rgba(255,255,255,0.15);color:#fff;">enabled</code> jelzővel —
+        így az adat megmarad, és bármikor visszakapcsolható. Ha valami nem világos, kérj fejlesztői segítséget.
+      </p>
+      <p style="color:#cdeae3;margin:0;">
+        A legtöbb feladathoz csak három dolgot kell tudnod: <strong>melyik menü</strong>, <strong>melyik mező</strong>, és <strong>publikáld</strong>.
+        A többit ez az útmutató mindig megmutatja.
+      </p>
+    </section>
+
+  </main>
+</div>
+
+</body>
+</html>

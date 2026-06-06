@@ -3,7 +3,7 @@ import { richText } from "../objects/richText";
 
 export const performerType = defineType({
   name: "performer",
-  title: "Performer",
+  title: "Fellépő",
   type: "document",
   fields: [
     defineField({ name: "name", type: "string", validation: (rule) => rule.required() }),
@@ -149,6 +149,35 @@ export const performerType = defineType({
     defineField({ name: "youtubeUrl", type: "url" }),
     defineField({ name: "spotifyUrl", type: "url" }),
     defineField({
+      name: "ticketUrlHu",
+      title: "Egyedi jegy URL (HU)",
+      type: "url",
+      description:
+        "Opcionális. Ha üres, a frontend később a globális jegy URL-re fallbackel.",
+    }),
+    defineField({
+      name: "ticketUrlEn",
+      title: "Egyedi jegy URL (EN)",
+      type: "url",
+      description:
+        "Opcionális. Ha üres, a frontend később a globális jegy URL-re fallbackel.",
+    }),
+    defineField({
+      name: "cardBackgroundVariant",
+      title: "Kártya háttér variáns",
+      type: "string",
+      initialValue: "navbar",
+      options: {
+        list: [
+          { title: "Navbar szín", value: "navbar" },
+          { title: "Alap", value: "default" },
+          { title: "Kiemelt", value: "accent" },
+        ],
+      },
+      description:
+        "Csak akkor látszik, ha nincs kép vagy a kép nem tölthető be. Ha van kép, a kártya krém háttérrel jelenik meg a kép körül.",
+    }),
+    defineField({
       name: "order",
       type: "number",
       initialValue: 0,
@@ -172,6 +201,28 @@ export const performerType = defineType({
     select: {
       title: "name",
       media: "image",
+      active: "isActive",
+      featured: "isFeatured",
+      order: "order",
+    },
+    prepare({ title, media, active, featured, order }) {
+      const bits = [
+        active === false ? "inaktív" : "aktív",
+        featured ? "kiemelt" : null,
+        typeof order === "number" ? `sorrend: ${order}` : null,
+      ].filter(Boolean);
+      return {
+        title: title || "(névtelen fellépő)",
+        subtitle: bits.join(" · ") || undefined,
+        media,
+      };
     },
   },
+  orderings: [
+    {
+      title: "Sorrend szerint",
+      name: "orderAsc",
+      by: [{ field: "order", direction: "asc" }],
+    },
+  ],
 });

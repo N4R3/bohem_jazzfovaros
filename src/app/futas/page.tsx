@@ -155,16 +155,6 @@ export default async function RunningPage() {
           </div>
         </div>
 
-        <div className="mb-8 flex justify-center">
-          <Image
-            src="/images/branding/43e3a57583f727d87fb1271bb22963ef.jpg"
-            alt="Széchenyi Terv embléma"
-            width={360}
-            height={86}
-            className="h-auto w-full max-w-[360px] rounded-xl border border-white/30 bg-white/95 p-2"
-          />
-        </div>
-
         {/* INGYENES szalag */}
         {freeEntryBanner && (
           <div

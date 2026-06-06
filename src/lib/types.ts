@@ -30,15 +30,22 @@ export interface Artist {
     stage: string;
     title?: string;
   }>;
+  ticketUrl?: string;
+  cardBackgroundVariant?: "navbar" | "default" | "accent";
 }
 
 export interface ScheduleSlot {
   time: string;
+  endTime?: string;
   artist: string;
+  eventTitle?: string;
+  performerNames?: string[];
   /** A programItem.stage szabad szöveges értéke (pl. "Main Stage", "Club", "Beach"). */
   stage: string;
   duration: number;
-  note?: string;
+  note?: string | PortableTextBlock[];
+  details?: PortableTextBlock[];
+  ticketUrl?: string;
 }
 
 export interface ScheduleDay {
@@ -63,9 +70,16 @@ export interface GalleryImage {
 }
 
 export interface TicketTier {
+  id?: string;
   label: string;
   price: string;
   highlight?: boolean;
+  description?: string;
+  descriptionRich?: PortableTextBlock[];
+  ctaUrl?: string;
+  ctaText?: string;
+  isFeatured?: boolean;
+  isAvailable?: boolean;
 }
 
 export interface LegalLink {
@@ -105,6 +119,21 @@ export interface Highlight {
   icon: string;
 }
 
+/** Főoldal látható tartalom — Sanity első, hu.ts/en.ts fallback. */
+export interface HomePageVisibleContent {
+  heroLine1: string;
+  heroLine2: string;
+  heroLocationBadge: string;
+  heroDateBadge: string;
+  primaryCtaLabel: string;
+  primaryCtaUrl: string;
+  ctaBannerTitle: string;
+  ctaBannerSubtitle: string;
+  ctaBannerButtonLabel: string;
+  ctaBannerButtonUrl: string;
+  stats: Highlight[];
+}
+
 export interface QuickLink {
   label: string;
   description: string;
@@ -115,10 +144,14 @@ export interface QuickLink {
 export interface Hotel {
   name: string;
   description: string;
+  descriptionRich?: PortableTextBlock[];
+  richBody?: PortableTextBlock[];
   price: string;
   distance: string;
   bookingUrl: string;
   bookingLabel: string;
+  ctaUrl?: string;
+  ctaText?: string;
   images: string[];
   stars?: number;
 }
@@ -201,6 +234,13 @@ export interface SiteContent {
     freeText?: string;
     /** Megjelenítési mód a Sanity Page (slug=program) dokumentumból. Default: "structured". */
     displayMode?: "structured" | "freeText" | "both";
+    /** Per-device visibility and order controls from Sanity (Phase 3B-3). Undefined = fall back to displayMode logic. */
+    showProgramTableDesktop?: boolean;
+    showProgramTableMobile?: boolean;
+    showProgramTextDesktop?: boolean;
+    showProgramTextMobile?: boolean;
+    desktopProgramOrder?: "tableFirst" | "textFirst";
+    mobileProgramOrder?: "tableFirst" | "textFirst";
   };
   info: {
     title: string;

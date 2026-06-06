@@ -1,24 +1,31 @@
 # Netlify — két nyelv, egy Git repó
 
+## Jelenlegi (staging) állapot
+
 | Oldal | URL | Build locale |
 |-------|-----|----------------|
 | Magyar | [bohemjazz.netlify.app](https://bohemjazz.netlify.app) | `hu` |
-| Angol | [buhemjazzen.netlify.app](https://buhemjazzen.netlify.app) | `en` |
+| Angol | _(még nem létezik külön site)_ | `en` (tervezett) |
 
-A `netlify.toml` tartalmazza a két URL-t (`NEXT_PUBLIC_SITE_URL_*`).
+Jelenleg **egy Netlify site** fut (`bohemjazz.netlify.app`, HU build). A nyelvváltó ideiglenesen visszamutat erre a site-ra; helyi devben `same-origin /en` path-t használ (a middleware kezeli az átirányítást).
 
-## Automatikus nyelvfelismerés buildkor
+## Nyelvfelismerés buildkor
 
-A `src/lib/buildLocale.ts` a Netlify által beállított **`URL`** / **`DEPLOY_PRIME_URL`** változót összeveti a `NEXT_PUBLIC_SITE_URL_EN` / `HU` hostnevével. Ha a deploy az angol Netlify URL-en fut, **angol** statikus oldal készül (nyelvváltó: **HU** → magyar site), a magyar URL-en **magyar** (nyelvváltó: **EN**).
-
-Így **nem kötelező** külön `NEXT_PUBLIC_LOCALE=en` az angol site-on — de beállíthatod, ha egyedi domainról deployolsz és az URL nem egyezik a táblázatban lévővel.
+A `netlify.toml` beállítja `NEXT_PUBLIC_LOCALE=hu`-t explicit módon — a `buildLocale.ts` URL-detekciója így nem szükséges a staging-en. A jövőbeli EN Netlify site-on a Netlify dashboardban kell `NEXT_PUBLIC_LOCALE=en`-t beállítani (felülírja a toml értékét).
 
 ## Opcionális felülírás
 
 **Site configuration → Environment variables**
 
-- `NEXT_PUBLIC_LOCALE` = `en` vagy `hu` — ha be van állítva, felülírja az automatikát.
+- `NEXT_PUBLIC_LOCALE` = `en` — az EN site-on kötelező beállítani go-live előtt
+- `NEXT_PUBLIC_SITE_URL_HU` = `https://<hu-production-domain>` — go-live-kor mindkét site-on
+- `NEXT_PUBLIC_SITE_URL_EN` = `https://<en-production-domain>` — go-live-kor mindkét site-on
 
-## Éles domainre váltáskor
+## Go-live teendők
 
-Frissítsd a `netlify.toml` `[build.environment]` blokkban a két URL-t, vagy írd felül Netlify env-ben a `NEXT_PUBLIC_SITE_URL_HU` / `EN` értékeket, különben az automatikus felismerés rossz nyelvet választhat.
+1. EN Netlify site létrehozása ugyanabból a repóból
+2. EN site dashboardon: `NEXT_PUBLIC_LOCALE=en`, `NEXT_PUBLIC_SITE_URL_HU=<hu-domain>`, `NEXT_PUBLIC_SITE_URL_EN=<en-domain>`
+3. HU site dashboardon: `NEXT_PUBLIC_LOCALE=hu` (vagy hagyja a toml értékét), `NEXT_PUBLIC_SITE_URL_HU=<hu-domain>`, `NEXT_PUBLIC_SITE_URL_EN=<en-domain>`
+4. Mindkét site-on custom domain beállítása Netlify-ban
+
+A dashboardon beállított értékek felülírják a `netlify.toml` értékeit.

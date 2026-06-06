@@ -28,6 +28,8 @@ export const getVenueQuery = `*[_type == "venue"][0]{
   longitude,
   descriptionHu,
   descriptionEn,
+  descriptionRichHu,
+  descriptionRichEn,
   mapImage,
   directionsHeadingHu,
   directionsHeadingEn
@@ -37,6 +39,9 @@ export const PERFORMER_PROJECTION = `{
   _id,
   name,
   slug,
+  ticketUrlHu,
+  ticketUrlEn,
+  cardBackgroundVariant,
   shortDescriptionRichHu,
   shortDescriptionRichEn,
   bioRichHu,
@@ -77,8 +82,16 @@ export const getProgramItemsQuery = `*[_type == "programItem" && isActive == tru
   _id,
   titleHu,
   titleEn,
+  eventTitleHu,
+  eventTitleEn,
   descriptionHu,
   descriptionEn,
+  descriptionRichHu,
+  descriptionRichEn,
+  detailsRichHu,
+  detailsRichEn,
+  ticketUrlHu,
+  ticketUrlEn,
   date,
   startTime,
   endTime,
@@ -93,6 +106,23 @@ export const getProgramItemsQuery = `*[_type == "programItem" && isActive == tru
   order,
   isActive,
   seo
+}`;
+
+export const getProgramItemsLightQuery = `*[_type == "programItem" && isActive == true] | order(date asc, startTime asc, order asc) {
+  _id,
+  titleHu,
+  titleEn,
+  date,
+  startTime,
+  stage,
+  "stageRef": stageRef->{ _id, nameHu, nameEn },
+  performers[]->{ _id }
+}`;
+
+export const getPerformerTicketUrlsQuery = `*[_type == "performer" && isActive == true]{
+  _id,
+  ticketUrlHu,
+  ticketUrlEn
 }`;
 
 export const getStagesQuery = `*[_type == "stage" && isActive == true] | order(order asc) { _id, nameHu, nameEn, slug, order, isActive }`;
@@ -119,6 +149,29 @@ export const getActivePageBySlugQuery = `*[_type == "page" && slug.current == $s
   titleHu,
   titleEn,
   slug,
+  videoUrl,
+  videoTitleHu,
+  videoTitleEn,
+  homeHeroTitleHu,
+  homeHeroTitleEn,
+  homeHeroSubtitleHu,
+  homeHeroSubtitleEn,
+  homeHeroLeadHu,
+  homeHeroLeadEn,
+  homePrimaryCtaTextHu,
+  homePrimaryCtaTextEn,
+  homePrimaryCtaUrl,
+  homeSecondaryCtaTextHu,
+  homeSecondaryCtaTextEn,
+  homeSecondaryCtaUrl,
+  homeStats[]{ value, labelHu, labelEn, icon },
+  homeCtaBannerTitleHu,
+  homeCtaBannerTitleEn,
+  homeCtaBannerTextHu,
+  homeCtaBannerTextEn,
+  homeCtaBannerButtonTextHu,
+  homeCtaBannerButtonTextEn,
+  homeCtaBannerButtonUrl,
   heroTitleHu,
   heroTitleEn,
   heroDescriptionRichHu,
@@ -133,6 +186,12 @@ export const getActivePageBySlugQuery = `*[_type == "page" && slug.current == $s
   programDisplayMode,
   programBodyRichHu,
   programBodyRichEn,
+  showProgramTableDesktop,
+  showProgramTableMobile,
+  showProgramTextDesktop,
+  showProgramTextMobile,
+  desktopProgramOrder,
+  mobileProgramOrder,
   primaryButtonLabelHu,
   primaryButtonLabelEn,
   primaryButtonUrlHu,
@@ -165,6 +224,30 @@ export const getActivePageBySlugQuery = `*[_type == "page" && slug.current == $s
   runningEntryDeadlineRichEn,
   runningResultsNoteRichHu,
   runningResultsNoteRichEn,
+  infoFaqItems[]{
+    questionHu,
+    questionEn,
+    answerRichHu,
+    answerRichEn,
+  },
+  sections[]{
+    ...,
+    videoRef->{
+      _id,
+      titleHu,
+      titleEn,
+      descriptionHu,
+      descriptionEn,
+      videoUrl,
+      thumbnail,
+      size,
+      enabled,
+      order,
+      ctaTextHu,
+      ctaTextEn,
+      ctaUrl
+    }
+  },
   isActive,
   seo
 }`;
@@ -242,9 +325,65 @@ export const getPageQuery = `*[_type == "page" && slug.current == $slug && isAct
 
 export const getAllActivePageSlugsQuery = `*[_type == "page" && isActive == true && defined(slug.current)].slug.current`;
 
+/** Extended variant with locale availability flags — used by generateStaticParams for locale-aware filtering. */
+export const getAllActivePageSlugsWithLocaleQuery = `*[_type == "page" && isActive == true && defined(slug.current)]{
+  "slug": slug.current,
+  "hasHu": defined(titleHu) && titleHu != "",
+  "hasEn": defined(titleEn) && titleEn != ""
+}`;
+
+export const getSitemapPagesQuery = `*[_type == "page" && isActive == true && defined(slug.current)]{
+  "slug": slug.current,
+  "_updatedAt": _updatedAt,
+  "noIndex": seo.noIndex,
+  "hasHu": defined(titleHu) && titleHu != "",
+  "hasEn": defined(titleEn) && titleEn != ""
+}`;
+
 export const getTicketsQuery = `*[_type == "ticket"] | order(order asc)`;
 
-export const getVisibleTicketsQuery = `*[_type == "ticket" && isHidden != true && isAvailable == true] | order(order asc)`;
+/** Tickets shown in the homepage ticket boxes — must have showOnHome=true, not hidden, available. */
+export const getHomeTicketsQuery = `*[_type == "ticket" && isHidden != true && isAvailable == true && showOnHome == true] | order(homeOrder asc, order asc){
+  _id,
+  nameHu,
+  nameEn,
+  descriptionHu,
+  descriptionEn,
+  price,
+  currency,
+  ticketUrlHu,
+  ticketUrlEn,
+  ctaTextHu,
+  ctaTextEn,
+  ctaUrl,
+  showOnHome,
+  homeOrder,
+  isAvailable,
+  isHidden
+}`;
+
+export const getVisibleTicketsQuery = `*[_type == "ticket" && isHidden != true && isAvailable == true] | order(order asc){
+  _id,
+  nameHu,
+  nameEn,
+  descriptionHu,
+  descriptionEn,
+  descriptionRichHu,
+  descriptionRichEn,
+  price,
+  currency,
+  ticketUrlHu,
+  ticketUrlEn,
+  badgeHu,
+  badgeEn,
+  ctaTextHu,
+  ctaTextEn,
+  ctaUrl,
+  isFeatured,
+  isAvailable,
+  isHidden,
+  order
+}`;
 
 export const getSponsorsGroupedByCategoryQuery = `*[_type == "sponsorCategory"] | order(order asc) {
   _id,
@@ -267,6 +406,13 @@ export const getAccommodationItemsQuery = `*[_type == "accommodation" && isActiv
   name,
   descriptionHu,
   descriptionEn,
+  descriptionRichHu,
+  descriptionRichEn,
+  bodyRichHu,
+  bodyRichEn,
+  ctaTextHu,
+  ctaTextEn,
+  ctaUrl,
   priceHu,
   priceEn,
   stars,
@@ -284,4 +430,23 @@ export const getAccommodationItemsQuery = `*[_type == "accommodation" && isActiv
 
 export const getTransportItemsQuery = `*[_type == "transportItem" && isActive == true] | order(order asc)`;
 
-export const getPageBySlugQuery = `*[_type == "page" && slug.current == $slug && isActive == true][0]`;
+export const getPageBySlugQuery = `*[_type == "page" && slug.current == $slug && isActive == true][0]{
+  titleHu,
+  titleEn,
+  seo
+}`;
+
+export const getEnabledVideosQuery = `*[_type == "video" && enabled == true] | order(order asc) {
+  _id,
+  titleHu,
+  titleEn,
+  videoUrl,
+  size,
+  enabled,
+  order,
+  ctaTextHu,
+  ctaTextEn,
+  ctaUrl,
+  thumbnail,
+  "displayOnPages": displayOnPages[]->slug.current
+}`;

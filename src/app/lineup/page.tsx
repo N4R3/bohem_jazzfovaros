@@ -3,7 +3,7 @@ import { getContent, getLocale } from "@/lib/locale";
 import { BASE } from "@/content/base";
 import BeachPageShell from "@/components/layout/BeachPageShell";
 import LineupGrid, { type LineupArtist } from "@/components/lineup/LineupGrid";
-import { getPerformersWithFallback } from "@/sanity/lib/content";
+import { getPerformersWithFallback, getTicketUrlWithFallback } from "@/sanity/lib/content";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 
 /** CMS tartalom ISR: ~30 mp-en belül frissül (content.ts SANITY_FETCH_NEXT). */
@@ -27,7 +27,11 @@ export default async function LineupPage() {
   const c = await getContent();
   const { lineup } = c;
   const isEn = c.otherLocale.label === "HU";
-  const lineupArtists = await getPerformersWithFallback();
+  const locale = isEn ? "en" : "hu";
+  const [lineupArtists, ticketUrl] = await Promise.all([
+    getPerformersWithFallback(),
+    getTicketUrlWithFallback(locale),
+  ]);
 
   const baseArtistByName = new Map(BASE.artists.map((artist) => [artist.name, artist]));
 
@@ -256,6 +260,8 @@ export default async function LineupPage() {
       lineup: artist.lineup || details?.lineup, // Prefer CMS members, fallback to static
       website: artist.websiteUrl || details?.website,
       youtube: artist.youtubeUrl || details?.youtube,
+      ticketUrl: artist.ticketUrl,
+      cardBackgroundVariant: artist.cardBackgroundVariant,
     };
   });
 
@@ -270,8 +276,8 @@ export default async function LineupPage() {
     >
       <LineupGrid
         artists={artists}
-        ticketUrl={BASE.ticketUrl}
-        ticketLabel="Jegyvásárlás"
+        ticketUrl={ticketUrl || BASE.ticketUrl}
+        ticketLabel={isEn ? "Tickets" : "Jegyvásárlás"}
       />
     </BeachPageShell>
   );

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cache } from "react";
 import { metadataAlternates, siteUrlForLocale } from "@/lib/seo";
 import type { Locale } from "@/lib/types";
 import { isSanityConfigured, sanityClient } from "./client";
@@ -51,9 +52,9 @@ function resolveSanityOgImage(image?: SanityImageRef, locale?: Locale): string |
   return toAbsoluteUrl(built, locale);
 }
 
-export async function getSeoMetadataForPage(
+export const getSeoMetadataForPage = cache(async (
   input: GetSeoMetadataForPageInput,
-): Promise<SanitySeoResolution> {
+): Promise<SanitySeoResolution> => {
   const fallbackOgImageAbsolute = toAbsoluteUrl(input.fallbackOgImage, input.locale);
 
   if (!isSanityConfigured()) {
@@ -102,7 +103,7 @@ export async function getSeoMetadataForPage(
       noIndex: false,
     };
   }
-}
+});
 
 export async function buildPageMetadataWithSanity(
   input: BuildPageMetadataWithSanityInput,

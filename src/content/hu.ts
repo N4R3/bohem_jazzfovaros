@@ -1,6 +1,5 @@
 import type { SiteContent } from "@/lib/types";
 import { BASE } from "./base";
-import { getLanguageSwitchUrl } from "@/lib/seo";
 
 export const hu: SiteContent = {
   meta: {
@@ -20,7 +19,7 @@ export const hu: SiteContent = {
     { label: "Jegyek & Infó", href: "/info/" },
     { label: "Szállás", href: "/szallas/" },
     { label: "Térkép", href: "/terkep/" },
-    { label: "Jazztábor", href: "/tabor/" },
+    { label: "Jazztábor", href: "/jazztabor/" },
     { label: "Futás", href: "/futas/" },
     { label: "Kapcsolat", href: "/contact/" },
   ],
@@ -30,7 +29,7 @@ export const hu: SiteContent = {
 
   otherLocale: {
     label: "EN",
-    domain: getLanguageSwitchUrl(),
+    domain: "/en",
   },
 
   home: {
@@ -81,7 +80,7 @@ export const hu: SiteContent = {
     accompanyingProgrammesTitle: "Kísérőprogramok",
     /* A jazzfovaros.hu/programok oldal „KÍSÉRŐPROGRAMOK" szekciója alapján. */
     accompanyingProgrammes: [
-      { label: "VI. JAZZFŐVÁROS jazztábor (aug. 4–9.)", url: "/tabor/" },
+      { label: "VI. JAZZFŐVÁROS jazztábor (aug. 4–9.)", url: "/jazztabor/" },
       { label: "Bohém JAZZFŐVÁROS Futás (szombat 10:00)", url: "/futas/" },
       { label: "Strand (a fesztiválkarszalaggal végig)" },
       { label: "Swingtánc taster órák kezdőknek (csütörtök–vasárnap)" },

@@ -1,5 +1,3 @@
-"use client";
-
 /**
  * Hero — statikus, referencia alapján 1:1.
  *
@@ -19,11 +17,19 @@ const BLUE = "#17345F";
 const BADGE_ORANGE = "#F54614";
 
 type HeroProps = {
+  line1?: string;
+  line2?: string;
+  locationBadge?: string;
+  dateBadge?: string;
   ctaLabel?: string;
   ctaUrl?: string;
 };
 
 export default function Hero({
+  line1 = "BOHÉM",
+  line2 = "JAZZFŐVÁROS",
+  locationBadge = "Kecskemét, Domb Beach",
+  dateBadge = "2026. AUGUSZTUS 6–9.",
   ctaLabel = "Jegyvásárlás",
   ctaUrl = "#",
 }: HeroProps) {
@@ -49,9 +55,9 @@ export default function Hero({
         <h1
           className="m-0 mb-1 max-w-[20ch] font-display font-normal uppercase [font-size:clamp(64px,13.5vw,96px)] [line-height:0.95] [letter-spacing:0.02em] [text-shadow:0_4px_12px_rgba(0,0,0,0.4)] sm:max-w-none md:[font-size:clamp(36px,7vw,92px)]"
         >
-          <span style={{ color: ORANGE_TEXT }}>BOHÉM</span>
+          <span style={{ color: ORANGE_TEXT }}>{line1}</span>
           <br />
-          <span className="text-white">JAZZFŐVÁROS</span>
+          <span className="text-white">{line2}</span>
         </h1>
 
         {/* Alcím sorok */}
@@ -61,14 +67,14 @@ export default function Hero({
             className="rounded px-3 py-1.5 font-sans text-[13px] font-bold uppercase tracking-wide shadow sm:text-[15px]"
             style={{ background: BADGE_ORANGE, color: "#fff" }}
           >
-            Kecskemét, Domb Beach
+            {locationBadge}
           </span>
           {/* Kék alapon narancs szöveg */}
           <span
             className="rounded px-3 py-1.5 font-sans text-[13px] font-bold uppercase tracking-wide shadow sm:text-[15px]"
             style={{ background: BLUE, color: ORANGE_STRONG }}
           >
-            2026. AUGUSZTUS 6–9.
+            {dateBadge}
           </span>
         </div>
 

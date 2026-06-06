@@ -1,6 +1,5 @@
 import type { SiteContent } from "@/lib/types";
 import { BASE } from "./base";
-import { getLanguageSwitchUrl } from "@/lib/seo";
 
 export const en: SiteContent = {
   meta: {
@@ -20,7 +19,7 @@ export const en: SiteContent = {
     { label: "Tickets & Info", href: "/info/" },
     { label: "Accommodation", href: "/szallas/" },
     { label: "Map & Transport", href: "/terkep/" },
-    { label: "Jazz Camp", href: "/tabor/" },
+    { label: "Jazz Camp", href: "/jazztabor/" },
     { label: "Run", href: "/futas/" },
     { label: "Contact", href: "/contact/" },
   ],
@@ -30,7 +29,7 @@ export const en: SiteContent = {
 
   otherLocale: {
     label: "HU",
-    domain: getLanguageSwitchUrl(),
+    domain: "/",
   },
 
   home: {
@@ -80,7 +79,7 @@ export const en: SiteContent = {
 
     accompanyingProgrammesTitle: "Accompanying Programmes",
     accompanyingProgrammes: [
-      { label: "VI. JAZZ CAPITAL Jazz Camp (Aug 4–9)", url: "/tabor/" },
+      { label: "VI. JAZZ CAPITAL Jazz Camp (Aug 4–9)", url: "/jazztabor/" },
       { label: "Bohém JAZZ CAPITAL Run (Saturday 10:00)", url: "/futas/" },
       { label: "Beach (free throughout with festival wristband)" },
       { label: "Swing dance taster classes for beginners (Thursday–Sunday)" },

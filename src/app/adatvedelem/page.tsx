@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getContent, getLocale } from "@/lib/locale";
 import PageBody from "@/components/layout/PageBody";
 import RichText from "@/components/common/RichText";
+import FlexibleSections from "@/components/layout/FlexibleSections";
 import { getPageContentBySlug } from "@/sanity/lib/content";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 import { breadcrumbSchema } from "@/lib/structuredData";
@@ -37,7 +38,7 @@ export default async function PrivacyPolicyPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <Container>
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-3xl">
           <h1 className="mb-8 font-display text-3xl font-bold text-[var(--color-navy-900)] sm:text-4xl">
             {title}
           </h1>
@@ -52,6 +53,9 @@ export default async function PrivacyPolicyPage() {
           )}
           <div className="overflow-hidden break-words rounded-2xl border border-[var(--color-cream-200)] bg-white p-8 shadow-sm [&_a]:break-all">
             <PageBody text={page.body} variant="plain" />
+          </div>
+          <div className="mt-6">
+            <FlexibleSections locale={locale} sections={page.sections} />
           </div>
         </div>
       </Container>

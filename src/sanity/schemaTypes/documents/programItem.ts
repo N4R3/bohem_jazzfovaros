@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { richText } from "../objects/richText";
 
 export const programItemType = defineType({
   name: "programItem",
@@ -20,16 +21,56 @@ export const programItemType = defineType({
       type: "string",
     }),
     defineField({
+      name: "eventTitleHu",
+      title: "Eseménycím (HU)",
+      type: "string",
+      description:
+        "Opcionális elsődleges eseménycím. Ha üres, frontend fallbackként a fellépőnév/cím használható.",
+    }),
+    defineField({
+      name: "eventTitleEn",
+      title: "Eseménycím (EN)",
+      type: "string",
+      description:
+        "Opcionális elsődleges eseménycím. Ha üres, frontend fallbackként a fellépőnév/cím használható.",
+    }),
+    defineField({
+      name: "descriptionRichHu",
+      title: "Rövid megjegyzés (HU) — Rich Text",
+      ...richText,
+      description: "Lenyitható programkártyán, a részletes leírás előtt.",
+    }),
+    defineField({
+      name: "descriptionRichEn",
+      title: "Rövid megjegyzés (EN) — Rich Text",
+      ...richText,
+    }),
+    defineField({
       name: "descriptionHu",
-      title: "Leírás (HU)",
+      title: "Rövid megjegyzés (HU) — régi sima szöveg",
+      type: "text",
+      rows: 3,
+      description: "Legacy. Ha a Rich Text üres, ez használható.",
+    }),
+    defineField({
+      name: "descriptionEn",
+      title: "Rövid megjegyzés (EN) — régi sima szöveg",
       type: "text",
       rows: 3,
     }),
     defineField({
-      name: "descriptionEn",
-      title: "Leírás (EN)",
-      type: "text",
-      rows: 3,
+      name: "detailsRichHu",
+      title: "Részletes leírás (HU)",
+      ...richText,
+      description:
+        "Részletes szöveg a Program oldalon (lenyitható részletek blokk). Ha üres, a rövid leírás vagy a fellépők adatai jelenhetnek meg.",
+    }),
+    defineField({
+      name: "detailsRichEn",
+      title: "Részletes leírás (EN)",
+      ...richText,
+      description:
+        "Részletes szöveg a Program oldalon (lenyitható részletek). Ha üres, HU vagy fallback szöveg használható.",
     }),
     defineField({
       name: "date",
@@ -76,6 +117,20 @@ export const programItemType = defineType({
       of: [{ type: "reference", to: [{ type: "performer" }] }],
       description:
         "Egy programItemhez több fellépő rendelhető. Egy fellépő több programItemhez is rendelhető (több időpont) – ugyanazt a Performer-t többször is felveheted különböző programItemekbe.",
+    }),
+    defineField({
+      name: "ticketUrlHu",
+      title: "Esemény jegy URL (HU)",
+      type: "url",
+      description:
+        "Opcionális. Ha üres, frontend később globális jegy URL fallbacket használhat.",
+    }),
+    defineField({
+      name: "ticketUrlEn",
+      title: "Esemény jegy URL (EN)",
+      type: "url",
+      description:
+        "Opcionális. Ha üres, frontend később globális jegy URL fallbacket használhat.",
     }),
     defineField({
       name: "order",

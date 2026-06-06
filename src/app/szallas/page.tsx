@@ -118,56 +118,63 @@ export default async function AccommodationPage() {
 
             <div className="flex flex-1 flex-col p-6">
               <h3
-                className="font-display text-xl font-black uppercase leading-tight"
-                style={{ color: "var(--color-teal-900)" }}
+                className="font-display text-xl font-black uppercase leading-tight text-[var(--color-teal-900)]"
               >
                 {hotel.name}
               </h3>
               <p
-                className="mt-1 text-xs font-extrabold uppercase tracking-wider"
+                className="mt-1.5 text-xs font-extrabold uppercase tracking-wider"
                 style={{ color: "var(--color-accent-600)" }}
               >
                 {hotel.distance}
               </p>
 
-              <p
-                className="mt-3 flex-1 text-sm leading-relaxed"
-                style={{ color: "rgba(10,58,54,0.75)" }}
+              <div
+                className="mt-4 flex-1 text-sm leading-relaxed text-[var(--color-teal-900)]/80"
               >
-                {hotel.description}
-              </p>
+                {hotel.richBody && hotel.richBody.length > 0 ? (
+                  <RichText value={hotel.richBody} />
+                ) : hotel.descriptionRich && hotel.descriptionRich.length > 0 ? (
+                  <RichText value={hotel.descriptionRich} />
+                ) : (
+                  <p>{hotel.description}</p>
+                )}
+              </div>
 
               <div
-                className="mt-5 flex items-center justify-between gap-3 border-t pt-4"
-                style={{ borderColor: "rgba(10,58,54,0.12)" }}
+                className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t pt-4"
+                style={{ borderColor: "rgba(10,58,54,0.08)" }}
               >
-                <div>
-                  <p
-                    className="text-[10px] font-bold uppercase tracking-wider"
-                    style={{ color: "rgba(10,58,54,0.45)" }}
-                  >
-                    ártól
-                  </p>
-                  <p
-                    className="font-display text-base font-black leading-tight"
-                    style={{ color: "var(--color-teal-900)" }}
-                  >
-                    {hotel.price}
-                  </p>
+                <div className="min-w-0">
+                  {hotel.price && (
+                    <p
+                      className="font-mono text-base font-black text-[var(--color-teal-900)]"
+                    >
+                      {hotel.price}
+                    </p>
+                  )}
                 </div>
-                <a
-                  href={hotel.bookingUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-extrabold uppercase tracking-wider transition-transform hover:scale-[1.05]"
-                  style={{
-                    background: "var(--color-accent-500)",
-                    color: "#fdf6e3",
-                    boxShadow: "0 6px 16px rgba(212,98,26,0.4)",
-                  }}
-                >
-                  {hotel.bookingLabel}
-                </a>
+                {(hotel.ctaUrl || hotel.bookingUrl) && (
+                  <a
+                    href={hotel.ctaUrl || hotel.bookingUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-full px-[18px] py-2 text-xs font-extrabold uppercase tracking-wider transition-all hover:scale-[1.03]"
+                    style={{
+                      background: "var(--color-accent-500)",
+                      color: "#fdf6e3",
+                      boxShadow: "0 4px 12px rgba(212,98,26,0.3)",
+                    }}
+                  >
+                    {(hotel.ctaText || hotel.bookingLabel || (isEn ? "Book" : "Foglalás")).replace(
+                      /\s*[→➔]\s*$/,
+                      "",
+                    ).trim()}
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden="true">
+                      <path d="M5 12h14M13 5l7 7-7 7" />
+                    </svg>
+                  </a>
+                )}
               </div>
             </div>
           </article>

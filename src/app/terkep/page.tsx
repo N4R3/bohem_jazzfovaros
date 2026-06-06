@@ -95,7 +95,14 @@ export default async function MapPage() {
           <strong className="font-extrabold uppercase tracking-wider">
             Info:
           </strong>{" "}
-          {venueContent.description}
+          {venueContent.descriptionRich && venueContent.descriptionRich.length > 0 ? (
+            <RichText
+              value={venueContent.descriptionRich}
+              className="inline [&_p]:inline [&_p]:mb-0"
+            />
+          ) : (
+            venueContent.description
+          )}
         </div>
       </div>
 
@@ -221,7 +228,13 @@ function DirectionCard({
   dir,
   index,
 }: {
-  dir: { mode: string; icon: string; text: string; url?: string };
+  dir: {
+    mode: string;
+    icon: string;
+    text: string;
+    textRich?: import("@portabletext/react").PortableTextBlock[];
+    url?: string;
+  };
   index: number;
 }) {
   const iconPath = iconPaths[dir.icon] ?? iconPaths.car;
@@ -269,12 +282,21 @@ function DirectionCard({
           >
             {dir.mode}
           </h3>
-          <p
-            className="mt-2 text-sm leading-relaxed"
-            style={{ color: "rgba(10,58,54,0.78)" }}
-          >
-            {dir.text}
-          </p>
+          {dir.textRich && dir.textRich.length > 0 ? (
+            <div
+              className="mt-2 text-sm leading-relaxed"
+              style={{ color: "rgba(10,58,54,0.78)" }}
+            >
+              <RichText value={dir.textRich} />
+            </div>
+          ) : (
+            <p
+              className="mt-2 text-sm leading-relaxed"
+              style={{ color: "rgba(10,58,54,0.78)" }}
+            >
+              {dir.text}
+            </p>
+          )}
           {dir.url && (
             <a
               href={dir.url}

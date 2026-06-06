@@ -7,19 +7,13 @@ import LocaleSwitchAnchor from "@/components/layout/LocaleSwitchAnchor";
 
 interface MobileMenuProps {
   nav: NavItem[];
-  otherLocaleLabel: string;
-  otherLocaleDomain: string;
   currentPath?: string;
 }
 
 const PANEL_MS = 880;
 const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
 
-export default function MobileMenu({
-  nav,
-  otherLocaleLabel,
-  otherLocaleDomain,
-}: MobileMenuProps) {
+export default function MobileMenu({ nav }: MobileMenuProps) {
   const [open, setOpen] = useState(false);
   const [menuGen, setMenuGen] = useState(0);
 
@@ -139,8 +133,6 @@ export default function MobileMenu({
                 }}
               >
                 <LocaleSwitchAnchor
-                  fallbackHref={otherLocaleDomain}
-                  label={otherLocaleLabel}
                   className="block min-w-0 max-w-full break-words rounded-xl px-4 py-3.5 text-sm font-bold transition-colors hover:bg-white/10"
                   style={{ color: "#f9d47a" }}
                   onClick={() => setOpen(false)}

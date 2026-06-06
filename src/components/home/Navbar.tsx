@@ -17,6 +17,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/cn";
+import { en } from "@/content/en";
+import { localizeInternalHref } from "@/lib/languageSwitch";
+import { isEnPathname, shouldUsePathPrefixLocale } from "@/lib/localeMode";
+import LocaleSwitchAnchor from "@/components/layout/LocaleSwitchAnchor";
 import type { NavItem, SiteContent } from "@/lib/types";
 
 type Props = {
@@ -25,22 +29,15 @@ type Props = {
   navOverride?: NavItem[];
 };
 
-function getSwitchHref(pathname: string, otherLocaleLabel: string): string {
-  if (otherLocaleLabel === "EN") {
-    return pathname === "/" ? "/en/" : `/en${pathname}`;
-  }
-  return pathname.replace(/^\/en(?=\/|$)/, "") || "/";
-}
-
 export default function Navbar({ content: c, navOverride }: Props) {
   const pathname = usePathname() || "/";
-  const NAV_ITEMS: NavItem[] = navOverride && navOverride.length > 0 ? navOverride : c.nav;
-  const OTHER = c.otherLocale;
-  const switchHref = getSwitchHref(pathname, OTHER.label);
+  const isEnglishPage = isEnPathname(pathname);
+  const useEnNav = shouldUsePathPrefixLocale() && isEnglishPage;
+  const NAV_ITEMS: NavItem[] =
+    useEnNav ? en.nav : navOverride && navOverride.length > 0 ? navOverride : c.nav;
 
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const isEnglishPage = pathname.startsWith("/en");
 
   /* Scroll-alapú árnyék a jazzdesign1 .navbar.scrolled osztályához */
   useEffect(() => {
@@ -67,7 +64,7 @@ export default function Navbar({ content: c, navOverride }: Props) {
     >
       <div className="mx-auto flex h-[76px] max-w-[1320px] items-center gap-6 px-5 sm:px-8">
         {/* Logó bal oldalt */}
-        <Link href="/" aria-label="Főoldal" className="flex shrink-0 items-center">
+        <Link href={localizeInternalHref("/", pathname)} aria-label="Főoldal" className="flex shrink-0 items-center">
           <Image
             src="/images/branding/logo_simple.png"
             alt="Bohém Jazzfőváros Kecskemét"
@@ -86,7 +83,7 @@ export default function Navbar({ content: c, navOverride }: Props) {
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.href}
-              href={item.href}
+              href={localizeInternalHref(item.href, pathname)}
               label={item.label}
               isActive={isNavActive(pathname, item.href)}
               external={item.external || /^https?:\/\//i.test(item.href)}
@@ -96,18 +93,14 @@ export default function Navbar({ content: c, navOverride }: Props) {
         </nav>
 
         {/* Desktop EN/HU kapcsoló pill */}
-        <a
-          href={switchHref}
+        <LocaleSwitchAnchor
           className={cn(
             "ml-auto hidden items-center rounded-full border-2 px-3.5 py-1.5 font-sans text-[12px] font-extrabold uppercase tracking-[0.08em] transition-colors xl:inline-flex",
             isEnglishPage
               ? "border-orange-500 bg-orange-500 text-white hover:bg-orange-600 hover:border-orange-600"
               : "border-black bg-black text-white hover:bg-neutral-900",
           )}
-          aria-label={OTHER.label === "EN" ? "Switch to English" : "Váltás magyarra"}
-        >
-          {OTHER.label}
-        </a>
+        />
 
         {/* Mobil hamburger */}
         <button
@@ -164,7 +157,7 @@ export default function Navbar({ content: c, navOverride }: Props) {
                   transition={{ delay: 0.04 + i * 0.025, duration: 0.28 }}
                 >
                   <Link
-                    href={item.href}
+                    href={localizeInternalHref(item.href, pathname)}
                     onClick={() => setOpen(false)}
                     className={cn(
                       "block px-6 py-3.5 text-[13px] font-bold uppercase tracking-[0.04em] transition-colors hover:bg-orange-500/5 hover:text-orange-500",
@@ -180,16 +173,13 @@ export default function Navbar({ content: c, navOverride }: Props) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.04 + NAV_ITEMS.length * 0.025, duration: 0.28 }}
               >
-                <a
-                  href={switchHref}
+                <LocaleSwitchAnchor
                   onClick={() => setOpen(false)}
                   className={cn(
                     "block px-6 py-3.5 text-center text-[13px] font-extrabold uppercase tracking-[0.08em] text-white transition-colors",
                     isEnglishPage ? "bg-orange-500 hover:bg-orange-600" : "bg-ink-800 hover:bg-ink-900",
                   )}
-                >
-                  {OTHER.label}
-                </a>
+                />
               </motion.li>
             </ul>
           </motion.nav>

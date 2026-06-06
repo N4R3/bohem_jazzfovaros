@@ -1,5 +1,3 @@
-"use client";
-
 /**
  * LineupTeaser — jazzdesign1 1:1 "FELLÉPŐK" szekció.
  *
@@ -115,6 +113,7 @@ function ArtistCard({
             fill
             sizes="(max-width: 640px) 45vw, (max-width: 1024px) 28vw, 18vw"
             className="object-cover"
+            loading="lazy"
           />
         ) : (
           <ArtistSilhouette color={artist.color} />

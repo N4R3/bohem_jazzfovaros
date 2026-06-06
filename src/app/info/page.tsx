@@ -2,9 +2,18 @@ import type { Metadata } from "next";
 import { getContent, getLocale } from "@/lib/locale";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 import BeachPageShell from "@/components/layout/BeachPageShell";
-import PageBody from "@/components/layout/PageBody";
-import { getVisibleTicketsWithFallback, getTicketUrlWithFallback, getPageContentBySlug } from "@/sanity/lib/content";
+import RichText from "@/components/common/RichText";
+import {
+  getVisibleTicketsWithFallback,
+  getTicketUrlWithFallback,
+  getPageContentBySlug,
+  getVenueContent,
+} from "@/sanity/lib/content";
+import type { PortableTextBlock } from "@portabletext/react";
 import { portableTextToPlain } from "@/sanity/lib/portableText";
+import InfoCmsSections from "@/components/info/InfoCmsSections";
+
+export const revalidate = 30;
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -24,14 +33,27 @@ export default async function InfoPage() {
   const c = await getContent();
   const isEn = c.otherLocale.label === "HU";
   const locale = isEn ? "en" : "hu";
-  const [sanityTickets, ticketUrl] = await Promise.all([
+  const [sanityTickets, ticketUrl, page, venue] = await Promise.all([
     getVisibleTicketsWithFallback(),
     getTicketUrlWithFallback(locale),
+    getPageContentBySlug("info", locale),
+    getVenueContent(locale),
   ]);
-  const page = await getPageContentBySlug("info", locale);
   const { info } = c;
+  const cmsFaq = page.infoFaq && page.infoFaq.length > 0 ? page.infoFaq : null;
+  const cmsMainSections =
+    page.sections?.some(
+      (s) =>
+        s &&
+        s.enabled !== false &&
+        (s._type === "sectionTextBox" || s._type === "sectionRichText"),
+    ) ?? false;
   const ticketTiers = sanityTickets.length ? sanityTickets : info.ticketTiers || [];
   const subtitle = typeof page.heroDescription === "string" ? page.heroDescription : portableTextToPlain(page.heroDescription);
+  const ticketFooterRich =
+    page.body && Array.isArray(page.body) && page.body.length > 0 ? (page.body as PortableTextBlock[]) : null;
+  const ticketFooterPlain = info.ticketNote?.trim() || "";
+  const globalBuyLabel = isEn ? "Buy tickets" : "Jegyvásárlás";
 
   return (
     <BeachPageShell
@@ -41,102 +63,142 @@ export default async function InfoPage() {
       canonicalPath="/info/"
       locale={isEn ? "en" : "hu"}
     >
-      {page.body && <PageBody text={page.body} />}
       <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr]">
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-8">
           {/* Ticket tiers */}
           {ticketTiers.length > 0 && (
-            <section
-              className="relative overflow-hidden rounded-2xl p-6 sm:p-8"
-              style={{
-                background: "var(--color-accent-500)",
-                color: "#fdf6e3",
-                boxShadow: "0 14px 36px rgba(0,0,0,0.35)",
-              }}
-            >
-              <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <h2 className="font-display text-2xl font-black uppercase sm:text-3xl">
-                  {info.ticketCta}
-                </h2>
-                <a
-                  href={ticketUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-xs font-extrabold uppercase tracking-wider"
-                  style={{
-                    background: "var(--color-accent-700)",
-                    color: "#fdf6e3",
-                  }}
-                >
-                  Jegyvásárlás
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                    <path d="M5 12h14M13 5l7 7-7 7" />
-                  </svg>
-                </a>
-              </div>
-
-              <ul className="flex flex-col divide-y" style={{ borderColor: "rgba(255,255,255,0.18)" }}>
-                {ticketTiers.map((tier) => (
-                  <li
-                    key={tier.label}
-                    className="flex items-baseline justify-between gap-4 py-3"
-                    style={{ borderTopColor: "rgba(255,255,255,0.18)" }}
-                  >
-                    <span
-                      className={`text-sm ${tier.highlight ? "font-bold" : "font-medium"}`}
-                      style={{ color: "rgba(253,246,227,0.95)" }}
+            <section>
+              <article
+                className="overflow-hidden rounded-2xl shadow-[0_14px_36px_rgba(0,0,0,0.35)]"
+                style={{ background: "var(--color-accent-500)", color: "#fdf6e3" }}
+              >
+                <header className="flex flex-col gap-3 border-b border-white/35 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5">
+                  <h2 className="font-display text-lg font-black uppercase leading-tight tracking-wide sm:text-xl">
+                    {info.ticketCta}
+                  </h2>
+                  {ticketUrl && (
+                    <a
+                      href={ticketUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex shrink-0 items-center justify-center gap-2 self-start rounded-full px-5 py-2.5 text-xs font-extrabold uppercase tracking-wider transition-transform hover:scale-[1.03] sm:text-sm"
+                      style={{
+                        background: "rgba(0,0,0,0.18)",
+                        color: "#fdf6e3",
+                        boxShadow: "0 4px 14px rgba(0,0,0,0.2)",
+                      }}
                     >
-                      {tier.highlight && (
-                        <span
-                          className="mr-2 inline-block rounded-full px-2 py-0.5 text-[9px] font-black uppercase tracking-wider"
-                          style={{ background: "#fdf6e3", color: "var(--color-accent-700)" }}
-                        >
-                          HOT
-                        </span>
-                      )}
-                      {tier.label}
-                    </span>
-                    <span className="shrink-0 font-mono text-sm font-black" style={{ color: "#fde4c0" }}>
-                      {tier.price}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+                      {globalBuyLabel}
+                      <span aria-hidden="true">→</span>
+                    </a>
+                  )}
+                </header>
 
-              {info.ticketNote && (
-                <p className="mt-5 text-xs leading-relaxed" style={{ color: "rgba(253,246,227,0.85)" }}>
-                  {info.ticketNote}
-                </p>
-              )}
+                <ul>
+                  {ticketTiers.map((tier, index) => {
+                    const rowUrl = tier.ctaUrl || ticketUrl;
+                    const canBuy = Boolean(rowUrl) && tier.isAvailable !== false;
+                    const rowClassName = `group relative flex items-center gap-3 px-5 py-3.5 transition-all duration-300 sm:px-6 sm:py-4 ${
+                      index > 0 ? "border-t border-white/35" : ""
+                    } ${canBuy ? "cursor-pointer hover:bg-white/14 hover:pl-7 hover:shadow-[inset_5px_0_0_rgba(255,255,255,0.55)]" : "opacity-70"}`;
+
+                    const rowContent = (
+                      <>
+                        <div className="min-w-0 flex-1 pr-1">
+                          <p className="text-sm font-semibold leading-snug sm:text-[15px]">{tier.label}</p>
+                          {(tier.descriptionRich?.length || tier.description) && (
+                            <div className="mt-0.5 text-[11px] leading-snug text-white/80 sm:text-xs [&_a]:text-white [&_a]:underline [&_p]:mb-0">
+                              {tier.descriptionRich?.length ? (
+                                <RichText value={tier.descriptionRich} />
+                              ) : (
+                                <p>{tier.description}</p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                        <p className="shrink-0 text-right text-sm font-bold tabular-nums sm:text-base">
+                          {tier.price}
+                        </p>
+                        {canBuy && (
+                          <span
+                            className="flex h-7 w-7 shrink-0 items-center justify-center text-xl font-black transition-all duration-300 group-hover:translate-x-1.5 group-hover:scale-110 sm:h-8 sm:w-8"
+                            aria-hidden="true"
+                          >
+                            ›
+                          </span>
+                        )}
+                      </>
+                    );
+
+                    if (canBuy) {
+                      return (
+                        <li key={tier.id || tier.label}>
+                          <a
+                            href={rowUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={rowClassName}
+                            aria-label={tier.label}
+                          >
+                            {rowContent}
+                          </a>
+                        </li>
+                      );
+                    }
+
+                    return (
+                      <li key={tier.id || tier.label} className={rowClassName}>
+                        {rowContent}
+                      </li>
+                    );
+                  })}
+                </ul>
+
+                {(ticketFooterRich || ticketFooterPlain) && (
+                  <footer className="border-t border-white/35 px-5 py-4 text-xs leading-relaxed text-white/92 sm:px-6 sm:py-5 sm:text-sm">
+                    {ticketFooterRich ? (
+                      <RichText
+                        value={ticketFooterRich}
+                        className="[&_a]:text-white [&_a]:underline [&_blockquote]:border-white/50 [&_blockquote]:text-white/90 [&_p]:mb-2.5 [&_p:last-child]:mb-0 [&_strong]:text-white"
+                      />
+                    ) : (
+                      <p>{ticketFooterPlain}</p>
+                    )}
+                  </footer>
+                )}
+              </article>
             </section>
           )}
 
-          {/* Information sections */}
-          {info.sections.map((section) => (
-            <section
-              key={section.title}
-              className="relative overflow-hidden rounded-2xl p-6 shadow-xl sm:p-7"
-              style={{ background: "var(--color-cream-50)" }}
-            >
-              <div
-                className="absolute inset-x-0 top-0 h-1.5"
-                style={{ background: "var(--color-accent-500)" }}
-                aria-hidden="true"
-              />
-              <h3
-                className="mb-3 font-display text-xl font-black uppercase"
-                style={{ color: "var(--color-teal-900)" }}
+          {cmsMainSections ? (
+            <InfoCmsSections locale={locale} sections={page.sections} />
+          ) : (
+            info.sections.map((section) => (
+              <section
+                key={section.title}
+                className="relative overflow-hidden rounded-2xl p-6 shadow-xl sm:p-7"
+                style={{ background: "var(--color-cream-50)" }}
               >
-                {section.title}
-              </h3>
-              <p
-                className="text-sm leading-relaxed"
-                style={{ color: "rgba(10,58,54,0.78)" }}
-              >
-                {section.body}
-              </p>
-            </section>
-          ))}
+                <div
+                  className="absolute inset-x-0 top-0 h-1.5"
+                  style={{ background: "var(--color-accent-500)" }}
+                  aria-hidden="true"
+                />
+                <h3
+                  className="mb-3 font-display text-xl font-black uppercase"
+                  style={{ color: "var(--color-teal-900)" }}
+                >
+                  {section.title}
+                </h3>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ color: "rgba(10,58,54,0.78)" }}
+                >
+                  {section.body}
+                </p>
+              </section>
+            ))
+          )}
         </div>
 
         {/* Right column: FAQ + CTA */}
@@ -157,27 +219,44 @@ export default async function InfoPage() {
               GYIK · FAQ
             </h3>
             <div className="flex flex-col gap-4">
-              {info.faq.map((item) => (
-                <div key={item.question}>
-                  <p
-                    className="text-sm font-extrabold"
-                    style={{ color: "var(--color-teal-900)" }}
-                  >
-                    {item.question}
-                  </p>
-                  <p
-                    className="mt-1 text-sm leading-relaxed"
-                    style={{ color: "rgba(10,58,54,0.72)" }}
-                  >
-                    {item.answer}
-                  </p>
-                </div>
-              ))}
+              {cmsFaq
+                ? cmsFaq.map((item) => (
+                    <div key={item.question}>
+                      <p
+                        className="text-sm font-extrabold"
+                        style={{ color: "var(--color-teal-900)" }}
+                      >
+                        {item.question}
+                      </p>
+                      <div
+                        className="mt-1 text-sm leading-relaxed [&_a]:font-semibold [&_a]:text-[var(--color-accent-600)]"
+                        style={{ color: "rgba(10,58,54,0.72)" }}
+                      >
+                        <RichText value={item.answer} />
+                      </div>
+                    </div>
+                  ))
+                : info.faq.map((item) => (
+                    <div key={item.question}>
+                      <p
+                        className="text-sm font-extrabold"
+                        style={{ color: "var(--color-teal-900)" }}
+                      >
+                        {item.question}
+                      </p>
+                      <p
+                        className="mt-1 text-sm leading-relaxed"
+                        style={{ color: "rgba(10,58,54,0.72)" }}
+                      >
+                        {item.answer}
+                      </p>
+                    </div>
+                  ))}
             </div>
           </section>
 
           <a
-            href={info.ticketUrl}
+            href={ticketUrl || info.ticketUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="group relative flex items-center justify-center gap-2 overflow-hidden rounded-2xl px-6 py-6 text-center font-display text-lg font-black uppercase tracking-wide"
@@ -214,12 +293,12 @@ export default async function InfoPage() {
                 className="mb-3 text-sm leading-relaxed"
                 style={{ color: "rgba(10,58,54,0.78)" }}
               >
-                Domb Beach, Kecskemét
+                {venue.eyebrow || "Domb Beach, Kecskemét"}
               </p>
               <div className="overflow-hidden rounded-xl border border-black/10">
                 <iframe
                   title={isEn ? "Domb Beach venue map" : "Domb Beach helyszín térkép"}
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2726.5!2d19.666032!3d46.903819!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDbCsDU0JzEzLjgiTiAxOcKwMzknNTcuNyJF!5e0!3m2!1shu!2shu!4v1700000000000!5m2!1shu!2shu"
+                  src={venue.mapEmbedUrl}
                   width="100%"
                   height="260"
                   style={{ border: 0 }}

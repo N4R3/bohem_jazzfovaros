@@ -10,14 +10,21 @@ function slugCurrent(doc: unknown): string | undefined {
 
 /** Program oldal: cím a titleHu/En-ből jön, subtitle a heroDescription-ből; programBody + mód. */
 const SLUG_PROGRAM = "program";
-/** Főoldal Page doksi: csak SEO (meta), a hero/pageBody nem renderelődik a főoldalon. */
+const SLUG_INFO = "info";
+/** Főoldal Page doksi: látható hero / stat / CTA + SEO + videó + jegyek. */
 const SLUG_HOME = "home";
+const isHomeSlug = (doc: unknown) => slugCurrent(doc) === SLUG_HOME;
 /** Fellépők oldal jelenleg nem hívja a getPageContentBySlug-ot – csak SEO + admin cím. */
 const SLUG_LINEUP = "lineup";
 const SLUG_SZALLAS = "szallas";
 const SLUG_TERKEP = "terkep";
 const SLUG_FUTAS = "futas";
-const SLUG_TABOR = "tabor";
+const SLUG_CAMP_LEGACY = "tabor";
+const SLUG_JAZZTABOR = "jazztabor";
+/** Returns true for both "tabor" (legacy Sanity doc slug) and "jazztabor" (canonical live route). */
+function isCampSlug(s?: string): boolean {
+  return s === SLUG_CAMP_LEGACY || s === SLUG_JAZZTABOR;
+}
 
 /**
  * Page — egy Sanity-ből szerkeszthető oldal.
@@ -27,7 +34,7 @@ const SLUG_TABOR = "tabor";
  * Összefoglaló:
  *  - Általános fix + dinamikus oldalak: hero cím/leírás, pageBody, SEO
  *  - `program`: titleHu/En = nagy cím; heroDescription = alcím; programDisplayMode + programBody
- *  - `tabor`: eyebrow, program blokkok (névsor + menetrend), támogatók lista; + második szöveg, CTA
+ *  - `jazztabor` (és legacy `tabor`): eyebrow, program blokkok (névsor + menetrend), támogatók lista; + második szöveg, CTA
  *  - `futas`: ingyenes belépő szalag, kártyák (dátum/idő/hely), távok táblázat, határidő, eredmény — + pageBody2 mint fő leírás
  *  - `home` / `lineup`: főleg SEO (+ belső címek); vizuális hero/pageBody nem erre az útvonalra megy
  *  - Új slug → `/oldal/[slug]` : hero + pageBody + SEO
@@ -59,7 +66,158 @@ export const pageType = defineType({
       type: "slug",
       options: { source: "titleHu", maxLength: 96 },
       description:
-        "FIX OLDALAKNÁL ne módosítsd: home, info, lineup, program, contact, szallas, terkep, futas, tabor, aszf. ÚJ információs oldalnál tetszőleges, kisbetű+kötőjel formátumban (pl. `gyik`, `sajto`); az új oldal a /oldal/[slug] URL-en lesz elérhető. Menübe a Navigation menüpontnál tehető.",
+        "FIX OLDALAKNÁL ne módosítsd: home, info, lineup, program, contact, szallas, terkep, futas, tabor, aszf. UJ informacios oldalnal tetszoleges, kisbetu+kotojel formatumban (pl. gyik, sajto); az uj oldal a /slug es a /oldal/slug URL-en is elerheto lesz. Menube a Navigation menupontnal teheto.",
+    }),
+    /* ── Page-local videó (R2): egyszerű YouTube link minden oldalhoz ──── */
+    defineField({
+      name: "videoUrl",
+      title: "Videó (YouTube link)",
+      type: "url",
+      description:
+        "Illeszd be ennek az oldalnak a YouTube videó linkjet. A honlapon elonezet jelenik meg, es csak kattintasra indul el (nem tolt be automatikusan). Uresen: a fooldalon es a jazztabor oldalon a kodbeli alapertelmezett video marad, mas oldalon nincs video.",
+    }),
+    defineField({
+      name: "videoTitleHu",
+      title: "Videó cím (HU) — opcionális",
+      type: "string",
+      description: "Opcionalis felirat a video felett/alatt. Uresen az oldal cime hasznalhato.",
+    }),
+    defineField({
+      name: "videoTitleEn",
+      title: "Videó cím (EN) — opcionális",
+      type: "string",
+    }),
+    /* ── Főoldal látható tartalom (R3) — csak slug=home ─────────────── */
+    defineField({
+      name: "homeHeroTitleHu",
+      title: "Főoldal — Hero cím (HU)",
+      type: "string",
+      description:
+        'A nagy cím két sora. Használható formátum: "BOHÉM|JAZZFŐVÁROS" vagy két sor (Enter). Ha üres: kódbeli alapértelmezés.',
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homeHeroTitleEn",
+      title: "Főoldal — Hero cím (EN)",
+      type: "string",
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homeHeroSubtitleHu",
+      title: "Főoldal — Hero helyszín badge (HU)",
+      type: "string",
+      description: 'Pl. "Kecskemét, Domb Beach" — narancs badge a hero alatt.',
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homeHeroSubtitleEn",
+      title: "Főoldal — Hero helyszín badge (EN)",
+      type: "string",
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homeHeroLeadHu",
+      title: "Főoldal — Hero dátum badge (HU)",
+      type: "string",
+      description: 'Pl. "2026. AUGUSZTUS 6–9." — kék badge.',
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homeHeroLeadEn",
+      title: "Főoldal — Hero dátum badge (EN)",
+      type: "string",
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homePrimaryCtaTextHu",
+      title: "Főoldal — Elsődleges CTA szöveg (HU)",
+      type: "string",
+      description: "Hero és info-sáv jegygomb felirata. Üresen: kódbeli fallback.",
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homePrimaryCtaTextEn",
+      title: "Főoldal — Elsődleges CTA szöveg (EN)",
+      type: "string",
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homePrimaryCtaUrl",
+      title: "Főoldal — Elsődleges CTA URL",
+      type: "url",
+      description: "Üresen: globális jegylink (Site settings).",
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homeSecondaryCtaTextHu",
+      title: "Főoldal — Másodlagos CTA szöveg (HU) — opcionális",
+      type: "string",
+      description: "Jelenleg nincs külön másodlagos gomb a hero-ban; későbbi használatra.",
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homeSecondaryCtaTextEn",
+      title: "Főoldal — Másodlagos CTA szöveg (EN) — opcionális",
+      type: "string",
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homeSecondaryCtaUrl",
+      title: "Főoldal — Másodlagos CTA URL — opcionális",
+      type: "url",
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homeStats",
+      title: "Főoldal — Statisztika sáv (4 / 10+ / …)",
+      type: "array",
+      description: "Narancs stats sáv. Legalább 2 elem ajánlott. Üresen: kódbeli alap statok.",
+      of: [defineArrayMember({ type: "homeStatItem" })],
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homeCtaBannerTitleHu",
+      title: "Főoldal — Alsó CTA banner cím (HU)",
+      type: "string",
+      description: 'Pl. "Vedd meg a jegyed most!" — a "jegyed" szó narancs kiemelést kap.',
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homeCtaBannerTitleEn",
+      title: "Főoldal — Alsó CTA banner cím (EN)",
+      type: "string",
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homeCtaBannerTextHu",
+      title: "Főoldal — Alsó CTA banner alcím (HU)",
+      type: "string",
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homeCtaBannerTextEn",
+      title: "Főoldal — Alsó CTA banner alcím (EN)",
+      type: "string",
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homeCtaBannerButtonTextHu",
+      title: "Főoldal — Alsó CTA gomb szöveg (HU)",
+      type: "string",
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homeCtaBannerButtonTextEn",
+      title: "Főoldal — Alsó CTA gomb szöveg (EN)",
+      type: "string",
+      hidden: ({ document }) => !isHomeSlug(document),
+    }),
+    defineField({
+      name: "homeCtaBannerButtonUrl",
+      title: "Főoldal — Alsó CTA gomb URL",
+      type: "url",
+      description: "Üresen: globális jegylink.",
+      hidden: ({ document }) => !isHomeSlug(document),
     }),
     defineField({
       name: "heroTitleHu",
@@ -172,6 +330,69 @@ export const pageType = defineType({
       ...richText,
       hidden: ({ document }) => slugCurrent(document) !== SLUG_PROGRAM,
     }),
+    /* ── Program oldal megjelenítési vezérlők (desktop / mobil) ─────────── */
+    defineField({
+      name: "showProgramTableDesktop",
+      title: "Menetrend tábla látható – asztali",
+      type: "boolean",
+      initialValue: true,
+      description: "Asztali nézeten latszik-e a strukturalt menetrend lista (tábla). Alapertelmezett: igen.",
+      hidden: ({ document }) => slugCurrent(document) !== SLUG_PROGRAM,
+    }),
+    defineField({
+      name: "showProgramTableMobile",
+      title: "Menetrend tábla látható – mobil",
+      type: "boolean",
+      initialValue: true,
+      description: "Mobil nezeten latszik-e a strukturalt menetrend lista (tábla). Alapertelmezett: igen.",
+      hidden: ({ document }) => slugCurrent(document) !== SLUG_PROGRAM,
+    }),
+    defineField({
+      name: "showProgramTextDesktop",
+      title: "Program szöveg látható – asztali",
+      type: "boolean",
+      initialValue: true,
+      description: "Asztali nezeten latszik-e a szabad szoveges programleiras. Csak akkor hat, ha van kitoltve program szabad szoveg is. Alapertelmezett: igen.",
+      hidden: ({ document }) => slugCurrent(document) !== SLUG_PROGRAM,
+    }),
+    defineField({
+      name: "showProgramTextMobile",
+      title: "Program szöveg látható – mobil",
+      type: "boolean",
+      initialValue: true,
+      description: "Mobil nezeten latszik-e a szabad szoveges programleiras. Alapertelmezett: igen.",
+      hidden: ({ document }) => slugCurrent(document) !== SLUG_PROGRAM,
+    }),
+    defineField({
+      name: "desktopProgramOrder",
+      title: "Sorrend asztali nézetben",
+      type: "string",
+      initialValue: "tableFirst",
+      description: "Asztali nezeten mi legyen elol: a menetrend tábla vagy a szoveges leiras.",
+      options: {
+        list: [
+          { title: "Tabla elol, szoveg utan", value: "tableFirst" },
+          { title: "Szoveg elol, tabla utan", value: "textFirst" },
+        ],
+        layout: "radio",
+      },
+      hidden: ({ document }) => slugCurrent(document) !== SLUG_PROGRAM,
+    }),
+    defineField({
+      name: "mobileProgramOrder",
+      title: "Sorrend mobil nézetben",
+      type: "string",
+      initialValue: "tableFirst",
+      description: "Mobil nezeten mi legyen elol: a menetrend tábla vagy a szoveges leiras.",
+      options: {
+        list: [
+          { title: "Tabla elol, szoveg utan", value: "tableFirst" },
+          { title: "Szoveg elol, tabla utan", value: "textFirst" },
+        ],
+        layout: "radio",
+      },
+      hidden: ({ document }) => slugCurrent(document) !== SLUG_PROGRAM,
+    }),
     /* ── Második szöveg doboz (Futás / Tábor oldalhoz) ─────────────────── */
     defineField({
       name: "showSecondBody",
@@ -182,7 +403,7 @@ export const pageType = defineType({
         "Csak „futas” és „tabor” slug esetén hat: a második szöveg doboz a kártyák közti nagy szövegblokk helyett / mellett.",
       hidden: ({ document }) => {
         const s = slugCurrent(document);
-        return s !== SLUG_FUTAS && s !== SLUG_TABOR;
+        return s !== SLUG_FUTAS && !isCampSlug(s);
       },
     }),
     defineField({
@@ -193,7 +414,7 @@ export const pageType = defineType({
         "Tábor: csak ha a kapcsoló be van kapcsolva, cseréli le az alap leírást. Futás: ha ki van töltve, mindig ez a hosszú szöveg jelenik meg a kártyák feletti rész után (kapcsoló nem szükséges).",
       hidden: ({ document }) => {
         const s = slugCurrent(document);
-        return s !== SLUG_FUTAS && s !== SLUG_TABOR;
+        return s !== SLUG_FUTAS && !isCampSlug(s);
       },
     }),
     defineField({
@@ -202,35 +423,35 @@ export const pageType = defineType({
       ...richText,
       hidden: ({ document }) => {
         const s = slugCurrent(document);
-        return s !== SLUG_FUTAS && s !== SLUG_TABOR;
+        return s !== SLUG_FUTAS && !isCampSlug(s);
       },
     }),
-    /* ── Jazztábor (`tabor`) — részletes program + támogatók ───────────── */
+    /* ── Jazztábor (`tabor` / `jazztabor`) — részletes program + támogatók ─ */
     defineField({
       name: "campEyebrowHu",
       title: "Tábor — szürke sor felett (HU)",
       type: "string",
       description: 'Pl. „Swing · Lindy Hop · Jazz Improvizáció”. Üresen a statikus fallback.',
-      hidden: ({ document }) => slugCurrent(document) !== SLUG_TABOR,
+      hidden: ({ document }) => !isCampSlug(slugCurrent(document)),
     }),
     defineField({
       name: "campEyebrowEn",
       title: "Tábor — szürke sor felett (EN)",
       type: "string",
-      hidden: ({ document }) => slugCurrent(document) !== SLUG_TABOR,
+      hidden: ({ document }) => !isCampSlug(slugCurrent(document)),
     }),
     defineField({
       name: "campScheduleSectionTitleHu",
       title: "Tábor — szekció főcím a kártyák fölött (HU)",
       type: "string",
       description: 'Pl. „Tanárok és program (2026)”. Üresen a statikus scheduleTitle.',
-      hidden: ({ document }) => slugCurrent(document) !== SLUG_TABOR,
+      hidden: ({ document }) => !isCampSlug(slugCurrent(document)),
     }),
     defineField({
       name: "campScheduleSectionTitleEn",
       title: "Tábor — szekció főcím (EN)",
       type: "string",
-      hidden: ({ document }) => slugCurrent(document) !== SLUG_TABOR,
+      hidden: ({ document }) => !isCampSlug(slugCurrent(document)),
     }),
     defineField({
       name: "campScheduleBlocks",
@@ -238,7 +459,7 @@ export const pageType = defineType({
       type: "array",
       description:
         "Minden blokk egy kártya: cím + bullet lista (Enterrel soronként). Üres lista = a honlap a repo-ban lévő alap menetrendet mutatja (hu.ts/en.ts), ezért a Studio és az élő oldal eltérhet. Kezdő töltés: npm run sanity:seed.",
-      hidden: ({ document }) => slugCurrent(document) !== SLUG_TABOR,
+      hidden: ({ document }) => !isCampSlug(slugCurrent(document)),
       of: [
         defineArrayMember({
           type: "object",
@@ -292,20 +513,20 @@ export const pageType = defineType({
       title: "Tábor — támogatók blokk címe (HU)",
       type: "string",
       description: 'Üresen: „Támogatók”.',
-      hidden: ({ document }) => slugCurrent(document) !== SLUG_TABOR,
+      hidden: ({ document }) => !isCampSlug(slugCurrent(document)),
     }),
     defineField({
       name: "campSupportersSectionTitleEn",
       title: "Tábor — támogatók blokk címe (EN)",
       type: "string",
-      hidden: ({ document }) => slugCurrent(document) !== SLUG_TABOR,
+      hidden: ({ document }) => !isCampSlug(slugCurrent(document)),
     }),
     defineField({
       name: "campSupporters",
       title: "Tábor — támogatók (linkek)",
       type: "array",
       description: "Ha van elem, ez felülírja a statikus támogató listát.",
-      hidden: ({ document }) => slugCurrent(document) !== SLUG_TABOR,
+      hidden: ({ document }) => !isCampSlug(slugCurrent(document)),
       of: [
         defineArrayMember({
           type: "object",
@@ -465,7 +686,7 @@ export const pageType = defineType({
         "Csak Futás / Tábor. A narancs CTA felirata. Üresen a kódbeli fallback szöveg.",
       hidden: ({ document }) => {
         const s = slugCurrent(document);
-        return s !== SLUG_FUTAS && s !== SLUG_TABOR;
+        return s !== SLUG_FUTAS && !isCampSlug(s);
       },
     }),
     defineField({
@@ -474,7 +695,7 @@ export const pageType = defineType({
       type: "string",
       hidden: ({ document }) => {
         const s = slugCurrent(document);
-        return s !== SLUG_FUTAS && s !== SLUG_TABOR;
+        return s !== SLUG_FUTAS && !isCampSlug(s);
       },
     }),
     defineField({
@@ -484,7 +705,7 @@ export const pageType = defineType({
       description: "Csak Futás / Tábor. Üresen a statikus nevezési URL.",
       hidden: ({ document }) => {
         const s = slugCurrent(document);
-        return s !== SLUG_FUTAS && s !== SLUG_TABOR;
+        return s !== SLUG_FUTAS && !isCampSlug(s);
       },
     }),
     defineField({
@@ -494,7 +715,7 @@ export const pageType = defineType({
       description: "Üresen a HU URL fallback.",
       hidden: ({ document }) => {
         const s = slugCurrent(document);
-        return s !== SLUG_FUTAS && s !== SLUG_TABOR;
+        return s !== SLUG_FUTAS && !isCampSlug(s);
       },
     }),
     defineField({
@@ -504,7 +725,7 @@ export const pageType = defineType({
       description: "Csak Futás / Tábor. Opcionális második gomb.",
       hidden: ({ document }) => {
         const s = slugCurrent(document);
-        return s !== SLUG_FUTAS && s !== SLUG_TABOR;
+        return s !== SLUG_FUTAS && !isCampSlug(s);
       },
     }),
     defineField({
@@ -513,7 +734,7 @@ export const pageType = defineType({
       type: "string",
       hidden: ({ document }) => {
         const s = slugCurrent(document);
-        return s !== SLUG_FUTAS && s !== SLUG_TABOR;
+        return s !== SLUG_FUTAS && !isCampSlug(s);
       },
     }),
     defineField({
@@ -523,7 +744,7 @@ export const pageType = defineType({
       description: "Üresen nincs másodlagos gomb.",
       hidden: ({ document }) => {
         const s = slugCurrent(document);
-        return s !== SLUG_FUTAS && s !== SLUG_TABOR;
+        return s !== SLUG_FUTAS && !isCampSlug(s);
       },
     }),
     defineField({
@@ -532,7 +753,7 @@ export const pageType = defineType({
       type: "url",
       hidden: ({ document }) => {
         const s = slugCurrent(document);
-        return s !== SLUG_FUTAS && s !== SLUG_TABOR;
+        return s !== SLUG_FUTAS && !isCampSlug(s);
       },
     }),
     /* ─────────────────────────────────────────────────────────────────── */
@@ -541,6 +762,31 @@ export const pageType = defineType({
       title: "SEO beállítások",
       type: "seo",
       description: "Cím / leírás / OG kép a keresőkhöz és közösségi megosztáshoz.",
+    }),
+    defineField({
+      name: "infoFaqItems",
+      title: "GYIK / FAQ (Jegyek & Infó)",
+      type: "array",
+      description:
+        "A jobb oldali GYIK blokk. Ha üres, a kódbeli alap GYIK marad. Rich Text válaszokkal, szerkeszthető linkekkel.",
+      of: [defineArrayMember({ type: "infoFaqItem" })],
+      hidden: ({ document }) => slugCurrent(document) !== SLUG_INFO,
+    }),
+    defineField({
+      name: "sections",
+      title: "Rugalmas szekciók (Phase 1B alap)",
+      type: "array",
+      description:
+        "Opcionális extra blokkok (szöveg, videó, kép, gomb, galéria, térköz). Megjelennek a /oldal/[slug], ÁSZF, Adatvédelem és a Jegyek & Infó bal oszlopában (Szövegdoboz / Rich Text) — a slug-specifikus mezők mellett.",
+      of: [
+        defineArrayMember({ type: "sectionRichText" }),
+        defineArrayMember({ type: "sectionTextBox" }),
+        defineArrayMember({ type: "sectionVideo" }),
+        defineArrayMember({ type: "sectionButton" }),
+        defineArrayMember({ type: "sectionImage" }),
+        defineArrayMember({ type: "sectionGallery" }),
+        defineArrayMember({ type: "sectionSpacer" }),
+      ],
     }),
     defineField({
       name: "order",
