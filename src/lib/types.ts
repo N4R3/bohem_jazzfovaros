@@ -40,6 +40,8 @@ export interface ScheduleSlot {
   artist: string;
   eventTitle?: string;
   performerNames?: string[];
+  /** Minden kapcsolódó fellépő neve (a címtől függetlenül) — a lineup-oldalra mutató linkekhez. */
+  performers?: string[];
   /** A programItem.stage szabad szöveges értéke (pl. "Main Stage", "Club", "Beach"). */
   stage: string;
   duration: number;

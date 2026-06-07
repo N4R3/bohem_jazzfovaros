@@ -5,6 +5,7 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { createPortal } from "react-dom";
 import type { Artist } from "@/lib/types";
+import { programSlotId } from "@/lib/programSlot";
 import RichText from "../common/RichText";
 import type { PortableTextBlock } from "@portabletext/react";
 
@@ -398,12 +399,36 @@ export default function LineupGrid({
                             Program / Fellépések
                           </p>
                           <ul className="mt-2 space-y-1">
-                            {activeArtist.programs.map((program, idx) => (
-                              <li key={idx} className="text-sm" style={{ color: "rgba(10,58,54,0.88)" }}>
-                                {program.date} · {program.time}
-                                {program.stage && ` · ${program.stage}`}
-                              </li>
-                            ))}
+                            {activeArtist.programs.map((program, idx) => {
+                              const slotId = programSlotId(program.date, program.time, program.stage);
+                              return (
+                                <li key={idx}>
+                                  <a
+                                    href={slotId ? `/program/?slot=${slotId}` : "/program/"}
+                                    className="group -mx-2 flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm transition-colors hover:bg-[rgba(20,122,109,0.1)]"
+                                    style={{ color: "rgba(10,58,54,0.88)" }}
+                                  >
+                                    <span className="font-semibold">
+                                      {program.date} · {program.time}
+                                      {program.stage && ` · ${program.stage}`}
+                                    </span>
+                                    <svg
+                                      className="h-3.5 w-3.5 shrink-0 -translate-x-1 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100"
+                                      style={{ color: "#147a6d" }}
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2.5"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      aria-hidden="true"
+                                    >
+                                      <path d="M5 12h14M13 5l7 7-7 7" />
+                                    </svg>
+                                  </a>
+                                </li>
+                              );
+                            })}
                           </ul>
                         </div>
                       )}

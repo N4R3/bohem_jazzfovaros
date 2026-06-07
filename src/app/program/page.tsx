@@ -4,6 +4,8 @@ import BeachPageShell from "@/components/layout/BeachPageShell";
 import { getProgramContent } from "@/sanity/lib/content";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 import RichText from "@/components/common/RichText";
+import ProgramDeepLink from "@/components/program/ProgramDeepLink";
+import { programSlotId } from "@/lib/programSlot";
 import type { PortableTextBlock } from "@portabletext/react";
 import type { ScheduleDay } from "@/lib/types";
 
@@ -177,9 +179,19 @@ function StructuredProgram({
               className="flex min-h-0 flex-1 flex-col divide-y"
               style={{ borderColor: "rgba(10,58,54,0.08)" }}
             >
-              {day.slots.map((slot, i) => (
+              {day.slots.map((slot, i) => {
+                const slotTitle = slot.eventTitle || slot.artist;
+                const slotId = programSlotId(day.date, slot.time, slot.stage);
+                /* Ha a sor címe pontosan egyetlen fellépő neve, a cím is a fellépő
+                   kártyájára visz (a többszereplős/eseménycímes sorokat a lenyíló
+                   rész fellépő-linkjei kezelik). */
+                const titlePerformer =
+                  slot.performers && slot.performers.length === 1 && slot.performers[0] === slotTitle
+                    ? slot.performers[0]
+                    : undefined;
+                return (
                 <li key={i}>
-                  <details className="group overflow-hidden">
+                  <details id={slotId || undefined} className="group overflow-hidden">
                     {/*
                       Collapsed row: time range · title · stage badge · chevron only.
                       No performer names, no large "Részletek" button.
@@ -199,7 +211,16 @@ function StructuredProgram({
                       {/* Content column — title, stage badge below */}
                       <div className="min-w-0 flex flex-col gap-0.5">
                         <h4 className="min-w-0 text-xs font-extrabold leading-snug text-[var(--color-teal-900)] sm:text-sm">
-                          {slot.eventTitle || slot.artist}
+                          {titlePerformer ? (
+                            <a
+                              href={`/lineup/?artist=${encodeURIComponent(titlePerformer)}`}
+                              className="underline-offset-2 transition-colors hover:text-[var(--color-accent-600)] hover:underline"
+                            >
+                              {slotTitle}
+                            </a>
+                          ) : (
+                            slotTitle
+                          )}
                         </h4>
                         {slot.stage && (
                           <span
@@ -233,11 +254,22 @@ function StructuredProgram({
 
                     {/* Expanded details */}
                     <div className="border-t border-[var(--color-teal-500)]/10 bg-[var(--color-teal-500)]/[0.03] px-4 py-3 text-xs leading-relaxed text-[var(--color-teal-950)]/90">
-                      {/* Performer names */}
-                      {slot.performerNames && slot.performerNames.length > 0 && (
-                        <p className="mb-2 font-semibold" style={{ color: "rgba(10,58,54,0.72)" }}>
-                          {slot.performerNames.join(", ")}
-                        </p>
+                      {/* Performers — clickable, deep-link to the lineup modal */}
+                      {slot.performers && slot.performers.length > 0 && (
+                        <div className="mb-2.5 flex flex-wrap items-center gap-1.5">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-teal-900)]/55">
+                            {locale === "en" ? "Performers" : "Fellépők"}:
+                          </span>
+                          {slot.performers.map((name) => (
+                            <a
+                              key={name}
+                              href={`/lineup/?artist=${encodeURIComponent(name)}`}
+                              className="rounded-full bg-[rgba(31,126,115,0.12)] px-2.5 py-0.5 text-[11px] font-bold text-[var(--color-teal-800)] transition-colors hover:bg-[rgba(239,122,31,0.18)] hover:text-[var(--color-accent-700)]"
+                            >
+                              {name}
+                            </a>
+                          ))}
+                        </div>
                       )}
 
                       {/* Note / short description */}
@@ -276,7 +308,8 @@ function StructuredProgram({
                     </div>
                   </details>
                 </li>
-              ))}
+                );
+              })}
             </ul>
           </section>
         );
@@ -347,6 +380,8 @@ export default async function ProgramPage() {
       canonicalPath="/program/"
       locale={isEn ? "en" : "hu"}
     >
+      {/* Opens & scrolls to a specific slot when arriving via /program/?slot=… */}
+      <ProgramDeepLink />
       {/* flex-col wrapper lets CSS order properties control table/text sequencing */}
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
         {textVisible && program.freeText && (

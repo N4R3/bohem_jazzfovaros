@@ -646,6 +646,7 @@ export const getProgramContent = cache(async (locale: "hu" | "en") => {
         artist: primaryTitle || "",
         eventTitle: primaryTitle || undefined,
         performerNames: secondaryPerformerNames,
+        performers: performerNames.length ? performerNames : undefined,
         stage: stageLabel,
         duration: calculateDuration(item.startTime, item.endTime),
         note:
