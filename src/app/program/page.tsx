@@ -4,6 +4,7 @@ import BeachPageShell from "@/components/layout/BeachPageShell";
 import { getProgramContent } from "@/sanity/lib/content";
 import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 import RichText from "@/components/common/RichText";
+import { localizePathForLocale } from "@/lib/languageSwitch";
 import ProgramDeepLink from "@/components/program/ProgramDeepLink";
 import { programSlotId } from "@/lib/programSlot";
 import type { PortableTextBlock } from "@portabletext/react";
@@ -213,7 +214,10 @@ function StructuredProgram({
                         <h4 className="min-w-0 text-xs font-extrabold leading-snug text-[var(--color-teal-900)] sm:text-sm">
                           {titlePerformer ? (
                             <a
-                              href={`/lineup/?artist=${encodeURIComponent(titlePerformer)}`}
+                              href={localizePathForLocale(
+                                `/lineup/?artist=${encodeURIComponent(titlePerformer)}`,
+                                locale,
+                              )}
                               className="underline-offset-2 transition-colors hover:text-[var(--color-accent-600)] hover:underline"
                             >
                               {slotTitle}
@@ -263,7 +267,10 @@ function StructuredProgram({
                           {slot.performers.map((name) => (
                             <a
                               key={name}
-                              href={`/lineup/?artist=${encodeURIComponent(name)}`}
+                              href={localizePathForLocale(
+                                `/lineup/?artist=${encodeURIComponent(name)}`,
+                                locale,
+                              )}
                               className="rounded-full bg-[rgba(31,126,115,0.12)] px-2.5 py-0.5 text-[11px] font-bold text-[var(--color-teal-800)] transition-colors hover:bg-[rgba(239,122,31,0.18)] hover:text-[var(--color-accent-700)]"
                             >
                               {name}

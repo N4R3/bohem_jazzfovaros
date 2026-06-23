@@ -14,7 +14,8 @@
   # The EN Netlify site must override this with NEXT_PUBLIC_LOCALE=en in its dashboard.
   NEXT_PUBLIC_LOCALE = "hu"
   NEXT_PUBLIC_SITE_URL_HU = "https://bohemjazz.netlify.app"
-  # Currently one staging site serves both builds; EN URL points there until a separate EN site exists.
-  # GO-LIVE: set NEXT_PUBLIC_SITE_URL_EN to the real EN production domain in each site's dashboard.
+  # Egy staging site: EN is /en/ path-prefix. GO-LIVE dashboard:
+  # NEXT_PUBLIC_SITE_URL_HU=https://jazzfovaros.hu
+  # NEXT_PUBLIC_SITE_URL_EN=https://jazzfovaros.hu
   NEXT_PUBLIC_SITE_URL_EN = "https://bohemjazz.netlify.app"
   SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SANITY_DATASET,NEXT_PUBLIC_SANITY_API_VERSION"

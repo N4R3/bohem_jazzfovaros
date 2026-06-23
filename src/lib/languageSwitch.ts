@@ -1,3 +1,4 @@
+import type { Locale } from "@/lib/types";
 import { getBuildLocale } from "@/lib/buildLocale";
 import { SITE_URL_EN, SITE_URL_HU } from "@/lib/seo";
 import {
@@ -6,6 +7,15 @@ import {
   stripEnPathPrefix,
   withEnPathPrefix,
 } from "@/lib/localeMode";
+
+/** Szerver oldali belső link — EN locale + path-prefix módban /en prefix. */
+export function localizePathForLocale(href: string, locale: Locale): string {
+  if (locale !== "en" || !shouldUsePathPrefixLocale()) return href;
+  if (/^https?:\/\//i.test(href)) return href;
+  const normalized = href.startsWith("/") ? href : `/${href}`;
+  if (normalized.startsWith("/en")) return normalized;
+  return withEnPathPrefix(normalized);
+}
 
 /** Nyelvváltó gomb felirata — pathname / build locale alapján (kliens-navigációhoz). */
 export function languageSwitchLabel(pathname: string): "EN" | "HU" {

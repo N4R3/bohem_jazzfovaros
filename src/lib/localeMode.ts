@@ -37,6 +37,24 @@ export function isStagingOrLocalHost(hostname: string): boolean {
   );
 }
 
+/** Éves archív aldomain (régi hosting) — ne érintse a locale middleware. */
+export function isYearArchiveHost(hostname: string): boolean {
+  return /^\d{4}\.jazzfovaros\.hu$/i.test(hostname.trim());
+}
+
+/** jazzcapital.hu — külső redirect cél; csak ha a kérés eléri az appot. */
+export function isJazzCapitalHost(hostname: string): boolean {
+  const h = hostname.toLowerCase();
+  return h === "jazzcapital.hu" || h === "www.jazzcapital.hu";
+}
+
+/** Fő production host (apex + www), archív éves subdomain nélkül. */
+export function isProductionMainHost(hostname: string): boolean {
+  const h = hostname.toLowerCase();
+  if (isYearArchiveHost(h)) return false;
+  return h === "jazzfovaros.hu" || h === "www.jazzfovaros.hu";
+}
+
 /**
  * Két külön production domain (különböző origin, mindkettő éles host).
  * Localhost / netlify.app staging → mindig false.

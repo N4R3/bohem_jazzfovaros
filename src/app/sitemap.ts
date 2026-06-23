@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getBuildLocale } from "@/lib/buildLocale";
-import { siteUrlForLocale } from "@/lib/seo";
+import { canonicalUrl } from "@/lib/seo";
 import { isSanityConfigured, sanityClient } from "@/sanity/lib/client";
 import { getSitemapPagesQuery } from "@/sanity/lib/queries";
 import { CORE_PATH_TO_SLUG, getNoIndexSlugsFromSanity } from "@/sanity/lib/sitemapContent";
@@ -49,12 +49,11 @@ function pathFromSlug(slug?: string): string | null {
   if (slug === "home") return "/";
   if (slug === "tabor") return "/jazztabor/";
   if (FIX_SLUGS.has(slug)) return `/${slug}/`;
-  return `/oldal/${slug}/`;
+  return `/${slug}/`;
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const locale = getBuildLocale();
-  const baseUrl = siteUrlForLocale(locale);
   const entries: MetadataRoute.Sitemap = [];
   const noIndexSlugs = await getNoIndexSlugsFromSanity();
 
@@ -62,7 +61,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const slug = CORE_PATH_TO_SLUG[path];
     if (slug && noIndexSlugs.has(slug)) continue;
     entries.push({
-      url: `${baseUrl}${path}`,
+      url: canonicalUrl(path, locale),
       lastModified: new Date(),
       changeFrequency,
       priority,
@@ -85,10 +84,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         if (!path || corePages.some((corePage) => corePage.path === path)) continue;
 
         entries.push({
-          url: `${baseUrl}${path}`,
+          url: canonicalUrl(path, locale),
           lastModified: page._updatedAt ? new Date(page._updatedAt) : new Date(),
           changeFrequency: "weekly",
-          priority: path.startsWith("/oldal/") ? 0.65 : 0.7,
+          priority: 0.65,
         });
       }
     } catch {

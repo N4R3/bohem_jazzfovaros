@@ -1146,8 +1146,8 @@ function navHrefFromPageSlug(slug: string | undefined): string | null {
   if (slug === "home") return "/";
   if (slug === "tabor") return "/jazztabor/";
   if (FIX_PAGE_SLUGS.has(slug)) return `/${slug}/`;
-  /* Új információs oldal a dinamikus /oldal/[slug] route-on érhető el. */
-  return `/oldal/${slug}/`;
+  /* Új információs oldal — kanonikus /[slug]/ (middleware /oldal/* → redirect). */
+  return `/${slug}/`;
 }
 
 function buildNavItem(

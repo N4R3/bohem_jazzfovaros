@@ -10,6 +10,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getContent } from "@/lib/locale";
+import { localizePathForLocale } from "@/lib/languageSwitch";
 import CookieSettingsLink from "@/components/analytics/CookieSettingsLink";
 import {
   getFooterSponsorsWithFallback,
@@ -27,6 +28,10 @@ export default async function Footer() {
     getNavigationWithFallback("footer"),
   ]);
   const rootPrefix = isEn ? "/en" : "";
+
+  function footerHref(href: string): string {
+    return localizePathForLocale(href, locale);
+  }
 
   /* A jazzdesign1 nav szekciója 5 rövid linket mutat. Elsősorban a Sanity-ben
      `showInFooter: true`-ra kapcsolt navigationItem-eket használjuk; ha nincs ilyen,
@@ -261,7 +266,7 @@ export default async function Footer() {
         {/* ===== Navigáció ===== */}
         <FooterCol title={isEn ? "Navigation" : "Navigáció"}>
           {footerNav.map((link) => (
-            <FooterLink key={link.href} href={link.href} label={link.label} />
+            <FooterLink key={link.href} href={footerHref(link.href)} label={link.label} />
           ))}
         </FooterCol>
 
@@ -311,7 +316,7 @@ export default async function Footer() {
                   {item.label}
                 </a>
               ) : (
-                <Link href={item.href} className="hover:text-sun-400">
+                <Link href={footerHref(item.href)} className="hover:text-sun-400">
                   {item.label}
                 </Link>
               )}

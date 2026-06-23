@@ -103,7 +103,6 @@ export default function SzechenyiPopup({
             max-h-[calc(100dvh-2rem)]
             object-contain
           "
-          priority
         />
       </div>
     </>

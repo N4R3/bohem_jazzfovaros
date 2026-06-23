@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getBuildLocale } from "@/lib/buildLocale";
-import { siteUrlForLocale } from "@/lib/seo";
+import { SITE_URL_HU, siteUrlForLocale } from "@/lib/seo";
 import {
   isEnPathname,
+  isJazzCapitalHost,
+  isYearArchiveHost,
+  normalizeSiteUrl,
   SITE_LOCALE_COOKIE,
   SITE_LOCALE_HEADER,
   shouldUsePathPrefixLocale,
@@ -10,6 +13,13 @@ import {
 } from "@/lib/localeMode";
 
 const BUILD_LOCALE = getBuildLocale();
+
+/** Defensive redirect ha jazzcapital.hu eléri a Netlify appot (elsődleges: DNS/provider szintű 301). */
+function jazzCapitalRedirectTarget(): string {
+  const hu = process.env.NEXT_PUBLIC_SITE_URL_HU?.trim();
+  const base = hu ? normalizeSiteUrl(hu) : normalizeSiteUrl(SITE_URL_HU);
+  return `${base}/en/`;
+}
 
 function isBypassedPath(pathname: string): boolean {
   return (
@@ -35,6 +45,16 @@ export function middleware(request: NextRequest) {
 
   if (isBypassedPath(pathname)) {
     return NextResponse.next();
+  }
+
+  /* Archív éves subdomain — ne módosítsuk (2024.jazzfovaros.hu stb. régi hostingon marad). */
+  if (isYearArchiveHost(hostname)) {
+    return NextResponse.next();
+  }
+
+  /* jazzcapital.hu → jazzfovaros.hu/en/ (ha egyáltalán eléri az appot). */
+  if (isJazzCapitalHost(hostname)) {
+    return NextResponse.redirect(jazzCapitalRedirectTarget(), 308);
   }
 
   if (isEnPathname(pathname)) {

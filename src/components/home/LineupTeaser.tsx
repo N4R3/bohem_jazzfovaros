@@ -11,6 +11,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
+import { localizePathForLocale } from "@/lib/languageSwitch";
+import type { Locale } from "@/lib/types";
 
 export type LineupArtist = {
   name: string;
@@ -26,6 +28,7 @@ type LineupTeaserProps = {
   lede?: string;
   /** Ha nem adsz meg fellépőket, a jazzdesign1 ARTISTS listát használjuk. */
   artists?: LineupArtist[];
+  locale?: Locale;
 };
 
 /* A X. Bohém JAZZFŐVÁROS 2026 valós fellépői (jazzfovaros.hu/fellepok).
@@ -37,6 +40,7 @@ export default function LineupTeaser({
   title    = "Fellépők",
   lede     = "Több mint 120 zenész, 10+ országból — négy napon keresztül a kecskeméti strandon.",
   artists  = DEFAULT_ARTISTS,
+  locale   = "hu",
 }: LineupTeaserProps) {
 
   return (
@@ -72,7 +76,7 @@ export default function LineupTeaser({
           className="grid grid-cols-2 gap-3 sm:gap-[18px] md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
         >
           {artists.map((a, i) => (
-            <ArtistCard key={`${a.name}-${i}`} artist={a} index={i} />
+            <ArtistCard key={`${a.name}-${i}`} artist={a} index={i} locale={locale} />
           ))}
         </div>
       </div>
@@ -86,9 +90,11 @@ export default function LineupTeaser({
 function ArtistCard({
   artist,
   index,
+  locale,
 }: {
   artist: LineupArtist;
   index: number;
+  locale: Locale;
 }) {
   const tiltClass =
     index % 2 === 0
@@ -97,7 +103,10 @@ function ArtistCard({
 
   return (
     <Link
-      href={`/lineup/?artist=${encodeURIComponent(artist.name)}`}
+      href={localizePathForLocale(
+        `/lineup/?artist=${encodeURIComponent(artist.name)}`,
+        locale,
+      )}
       className={cn(
         "group flex cursor-pointer transform-gpu flex-col overflow-hidden rounded-[14px] bg-cream-50 shadow-[0_8px_22px_rgba(0,0,0,0.15)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_18px_40px_rgba(0,0,0,0.25)]",
         tiltClass,

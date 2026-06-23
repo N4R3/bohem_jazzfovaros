@@ -154,7 +154,11 @@ export default async function HomePage() {
             ariaLabel={c.otherLocale.label === "HU" ? "Festival statistics" : "Fesztivál statisztikák"}
           />
 
-          <LineupTeaser title={c.home.lineupTeaserTitle} artists={lineupTeaserArtists} />
+          <LineupTeaser
+            title={c.home.lineupTeaserTitle}
+            artists={lineupTeaserArtists}
+            locale={locale}
+          />
 
           <CtaSection
             title={homeVisible.ctaBannerTitle}

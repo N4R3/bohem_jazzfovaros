@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { createPortal } from "react-dom";
 import type { Artist } from "@/lib/types";
 import { programSlotId } from "@/lib/programSlot";
+import { localizeInternalHref } from "@/lib/languageSwitch";
 import RichText from "../common/RichText";
 import type { PortableTextBlock } from "@portabletext/react";
 
@@ -105,6 +107,7 @@ export default function LineupGrid({
   ticketUrl,
   ticketLabel,
 }: Props) {
+  const pathname = usePathname();
   const [activeArtist, setActiveArtist] = useState<LineupArtist | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -404,7 +407,10 @@ export default function LineupGrid({
                               return (
                                 <li key={idx}>
                                   <a
-                                    href={slotId ? `/program/?slot=${slotId}` : "/program/"}
+                                    href={localizeInternalHref(
+                                      slotId ? `/program/?slot=${slotId}` : "/program/",
+                                      pathname,
+                                    )}
                                     className="group -mx-2 flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm transition-colors hover:bg-[rgba(20,122,109,0.1)]"
                                     style={{ color: "rgba(10,58,54,0.88)" }}
                                   >
