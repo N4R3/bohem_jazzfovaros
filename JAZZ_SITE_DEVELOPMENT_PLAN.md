@@ -1,5 +1,9 @@
 # Jazz / Jazzfőváros Festival Website — Development & Workflow Plan
 
+> **⚠️ PLANNING / HISTORICAL DOC.** Much of the body and Status Log describe earlier two-site / two-domain experiments.  
+> **For production launch and DNS, use only:** [`PRODUCTION_LAUNCH_CHECKLIST.md`](PRODUCTION_LAUNCH_CHECKLIST.md) · [`FINAL_LAUNCH_REVIEW.md`](FINAL_LAUNCH_REVIEW.md).  
+> **Current model:** Netlify + GitHub + Sanity · `jazzfovaros.hu/` = HU · `jazzfovaros.hu/en/` = EN · `jazzcapital.hu` = external 301 → `jazzfovaros.hu/en/` (not Netlify custom domain) · staging `bohemjazz.netlify.app`.
+
 > **Status:** Planning (no code written yet)
 > **Date:** 2026-06-02 _(update on each revision)_
 > **Owner:** besenyeizalan@gmail.com

@@ -90,15 +90,17 @@
 
 ### 3.3 Domain és DNS beállítások
 
-- [ ] Magyar domain (`jazzfovaros.hu` vagy más) → Netlify HU site → Custom domain beállítása
-- [ ] Angol domain (`jazzcapital.hu` vagy más) → Netlify EN site → Custom domain beállítása
+> **Launch model (2026-06):** Egy Netlify site. HU = `jazzfovaros.hu/`, EN = `jazzfovaros.hu/en/`. Nyelvváltó same-origin (`/en/` ↔ `/`). Teljes checklist: `PRODUCTION_LAUNCH_CHECKLIST.md`.
+
+- [ ] `jazzfovaros.hu` → Netlify → Custom domain (Netlify által adott DNS rekordok)
+- [ ] `www.jazzfovaros.hu` → Netlify vagy apex redirect (ajánlott: www → apex 301)
+- [ ] **`jazzcapital.hu` + `www` → külső 301/308 → `https://jazzfovaros.hu/en/`** (domain szolgáltatónál; **NEM** Netlify custom domain)
 - [ ] HTTPS: Netlify automatikusan kezeli (Let's Encrypt)
-- [ ] Apex + www canonical egyeztetése (Netlify UI-ban: melyik a primary)
-- [ ] `NEXT_PUBLIC_SITE_URL_HU` / `_EN` frissítése a valódi domainkre **mindkét** site-on
-- [ ] Smoke test: HU site → `/sitemap.xml` helyes domain URL-eket tartalmaz
-- [ ] Smoke test: EN site → `/sitemap.xml` helyes EN domain URL-eket tartalmaz
-- [ ] Smoke test: staging deploy → `/robots.txt` `Disallow: /` van-e (production előtt)
-- [ ] Smoke test: production deploy → `/robots.txt` `Allow: /` van-e
+- [ ] Production Netlify env: `NEXT_PUBLIC_SITE_URL_HU` és `NEXT_PUBLIC_SITE_URL_EN` = `https://jazzfovaros.hu`
+- [ ] Smoke test: `/sitemap.xml` helyes `jazzfovaros.hu` URL-eket tartalmaz (nem staging)
+- [ ] Smoke test: staging → `/robots.txt` `Disallow: /` (ha preview)
+- [ ] Smoke test: production → `/robots.txt` `Allow: /`
+- [ ] **Ne módosítsd** az éves archív subdomain DNS-t (`2024.jazzfovaros.hu`, `2025.jazzfovaros.hu`, …)
 
 ### 3.4 Build parancsok a Netlify site-okon
 

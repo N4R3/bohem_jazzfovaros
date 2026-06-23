@@ -1,7 +1,7 @@
 # FINAL PRELAUNCH GLM AUDIT — Jazzfőváros / Bohem Jazz
 
 **Dátum:** 2026-06-23  
-**Verdict:** **READY AFTER FIXES** (implementálva ebben a commitban)  
+**Verdict:** **READY** (2026-06-23 final verification)  
 **Stack:** Next.js 15 · Sanity v4 · Netlify · GitHub  
 
 ---
@@ -99,3 +99,5 @@ npx cross-env NODE_OPTIONS="--max-old-space-size=8192" npm run build:en
 ```
 
 Windows cache hiba esetén: töröld `.next/cache`-t, futtasd újra.
+
+**Utolsó futás (2026-06-23):** mind a négy parancs **PASS**. Részletek: `FINAL_LAUNCH_REVIEW.md` §8.

@@ -118,6 +118,17 @@ npx cross-env NODE_OPTIONS="--max-old-space-size=8192" npm run build:en
 
 Windows: `.next/cache` törlés cache hiba esetén.
 
+### 9.1 Utolsó build evidence (2026-06-23)
+
+| Parancs | Eredmény | Összefoglaló |
+|---------|----------|--------------|
+| `npm run lint` | **PASS** | Nincs ESLint hiba |
+| `npm run build` | **PASS** | 19 oldal; főoldal First Load JS 159 kB |
+| `npm run build:hu` | **PASS** | 19 oldal, `NEXT_PUBLIC_LOCALE=hu` |
+| `npm run build:en` | **PASS** | 17 oldal, `NEXT_PUBLIC_LOCALE=en` |
+
+Cache törlés nem volt szükséges (első futás sikeres). Részletek: `FINAL_LAUNCH_REVIEW.md` §8.
+
 ---
 
 ## 10. Local QA útvonalak

@@ -1,5 +1,8 @@
 # JAZZ_SITE_FINAL_REAUDIT_AFTER_FIXES
 
+> **⚠️ HISTORICAL DOCUMENT (2026-06-05).** CMS/admin findings may still be useful; **domain/locale sections are obsolete.** Use [`PRODUCTION_LAUNCH_CHECKLIST.md`](PRODUCTION_LAUNCH_CHECKLIST.md) for go-live.  
+> Do not use `buhemjazzen.netlify.app`, `__PEER_LOCALE_URL__`, or jazzcapital.hu-as-Netlify-domain from this file.
+
 **Audit date:** 2026-06-05  
 **Auditor:** Cascade (Claude)  
 **Scope:** Full codebase audit against 16 client requirements after R1/R2 fixes  
@@ -154,12 +157,9 @@ These are not cosmetic; they block the owner from actually running the site effe
 - **Status:** CORRECT (strict locale enforcement, no HU→EN fallback at render time)
 
 ### Language switch
-- **File:** `src/lib/seo.ts`
-- **Defaults:** Changed from dead production domains to live Netlify staging URLs (Phase 3B-1)
-- **HU default:** `https://bohemjazz.netlify.app`
-- **EN default:** `https://buhemjazzen.netlify.app`
-- **Override:** `NEXT_PUBLIC_SITE_URL_HU`/`NEXT_PUBLIC_SITE_URL_EN` env vars override defaults
-- **Status:** CORRECT (safe before final domains)
+- **File:** `src/lib/seo.ts`, `src/lib/languageSwitch.ts`
+- **Current model (2026-06):** Same-origin `/en` path-prefix; production `jazzfovaros.hu` + `/en/`. See `PRODUCTION_LAUNCH_CHECKLIST.md`.
+- **Historical note (obsolete):** `buhemjazzen.netlify.app` references below this reaudit are **out of date**.
 
 ### Canonical URLs
 - **File:** `src/lib/seo.ts`

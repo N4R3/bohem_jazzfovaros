@@ -1,5 +1,8 @@
 # JAZZ_SITE_FINAL_AUDIT
 
+> **⚠️ HISTORICAL DOCUMENT (2026-06-03).** Superseded for launch/DNS by [`PRODUCTION_LAUNCH_CHECKLIST.md`](PRODUCTION_LAUNCH_CHECKLIST.md) and [`FINAL_LAUNCH_REVIEW.md`](FINAL_LAUNCH_REVIEW.md).  
+> Sections below may reference **obsolete** concepts (`buhemjazzen.netlify.app`, `__PEER_LOCALE_URL__`, two Netlify sites, jazzcapital.hu as EN Netlify domain). **Current model:** one Netlify site; HU at `/`, EN at `/en/`; `jazzcapital.hu` → external 301 to `jazzfovaros.hu/en/`.
+
 **Audit date:** 2026-06-03  
 **Auditor:** Cascade (Claude)  
 **Scope:** Full codebase audit against 15 client requirements  
@@ -216,13 +219,9 @@ The following are intentional multiple access paths to the same documents (not d
 - **Status:** CORRECT (intentionally lenient at render time for safety)
 
 ### Language switch
-- **File:** `src/lib/seo.ts`
-- **Defaults:** Changed from dead production domains to live Netlify staging URLs (Phase 3B-1)
-- **HU default:** `https://bohemjazz.netlify.app`
-- **EN default:** `https://buhemjazzen.netlify.app`
-- **Override:** `NEXT_PUBLIC_SITE_URL_HU`/`NEXT_PUBLIC_SITE_URL_EN` env vars override defaults
-- **Runtime override:** `window.__PEER_LOCALE_URL__` available in `LocaleSwitchAnchor`
-- **Status:** CORRECT (safe before final domains)
+- **File:** `src/lib/seo.ts`, `src/lib/languageSwitch.ts`, `src/components/layout/LocaleSwitchAnchor.tsx`
+- **Current model (2026-06):** Same-origin path-prefix — HU `/`, EN `/en/`; staging `bohemjazz.netlify.app`. See `PRODUCTION_LAUNCH_CHECKLIST.md`.
+- **Historical note (obsolete):** This audit originally listed `buhemjazzen.netlify.app` and `__PEER_LOCALE_URL__` — **removed from code**; do not use for DNS.
 
 ### /jazztabor
 - **Canonical route:** `/jazztabor/`
