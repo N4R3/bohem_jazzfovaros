@@ -6,7 +6,6 @@ import { BASE_URL, canonicalUrl, metadataAlternates } from "@/lib/seo";
 import Scripts from "@/components/analytics/Scripts";
 import CookieBanner from "@/components/analytics/CookieBanner";
 import Navbar from "@/components/home/Navbar";
-import Footer from "@/components/home/Footer";
 import { getNavigationWithFallback } from "@/sanity/lib/content";
 import BackgroundWrapper from "@/components/layout/BackgroundWrapper";
 import AppShell from "@/components/layout/AppShell";
@@ -145,7 +144,6 @@ export default async function RootLayout({
                 <main id="main-content" className="pt-[76px]">
                   {children}
                 </main>
-                <Footer />
               </BackgroundWrapper>
               <CookieBanner />
             </>

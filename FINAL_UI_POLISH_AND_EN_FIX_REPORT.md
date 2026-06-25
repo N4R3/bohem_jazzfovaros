@@ -63,6 +63,8 @@
 3. Footer, layout, and all pages use `await getLocale()` directly
 4. `buildNavItem()` applies `localizePathForLocale()` so Sanity nav links include `/en` prefix server-side
 
+**Follow-up fix (footer still HU after client nav):** Footer was in `layout.tsx`, which Next.js does **not** re-render on client-side navigation (unlike page content). Navbar worked because it is a client component using `usePathname()`. **Moved `<Footer />` to server `template.tsx`**, which remounts on every navigation — footer locale now refreshes on `/` ↔ `/en` switches without full reload.
+
 **Not changed:** Language switch button logic, domain redirects, archive handling.
 
 ---

@@ -1,13 +1,15 @@
-"use client";
+import Footer from "@/components/home/Footer";
+import PageEnter from "@/components/layout/PageEnter";
 
-import { usePathname } from "next/navigation";
-
+/**
+ * Template újrarenderel navigációnként (Next.js) — így a Footer
+ * minden /en ↔ / váltáskor friss locale-tal töltődik (layout nem).
+ */
 export default function Template({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-
   return (
-    <div key={pathname} className="page-enter">
-      {children}
-    </div>
+    <>
+      <PageEnter>{children}</PageEnter>
+      <Footer />
+    </>
   );
 }
