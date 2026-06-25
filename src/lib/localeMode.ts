@@ -2,8 +2,10 @@ import type { Locale } from "./types";
 
 const SITE_LOCALE_HEADER = "x-site-locale";
 const SITE_LOCALE_COOKIE = "site-locale";
+/** Middleware által beállított eredeti URL path — locale forrás path-prefix módban. */
+const SITE_PATHNAME_HEADER = "x-site-pathname";
 
-export { SITE_LOCALE_HEADER, SITE_LOCALE_COOKIE };
+export { SITE_LOCALE_HEADER, SITE_LOCALE_COOKIE, SITE_PATHNAME_HEADER };
 
 export function normalizeSiteUrl(url: string): string {
   const trimmed = url.trim().replace(/\/$/, "");

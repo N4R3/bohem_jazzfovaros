@@ -33,7 +33,7 @@ export default async function CampPage() {
   const c = await getContent();
   const locale = await getLocale();
   const { camp } = c;
-  const isEn = c.otherLocale.label === "HU";
+  const isEn = locale === "en";
   const page = await getCampPageContent(locale);
 
   const campCms = page.campCms;

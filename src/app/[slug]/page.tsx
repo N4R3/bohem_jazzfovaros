@@ -121,7 +121,7 @@ export default async function RootDynamicPage({
   if (page.availableInLocale === false) {
     notFound();
   }
-  const isEn = c.otherLocale.label === "HU";
+  const isEn = locale === "en";
   const subtitle =
     typeof page.heroDescription === "string"
       ? page.heroDescription

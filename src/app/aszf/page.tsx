@@ -23,9 +23,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function TermsPage() {
-  const c = await getContent();
+  const [c, locale] = await Promise.all([getContent(), getLocale()]);
   const { terms } = c;
-  const locale = c.otherLocale.label === "HU" ? "en" : "hu";
   const page = await getPageContentBySlug("aszf", locale);
   const title = page.heroTitle || terms.title;
   const breadcrumbJsonLd = breadcrumbSchema(locale, [

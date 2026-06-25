@@ -71,7 +71,7 @@ export default async function RunningPage() {
   const c = await getContent();
   const locale = await getLocale();
   const { running } = c;
-  const isEn = c.otherLocale.label === "HU";
+  const isEn = locale === "en";
   const page = await getPageContentBySlug("futas", locale);
   const subtitle = typeof page.heroDescription === "string" ? page.heroDescription : portableTextToPlain(page.heroDescription);
 

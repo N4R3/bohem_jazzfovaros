@@ -11,7 +11,7 @@
  */
 
 import Link from "next/link";
-import { getContent } from "@/lib/locale";
+import { getLocale } from "@/lib/locale";
 import { getHomeTicketsWithFallback, getTicketUrlWithFallback } from "@/sanity/lib/content";
 
 type Box = {
@@ -27,9 +27,8 @@ type TicketBoxesProps = {
 };
 
 export default async function TicketBoxes({ embedded = false }: TicketBoxesProps) {
-  const c = await getContent();
-  const isEn = c.otherLocale.label === "HU";
-  const locale = isEn ? "en" : "hu";
+  const locale = await getLocale();
+  const isEn = locale === "en";
   const ticketUrl = await getTicketUrlWithFallback(locale);
 
   // Try Sanity-driven home tickets first

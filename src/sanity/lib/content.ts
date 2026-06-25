@@ -1,6 +1,7 @@
 import type { PortableTextBlock } from "@portabletext/react";
 import { cache } from "react";
 import { getContent, getLocale } from "@/lib/locale";
+import { localizePathForLocale } from "@/lib/languageSwitch";
 import type { Artist, Highlight, HomePageVisibleContent, Hotel, ScheduleDay, TicketTier } from "@/lib/types";
 import { BASE } from "@/content/base";
 import { sanityClient, isSanityConfigured } from "./client";
@@ -74,7 +75,7 @@ export const getFooterSponsorsWithFallback = cache(async () => {
           .map((sponsor) => ({
             name: sponsor.name || "",
             logo:
-              (sponsor.logo ? sanityImageUrl(sponsor.logo, { width: 400 }) : null) ||
+              (sponsor.logo ? sanityImageUrl(sponsor.logo, { width: 800, quality: 90 }) : null) ||
               sponsor.logoPath ||
               "",
             url: sponsor.url || "",
@@ -1166,9 +1167,10 @@ function buildNavItem(
   }
   const href = (item.href || "").trim();
   if (href) {
+    const normalizedHref = /^https?:\/\//i.test(href) ? href : localizePathForLocale(href, locale);
     return {
       label,
-      href,
+      href: normalizedHref,
       external: /^https?:\/\//i.test(href),
       openInNewTab: item.openInNewTab === true,
     };
@@ -1178,7 +1180,7 @@ function buildNavItem(
   if (fromPage && item.page?.isActive !== false) {
     return {
       label,
-      href: fromPage,
+      href: localizePathForLocale(fromPage, locale),
       external: false,
       openInNewTab: item.openInNewTab === true,
     };

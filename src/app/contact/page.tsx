@@ -21,11 +21,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ContactPage() {
-  const c = await getContent();
   const locale = await getLocale();
   const contact = await getContactContent(locale);
   const page = await getPageContentBySlug("contact", locale);
-  const isEn = c.otherLocale.label === "HU";
+  const isEn = locale === "en";
   const subtitle = typeof page.heroDescription === "string" ? page.heroDescription : portableTextToPlain(page.heroDescription);
 
   return (

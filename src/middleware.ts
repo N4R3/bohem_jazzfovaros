@@ -8,6 +8,7 @@ import {
   normalizeSiteUrl,
   SITE_LOCALE_COOKIE,
   SITE_LOCALE_HEADER,
+  SITE_PATHNAME_HEADER,
   shouldUsePathPrefixLocale,
   stripEnPathPrefix,
 } from "@/lib/localeMode";
@@ -29,6 +30,16 @@ function isBypassedPath(pathname: string): boolean {
     pathname === "/robots.txt" ||
     pathname === "/sitemap.xml"
   );
+}
+
+function attachLocaleHeaders(
+  request: NextRequest,
+  locale: "hu" | "en",
+): Headers {
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set(SITE_LOCALE_HEADER, locale);
+  requestHeaders.set(SITE_PATHNAME_HEADER, request.nextUrl.pathname);
+  return requestHeaders;
 }
 
 function setLocaleCookie(response: NextResponse, locale: "hu" | "en") {
@@ -74,8 +85,7 @@ export function middleware(request: NextRequest) {
 
     const rewriteUrl = request.nextUrl.clone();
     rewriteUrl.pathname = targetPath;
-    const requestHeaders = new Headers(request.headers);
-    requestHeaders.set(SITE_LOCALE_HEADER, "en");
+    const requestHeaders = attachLocaleHeaders(request, "en");
     const response = NextResponse.rewrite(rewriteUrl, {
       request: { headers: requestHeaders },
     });
@@ -97,8 +107,7 @@ export function middleware(request: NextRequest) {
   }
 
   if (shouldUsePathPrefixLocale(hostname)) {
-    const requestHeaders = new Headers(request.headers);
-    requestHeaders.set(SITE_LOCALE_HEADER, "hu");
+    const requestHeaders = attachLocaleHeaders(request, "hu");
     const response = NextResponse.next({ request: { headers: requestHeaders } });
     setLocaleCookie(response, "hu");
     return response;

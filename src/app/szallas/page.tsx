@@ -42,11 +42,10 @@ function Stars({ count }: { count: number }) {
 }
 
 export default async function AccommodationPage() {
-  const c = await getContent();
   const locale = await getLocale();
   const accommodation = await getAccommodationContent(locale);
   const page = await getPageContentBySlug("szallas", locale);
-  const isEn = c.otherLocale.label === "HU";
+  const isEn = locale === "en";
   const subtitle = typeof page.heroDescription === "string" ? page.heroDescription : portableTextToPlain(page.heroDescription);
   const introNoteContent = page.introNote;
 

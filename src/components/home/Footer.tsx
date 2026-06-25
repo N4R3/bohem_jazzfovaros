@@ -9,9 +9,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { getContent } from "@/lib/locale";
+import { getContent, getLocale } from "@/lib/locale";
 import { localizePathForLocale } from "@/lib/languageSwitch";
 import CookieSettingsLink from "@/components/analytics/CookieSettingsLink";
+import SmoothImage from "@/components/common/SmoothImage";
 import {
   getFooterSponsorsWithFallback,
   getContactContent,
@@ -19,9 +20,8 @@ import {
 } from "@/sanity/lib/content";
 
 export default async function Footer() {
-  const c = await getContent();
-  const isEn = c.otherLocale.label === "HU";
-  const locale = isEn ? "en" : "hu";
+  const [c, locale] = await Promise.all([getContent(), getLocale()]);
+  const isEn = locale === "en";
   const [sponsors, contact, footerNavSanity] = await Promise.all([
     getFooterSponsorsWithFallback(),
     getContactContent(locale),
@@ -81,21 +81,27 @@ export default async function Footer() {
                   title={s.name}
                   className="opacity-90 transition-opacity hover:opacity-100"
                 >
-                  <Image
+                  <SmoothImage
                     src={s.logo}
                     alt={s.name}
-                    width={80}
-                    height={40}
+                    width={200}
+                    height={100}
+                    sizes="(max-width: 640px) 160px, 200px"
+                    loading="lazy"
+                    wrapperClassName="footer-sponsor-logo"
                     className="h-14 w-auto object-contain sm:h-16"
                   />
                 </a>
               ) : (
                 <span key={s.name} title={s.name} className="opacity-85">
-                  <Image
+                  <SmoothImage
                     src={s.logo}
                     alt={s.name}
-                    width={80}
-                    height={40}
+                    width={200}
+                    height={100}
+                    sizes="(max-width: 640px) 160px, 200px"
+                    loading="lazy"
+                    wrapperClassName="footer-sponsor-logo"
                     className="h-14 w-auto object-contain sm:h-16"
                   />
                 </span>
@@ -121,24 +127,26 @@ export default async function Footer() {
                     title={s.name}
                     className="opacity-85 transition-opacity hover:opacity-100"
                   >
-                    <Image
+                    <SmoothImage
                       src={s.logo}
                       alt={s.name}
-                      width={64}
-                      height={32}
+                      width={160}
+                      height={80}
+                      sizes="(max-width: 640px) 120px, 160px"
+                      loading="lazy"
                       className="h-11 w-auto object-contain sm:h-[52px]"
-                    loading="lazy"
                     />
                   </a>
                 ) : (
                   <span key={s.name} title={s.name} className="opacity-80">
-                    <Image
+                    <SmoothImage
                       src={s.logo}
                       alt={s.name}
-                      width={64}
-                      height={32}
+                      width={160}
+                      height={80}
+                      sizes="(max-width: 640px) 120px, 160px"
+                      loading="lazy"
                       className="h-11 w-auto object-contain sm:h-[52px]"
-                    loading="lazy"
                     />
                   </span>
                 )
@@ -165,24 +173,26 @@ export default async function Footer() {
                       title={s.name}
                       className="opacity-85 transition-opacity hover:opacity-100"
                     >
-                      <Image
+                      <SmoothImage
                         src={s.logo}
                         alt={s.name}
-                        width={56}
-                        height={28}
-                        className="h-10 w-auto object-contain sm:h-12"
+                        width={140}
+                        height={70}
+                        sizes="(max-width: 640px) 100px, 140px"
                         loading="lazy"
+                        className="h-10 w-auto object-contain sm:h-12"
                       />
                     </a>
                   ) : (
                     <span key={s.name} title={s.name} className="opacity-75">
-                      <Image
+                      <SmoothImage
                         src={s.logo}
                         alt={s.name}
-                        width={56}
-                        height={28}
-                        className="h-10 w-auto object-contain sm:h-12"
+                        width={140}
+                        height={70}
+                        sizes="(max-width: 640px) 100px, 140px"
                         loading="lazy"
+                        className="h-10 w-auto object-contain sm:h-12"
                       />
                     </span>
                   )
@@ -237,32 +247,6 @@ export default async function Footer() {
               label="YouTube"
             >
               <path d="M22 12s0-3.3-.4-4.9c-.2-.9-.9-1.6-1.8-1.8C18.3 5 12 5 12 5s-6.3 0-7.8.3c-.9.2-1.6.9-1.8 1.8C2 8.7 2 12 2 12s0 3.3.4 4.9c.2.9.9 1.6 1.8 1.8 1.5.3 7.8.3 7.8.3s6.3 0 7.8-.3c.9-.2 1.6-.9 1.8-1.8.4-1.6.4-4.9.4-4.9zM10 15V9l5 3-5 3z" />
-            </SocialIcon>
-            <SocialIcon href="#" label="Spotify">
-              <g>
-                <circle cx="12" cy="12" r="10" />
-                <path
-                  d="M7 10c3-.8 7-.6 10 1"
-                  stroke="#1A2733"
-                  strokeWidth="1.6"
-                  fill="none"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M7.5 13c2.5-.6 5.5-.4 8 1"
-                  stroke="#1A2733"
-                  strokeWidth="1.4"
-                  fill="none"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M8 16c2-.4 4-.3 6 .7"
-                  stroke="#1A2733"
-                  strokeWidth="1.2"
-                  fill="none"
-                  strokeLinecap="round"
-                />
-              </g>
             </SocialIcon>
           </div>
         </div>

@@ -329,7 +329,7 @@ export default async function ProgramPage() {
   const c = await getContent();
   const locale = await getLocale();
   const program = await getProgramContent(locale);
-  const isEn = c.otherLocale.label === "HU";
+  const isEn = locale === "en";
 
   const hasFree = Boolean(program.freeText);
   const hasStructured = (program.days || []).length > 0;

@@ -43,8 +43,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const c = await getContent();
-  const locale = c.otherLocale.label === "HU" ? "en" : "hu";
+  const [c, locale] = await Promise.all([getContent(), getLocale()]);
   const [popupSettings, performers, ticketUrl, homePage, homeVisible] = await Promise.all([
     getPopupSettingsWithFallback(),
     getPerformersWithFallback(),
@@ -153,7 +152,7 @@ export default async function HomePage() {
 
           <StatsBar
             items={homeVisible.stats}
-            ariaLabel={c.otherLocale.label === "HU" ? "Festival statistics" : "Fesztivál statisztikák"}
+            ariaLabel={locale === "en" ? "Festival statistics" : "Fesztivál statisztikák"}
           />
 
           <LineupTeaser

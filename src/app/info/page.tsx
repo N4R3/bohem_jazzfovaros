@@ -30,9 +30,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function InfoPage() {
-  const c = await getContent();
-  const isEn = c.otherLocale.label === "HU";
-  const locale = isEn ? "en" : "hu";
+  const [c, locale] = await Promise.all([getContent(), getLocale()]);
+  const isEn = locale === "en";
   const [sanityTickets, ticketUrl, page, venue] = await Promise.all([
     getVisibleTicketsWithFallback(),
     getTicketUrlWithFallback(locale),

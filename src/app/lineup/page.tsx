@@ -24,10 +24,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function LineupPage() {
-  const c = await getContent();
+  const [c, locale] = await Promise.all([getContent(), getLocale()]);
   const { lineup } = c;
-  const isEn = c.otherLocale.label === "HU";
-  const locale = isEn ? "en" : "hu";
+  const isEn = locale === "en";
   const [lineupArtists, ticketUrl] = await Promise.all([
     getPerformersWithFallback(),
     getTicketUrlWithFallback(locale),

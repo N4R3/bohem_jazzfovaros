@@ -406,7 +406,12 @@ p { text-wrap: pretty; }
   background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.08) 0 12px, transparent 12px 24px);
 }
 
-/* Homepage hero háttér — feltételes loader (HeroBannerLoader.tsx) */
+/* Szponzor logók — élesebb megjelenítés nagyításnál */
+.footer-sponsor-logo img {
+  image-rendering: auto;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
 .hero-banner-loader {
   position: absolute;
   inset: 0;

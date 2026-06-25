@@ -30,13 +30,13 @@ const iconPaths: Record<string, string> = {
 };
 
 export default async function MapPage() {
-  const [c, locale] = await Promise.all([getContent(), getLocale()]);
+  const locale = await getLocale();
   const [venueContent, transportDirections, page] = await Promise.all([
     getVenueContent(locale),
     getTransportContent(locale),
     getPageContentBySlug("terkep", locale),
   ]);
-  const isEn = c.otherLocale.label === "HU";
+  const isEn = locale === "en";
   const subtitle = typeof page.heroDescription === "string" ? page.heroDescription : portableTextToPlain(page.heroDescription);
   const introNoteContent = page.introNote;
   const mapsUrl = venueContent.mapEmbedUrl || venueContent.googleMapsUrl;
