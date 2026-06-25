@@ -192,7 +192,7 @@ function StructuredProgram({
                     : undefined;
                 return (
                 <li key={i}>
-                  <details id={slotId || undefined} className="group overflow-hidden">
+                  <details id={slotId || undefined} className="group program-slot overflow-hidden">
                     {/*
                       Collapsed row: time range · title · stage badge · chevron only.
                       No performer names, no large "Részletek" button.

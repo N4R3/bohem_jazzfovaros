@@ -96,6 +96,7 @@ export default async function AccommodationPage() {
                   alt={hotel.name}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                  loading="lazy"
                   className="object-cover"
                 />
               ) : (

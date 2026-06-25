@@ -114,6 +114,7 @@ export default function FlexibleSections({ locale, sections }: Props) {
                     alt={title || caption || "Section image"}
                     fill
                     sizes="(max-width: 768px) 100vw, 960px"
+                    loading="lazy"
                     className="object-cover"
                   />
                 </div>
@@ -139,7 +140,14 @@ export default function FlexibleSections({ locale, sections }: Props) {
                     const alt = localize(locale, img.altHu, img.altEn) || "Gallery image";
                     return (
                       <div key={imgIndex} className="relative aspect-[4/3] overflow-hidden rounded-xl border border-[#e8d8b8]/40 shadow-sm transition-transform hover:scale-[1.02] hover:shadow-md">
-                        <Image src={src} alt={alt} fill className="object-cover" />
+                        <Image
+                          src={src}
+                          alt={alt}
+                          fill
+                          sizes="(max-width: 640px) 50vw, 33vw"
+                          loading="lazy"
+                          className="object-cover"
+                        />
                       </div>
                     );
                   })}

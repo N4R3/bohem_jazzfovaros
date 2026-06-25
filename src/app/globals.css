@@ -153,6 +153,7 @@
 @media (prefers-reduced-motion: reduce) {
   .mobile-nav-link-in { animation: none; }
   .page-enter { animation: none !important; }
+  html { scroll-behavior: auto; }
 }
 
 /* ============================================================
@@ -405,6 +406,68 @@ p { text-wrap: pretty; }
   background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.08) 0 12px, transparent 12px 24px);
 }
 
+/* Homepage hero háttér — feltételes loader (HeroBannerLoader.tsx) */
+.hero-banner-loader {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #bfe6f5 0%, #e8f4fa 45%, #fff6d6 100%);
+  pointer-events: none;
+}
+.hero-banner-loader__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  text-align: center;
+}
+.hero-banner-loader__brand {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0a3a36;
+}
+.hero-banner-loader__text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(10, 58, 54, 0.72);
+}
+.hero-banner-loader__lines {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.35rem;
+  margin-top: 0.65rem;
+  height: 1.25rem;
+}
+.hero-banner-loader__lines span {
+  display: block;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #ef7a1f 0%, #0a3a36 100%);
+  animation: hero-loader-pulse 0.9s ease-in-out infinite;
+}
+.hero-banner-loader__lines span:nth-child(1) { height: 0.45rem; animation-delay: 0s; }
+.hero-banner-loader__lines span:nth-child(2) { height: 0.85rem; animation-delay: 0.12s; }
+.hero-banner-loader__lines span:nth-child(3) { height: 1.1rem; animation-delay: 0.24s; }
+.hero-banner-loader__lines span:nth-child(4) { height: 0.65rem; animation-delay: 0.36s; }
+
+@keyframes hero-loader-pulse {
+  0%, 100% { transform: scaleY(0.55); opacity: 0.55; }
+  50% { transform: scaleY(1); opacity: 1; }
+}
+
+/* Program accordion — enyhe summary átmenet */
+details.program-slot > summary {
+  transition: background-color 0.15s ease;
+}
+
 /* prefers-reduced-motion: letilt minden dekoratív animációt */
 @media (prefers-reduced-motion: reduce) {
   .animate-bob,
@@ -421,6 +484,11 @@ p { text-wrap: pretty; }
   [style*="fadeInUp"] {
     animation: none !important;
     opacity: 1 !important;
+    transform: none !important;
+  }
+  .hero-banner-loader__lines span {
+    animation: none !important;
+    opacity: 0.85 !important;
     transform: none !important;
   }
 }

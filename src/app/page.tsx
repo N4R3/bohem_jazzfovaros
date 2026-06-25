@@ -9,6 +9,7 @@ import { buildPageMetadataWithSanity } from "@/sanity/lib/seoContent";
 import { musicEventSchema } from "@/lib/structuredData";
 
 import Hero from "@/components/home/Hero";
+import HeroBannerLoader from "@/components/home/HeroBannerLoader";
 import InfoBar from "@/components/home/InfoBar";
 import VideoLiteEmbed from "@/components/common/VideoLiteEmbed";
 import { BASE } from "@/content/base";
@@ -97,6 +98,7 @@ export default async function HomePage() {
 
       <div className="page-bg">
         <div className="hero-fold">
+          <HeroBannerLoader />
           <Hero
             line1={homeVisible.heroLine1}
             line2={homeVisible.heroLine2}

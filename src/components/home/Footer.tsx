@@ -127,6 +127,7 @@ export default async function Footer() {
                       width={64}
                       height={32}
                       className="h-11 w-auto object-contain sm:h-[52px]"
+                    loading="lazy"
                     />
                   </a>
                 ) : (
@@ -137,6 +138,7 @@ export default async function Footer() {
                       width={64}
                       height={32}
                       className="h-11 w-auto object-contain sm:h-[52px]"
+                    loading="lazy"
                     />
                   </span>
                 )
@@ -169,6 +171,7 @@ export default async function Footer() {
                         width={56}
                         height={28}
                         className="h-10 w-auto object-contain sm:h-12"
+                        loading="lazy"
                       />
                     </a>
                   ) : (
@@ -179,6 +182,7 @@ export default async function Footer() {
                         width={56}
                         height={28}
                         className="h-10 w-auto object-contain sm:h-12"
+                        loading="lazy"
                       />
                     </span>
                   )

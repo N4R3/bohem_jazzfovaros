@@ -13,7 +13,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/cn";
@@ -38,6 +38,11 @@ export default function Navbar({ content: c, navOverride }: Props) {
 
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const reduceMotion = useReducedMotion();
+  const menuEase = [0.22, 1, 0.36, 1] as const;
+  const menuDuration = reduceMotion ? 0 : 0.28;
+  const linkDelay = reduceMotion ? 0 : 0.04;
+  const linkStagger = reduceMotion ? 0 : 0.025;
 
   /* Scroll-alapú árnyék a jazzdesign1 .navbar.scrolled osztályához */
   useEffect(() => {
@@ -144,7 +149,7 @@ export default function Navbar({ content: c, navOverride }: Props) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: menuDuration, ease: menuEase }}
             className="overflow-hidden border-t border-white/15 bg-[#083a44] xl:hidden"
             aria-label="Mobil navigáció"
           >
@@ -154,7 +159,7 @@ export default function Navbar({ content: c, navOverride }: Props) {
                   key={item.href}
                   initial={{ opacity: 0, x: -12 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.04 + i * 0.025, duration: 0.28 }}
+                  transition={{ delay: linkDelay + i * linkStagger, duration: menuDuration }}
                 >
                   <Link
                     href={localizeInternalHref(item.href, pathname)}
@@ -171,7 +176,7 @@ export default function Navbar({ content: c, navOverride }: Props) {
               <motion.li
                 initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.04 + NAV_ITEMS.length * 0.025, duration: 0.28 }}
+                transition={{ delay: linkDelay + NAV_ITEMS.length * linkStagger, duration: menuDuration }}
               >
                 <LocaleSwitchAnchor
                   onClick={() => setOpen(false)}

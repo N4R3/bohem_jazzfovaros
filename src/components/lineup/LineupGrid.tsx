@@ -82,6 +82,7 @@ function PerformerCardImage({
           alt={name}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          loading="lazy"
           className={`transition-transform duration-500 group-hover:scale-[1.04] ${
             imageDisplayMode === "contain" ? "object-contain" : "object-cover"
           }`}
