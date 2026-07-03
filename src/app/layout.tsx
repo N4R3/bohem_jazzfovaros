@@ -3,7 +3,7 @@ import "./globals.css";
 import { Bebas_Neue, Poppins, Pacifico } from "next/font/google";
 import { getContent, getLocale } from "@/lib/locale";
 import { BASE_URL, canonicalUrl, metadataAlternates } from "@/lib/seo";
-import Scripts from "@/components/analytics/Scripts";
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import CookieBanner from "@/components/analytics/CookieBanner";
 import Navbar from "@/components/home/Navbar";
 import { getNavigationWithFallback } from "@/sanity/lib/content";
@@ -104,11 +104,13 @@ export default async function RootLayout({
       className={`${bebasNeue.variable} ${poppins.variable} ${pacifico.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <GoogleAnalytics />
+      </head>
       <body className="font-sans antialiased text-ink-800">
         <AppShell
           publicShell={
             <>
-              <Scripts />
               <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
