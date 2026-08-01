@@ -75,6 +75,16 @@ export const deskStructure: StructureResolver = (S) =>
 
       // Gyors elérés a slug-specifikus fix oldalakhoz
       S.listItem()
+        .title("⚡ Jegyek & Infó — Page (slug: info)")
+        .id("page-list-info")
+        .child(
+          S.documentList()
+            .title("Jegyek & Infó Page — narancs blokk lábjegyzet + GYIK")
+            .filter('_type == "page" && slug.current == "info"')
+            .defaultOrdering([{ field: "_updatedAt", direction: "desc" }]),
+        ),
+
+      S.listItem()
         .title("⚡ Jazztábor — Page (slug: tabor / jazztabor)")
         .id("page-list-jazztabor")
         .child(

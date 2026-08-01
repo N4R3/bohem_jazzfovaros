@@ -280,11 +280,27 @@ export const pageType = defineType({
       },
     }),
     defineField({
+      name: "ticketNoteRichHu",
+      title: "🎟️ Narancs jegyblokk — lábjegyzet (HU)",
+      ...richText,
+      description:
+        "A Jegyek & Infó oldal bal oldali narancs blokkjában, a jegyárak ALATT megjelenő szöveg (pl. karszalag, kapuk, SZÉP-kártya). Üresen: a kódbeli alap szöveg jelenik meg. Ezt szerkeszd, ha hibás jegy-/kapu-infót kell javítani.",
+      hidden: ({ document }) => slugCurrent(document) !== SLUG_INFO,
+    }),
+    defineField({
+      name: "ticketNoteRichEn",
+      title: "🎟️ Orange ticket block — footnote (EN)",
+      ...richText,
+      description:
+        "Same orange ticket-box footnote on Tickets & Info (below prices). Empty = code fallback.",
+      hidden: ({ document }) => slugCurrent(document) !== SLUG_INFO,
+    }),
+    defineField({
       name: "pageBodyRichHu",
       title: "Oldal tartalom – HU",
       ...richText,
       description:
-        "Fix aloldalakon és új /oldal/[slug] oldalakon jelenik meg (Hero alatt). A Program oldal szabad szövegét a „Program – szabad szöveg” mezők adják — ez a mező ott nem használatos. Támogatja: félkövér, dőlt, link, h2, h3, lista, blockquote.",
+        "Fix aloldalakon és új /oldal/[slug] oldalakon jelenik meg (Hero alatt). A Program oldal szabad szövegét a „Program – szabad szöveg” mezők adják — ez a mező ott nem használatos. Jegyek & Infó (slug: info): a narancs blokk lábjegyzetét a „Narancs jegyblokk — lábjegyzet” mezőben szerkeszd (nem itt). Támogatja: félkövér, dőlt, link, h2, h3, lista, blockquote.",
       hidden: ({ document }) => {
         const s = slugCurrent(document);
         return s === SLUG_HOME || s === SLUG_PROGRAM || s === SLUG_LINEUP;

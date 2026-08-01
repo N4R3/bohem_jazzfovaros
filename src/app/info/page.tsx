@@ -49,9 +49,14 @@ export default async function InfoPage() {
     ) ?? false;
   const ticketTiers = sanityTickets.length ? sanityTickets : info.ticketTiers || [];
   const subtitle = typeof page.heroDescription === "string" ? page.heroDescription : portableTextToPlain(page.heroDescription);
+  /* Narancs blokk lábjegyzet: 1) dedikált Sanity mező 2) régi pageBody 3) kódbeli ticketNote */
   const ticketFooterRich =
-    page.body && Array.isArray(page.body) && page.body.length > 0 ? (page.body as PortableTextBlock[]) : null;
-  const ticketFooterPlain = info.ticketNote?.trim() || "";
+    (page.ticketNote && page.ticketNote.length > 0
+      ? page.ticketNote
+      : page.body && Array.isArray(page.body) && page.body.length > 0
+        ? (page.body as PortableTextBlock[])
+        : null);
+  const ticketFooterPlain = ticketFooterRich ? "" : info.ticketNote?.trim() || "";
   const globalBuyLabel = isEn ? "Buy tickets" : "Jegyvásárlás";
 
   return (

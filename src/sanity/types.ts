@@ -238,6 +238,8 @@ export type SanityPage = {
   runningEntryDeadlineRichEn?: PortableTextBlock[];
   runningResultsNoteRichHu?: PortableTextBlock[];
   runningResultsNoteRichEn?: PortableTextBlock[];
+  ticketNoteRichHu?: PortableTextBlock[];
+  ticketNoteRichEn?: PortableTextBlock[];
   infoFaqItems?: Array<{
     questionHu?: string;
     questionEn?: string;

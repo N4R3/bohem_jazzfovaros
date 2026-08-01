@@ -1051,6 +1051,8 @@ export const getPageContentBySlug = cache(
     secondaryButton?: { label: string; url: string };
     sections?: SanityPage["sections"];
     infoFaq?: Array<{ question: string; answer: PortableTextBlock[] }>;
+    /** Narancs jegyblokk lábjegyzet (Jegyek & Infó). */
+    ticketNote?: PortableTextBlock[];
     campCms?: CampPageCmsOverlay;
     runningCms?: RunningPageCmsOverlay;
     seo?: SanityPage["seo"];
@@ -1110,6 +1112,11 @@ export const getPageContentBySlug = cache(
             return { question, answer };
           })
           .filter((item): item is { question: string; answer: PortableTextBlock[] } => item !== null),
+        ticketNote: resolveLocalizedRichOrPlain(
+          locale,
+          page.ticketNoteRichHu,
+          page.ticketNoteRichEn,
+        ),
         campCms: slug === "tabor" || slug === "jazztabor" ? buildCampOverlay(page, locale) : undefined,
         runningCms: slug === "futas" ? buildRunningOverlay(page, locale) : undefined,
         seo: page.seo,

@@ -224,6 +224,8 @@ export const getActivePageBySlugQuery = `*[_type == "page" && slug.current == $s
   runningEntryDeadlineRichEn,
   runningResultsNoteRichHu,
   runningResultsNoteRichEn,
+  ticketNoteRichHu,
+  ticketNoteRichEn,
   infoFaqItems[]{
     questionHu,
     questionEn,
