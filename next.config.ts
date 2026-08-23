@@ -8,41 +8,6 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   trailingSlash: true,
-  /**
-   * Netlify Durable CDN cache a dinamikusan renderelt oldalakra.
-   *
-   * Ezt az ORIGIN válaszán kell beállítani, nem a middleware-ben. Élesben
-   * mérve: a `/studio/` (force-static, a middleware matcherből kizárva, tehát
-   * edge-fejlécet egyáltalán nem kap) `"Netlify Durable"; hit`-et ad, míg a
-   * dinamikus oldalak `fwd=bypass`-t — pedig ott fut a middleware (a `/tabor/`
-   * 308 redirect bizonyítja). A cache-döntés tehát az origin válasz
-   * fejlécéből születik, és az edge function válasz-mutációja ehhez képest
-   * későn érkezik. A middleware `Netlify-CDN-Cache-Control` fejléce ott marad,
-   * mert a tisztán edge-en keletkező válaszoknál (308 redirect) az az egyetlen
-   * cache-jelzés.
-   *
-   * A `Netlify-CDN-Cache-Control` csak a Netlify CDN-re vonatkozik — a böngésző
-   * továbbra is a Next saját `no-store` fejlécét kapja, így a kliensnél nem
-   * ragad be elavult HTML.
-   *
-   * A minta ugyanazt zárja ki, mint a middleware matcher, hogy a két réteg ne
-   * mondjon ellent egymásnak: az `/api/*` saját `no-store`-t küld, a
-   * `_next/static` immutable, a `/images/*` pedig a netlify.toml hosszú
-   * cache-ét kapja.
-   */
-  async headers() {
-    return [
-      {
-        source: "/:path((?!api/|_next/|images/|documents/|studio).*)",
-        headers: [
-          {
-            key: "Netlify-CDN-Cache-Control",
-            value: "public, s-maxage=60, stale-while-revalidate=240, durable",
-          },
-        ],
-      },
-    ];
-  },
   images: {
     formats: ["image/avif", "image/webp"],
     /**
