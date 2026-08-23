@@ -29,6 +29,7 @@ export default function QuickLinks({ items }: Props) {
         <div ref={ref} className="grid gap-4 sm:grid-cols-3">
           {items.map((item, i) => (
             <Link
+              prefetch={false}
               key={item.href}
               href={item.href}
               className="group flex items-center gap-4 rounded-full px-5 py-4 transition-all hover:brightness-110"

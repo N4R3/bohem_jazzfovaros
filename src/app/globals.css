@@ -580,3 +580,71 @@ details.program-slot > summary {
   margin-bottom: 1.5rem;
   box-shadow: 0 2px 12px rgba(0,0,0,0.12);
 }
+
+/* ============================================================
+   MODERN KÉPFORMÁTUMOK A HÁTTÉRKÉPEKHEZ (AVIF / WebP)
+   ------------------------------------------------------------
+   A fenti szabályok PNG-t használnak — ezek maradnak a fallback.
+   Az öt CSS-háttérkép együtt 13,2 MB PNG volt, és `next/image`-et
+   megkerülve, nyers méretben töltődött le minden látogatónál. Ugyanez
+   AVIF-ban 0,33 MB (PSNR 43–46 dB, vizuálisan azonos).
+
+   Miért külön `@supports` blokk, és nem két egymás utáni
+   `background-image` deklaráció ugyanabban a szabályban?
+   Mert a CSS-minifier az „úgyis felülírja” alapon eldobja a korábbi
+   `url(...)` sort, így a `type()`-ot nem ismerő böngészőkben
+   (pl. Safari ≤ 16) egyáltalán nem maradna háttérkép. A `@supports`
+   feltétel csak ott lép életbe, ahol az `image-set()` + `type()`
+   biztosan értelmezhető; máshol a fenti PNG szabályok érvényesek.
+
+   A blokk a fájl végén van, így azonos specifikusság mellett felülírja
+   a fenti deklarációkat. A sorrend (bg_home → subpage_bg, normal →
+   wide) megegyezik az eredetivel, hogy a felülírási lánc ne változzon.
+   ============================================================ */
+@supports (background-image: image-set("i.avif" type("image/avif"))) {
+  @media (max-width: 959px) {
+    .hero-fold > section[aria-label="Hero"] {
+      background-image: image-set(
+        url('/images/header_phone1.avif') type('image/avif'),
+        url('/images/header_phone1.webp') type('image/webp'),
+        url('/images/header_phone1.png') type('image/png')
+      );
+    }
+  }
+
+  @media (min-width: 960px) {
+    .hero-fold > section[aria-label="Hero"]::before {
+      background-image: image-set(
+        url('/images/header_normal1.avif') type('image/avif'),
+        url('/images/header_normal1.webp') type('image/webp'),
+        url('/images/header_normal1.png') type('image/png')
+      );
+    }
+  }
+
+  @media (min-width: 960px) and (min-aspect-ratio: 2/1) {
+    .hero-fold > section[aria-label="Hero"]::before {
+      background-image: image-set(
+        url('/images/header_wide1.avif') type('image/avif'),
+        url('/images/header_wide1.webp') type('image/webp'),
+        url('/images/header_wide1.png') type('image/png')
+      );
+    }
+  }
+
+  .below-fold-bg {
+    background-image: image-set(
+      url('/images/design1/bg_home.avif') type('image/avif'),
+      url('/images/design1/bg_home.webp') type('image/webp'),
+      url('/images/design1/bg_home.png') type('image/png')
+    );
+  }
+
+  .below-fold-bg.subpage-bg {
+    background-image: image-set(
+      url('/images/design1/sub_bg.avif') type('image/avif'),
+      url('/images/design1/sub_bg.webp') type('image/webp'),
+      url('/images/design1/sub_bg.png') type('image/png')
+    );
+  }
+}

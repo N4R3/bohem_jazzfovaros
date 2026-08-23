@@ -69,7 +69,7 @@ export default function Navbar({ content: c, navOverride }: Props) {
     >
       <div className="mx-auto flex h-[76px] max-w-[1320px] items-center gap-6 px-5 sm:px-8">
         {/* Logó bal oldalt */}
-        <Link href={localizeInternalHref("/", pathname)} aria-label="Főoldal" className="flex shrink-0 items-center">
+        <Link prefetch={false} href={localizeInternalHref("/", pathname)} aria-label="Főoldal" className="flex shrink-0 items-center">
           <Image
             src="/images/branding/logo_simple.png"
             alt="Bohém Jazzfőváros Kecskemét"
@@ -162,6 +162,7 @@ export default function Navbar({ content: c, navOverride }: Props) {
                   transition={{ delay: linkDelay + i * linkStagger, duration: menuDuration }}
                 >
                   <Link
+                    prefetch={false}
                     href={localizeInternalHref(item.href, pathname)}
                     onClick={() => setOpen(false)}
                     className={cn(
@@ -237,7 +238,7 @@ function NavLink({
     );
   }
   return (
-    <Link href={href} className={className} target={openInNewTab ? "_blank" : undefined}>
+    <Link prefetch={false} href={href} className={className} target={openInNewTab ? "_blank" : undefined}>
       <span>{label}</span>
       {underline}
     </Link>

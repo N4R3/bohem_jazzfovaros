@@ -103,6 +103,7 @@ function ArtistCard({
 
   return (
     <Link
+      prefetch={false}
       href={localizePathForLocale(
         `/lineup/?artist=${encodeURIComponent(artist.name)}`,
         locale,

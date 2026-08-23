@@ -13,10 +13,42 @@
   # NEXT_PUBLIC_LOCALE=hu makes the HU build explicit so URL-based detection is not needed.
   # The EN Netlify site must override this with NEXT_PUBLIC_LOCALE=en in its dashboard.
   NEXT_PUBLIC_LOCALE = "hu"
-  NEXT_PUBLIC_SITE_URL_HU = "https://bohemjazz.netlify.app"
-  # Egy staging site: EN is /en/ path-prefix. GO-LIVE dashboard:
-  # NEXT_PUBLIC_SITE_URL_HU=https://jazzfovaros.hu
-  # NEXT_PUBLIC_SITE_URL_EN=https://jazzfovaros.hu
-  NEXT_PUBLIC_SITE_URL_EN = "https://bohemjazz.netlify.app"
+  # FONTOS: ezek adják a canonical / hreflang / sitemap URL-eket. Amíg itt (vagy a
+  # Netlify dashboardon) a staging domain szerepelt, az éles jazzfovaros.hu
+  # `<link rel="canonical" href="https://bohemjazz.netlify.app/">`-t küldött, így a
+  # keresők a staging site-ot crawlolták — dupla Function/Edge használat két site-on.
+  # Egy domain + /en path-prefix, ezért HU és EN ugyanaz a host.
+  NEXT_PUBLIC_SITE_URL_HU = "https://jazzfovaros.hu"
+  NEXT_PUBLIC_SITE_URL_EN = "https://jazzfovaros.hu"
   NEXT_PUBLIC_GA4_ID = "G-Y9BMR7XZK6"
   SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SANITY_DATASET,NEXT_PUBLIC_SANITY_API_VERSION"
+
+# ---------------------------------------------------------------------------
+# Statikus asset cache
+#
+# A Netlify alapértelmezése a public/ fájlokra `public,max-age=0,must-revalidate`,
+# vagyis a böngésző MINDEN oldalletöltésnél újra elküld egy feltételes kérést a
+# többmegabájtos háttérképekre is. A `stale-while-revalidate` ablakkal a
+# visszatérő látogató azonnal a cache-ből kapja a képet, a frissítés a háttérben
+# történik — így egy háttérkép cseréje is legfeljebb egy napon belül átmegy.
+# ---------------------------------------------------------------------------
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=2592000"
+
+[[headers]]
+  for = "/documents/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=2592000"
+
+[[headers]]
+  for = "/favicon.png"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/site.webmanifest"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

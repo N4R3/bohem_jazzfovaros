@@ -15,12 +15,25 @@ if (!sanityProjectId) {
   throw new Error("Missing NEXT_PUBLIC_SANITY_PROJECT_ID");
 }
 
+/**
+ * A Sanity CDN (`apicdn.sanity.io`) publikáláskor ürül, tehát a publikált
+ * tartalom frissessége gyakorlatilag nem romlik tőle — viszont a lekérés
+ * gyorsabb, és nem terheli az API kvótát. Ez rövidebb függvényfutásidőt
+ * jelent minden szerveroldali renderen.
+ *
+ * Kivétel: ha van read token, az privilegizált olvasást jelent (privát
+ * dataset vagy draft/preview tartalom) — ott maradunk az originnél, mert a
+ * CDN tokenenként cache-el, és a draftoknál a frissesség kritikus. A projekt
+ * jelenleg nem használ draft/preview módot, így ez az ág inaktív, de a
+ * kapcsoló automatikusan visszavált, ha valaki bevezeti.
+ */
+const useSanityCdn = !sanityReadToken;
+
 export const sanityClient = createClient({
   projectId: sanityProjectId,
   dataset: sanityDataset,
   apiVersion: sanityApiVersion,
-  /* CDN nélkül: a publikált tartalom és a Studio-ban látott állapot gyorsabban egyezik (kevesebb „régi cache”). */
-  useCdn: false,
+  useCdn: useSanityCdn,
   token: sanityReadToken,
 });
 

@@ -56,6 +56,7 @@ export default function CookieBanner() {
         <p className="text-sm leading-relaxed text-[var(--color-cream-200)]/70">
           We use cookies to analyse traffic and improve your experience.{" "}
           <Link
+            prefetch={false}
             href="/adatvedelem/"
             className="underline hover:text-[var(--color-gold-400)] transition-colors"
           >

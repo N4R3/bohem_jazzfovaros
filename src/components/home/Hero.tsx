@@ -80,6 +80,7 @@ export default function Hero({
 
         {/* CTA gomb — lejjebb, kék alapon fehér */}
         <Link
+          prefetch={false}
           href={ctaUrl}
           className="inline-flex max-sm:mt-24 max-sm:self-center max-sm:items-center items-center gap-2 self-start rounded-full px-6 py-3 font-sans text-[14px] font-bold uppercase tracking-wide shadow-lg transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0 sm:mt-0 sm:gap-3 sm:px-8 sm:py-4 sm:text-[16px]"
           style={{ background: BLUE, color: ORANGE_TEXT }}

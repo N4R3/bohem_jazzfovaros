@@ -304,7 +304,7 @@ export default async function Footer() {
                   {item.label}
                 </a>
               ) : (
-                <Link href={footerHref(item.href)} className="hover:text-sun-400">
+                <Link prefetch={false} href={footerHref(item.href)} className="hover:text-sun-400">
                   {item.label}
                 </Link>
               )}
@@ -358,7 +358,7 @@ function FooterLink({ href, label }: { href: string; label: string }) {
           {label}
         </a>
       ) : (
-        <Link href={href} className="transition-colors hover:text-sun-400">
+        <Link prefetch={false} href={href} className="transition-colors hover:text-sun-400">
           {label}
         </Link>
       )}

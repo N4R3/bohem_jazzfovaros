@@ -73,6 +73,7 @@ function linkify(text: string): React.ReactNode[] {
     const url = m[1];
     out.push(
       <Link
+        prefetch={false}
         key={`${m.index}-${url}`}
         href={url}
         target="_blank"

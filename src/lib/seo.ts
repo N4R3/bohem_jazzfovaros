@@ -10,17 +10,23 @@ function normalizeSiteUrl(url: string): string {
   return url.replace(/\/$/, "");
 }
 
-// Staging default: bohemjazz.netlify.app (egy site, /en path-prefix).
-// GO-LIVE (Netlify dashboard): NEXT_PUBLIC_SITE_URL_HU=https://jazzfovaros.hu
-//   NEXT_PUBLIC_SITE_URL_EN=https://jazzfovaros.hu  (ugyanaz az origin — EN = /en/)
+// Egy éles domain, EN = /en/ path-prefix ugyanazon az originen.
+// A tényleges értéket a netlify.toml (illetve a Netlify dashboard) adja; ez itt
+// csak a végső fallback. FONTOS: korábban ez a fallback a staging domainre
+// (bohemjazz.netlify.app) mutatott, ezért az éles oldal is oda mutató
+// canonical/hreflang/sitemap URL-eket adott — a keresők a staging site-ot
+// crawlolták, ami külön számlázott Netlify site. A biztonságos default az éles
+// domain: preview/branch deploynál a robots.txt amúgy is teljes Disallow.
 // jazzcapital.hu: külső DNS 301 → https://jazzfovaros.hu/en/ (nem Netlify custom domain).
+const FALLBACK_SITE_URL = "https://jazzfovaros.hu";
+
 export const SITE_URL_HU = normalizeSiteUrl(
-  process.env.NEXT_PUBLIC_SITE_URL_HU ?? "https://bohemjazz.netlify.app",
+  process.env.NEXT_PUBLIC_SITE_URL_HU ?? FALLBACK_SITE_URL,
 );
 export const SITE_URL_EN = normalizeSiteUrl(
   process.env.NEXT_PUBLIC_SITE_URL_EN ??
     process.env.NEXT_PUBLIC_SITE_URL_HU ??
-    "https://bohemjazz.netlify.app",
+    FALLBACK_SITE_URL,
 );
 
 function buildLocale(): Locale {

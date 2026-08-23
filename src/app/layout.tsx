@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Bebas_Neue, Poppins, Pacifico } from "next/font/google";
 import { getContent, getLocale } from "@/lib/locale";
+import { recordCurrentRequest } from "@/lib/usage/serverMetrics";
 import { BASE_URL, canonicalUrl, metadataAlternates } from "@/lib/seo";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import CookieBanner from "@/components/analytics/CookieBanner";
@@ -97,6 +98,11 @@ export default async function RootLayout({
     getNavigationWithFallback("header"),
   ]);
   const isEn = locale === "en";
+
+  /* Egy szerveroldali render = egy Netlify Function Invocation. A hívás maga
+     dönti el, hogy szabad-e `headers()`-t olvasnia — így a monitoring nem tesz
+     dinamikussá olyan route-ot, ami egyébként statikus lehetne. */
+  await recordCurrentRequest();
 
   return (
     <html

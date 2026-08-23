@@ -68,6 +68,7 @@ export default function InfoBar({
 
         {/* Jegyvásárlás gomb - kék alapon narancs szöveg */}
         <Link
+          prefetch={false}
           href={ticketUrl}
           className="ml-auto inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[13px] font-extrabold uppercase tracking-[0.08em] transition-transform duration-200 hover:translate-x-1"
           style={{ background: BLUE, color: ORANGE_TEXT }}

@@ -12,6 +12,7 @@ import Image from "next/image";
 export default function SiteLogoBanner() {
   return (
     <Link
+      prefetch={false}
       href="/"
       aria-label="Bohém Jazzfőváros"
       className="absolute left-3 top-0 z-50 block sm:left-5 md:left-7"

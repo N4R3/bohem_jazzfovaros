@@ -43,6 +43,7 @@ export default function Header({ nav }: Props) {
               </a>
             ) : (
               <Link
+                prefetch={false}
                 key={item.href}
                 href={item.href}
                 className="whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.14em] transition-colors lg:text-[11px]"

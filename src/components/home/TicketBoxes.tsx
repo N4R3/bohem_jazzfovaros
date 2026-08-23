@@ -76,6 +76,7 @@ export default async function TicketBoxes({ embedded = false }: TicketBoxesProps
 function TicketBox({ emoji, title, sub, href }: Box) {
   return (
     <Link
+      prefetch={false}
       href={href}
       className="group reveal-on-scroll-fast relative flex min-h-[88px] items-center gap-3 overflow-hidden rounded-[14px] bg-orange-500 px-4 py-5 text-white shadow-[0_8px_0_var(--color-orange-700),0_14px_30px_rgba(255,98,0,0.35)] transition-all duration-[250ms] hover:-translate-y-[5px] hover:shadow-[0_13px_0_var(--color-orange-700),0_22px_40px_rgba(255,98,0,0.5)] sm:gap-4 sm:px-5 sm:py-[22px] md:px-6"
     >

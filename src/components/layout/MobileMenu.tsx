@@ -110,6 +110,7 @@ export default function MobileMenu({ nav }: MobileMenuProps) {
                   </a>
                 ) : (
                   <Link
+                    prefetch={false}
                     key={item.href}
                     href={item.href}
                     onClick={() => setOpen(false)}
